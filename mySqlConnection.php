@@ -101,7 +101,7 @@ class mySqlConnection {
 
 	
 	
-	function updated() {
+	public function updated() {
 		$return = false;
 		$return = @mysql_affected_rows($this->mysql);
 		return $return;
