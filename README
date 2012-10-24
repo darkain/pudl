@@ -1,0 +1,20 @@
+PHP MySql Wrapper Library
+
+This software library is licenced under the BSD 3-clause license, and may be
+freely used in any project which is compatible with this license. 
+
+Please see the examples folder for information on how to implment this library
+
+
+------------------------------------------------------------------------------
+
+
+The purpose of this library is to provide easier to understand access to more
+complex MySQL query strings. Debugging complex query strings inside of PHP can
+often times become a nightmare. This library helps to simplify this by using
+built in PHP data types for pushing and pulling information from MySQL tables.
+
+The 'mysql_fetch_assoc' function inside of PHP returns an associative array,
+with the keys being the MySQL column names, and the values being the MySQL
+table values. The functions of this library mimic this same methodology, and
+expand it to support many more query types.
