@@ -13,6 +13,7 @@ class mySqlConnection {
 		$this->debug  = false;
 		$this->union  = false;	
 		$this->locked = false;
+		
 		$this->mysql  = false;
 		$this->mysql  = @mysql_pconnect($server, $username, $password);
 		
@@ -20,7 +21,22 @@ class mySqlConnection {
 			$this->mysql = @mysql_connect($server, $username, $password);
 		}
 		
-		if ($this->mysql) @mysql_select_db($database, $this->mysql);
+		if (!$this->mysql) {
+			$error  = "<br />\r\n";
+			$error .= 'Unable to connect to database server: "' . $server;
+			$error .= '" with the username: "' . $username;
+			$error .= "\"<br />\r\nError " . mysql_errno() . ': ' . mysql_error(); 
+			die($error);
+		}
+		
+		$selected = false;
+		$selected = @mysql_select_db($database, $this->mysql);
+		if (!$selected) {
+			$error  = "<br />\r\n";
+			$error .= 'Unable to select database : "' . $database;
+			$error .= "\"<br />\r\nError " . mysql_errno() . ': ' . mysql_error(); 
+			die($error);
+		}
 	}
 	
 	
@@ -88,7 +104,7 @@ class mySqlConnection {
 			$debug($this);
 		}
 		
-		return new mySqlResult($result);
+		return new mySqlResult($result, $query);
 	}
 	
 	

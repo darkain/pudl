@@ -1,8 +1,9 @@
 <?php
 
 class mySqlResult {
-	public function __construct($result) {
+	public function __construct($result, $query) {
 		$this->result = $result;
+		$this->query  = $query;
 		$this->fields = false;
 	}
 
@@ -113,9 +114,16 @@ class mySqlResult {
 
 		return $data;
 	}
-	
-	
+
+
+
+	public function query() {
+		return $this->query;
+	}
+
+
 
 	private $fields;
 	private $result;
+	private $query;
 }
