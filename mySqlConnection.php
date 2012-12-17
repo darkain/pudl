@@ -99,12 +99,14 @@ class mySqlConnection {
 			$bench($query, $diff, $this);
 		}
 		
+		$return = new mySqlResult($result, $query);
+		
 		if ($result === false  &&  $this->debug !== false) {
 			$debug = $this->debug;
-			$debug($this);
+			$debug($this, $return);
 		}
 		
-		return new mySqlResult($result, $query);
+		return $return;
 	}
 	
 	
@@ -604,6 +606,16 @@ class mySqlConnection {
 		$query  = "UPDATE `$table` SET ";
 		$query .= mySqlQuery::update($data, $safe);
 		$query .= mySqlQuery::clause($clause);
+		$query .= mySqlQuery::limit($limit, $offset);
+		return $this->query($query);
+	}
+
+
+
+	public function updateIn($table, $data, $field, $in, $safe=false, $limit=false, $offset=false) {
+		$query  = "UPDATE `$table` SET ";
+		$query .= mySqlQuery::update($data, $safe);
+		$query .= " WHERE `$field` IN ($in)";
 		$query .= mySqlQuery::limit($limit, $offset);
 		return $this->query($query);
 	}
