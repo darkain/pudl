@@ -63,6 +63,7 @@ class mySqlQuery {
 	public static function clause($clause) {
 		if ($clause === false) return '';
 		if (!is_array($clause)) return " WHERE $clause";
+		if (!count($clause)) return '';
 
 		$query = " WHERE ";
 		$first = true;
@@ -94,6 +95,7 @@ class mySqlQuery {
 	public static function order($order) {
 		if ($order === false)  return '';
 		if (!is_array($order)) return " ORDER BY $order";
+		if (!count($order)) return '';
 
 		$query = " ORDER BY ";
 		$first = true;
@@ -112,6 +114,7 @@ class mySqlQuery {
 	public static function group($group) {
 		if ($group === false)  return '';
 		if (!is_array($group)) return " GROUP BY $group";
+		if (!count($group)) return '';
 
 		$query = " GROUP BY ";
 		$first = true;
@@ -146,6 +149,7 @@ class mySqlQuery {
 	public static function joinClause($join_clause) {
 		if ($join_clause === false) return '';
 		if (!is_array($join_clause)) return " ON ($join_clause)";
+		if (!count($join_clause)) return '';
 
 		$query = ' ON (';
 		$first = true;
@@ -178,6 +182,7 @@ class mySqlQuery {
 	public static function joinUsing($join_using) {
 		if ($join_using === false)  return '';
 		if (!is_array($join_using)) return " USING ($join_using)";
+		if (!count($join_using)) return '';
 
 		$query = ' USING (';
 
