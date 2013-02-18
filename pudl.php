@@ -9,7 +9,6 @@ abstract class pudl extends pudlQuery {
 
 	
 	public function __construct() {
-		$this->db     = $this;
 		$this->bench  = false;
 		$this->debug  = false;
 		$this->union  = false;	
