@@ -17,7 +17,7 @@ class pudlMySqliResult extends pudlResult {
 
 	public function free() {
 		$return = false;
-		if (is_array($this->result)) $return = @$this->result->free();
+		if (is_object($this->result)) $return = @$this->result->free();
 		$this->result = false;
 		return $return;
 	}
@@ -25,7 +25,7 @@ class pudlMySqliResult extends pudlResult {
 
 	public function cell($row=0, $column=0) {
 		$return = false;
-		if (is_array($this->result)) {
+		if (is_object($this->result)) {
 			@$this->result->data_seek($row);
 			$data = $this->row('NUMBER');
 			if (isset($data[$column])) $return = $data[$column];
@@ -36,21 +36,21 @@ class pudlMySqliResult extends pudlResult {
 
 	public function count() {
 		$rows = false;
-		if (is_array($this->result)) $rows = $this->result->num_rows;
+		if (is_object($this->result)) $rows = $this->result->num_rows;
 		return ($rows !== false) ? $rows : 0;
 	}
 
 	
 	public function fields() {
 		$fields = false;
-		if (is_array($this->result)) $fields = $this->result->field_count;
+		if (is_object($this->result)) $fields = $this->result->field_count;
 		return ($fields !== false) ? $fields : 0;
 	}
 
 
 	public function getField($column) {
 		$field = false;
-		if (is_array($this->result)) {
+		if (is_object($this->result)) {
 			@$this->result->field_seek($column);
 			$field = @$this->result->fetch_field();
 		}
@@ -59,7 +59,7 @@ class pudlMySqliResult extends pudlResult {
 
 	
 	public function row($type='ARRAY') {
-		if (!$this->result) return false;
+		if (!is_object($this->result)) return false;
 		$data = false;
 		switch ($type) {
 			case 'ARRAY':	$data = @$this->result->fetch_array(MYSQLI_ASSOC);	break;
