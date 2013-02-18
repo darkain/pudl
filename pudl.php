@@ -1,84 +1,30 @@
 <?php
 
 
-require_once('mySqlResult.php');
-require_once('mySqlQuery.php');
+require_once('pudlResult.php');
+require_once('pudlQuery.php');
 
 
-class mySqlConnection {
+abstract class pudl extends pudlQuery {
 
 	
-	public function __construct($username, $password, $database, $server='localhost') {
+	public function __construct() {
+		$this->db     = $this;
 		$this->bench  = false;
 		$this->debug  = false;
 		$this->union  = false;	
 		$this->locked = false;
-		
-		$this->mysql  = false;
-		$this->mysql  = @mysql_pconnect($server, $username, $password);
-		
-		if (!$this->mysql) {
-			$this->mysql = @mysql_connect($server, $username, $password);
-		}
-		
-		if (!$this->mysql) {
-			$error  = "<br />\r\n";
-			$error .= 'Unable to connect to database server: "' . $server;
-			$error .= '" with the username: "' . $username;
-			$error .= "\"<br />\r\nError " . mysql_errno() . ': ' . mysql_error(); 
-			die($error);
-		}
-		
-		$selected = false;
-		$selected = @mysql_select_db($database, $this->mysql);
-		if (!$selected) {
-			$error  = "<br />\r\n";
-			$error .= 'Unable to select database : "' . $database;
-			$error .= "\"<br />\r\nError " . mysql_errno() . ': ' . mysql_error(); 
-			die($error);
-		}
 	}
 	
 	
 	
-	public static function instance($data) {
-		$username = isset($data['username']) ? $data['username'] : '';
-		$password = isset($data['password']) ? $data['password'] : '';
-		$database = isset($data['database']) ? $data['database'] : '';
-		$server   = isset($data['server'])   ? $data['server']   : 'localhost';
-		return new mySqlConnection($username, $password, $database, $server);
-	}
-
-
-
-	public static function safe($str) {
-		$return = false;
-		$return = @mysql_real_escape_string($str);
-		return $return;
-	}
-
+	abstract protected function process($query);
 	
+	abstract public function insertId();
+	abstract public function updated();
 	
-	public function safer($str) {
-		$return = false;
-		$return = @mysql_real_escape_string($str, $this->mysql);
-		return $return;
-	}
-	
-	
-	public function errno() {
-		$return = false;
-		$return = @mysql_errno($this->mysql);
-		return $return;
-	}
-
-	
-	
-	public function error() {
-		$return = false;
-		$return = @mysql_error($this->mysql);
-		return $return;
-	}
+	abstract public function errno();
+	abstract public function error();
 	
 	
 	
@@ -87,57 +33,38 @@ class mySqlConnection {
 			$this->union[] = $query;
 			return true;
 		}
-		
+
 		if (!empty($this->bench)) $microtime = microtime();
 
-		$result = false;
-		$result = @mysql_query($query, $this->mysql);
-		
+		$result = $this->process($query);
+
 		if (!empty($this->bench)) {
 			$bench = $this->bench;
 			$diff = round(microtime()-$microtime, 6);
 			$bench($query, $diff, $this);
 		}
-		
-		$return = new mySqlResult($result, $query);
-		
-		if ($result === false  &&  $this->debug !== false) {
+
+		if ($result->error()  &&  $this->debug !== false) {
 			$debug = $this->debug;
-			$debug($this, $return);
+			$debug($this, $result);
 		}
-		
-		return $return;
+
+		return $result;
 	}
 	
 	
 	
-	public function insertId() {
-		$return = false;
-		$return = @mysql_insert_id($this->mysql);
-		return $return;
-	}
-
-	
-	
-	public function updated() {
-		$return = false;
-		$return = @mysql_affected_rows($this->mysql);
-		return $return;
-	}
-	
-
-
 	public function listFields($table, $safe=false) {
 		$return = array();
 		if (is_array($table)) {
 			foreach ($table as $t) {
-				if ($safe) $t = $this->safer($t);
+				if ($safe) $t = $this->safe($t);
 				$result = $this->query("SHOW COLUMNS FROM `$t`");
 				while ($data = $result->row()) $return[$data['Field']] = $data;
 				$result->free();
 			}
 		} else {
-			if ($safe) $table = $this->safer($table);
+			if ($safe) $table = $this->safe($table);
 			$result = $this->query("SHOW COLUMNS FROM `$table`");
 			while ($data = $result->row()) $return[$data['Field']] = $data;
 			$result->free();
@@ -149,12 +76,13 @@ class mySqlConnection {
 
 	public function select($col, $table, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT ';
-		$query .= mySqlQuery::column($col);
-		$query .= mySqlQuery::table($table);
-		$query .= mySqlQuery::clause($clause);
-		$query .= mySqlQuery::order($order);
-		$query .= mySqlQuery::limit($limit, $offset);
-		$query .= mySqlQuery::lock($lock);
+		$query .= $this->_top($limit);
+		$query .= $this->_column($col);
+		$query .= $this->_table($table);
+		$query .= $this->_clause($clause);
+		$query .= $this->_order($order);
+		$query .= $this->_limit($limit, $offset);
+		$query .= $this->_lock($lock);
 		return $this->query($query);
 	}
 
@@ -162,13 +90,14 @@ class mySqlConnection {
 
 	public function selectGroup($col, $table, $clause=false, $group=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT ';
-		$query .= mySqlQuery::column($col);
-		$query .= mySqlQuery::table($table);
-		$query .= mySqlQuery::clause($clause);
-		$query .= mySqlQuery::group($group);
-		$query .= mySqlQuery::order($order);
-		$query .= mySqlQuery::limit($limit, $offset);
-		$query .= mySqlQuery::lock($lock);
+		$query .= $this->_top($limit);
+		$query .= $this->_column($col);
+		$query .= $this->_table($table);
+		$query .= $this->_clause($clause);
+		$query .= $this->_group($group);
+		$query .= $this->_order($order);
+		$query .= $this->_limit($limit, $offset);
+		$query .= $this->_lock($lock);
 		return $this->query($query);
 	}
 
@@ -176,15 +105,16 @@ class mySqlConnection {
 
 	public function selectOrderGroup($col, $table, $clause=false, $group=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT *, COUNT(*) FROM (SELECT ';
-		$query .= mySqlQuery::column($col);
-		$query .= mySqlQuery::table($table);
-		$query .= mySqlQuery::clause($clause);
-		$query .= mySqlQuery::order($order);
+		$query .= $this->_top($limit);
+		$query .= $this->_column($col);
+		$query .= $this->_table($table);
+		$query .= $this->_clause($clause);
+		$query .= $this->_order($order);
 		$query .= ') groupbyorderby ';
-		$query .= mySqlQuery::group($group);
-		$query .= mySqlQuery::order($order);
-		$query .= mySqlQuery::limit($limit, $offset);
-		$query .= mySqlQuery::lock($lock);
+		$query .= $this->_group($group);
+		$query .= $this->_order($order);
+		$query .= $this->_limit($limit, $offset);
+		$query .= $this->_lock($lock);
 		return $this->query($query);
 	}
 
@@ -192,14 +122,15 @@ class mySqlConnection {
 
 	public function selectJoin($col, $table, $join_table, $join_clause, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT ';
-		$query .= mySqlQuery::column($col);
-		$query .= mySqlQuery::table($table);
-		$query .= mySqlQuery::joinTable($join_table);
-		$query .= mySqlQuery::joinClause($join_clause);
-		$query .= mySqlQuery::clause($clause);
-		$query .= mySqlQuery::order($order);
-		$query .= mySqlQuery::limit($limit, $offset);
-		$query .= mySqlQuery::lock($lock);
+		$query .= $this->_top($limit);
+		$query .= $this->_column($col);
+		$query .= $this->_table($table);
+		$query .= $this->_joinTable($join_table);
+		$query .= $this->_joinClause($join_clause);
+		$query .= $this->_clause($clause);
+		$query .= $this->_order($order);
+		$query .= $this->_limit($limit, $offset);
+		$query .= $this->_lock($lock);
 		return $this->query($query);
 	}
 
@@ -207,12 +138,13 @@ class mySqlConnection {
 
 	public function selectDistinct($col, $table, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT DISTINCT ';
-		$query .= mySqlQuery::column($col);
-		$query .= mySqlQuery::table($table);
-		$query .= mySqlQuery::clause($clause);
-		$query .= mySqlQuery::order($order);
-		$query .= mySqlQuery::limit($limit, $offset);
-		$query .= mySqlQuery::lock($lock);
+		$query .= $this->_top($limit);
+		$query .= $this->_column($col);
+		$query .= $this->_table($table);
+		$query .= $this->_clause($clause);
+		$query .= $this->_order($order);
+		$query .= $this->_limit($limit, $offset);
+		$query .= $this->_lock($lock);
 		return $this->query($query);
 	}
 
@@ -220,15 +152,16 @@ class mySqlConnection {
 
 	public function selectDistinctGroup($col, $table, $clause=false, $group=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT DISTINCT * FROM (SELECT ';
-		$query .= mySqlQuery::column($col);
-		$query .= mySqlQuery::table($table);
-		$query .= mySqlQuery::clause($clause);
-		$query .= mySqlQuery::order($order);
+		$query .= $this->_top($limit);
+		$query .= $this->_column($col);
+		$query .= $this->_table($table);
+		$query .= $this->_clause($clause);
+		$query .= $this->_order($order);
 		$query .= ') groupbyorderby ';
-		$query .= mySqlQuery::group($group);
-		$query .= mySqlQuery::order($order);
-		$query .= mySqlQuery::limit($limit, $offset);
-		$query .= mySqlQuery::lock($lock);
+		$query .= $this->_group($group);
+		$query .= $this->_order($order);
+		$query .= $this->_limit($limit, $offset);
+		$query .= $this->_lock($lock);
 		return $this->query($query);
 	}
 
@@ -236,14 +169,15 @@ class mySqlConnection {
 
 	public function selectDistinctJoin($col, $table, $join_table, $join_clause, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT DISTINCT ';
-		$query .= mySqlQuery::column($col);
-		$query .= mySqlQuery::table($table);
-		$query .= mySqlQuery::joinTable($join_table);
-		$query .= mySqlQuery::joinClause($join_clause);
-		$query .= mySqlQuery::clause($clause);
-		$query .= mySqlQuery::order($order);
-		$query .= mySqlQuery::limit($limit, $offset);
-		$query .= mySqlQuery::lock($lock);
+		$query .= $this->_top($limit);
+		$query .= $this->_column($col);
+		$query .= $this->_table($table);
+		$query .= $this->_joinTable($join_table);
+		$query .= $this->_joinClause($join_clause);
+		$query .= $this->_clause($clause);
+		$query .= $this->_order($order);
+		$query .= $this->_limit($limit, $offset);
+		$query .= $this->_lock($lock);
 		return $this->query($query);
 	}
 
@@ -251,12 +185,13 @@ class mySqlConnection {
 
 	public function selectExplain($col, $table, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT ';
-		$query .= mySqlQuery::column($col);
-		$query .= mySqlQuery::table($table);
-		$query .= mySqlQuery::clause($clause);
-		$query .= mySqlQuery::order($order);
-		$query .= mySqlQuery::limit($limit, $offset);
-		$query .= mySqlQuery::lock($lock);
+		$query .= $this->_top($limit);
+		$query .= $this->_column($col);
+		$query .= $this->_table($table);
+		$query .= $this->_clause($clause);
+		$query .= $this->_order($order);
+		$query .= $this->_limit($limit, $offset);
+		$query .= $this->_lock($lock);
 		return $this->explain($query);
 	}
 
@@ -264,12 +199,12 @@ class mySqlConnection {
 
 	public function selectCache($col, $table, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT SQL_CACHE ';
-		$query .= mySqlQuery::column($col);
-		$query .= mySqlQuery::table($table);
-		$query .= mySqlQuery::clause($clause);
-		$query .= mySqlQuery::order($order);
-		$query .= mySqlQuery::limit($limit, $offset);
-		$query .= mySqlQuery::lock($lock);
+		$query .= $this->_column($col);
+		$query .= $this->_table($table);
+		$query .= $this->_clause($clause);
+		$query .= $this->_order($order);
+		$query .= $this->_limit($limit, $offset);
+		$query .= $this->_lock($lock);
 		return $this->query($query);
 	}
 
@@ -277,12 +212,13 @@ class mySqlConnection {
 
 	public function selectNoCache($col, $table, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT SQL_NO_CACHE ';
-		$query .= mySqlQuery::column($col);
-		$query .= mySqlQuery::table($table);
-		$query .= mySqlQuery::clause($clause);
-		$query .= mySqlQuery::order($order);
-		$query .= mySqlQuery::limit($limit, $offset);
-		$query .= mySqlQuery::lock($lock);
+		$query .= $this->_top($limit);
+		$query .= $this->_column($col);
+		$query .= $this->_table($table);
+		$query .= $this->_clause($clause);
+		$query .= $this->_order($order);
+		$query .= $this->_limit($limit, $offset);
+		$query .= $this->_lock($lock);
 		return $this->query($query);
 	}
 	
@@ -295,27 +231,28 @@ class mySqlConnection {
 			$query = 'SELECT ';
 		}
 
-		if (isset($params['column'])) $query .= mySqlQuery::column($params['column']);
-		if (isset($params['table' ])) $query .= mySqlQuery::table( $params['table' ]);
-		if (isset($params['clause'])) $query .= mySqlQuery::clause($params['clause']);
+		if (isset($params['limit' ])) $query .= $this->_top(   $params['limit ']);
+		if (isset($params['column'])) $query .= $this->_column($params['column']);
+		if (isset($params['table' ])) $query .= $this->_table( $params['table' ]);
+		if (isset($params['clause'])) $query .= $this->_clause($params['clause']);
 
 		if (isset($params['group'])  &&  isset($params['order'])) {
-			$query .= mySqlQuery::order($params['order']);
+			$query .= $this->_order($params['order']);
 			$query .= ') groupbyorderby ';
 		}
 
-		if (isset($params['group'])) $query .= mySqlQuery::group($params['group']);
-		if (isset($params['order'])) $query .= mySqlQuery::order($params['order']);
+		if (isset($params['group'])) $query .= $this->_group($params['group']);
+		if (isset($params['order'])) $query .= $this->_order($params['order']);
 
 		if (isset($params['limit'])) {
 			if (isset($params['offset'])) {
-				$query .= mySqlQuery::limit($params['limit'], $params['offset']);
+				$query .= $this->_limit($params['limit'], $params['offset']);
 			} else {
-				$query .= mySqlQuery::limit($params['limit']);
+				$query .= $this->_limit($params['limit']);
 			}
 		}
 
-		if (isset($params['lock'])) $query .= mySqlQuery::lock($params['lock']);
+		if (isset($params['lock'])) $query .= $this->_lock($params['lock']);
 
 		$result = $this->query($query);
 		$params['rows'] = $result->count();
@@ -369,9 +306,10 @@ class mySqlConnection {
 
 	public function delete($table, $clause, $limit=false, $offset=false) {
 		$query  = 'DELETE ';
-		$query .= mySqlQuery::table($table);
-		$query .= mySqlQuery::clause($clause);
-		$query .= mySqlQuery::limit($limit, $offset);
+		$query .= $this->_top($limit);
+		$query .= $this->_table($table);
+		$query .= $this->_clause($clause);
+		$query .= $this->_limit($limit, $offset);
 		return $this->query($query);
 	}
 
@@ -423,10 +361,10 @@ class mySqlConnection {
 	public function countGroup($table, $clause, $group, $col='*') {
 		$query  = 'SELECT COUNT(*) FROM (';
 		$query .= 'SELECT ';
-		$query .= mySqlQuery::column($col);
-		$query .= mySqlQuery::table($table);
-		$query .= mySqlQuery::clause($clause);
-		$query .= mySqlQuery::group($group);
+		$query .= $this->_column($col);
+		$query .= $this->_table($table);
+		$query .= $this->_clause($clause);
+		$query .= $this->_group($group);
 		$query .= ') groupbycount';
 
 		$result = $this->query($query);
@@ -459,8 +397,9 @@ class mySqlConnection {
 			$query .= $union;
 		}
 
-		$query .= mySqlQuery::order($order);
-		$query .= mySqlQuery::limit($limit, $offset);
+		$query .= $this->_order($order);
+		$query .= $this->_limit($limit, $offset);
+		//TODO: figure out how to convert this over to 'TOP' syntax
 
 		$this->union = false;
 		return $this->query($query);
@@ -481,18 +420,18 @@ class mySqlConnection {
 			} else if (is_array($value)) {
 				foreach ($value as $func => $sub_value) {
 					if ($func == 'AES_ENCRYPT') {
-						if ($safe !== false) $sub_value['key']  = $this->safer($sub_value['key']);
-						if ($safe !== false) $sub_value['data'] = $this->safer($sub_value['data']);
+						if ($safe !== false) $sub_value['key']  = $this->safe($sub_value['key']);
+						if ($safe !== false) $sub_value['data'] = $this->safe($sub_value['data']);
 						$good = $func . '("' . $sub_value['data'] . '","' . $sub_value['key'] . '")';
 					} else {
-						if ($safe !== false) $sub_value = $this->safer($sub_value);
+						if ($safe !== false) $sub_value = $this->safe($sub_value);
 						$good = $func . '(' . $sub_value . ')';
 					}
 					break;
 				}
 
 			} else {
-				if ($safe !== false) $value = $this->safer($value);
+				if ($safe !== false) $value = $this->safe($value);
 				$good = "'$value'";
 			}
 
@@ -515,7 +454,7 @@ class mySqlConnection {
 			$query = "INSERT INTO `$table` ($cols) VALUES ($vals)";
 			if ($update !== false) {
 				$query .= ' ON DUPLICATE KEY UPDATE ';
-				$query .= mySqlQuery::update($update, $safe);
+				$query .= $this->_update($update, $safe);
 			}
 		}
 
@@ -580,7 +519,7 @@ class mySqlConnection {
 			$query = "INSERT INTO `$table` (" . $query;
 			if ($update !== false) {
 				$query .= ' ON DUPLICATE KEY UPDATE ';
-				$query .= mySqlQuery::update($update, $safe);
+				$query .= $this->_update($update, $safe);
 			}
 		}
 
@@ -603,20 +542,24 @@ class mySqlConnection {
 
 
 	public function update($table, $data, $clause, $safe=false, $limit=false, $offset=false) {
-		$query  = "UPDATE `$table` SET ";
-		$query .= mySqlQuery::update($data, $safe);
-		$query .= mySqlQuery::clause($clause);
-		$query .= mySqlQuery::limit($limit, $offset);
+		$query  = 'UPDATE ';
+		$query .= $this->_top($limit);
+		$query .= "`$table` SET ";
+		$query .= $this->_update($data, $safe);
+		$query .= $this->_clause($clause);
+		$query .= $this->_limit($limit, $offset);
 		return $this->query($query);
 	}
 
 
 
 	public function updateIn($table, $data, $field, $in, $safe=false, $limit=false, $offset=false) {
-		$query  = "UPDATE `$table` SET ";
-		$query .= mySqlQuery::update($data, $safe);
+		$query  = 'UPDATE ';
+		$query .= $this->_top($limit);
+		$query .= "`$table` SET ";
+		$query .= $this->_update($data, $safe);
 		$query .= " WHERE `$field` IN ($in)";
-		$query .= mySqlQuery::limit($limit, $offset);
+		$query .= $this->_limit($limit, $offset);
 		return $this->query($query);
 	}
 
@@ -630,9 +573,11 @@ class mySqlConnection {
 
 
 	public function increment($table, $col, $clause, $amount=1, $limit=false, $offset=false) {
-		$query = "UPDATE `$table` SET `$col`=`$col`+($amount) ";
-		$query .= mySqlQuery::clause($clause);
-		$query .= mySqlQuery::limit($limit, $offset);
+		$query = 'UPDATE ';
+		$query .= $this->_top($limit);
+		$query .= "`$table` SET `$col`=`$col`+($amount) ";
+		$query .= $this->_clause($clause);
+		$query .= $this->_limit($limit, $offset);
 		return $this->query($query);
 	}
 
@@ -640,10 +585,11 @@ class mySqlConnection {
 
 	public function fieldType($table, $column, $safe=false) {
 		if ($safe) {
-			$table  = $this->safer($table);
-			$column = $this->safer($column);
+			$table  = $this->safe($table);
+			$column = $this->safe($column);
 		}
 
+		//TODO: convert this to some sort of standard SQL
 		$query = "SELECT SQL_CACHE COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='$table' AND COLUMN_NAME='$column'";
 		$result = $this->query($query);
 		$return = $result->cell();
@@ -750,7 +696,6 @@ class mySqlConnection {
 	}
 
 
-	private $mysql;
 	private $union;
 	private $locked;
 	private $debug;

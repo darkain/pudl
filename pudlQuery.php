@@ -1,9 +1,24 @@
 <?php
 
-class mySqlQuery {
+abstract class pudlQuery {
 
 
-	public static function column($col) {
+	abstract public function safe($str);
+
+
+
+	protected function _top($limit) {
+		if (!$this->top) return '';
+		if ($limit === false) return '';
+		return 'TOP ' . (int) $limit . ' ';
+	}
+
+
+
+	protected function _column($col) {
+		$escstart = $this->escstart;
+		$escend = $this->escend;
+		
 		if (!is_array($col)) {
 			if ($col === false  ||  $col === ''  ||  $col === null) return '*';
 			return $col;
@@ -17,7 +32,7 @@ class mySqlQuery {
 			if (is_numeric($key)) {
 				$query .= $val;
 			} else {
-				$query .= "$key.`$val`";
+				$query .= "$escstart$key$escend.$escstart$val$escend";
 			}
 			$first = false;
 		}
@@ -27,8 +42,11 @@ class mySqlQuery {
 
 
 
-	public static function table($table) {
-		if (!is_array($table)) return " FROM `$table`";
+	protected function _table($table) {
+		$escstart = $this->escstart;
+		$escend = $this->escend;
+
+		if (!is_array($table)) return " FROM $escstart$table$escend";
 
 		$query = ' FROM ';
 		$first = true;
@@ -38,9 +56,9 @@ class mySqlQuery {
 			$first = false;
 
 			if (!is_array($val)) {
-				$query .= "`$val` $key";
+				$query .= "$escstart$val$escend $key";
 			} else {
-				$query .= "`$val[0]` $key";
+				$query .= "$escstart$val[0]$escend $key";
 				for ($i=1; $i<count($val); $i++) {
 					$query .= self::joinTable( $val[$i]['join']);
 
@@ -60,7 +78,7 @@ class mySqlQuery {
 
 
 
-	public static function clause($clause) {
+	protected function _clause($clause) {
 		if ($clause === false) return '';
 		if (!is_array($clause)) return " WHERE $clause";
 		if (!count($clause)) return '';
@@ -92,7 +110,7 @@ class mySqlQuery {
 
 
 
-	public static function order($order) {
+	protected function _order($order) {
 		if ($order === false)  return '';
 		if (!is_array($order)) return " ORDER BY $order";
 		if (!count($order)) return '';
@@ -111,7 +129,7 @@ class mySqlQuery {
 
 
 
-	public static function group($group) {
+	protected function _group($group) {
 		if ($group === false)  return '';
 		if (!is_array($group)) return " GROUP BY $group";
 		if (!count($group)) return '';
@@ -130,7 +148,8 @@ class mySqlQuery {
 
 
 
-	public static function limit($limit, $offset) {
+	protected function _limit($limit, $offset=false) {
+		if (!$this->limit) return '';
 		if ($limit !== false  &&  $offset === false) return " LIMIT $limit";
 		if ($limit !== false  &&  $offset !== false) return " LIMIT $offset,$limit";
 		return '';
@@ -138,7 +157,7 @@ class mySqlQuery {
 
 
 
-	public static function lock($lock) {
+	protected function _lock($lock) {
 		if ($lock === "SHARE")  return ' LOCK IN SHARE MODE';
 		if ($lock === "UPDATE") return ' FOR UPDATE';
 		return '';
@@ -146,7 +165,7 @@ class mySqlQuery {
 
 
 
-	public static function joinClause($join_clause) {
+	protected function _joinClause($join_clause) {
 		if ($join_clause === false) return '';
 		if (!is_array($join_clause)) return " ON ($join_clause)";
 		if (!count($join_clause)) return '';
@@ -179,7 +198,7 @@ class mySqlQuery {
 
 
 
-	public static function joinUsing($join_using) {
+	protected function _joinUsing($join_using) {
 		if ($join_using === false)  return '';
 		if (!is_array($join_using)) return " USING ($join_using)";
 		if (!count($join_using)) return '';
@@ -199,8 +218,11 @@ class mySqlQuery {
 
 
 
-	public static function joinTable($join_table) {
-		if (!is_array($join_table)) return " LEFT JOIN (`$join_table`)";
+	protected function _joinTable($join_table) {
+		$escstart = $this->escstart;
+		$escend = $this->escend;
+
+		if (!is_array($join_table)) return " LEFT JOIN ($escstart$join_table$escend)";
 
 		// $query = " LEFT JOIN (";
 		$query = " LEFT JOIN ";
@@ -208,7 +230,7 @@ class mySqlQuery {
 
 		foreach ($join_table as $key => &$val) {
 			// if (!$first) $query .= ', ';
-			$query .= "`$val` $key";
+			$query .= "$escstart$val$escend $key";
 			break;
 			// $first = false;
 		}
@@ -219,8 +241,10 @@ class mySqlQuery {
 
 
 
-	public static function update($data, $safe=false) {
-		global $db;
+	protected function _update($data, $safe=false) {
+		$escstart = $this->escstart;
+		$escend = $this->escend;
+
 		if (!is_array($data)) return $data;
 
 		$query = '';
@@ -234,24 +258,24 @@ class mySqlQuery {
 			} else if (is_array($value)) {
 				foreach ($value as $func => $sub_value) {
 					if ($func == 'AES_ENCRYPT') {
-						if ($safe !== false) $sub_value['key']  = $db->safer($sub_value['key']);
-						if ($safe !== false) $sub_value['data'] = $db->safer($sub_value['data']);
+						if ($safe !== false) $sub_value['key']  = $this->safe($sub_value['key']);
+						if ($safe !== false) $sub_value['data'] = $this->safe($sub_value['data']);
 						$good = $func . '("' . $sub_value['data'] . '","' . $sub_value['key'] . '")';
 					} else {
-						if ($safe !== false) $sub_value = $db->safer($sub_value);
+						if ($safe !== false) $sub_value = $this->safe($sub_value);
 						$good = $func . '(' . $sub_value . ')';
 					}
 					break;
 				}
 			} else {
-				if ($safe !== false) $value = $db->safer($value);
+				if ($safe !== false) $value = $this->safe($value);
 				$good = "'$value'";
 			}
 
 			if ($good !== false) {
 				if (!$first) $query .= ', ';
 				$first  = false;
-				$query .= "`$column`=$good";
+				$query .= "$escstart$column$escend=$good";
 			}
 		}
 
@@ -259,4 +283,52 @@ class mySqlQuery {
 	}	
 
 
+
+	public function prefixColumns($table, $col=false) {
+		$prefix = array();
+		
+		if (is_array($table)) {
+			foreach ($table as $key => $val) {
+				if (is_array($val)) {
+					foreach ($val as $subtable) {
+						if (is_array($subtable)) {
+							foreach ($subtable['join'] as $subkey => $subname) {
+								$fields = $this->listFields($subname);
+								foreach ($fields as $field) {
+									$prefix[$field['Field']] = $subkey;
+								}
+							}
+						} else {
+							$fields = $this->listFields($subtable);
+							foreach ($fields as $field) {
+								$prefix[$field['Field']] = $key;
+							}
+						}
+					}
+				} else {
+					$fields = $this->listFields($val);
+					foreach ($fields as $field) {
+						$prefix[$field['Field']] = $key;
+					}
+				}
+			}
+		}
+		
+		if ($col === false) return $prefix;
+		
+		$column = array();
+		foreach ($col as $val) {
+			if (isset($prefix[$val])) {
+				$column[] = $prefix[$val] . '.' . $val;
+			}
+		}
+		return $column;
+	}
+
+
+
+	protected $escstart = '`';
+	protected $escend = '`';
+	protected $top = false;
+	protected $limit = false;
 }
