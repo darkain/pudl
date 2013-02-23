@@ -60,14 +60,14 @@ abstract class pudlQuery {
 			} else {
 				$query .= "$escstart$val[0]$escend $key";
 				for ($i=1; $i<count($val); $i++) {
-					$query .= self::joinTable( $val[$i]['join']);
+					$query .= self::_joinTable( $val[$i]['join']);
 
 					if (isset($val[$i]['clause'])) {
-						$query .= self::joinClause($val[$i]['clause']);
+						$query .= self::_joinClause($val[$i]['clause']);
 					}
 
 					if (isset($val[$i]['using'])) {
-						$query .= self::joinUsing($val[$i]['using']);
+						$query .= self::_joinUsing($val[$i]['using']);
 					}
 				}
 			}
