@@ -15,7 +15,7 @@ abstract class pudlQuery {
 
 
 
-	protected function _column($col) {
+	protected function _column(&$col) {
 		$escstart = $this->escstart;
 		$escend = $this->escend;
 		
@@ -42,7 +42,7 @@ abstract class pudlQuery {
 
 
 
-	protected function _table($table) {
+	protected function _table(&$table) {
 		$escstart = $this->escstart;
 		$escend = $this->escend;
 
@@ -78,39 +78,33 @@ abstract class pudlQuery {
 
 
 
-	protected function _clause($clause) {
+	protected function _clause(&$clause) {
 		if ($clause === false) return '';
 		if (!is_array($clause)) return " WHERE $clause";
 		if (!count($clause)) return '';
+		return " WHERE " . $this->_clause_recurse($clause);
+	}
 
-		$query = " WHERE ";
+
+	private function _clause_recurse(&$clause, $or=false) {
 		$first = true;
-
+		$query = '';
 		foreach ($clause as $key => &$val) {
-			if (!$first) $query .= ' AND ';
+			if (!$first) $query .= ($or ? ' OR ' : ' AND ');
 			$first = false;
 
 			if (is_array($val)) {
-				$query .= '(';
-				$val_first = true;
-				foreach ($val as $val_key => &$val_val) {
-					if (!$val_first) $query .= ' OR ';
-					$val_first = false;
-					$query .= $val_val;
-				}
-				$query .= ')';
-
+				$query .= '(' . $this->_clause_recurse($val, !$or) . ')';
 			} else {
 				$query .= $val;
 			}
 		}
-
 		return $query;
 	}
 
 
 
-	protected function _order($order) {
+	protected function _order(&$order) {
 		if ($order === false)  return '';
 		if (!is_array($order)) return " ORDER BY $order";
 		if (!count($order)) return '';
@@ -129,7 +123,7 @@ abstract class pudlQuery {
 
 
 
-	protected function _group($group) {
+	protected function _group(&$group) {
 		if ($group === false)  return '';
 		if (!is_array($group)) return " GROUP BY $group";
 		if (!count($group)) return '';
