@@ -9,13 +9,18 @@ class pudlMySqli extends pudl {
 	public function __construct($username, $password, $database, $server='localhost') {
 		parent::__construct();
 
+		$this->limit	= true;
+		$this->escstart	= '`';
+		$this->escend	= '`';
 
-		$this->mysqli = new mysqli("p:$server", $username, $password, $database);
-		if ($this->mysqli->connect_error) {
-			$this->mysqli = new mysqli($server, $username, $password, $database);
+		$this->mysqli = false;
+		$this->mysqli = @new mysqli("p:$server", $username, $password, $database);
+
+		if ($this->mysqli ===  false  ||  $this->mysqli->connect_error) {
+			$this->mysqli = @new mysqli($server, $username, $password, $database);
 		}
 
-		if ($this->mysqli->connect_error) {
+		if ($this->mysqli ===  false  ||  $this->mysqli->connect_error) {
 			$error  = "<br />\r\n";
 			$error .= 'Unable to connect to database server: "' . $server;
 			$error .= '" with the username: "' . $username;

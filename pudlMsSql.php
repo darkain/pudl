@@ -9,6 +9,9 @@ class pudlMsSql extends pudl {
 	public function __construct($username, $password, $database, $server='localhost') {
 		parent::__construct();
 
+		$this->escstart = '[';
+		$this->escend = ']';
+		$this->top = true;
 
 		$this->mssql  = false;
 		$this->mssql  = @mssql_pconnect($server, $username, $password);

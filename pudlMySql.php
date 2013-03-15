@@ -9,6 +9,9 @@ class pudlMySql extends pudl {
 	public function __construct($username, $password, $database, $server='localhost') {
 		parent::__construct();
 
+		$this->limit	= true;
+		$this->escstart	= '`';
+		$this->escend	= '`';
 
 		$this->mysql  = false;
 		$this->mysql  = @mysql_pconnect($server, $username, $password);
