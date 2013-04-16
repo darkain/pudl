@@ -6,13 +6,14 @@ require_once('pudlOdbcResult.php');
 
 
 class pudlOdbc extends pudl {
-	public function __construct($username, $password, $database, $server='localhost') {
+	public function __construct($username, $password, $database, $server='localhost', $prefix=false) {
 		parent::__construct();
 
-		$this->escstart = '"';
-		$this->escend = '"';
-		$this->numrows = 0;
-		$this->top = true;
+		$this->escstart	= '"';
+		$this->escend	= '"';
+		$this->numrows	= 0;
+		$this->top		= true;
+		$this->prefix	= $prefix;
 		
 		$this->odbc = false;
 		$this->odbc = @odbc_connect($database, $username, $password);
@@ -22,6 +23,17 @@ class pudlOdbc extends pudl {
 		//TODO: error out if connection fails
 	}
 
+
+	public static function instance($data) {
+		$username	= empty($data['pudl_username']) ? '' : $data['pudl_username'];
+		$password	= empty($data['pudl_password']) ? '' : $data['pudl_password'];
+		$database	= empty($data['pudl_database']) ? '' : $data['pudl_database'];
+		$server		= empty($data['pudl_server']) ? 'localhost' : $data['pudl_server'];
+		$prefix		= empty($data['pudl_prefix']) ? false : $data['pudl_prefix'];
+		return new pudlOdbc($username, $password, $database, $server, $prefix);
+	}
+
+	
 
 	protected function process($query) {
 		$result = false;

@@ -58,13 +58,15 @@ abstract class pudl extends pudlQuery {
 		if (is_array($table)) {
 			foreach ($table as $t) {
 				if ($safe) $t = $this->safe($t);
-				$result = $this->query("SHOW COLUMNS FROM `$t`");
+				$t = $this->_table2($t);
+				$result = $this->query("SHOW COLUMNS FROM $t");
 				while ($data = $result->row()) $return[$data['Field']] = $data;
 				$result->free();
 			}
 		} else {
 			if ($safe) $table = $this->safe($table);
-			$result = $this->query("SHOW COLUMNS FROM `$table`");
+			$table = $this->_table2($table);
+			$result = $this->query("SHOW COLUMNS FROM $table");
 			while ($data = $result->row()) $return[$data['Field']] = $data;
 			$result->free();
 		}
@@ -298,7 +300,7 @@ abstract class pudl extends pudlQuery {
 
 
 	public function rowId($table, $idcol, $id, $lock=false) {
-		return $this->row($table, "`$idcol`='$id'", false, $lock);
+		return $this->row($table, "{$this->escstart}$idcol{$this->escend}='$id'", false, $lock);
 	}
 
 
@@ -334,7 +336,7 @@ abstract class pudl extends pudlQuery {
 
 
 	public function cellId($table, $col, $idcol, $id) {
-		return $this->cell($table, $col, "`$idcol`='$id'");
+		return $this->cell($table, $col, "{$this->escstart}$idcol{$this->escend}='$id'");
 	}
 
 
@@ -410,6 +412,10 @@ abstract class pudl extends pudlQuery {
 		$cols = '';
 		$vals = '';
 
+		$table = $this->_table2($table);
+
+		//TODO: if $data is not an ARRAY, throw up an error message
+
 		$count = 0;
 		foreach ($data as $column => &$value) {
 			$good = false;
@@ -439,18 +445,18 @@ abstract class pudl extends pudlQuery {
 					$cols .= ', ';
 					$vals .= ', ';
 				}
-				$cols .= "`$column`";
+				$cols .= "{$this->escstart}$column{$this->escend}";
 				$vals .= $good;
 				$count++;
 			}
 		}
 
 		if ($update === 'IGNORE') {
-			$query = "INSERT IGNORE INTO `$table` ($cols) VALUES ($vals)";
+			$query = "INSERT IGNORE INTO $table ($cols) VALUES ($vals)";
 		} else if ($update === 'REPLACE') {
-			$query = "REPLACE INTO `$table` ($cols) VALUES ($vals)";
+			$query = "REPLACE INTO $table ($cols) VALUES ($vals)";
 		} else {
-			$query = "INSERT INTO `$table` ($cols) VALUES ($vals)";
+			$query = "INSERT INTO $table ($cols) VALUES ($vals)";
 			if ($update !== false) {
 				$query .= ' ON DUPLICATE KEY UPDATE ';
 				$query .= $this->_update($update, $safe);
@@ -476,20 +482,22 @@ abstract class pudl extends pudlQuery {
 
 
 	public function insertUpdate($table, $data, $idcol, $safe=false) {
-		$update = "`$idcol`=LAST_INSERT_ID(`$idcol`)";
+		$update = "{$this->escstart}$idcol{$this->escend}=LAST_INSERT_ID({$this->escstart}$idcol{$this->escend})";
 		return $this->insert($table, $data, $safe, $update);
 	}
 
 
 
 	public function insertEx($table, $cols, $data, $safe=false, $update=false) {
+		$table = $this->_table2($table);
+
 		$query = '';
 
 		$first = true;
 		foreach ($cols as &$name) {
 			if (!first) $query .= ',';
 			$first = false;
-			$query .= "`$name`";
+			$query .= "{$this->escstart}$name{$this->escend}";
 		}
 
 		$query .= ') VALUES ';
@@ -511,11 +519,11 @@ abstract class pudl extends pudlQuery {
 		}
 
 		if ($update === 'IGNORE') {
-			$query = "INSERT IGNORE INTO `$table` (" . $query;
+			$query = "INSERT IGNORE INTO $table (" . $query;
 		} else if ($update === 'REPLACE') {
-			$query = "REPLACE INTO `$table` (" . $query;
+			$query = "REPLACE INTO $table (" . $query;
 		} else {
-			$query = "INSERT INTO `$table` (" . $query;
+			$query = "INSERT INTO $table (" . $query;
 			if ($update !== false) {
 				$query .= ' ON DUPLICATE KEY UPDATE ';
 				$query .= $this->_update($update, $safe);
@@ -543,7 +551,8 @@ abstract class pudl extends pudlQuery {
 	public function update($table, $data, $clause, $safe=false, $limit=false, $offset=false) {
 		$query  = 'UPDATE ';
 		$query .= $this->_top($limit);
-		$query .= "`$table` SET ";
+		$query .= $this->_table2($table);
+		$query .= ' SET ';
 		$query .= $this->_update($data, $safe);
 		$query .= $this->_clause($clause);
 		$query .= $this->_limit($limit, $offset);
@@ -555,9 +564,10 @@ abstract class pudl extends pudlQuery {
 	public function updateIn($table, $data, $field, $in, $safe=false, $limit=false, $offset=false) {
 		$query  = 'UPDATE ';
 		$query .= $this->_top($limit);
-		$query .= "`$table` SET ";
+		$query .= $this->_table2($table);
+		$query .= ' SET ';
 		$query .= $this->_update($data, $safe);
-		$query .= " WHERE `$field` IN ($in)";
+		$query .= " WHERE {$this->escstart}$field{$this->escend} IN ($in)";
 		$query .= $this->_limit($limit, $offset);
 		return $this->query($query);
 	}
@@ -566,7 +576,7 @@ abstract class pudl extends pudlQuery {
 
 	public function updateId($table, $data, $column, $id, $safe=false) {
 		if (is_array($id)) $id = $id[$column];
-		return $this->update($table, $data, "`$column`='$id'", $safe);
+		return $this->update($table, $data, "{$this->escstart}$column{$this->escend}='$id'", $safe);
 	}
 
 
@@ -574,7 +584,8 @@ abstract class pudl extends pudlQuery {
 	public function increment($table, $col, $clause, $amount=1, $limit=false, $offset=false) {
 		$query = 'UPDATE ';
 		$query .= $this->_top($limit);
-		$query .= "`$table` SET `$col`=`$col`+($amount) ";
+		$query .= $this->_table2($table);
+		$query .= " SET {$this->escstart}$col{$this->escend}={$this->escstart}$col{$this->escend}+($amount) ";
 		$query .= $this->_clause($clause);
 		$query .= $this->_limit($limit, $offset);
 		return $this->query($query);
@@ -619,9 +630,9 @@ abstract class pudl extends pudlQuery {
 					if (!$first) $query .= ', ';
 					$first = false;
 					if (!is_numeric($key)) {
-						$query .= "`$val` $key READ";
+						$query .= "{$this->escstart}$val{$this->escend} $key READ";
 					} else {
-						$query .= "`$val` READ";
+						$query .= "{$this->escstart}$val{$this->escend} READ";
 					}
 				}
 			}
@@ -631,9 +642,9 @@ abstract class pudl extends pudlQuery {
 					if (!$first) $query .= ', ';
 					$first = false;
 					if (!is_numeric($key)) {
-						$query .= "`$val` $key WRITE";
+						$query .= "{$this->escstart}$val{$this->escend} $key WRITE";
 					} else {
-						$query .= "`$val` WRITE";
+						$query .= "{$this->escstart}$val{$this->escend} WRITE";
 					}
 				}
 			}
@@ -643,9 +654,9 @@ abstract class pudl extends pudlQuery {
 					if (!$first) $query .= ', ';
 					$first = false;
 					if (!is_numeric($key)) {
-						$query .= "`$val` $key WRITE";
+						$query .= "{$this->escstart}$val{$this->escend} $key WRITE";
 					} else {
-						$query .= "`$val` WRITE";
+						$query .= "{$this->escstart}$val{$this->escend} WRITE";
 					}
 				}
 			}

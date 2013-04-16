@@ -46,7 +46,7 @@ abstract class pudlQuery {
 		$escstart = $this->escstart;
 		$escend = $this->escend;
 
-		if (!is_array($table)) return " FROM $escstart$table$escend";
+		if (!is_array($table)) return ' FROM ' . $this->_table2($table);
 
 		$query = ' FROM ';
 		$first = true;
@@ -56,9 +56,9 @@ abstract class pudlQuery {
 			$first = false;
 
 			if (!is_array($val)) {
-				$query .= "$escstart$val$escend $key";
+				$query .= $this->_table2($val) . ' ' . $key;
 			} else {
-				$query .= "$escstart$val[0]$escend $key";
+				$query .= $this->_table2($val[0]) . ' ' . $key;
 				for ($i=1; $i<count($val); $i++) {
 					$query .= self::_joinTable( $val[$i]['join']);
 
@@ -74,6 +74,16 @@ abstract class pudlQuery {
 		}
 
 		return $query;
+	}
+
+
+
+	protected function _table2(&$table) {
+		if ($this->prefix !== false  &&  substr($table, 0, 5) === 'pudl_') {
+			return $this->escstart . $this->prefix . substr($table, 5) . $this->escend;
+		}
+
+		return $this->escstart . $table . $this->escend;
 	}
 
 
@@ -216,7 +226,7 @@ abstract class pudlQuery {
 		$escstart = $this->escstart;
 		$escend = $this->escend;
 
-		if (!is_array($join_table)) return " LEFT JOIN ($escstart$join_table$escend)";
+		if (!is_array($join_table)) return ' LEFT JOIN (' . $this->_table2($join_table) . ')';
 
 		// $query = " LEFT JOIN (";
 		$query = " LEFT JOIN ";
@@ -224,7 +234,7 @@ abstract class pudlQuery {
 
 		foreach ($join_table as $key => &$val) {
 			// if (!$first) $query .= ', ';
-			$query .= "$escstart$val$escend $key";
+			$query .= $this->_table2($val) . ' ' . $key;
 			break;
 			// $first = false;
 		}
@@ -325,4 +335,5 @@ abstract class pudlQuery {
 	protected $escend = '`';
 	protected $top = false;
 	protected $limit = false;
+	protected $prefix = false;
 }

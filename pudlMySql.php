@@ -6,12 +6,13 @@ require_once('pudlMySqlResult.php');
 
 
 class pudlMySql extends pudl {
-	public function __construct($username, $password, $database, $server='localhost') {
+	public function __construct($username, $password, $database, $server='localhost', $prefix=false) {
 		parent::__construct();
 
 		$this->limit	= true;
 		$this->escstart	= '`';
 		$this->escend	= '`';
+		$this->prefix	= $prefix;
 
 		$this->mysql  = false;
 		$this->mysql  = @mysql_pconnect($server, $username, $password);
@@ -41,11 +42,12 @@ class pudlMySql extends pudl {
 
 
 	public static function instance($data) {
-		$username = empty($data['pudl_username']) ? '' : $data['pudl_username'];
-		$password = empty($data['pudl_password']) ? '' : $data['pudl_password'];
-		$database = empty($data['pudl_database']) ? '' : $data['pudl_database'];
-		$server   = empty($data['pudl_server']) ? 'localhost' : $data['pudl_server'];
-		return new pudlMySql($username, $password, $database, $server);
+		$username	= empty($data['pudl_username']) ? '' : $data['pudl_username'];
+		$password	= empty($data['pudl_password']) ? '' : $data['pudl_password'];
+		$database	= empty($data['pudl_database']) ? '' : $data['pudl_database'];
+		$server		= empty($data['pudl_server']) ? 'localhost' : $data['pudl_server'];
+		$prefix		= empty($data['pudl_prefix']) ? false : $data['pudl_prefix'];
+		return new pudlMySql($username, $password, $database, $server, $prefix);
 	}
 
 
