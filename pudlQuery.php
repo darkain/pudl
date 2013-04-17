@@ -299,20 +299,20 @@ abstract class pudlQuery {
 							foreach ($subtable['join'] as $subkey => $subname) {
 								$fields = $this->listFields($subname);
 								foreach ($fields as $field) {
-									$prefix[$field['Field']] = $subkey;
+									if (!isset($prefix[$field['Field']])) $prefix[$field['Field']] = $subkey;
 								}
 							}
 						} else {
 							$fields = $this->listFields($subtable);
 							foreach ($fields as $field) {
-								$prefix[$field['Field']] = $key;
+								if (!isset($prefix[$field['Field']])) $prefix[$field['Field']] = $key;
 							}
 						}
 					}
 				} else {
 					$fields = $this->listFields($val);
 					foreach ($fields as $field) {
-						$prefix[$field['Field']] = $key;
+						if (!isset($prefix[$field['Field']])) $prefix[$field['Field']] = $key;
 					}
 				}
 			}
