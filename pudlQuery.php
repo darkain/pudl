@@ -43,10 +43,20 @@ abstract class pudlQuery {
 
 
 	protected function _table(&$table) {
+		if ($this->prefix !== false  &&  substr($table, 0, 5) === 'pudl_') {
+			return $this->escstart . $this->prefix . substr($table, 5) . $this->escend;
+		}
+
+		return $this->escstart . $table . $this->escend;
+	}
+
+
+
+	protected function _tables(&$table) {
 		$escstart = $this->escstart;
 		$escend = $this->escend;
 
-		if (!is_array($table)) return ' FROM ' . $this->_table2($table);
+		if (!is_array($table)) return ' FROM ' . self::_table($table);
 
 		$query = ' FROM ';
 		$first = true;
@@ -56,9 +66,9 @@ abstract class pudlQuery {
 			$first = false;
 
 			if (!is_array($val)) {
-				$query .= $this->_table2($val) . ' ' . $key;
+				$query .= self::_table($val) . ' ' . $key;
 			} else {
-				$query .= $this->_table2($val[0]) . ' ' . $key;
+				$query .= self::_table($val[0]) . ' ' . $key;
 				for ($i=1; $i<count($val); $i++) {
 					$query .= self::_joinTable( $val[$i]['join']);
 
@@ -78,21 +88,11 @@ abstract class pudlQuery {
 
 
 
-	protected function _table2(&$table) {
-		if ($this->prefix !== false  &&  substr($table, 0, 5) === 'pudl_') {
-			return $this->escstart . $this->prefix . substr($table, 5) . $this->escend;
-		}
-
-		return $this->escstart . $table . $this->escend;
-	}
-
-
-
 	protected function _clause(&$clause) {
 		if ($clause === false) return '';
 		if (!is_array($clause)) return " WHERE $clause";
 		if (!count($clause)) return '';
-		return " WHERE " . $this->_clause_recurse($clause);
+		return " WHERE " . self::_clause_recurse($clause);
 	}
 
 
@@ -104,7 +104,7 @@ abstract class pudlQuery {
 			$first = false;
 
 			if (is_array($val)) {
-				$query .= '(' . $this->_clause_recurse($val, !$or) . ')';
+				$query .= '(' . self::_clause_recurse($val, !$or) . ')';
 			} else {
 				$query .= $val;
 			}
@@ -226,7 +226,7 @@ abstract class pudlQuery {
 		$escstart = $this->escstart;
 		$escend = $this->escend;
 
-		if (!is_array($join_table)) return ' LEFT JOIN (' . $this->_table2($join_table) . ')';
+		if (!is_array($join_table)) return ' LEFT JOIN (' . self::_table2($join_table) . ')';
 
 		// $query = " LEFT JOIN (";
 		$query = " LEFT JOIN ";
@@ -234,7 +234,7 @@ abstract class pudlQuery {
 
 		foreach ($join_table as $key => &$val) {
 			// if (!$first) $query .= ', ';
-			$query .= $this->_table2($val) . ' ' . $key;
+			$query .= self::_table($val) . ' ' . $key;
 			break;
 			// $first = false;
 		}

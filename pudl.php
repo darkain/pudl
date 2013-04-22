@@ -13,6 +13,7 @@ abstract class pudl extends pudlQuery {
 		$this->debug  = false;
 		$this->union  = false;	
 		$this->locked = false;
+		$this->query  = false;
 	}
 	
 	
@@ -27,7 +28,9 @@ abstract class pudl extends pudlQuery {
 	
 	
 	
-	public function query($query) {
+	public function query($query=false) {
+		if ($query === false) return $this->query;
+
 		if (is_array($this->union)) {
 			$this->union[] = $query;
 			return true;
@@ -35,6 +38,7 @@ abstract class pudl extends pudlQuery {
 
 		if (!empty($this->bench)) $microtime = microtime();
 
+		$this->query = $query;
 		$result = $this->process($query);
 
 		if (!empty($this->bench)) {
@@ -58,14 +62,14 @@ abstract class pudl extends pudlQuery {
 		if (is_array($table)) {
 			foreach ($table as $t) {
 				if ($safe) $t = $this->safe($t);
-				$t = $this->_table2($t);
+				$t = $this->_table($t);
 				$result = $this->query("SHOW COLUMNS FROM $t");
 				while ($data = $result->row()) $return[$data['Field']] = $data;
 				$result->free();
 			}
 		} else {
 			if ($safe) $table = $this->safe($table);
-			$table = $this->_table2($table);
+			$table = $this->_table($table);
 			$result = $this->query("SHOW COLUMNS FROM $table");
 			while ($data = $result->row()) $return[$data['Field']] = $data;
 			$result->free();
@@ -79,7 +83,7 @@ abstract class pudl extends pudlQuery {
 		$query  = 'SELECT ';
 		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
-		$query .= $this->_table($table);
+		$query .= $this->_tables($table);
 		$query .= $this->_clause($clause);
 		$query .= $this->_order($order);
 		$query .= $this->_limit($limit, $offset);
@@ -93,7 +97,7 @@ abstract class pudl extends pudlQuery {
 		$query  = 'SELECT ';
 		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
-		$query .= $this->_table($table);
+		$query .= $this->_tables($table);
 		$query .= $this->_clause($clause);
 		$query .= $this->_group($group);
 		$query .= $this->_order($order);
@@ -108,7 +112,7 @@ abstract class pudl extends pudlQuery {
 		$query  = 'SELECT *, COUNT(*) FROM (SELECT ';
 		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
-		$query .= $this->_table($table);
+		$query .= $this->_tables($table);
 		$query .= $this->_clause($clause);
 		$query .= $this->_order($order);
 		$query .= ') groupbyorderby ';
@@ -125,7 +129,7 @@ abstract class pudl extends pudlQuery {
 		$query  = 'SELECT ';
 		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
-		$query .= $this->_table($table);
+		$query .= $this->_tables($table);
 		$query .= $this->_joinTable($join_table);
 		$query .= $this->_joinClause($join_clause);
 		$query .= $this->_clause($clause);
@@ -141,7 +145,7 @@ abstract class pudl extends pudlQuery {
 		$query  = 'SELECT DISTINCT ';
 		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
-		$query .= $this->_table($table);
+		$query .= $this->_tables($table);
 		$query .= $this->_clause($clause);
 		$query .= $this->_order($order);
 		$query .= $this->_limit($limit, $offset);
@@ -155,7 +159,7 @@ abstract class pudl extends pudlQuery {
 		$query  = 'SELECT DISTINCT * FROM (SELECT ';
 		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
-		$query .= $this->_table($table);
+		$query .= $this->_tables($table);
 		$query .= $this->_clause($clause);
 		$query .= $this->_order($order);
 		$query .= ') groupbyorderby ';
@@ -172,7 +176,7 @@ abstract class pudl extends pudlQuery {
 		$query  = 'SELECT DISTINCT ';
 		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
-		$query .= $this->_table($table);
+		$query .= $this->_tables($table);
 		$query .= $this->_joinTable($join_table);
 		$query .= $this->_joinClause($join_clause);
 		$query .= $this->_clause($clause);
@@ -188,7 +192,7 @@ abstract class pudl extends pudlQuery {
 		$query  = 'SELECT ';
 		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
-		$query .= $this->_table($table);
+		$query .= $this->_tables($table);
 		$query .= $this->_clause($clause);
 		$query .= $this->_order($order);
 		$query .= $this->_limit($limit, $offset);
@@ -201,7 +205,7 @@ abstract class pudl extends pudlQuery {
 	public function selectCache($col, $table, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT SQL_CACHE ';
 		$query .= $this->_column($col);
-		$query .= $this->_table($table);
+		$query .= $this->_tables($table);
 		$query .= $this->_clause($clause);
 		$query .= $this->_order($order);
 		$query .= $this->_limit($limit, $offset);
@@ -215,7 +219,7 @@ abstract class pudl extends pudlQuery {
 		$query  = 'SELECT SQL_NO_CACHE ';
 		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
-		$query .= $this->_table($table);
+		$query .= $this->_tables($table);
 		$query .= $this->_clause($clause);
 		$query .= $this->_order($order);
 		$query .= $this->_limit($limit, $offset);
@@ -234,7 +238,7 @@ abstract class pudl extends pudlQuery {
 
 		if (isset($params['limit' ])) $query .= $this->_top(   $params['limit ']);
 		if (isset($params['column'])) $query .= $this->_column($params['column']);
-		if (isset($params['table' ])) $query .= $this->_table( $params['table' ]);
+		if (isset($params['table' ])) $query .= $this->_tables($params['table' ]);
 		if (isset($params['clause'])) $query .= $this->_clause($params['clause']);
 
 		if (isset($params['group'])  &&  isset($params['order'])) {
@@ -308,6 +312,7 @@ abstract class pudl extends pudlQuery {
 	public function delete($table, $clause, $limit=false, $offset=false) {
 		$query  = 'DELETE ';
 		$query .= $this->_top($limit);
+		$query .= ' FROM ';
 		$query .= $this->_table($table);
 		$query .= $this->_clause($clause);
 		$query .= $this->_limit($limit, $offset);
@@ -363,7 +368,7 @@ abstract class pudl extends pudlQuery {
 		$query  = 'SELECT COUNT(*) FROM (';
 		$query .= 'SELECT ';
 		$query .= $this->_column($col);
-		$query .= $this->_table($table);
+		$query .= $this->_tables($table);
 		$query .= $this->_clause($clause);
 		$query .= $this->_group($group);
 		$query .= ') groupbycount';
@@ -412,7 +417,7 @@ abstract class pudl extends pudlQuery {
 		$cols = '';
 		$vals = '';
 
-		$table = $this->_table2($table);
+		$table = $this->_table($table);
 
 		//TODO: if $data is not an ARRAY, throw up an error message
 
@@ -489,7 +494,7 @@ abstract class pudl extends pudlQuery {
 
 
 	public function insertEx($table, $cols, $data, $safe=false, $update=false) {
-		$table = $this->_table2($table);
+		$table = $this->_table($table);
 
 		$query = '';
 
@@ -551,7 +556,7 @@ abstract class pudl extends pudlQuery {
 	public function update($table, $data, $clause, $safe=false, $limit=false, $offset=false) {
 		$query  = 'UPDATE ';
 		$query .= $this->_top($limit);
-		$query .= $this->_table2($table);
+		$query .= $this->_table($table);
 		$query .= ' SET ';
 		$query .= $this->_update($data, $safe);
 		$query .= $this->_clause($clause);
@@ -564,7 +569,7 @@ abstract class pudl extends pudlQuery {
 	public function updateIn($table, $data, $field, $in, $safe=false, $limit=false, $offset=false) {
 		$query  = 'UPDATE ';
 		$query .= $this->_top($limit);
-		$query .= $this->_table2($table);
+		$query .= $this->_table($table);
 		$query .= ' SET ';
 		$query .= $this->_update($data, $safe);
 		$query .= " WHERE {$this->escstart}$field{$this->escend} IN ($in)";
@@ -584,7 +589,7 @@ abstract class pudl extends pudlQuery {
 	public function increment($table, $col, $clause, $amount=1, $limit=false, $offset=false) {
 		$query = 'UPDATE ';
 		$query .= $this->_top($limit);
-		$query .= $this->_table2($table);
+		$query .= $this->_table($table);
 		$query .= " SET {$this->escstart}$col{$this->escend}={$this->escstart}$col{$this->escend}+($amount) ";
 		$query .= $this->_clause($clause);
 		$query .= $this->_limit($limit, $offset);
@@ -710,4 +715,5 @@ abstract class pudl extends pudlQuery {
 	private $locked;
 	private $debug;
 	private $bench;
+	private $query;
 }
