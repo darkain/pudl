@@ -288,7 +288,7 @@ abstract class pudlQuery {
 
 
 
-	public function prefixColumns($table, $col=false) {
+	public function prefixColumns($table, $col=false, $unprefixed=true) {
 		$prefix = array();
 		
 		if (is_array($table)) {
@@ -324,6 +324,8 @@ abstract class pudlQuery {
 		foreach ($col as $val) {
 			if (isset($prefix[$val])) {
 				$column[] = $prefix[$val] . '.' . $val;
+			} else if ($unprefixed) {
+				$column[] = $val;
 			}
 		}
 		return $column;

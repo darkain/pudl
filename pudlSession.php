@@ -5,8 +5,15 @@ class pudlSession {
 		$this->db = $database;
 		$this->table = $table;
 		
-		session_set_save_handler(array(&$this, 'open'),  array(&$this, 'close'),   array(&$this, 'read'),
-								 array(&$this, 'write'), array(&$this, 'destroy'), array(&$this, 'clean'));
+		session_set_save_handler(
+			array(&$this, 'open'),
+			array(&$this, 'close'),
+			array(&$this, 'read'),
+			array(&$this, 'write'),
+			array(&$this, 'destroy'),
+			array(&$this, 'clean')
+		);
+		
 		session_start();
 	}
 
@@ -17,6 +24,7 @@ class pudlSession {
 
 
 	function close() {
+		return true;
 	}
 
 
@@ -27,29 +35,40 @@ class pudlSession {
 
 
 	function write($id, $data) {
-		$insert['id']     = $id;
-		$insert['access'] = time();
-		$insert['data']   = $data;
+		if (empty($data)) return $this->destroy($id);
 
 		if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-			$insert['address'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
+			$address = $_SERVER['HTTP_X_FORWARDED_FOR'];
 		} else if (isset($_SERVER['REMOTE_ADDR'])) {
-			$insert['address'] = $_SERVER['REMOTE_ADDR'];
+			$address = $_SERVER['REMOTE_ADDR'];
+		} else {
+			$address = '';
 		}
 
-		return $this->db->replace($this->table, $insert, true);
+		return $this->db->replace(
+			$this->table,
+			array(
+				'id'		=> $id,
+				'access'	=> $this->db->time(),
+				'address'	=> $address,
+				'data'		=> $data,
+			),
+			true
+		);
 	}
 
 
 	function destroy($id) {
 		$id = $this->db->safe($id);
-		return $this->db->delete($this->table, "`id`='$id'");
+		$this->db->delete($this->table, "`id`='$id'");
+		return true;
 	}
 
 
 	function clean($max) {
 		$expire = time() - (int) $max;
-		return $this->db->delete($this->table, "`access`<'$expire'");
+		$this->db->delete($this->table, "`access`<'$expire'");
+		return true;
 	}
 
 

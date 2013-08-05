@@ -76,5 +76,29 @@ class pudlMySqli extends pudl {
 	}
 
 
+	public static function aesKey($key) {
+		$aes = str_repeat(chr(0), 16);
+		$len = strlen($key);
+		for ($i=0; $i<$len; $i++) {
+			$aes[$i%16] = $aes[$i%16] ^ $key[$i];
+		}
+		return $aes;
+	}
+
+
+	public static function aesDecrypt($data, $key) {
+		return rtrim(
+			mcrypt_decrypt(
+				MCRYPT_RIJNDAEL_128,
+				self::aesKey($key),
+				pack('H*', $data),
+				MCRYPT_MODE_ECB,
+				''
+			),
+			"\0"
+		);
+	}
+
+
 	private $mysqli;
 }

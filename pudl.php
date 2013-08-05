@@ -9,11 +9,12 @@ abstract class pudl extends pudlQuery {
 
 	
 	public function __construct() {
-		$this->bench  = false;
-		$this->debug  = false;
-		$this->union  = false;	
-		$this->locked = false;
-		$this->query  = false;
+		$this->bench	= false;
+		$this->debug	= false;
+		$this->union	= false;	
+		$this->locked	= false;
+		$this->query	= false;
+		$this->time		= time();
 	}
 	
 	
@@ -711,9 +712,15 @@ abstract class pudl extends pudlQuery {
 	}
 
 
+	public function time() {
+		return $this->time;
+	}
+
+
 	private $union;
 	private $locked;
 	private $debug;
 	private $bench;
 	private $query;
+	private $time;
 }
