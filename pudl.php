@@ -568,6 +568,7 @@ abstract class pudl extends pudlQuery {
 
 
 	public function updateIn($table, $data, $field, $in, $safe=false, $limit=false, $offset=false) {
+		if (is_array($in)) $in = implode(',', $in);
 		$query  = 'UPDATE ';
 		$query .= $this->_top($limit);
 		$query .= $this->_table($table);
