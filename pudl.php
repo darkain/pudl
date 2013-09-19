@@ -395,15 +395,16 @@ abstract class pudl extends pudlQuery {
 		if (!is_array($this->union)) return false;
 		if ($type !== 'ALL'  &&  $type !== 'DISTINCT') $type = '';
 
-		$query = '';
+		$query = '(';
 		$first = true;
 
 		foreach($this->union as &$union) {
-			if (!$first) $query .= " UNION $type ";
+			if (!$first) $query .= ") UNION $type (";
 			$first = false;
 			$query .= $union;
-		}
+		} unset($union);
 
+		$query .= ')';
 		$query .= $this->_order($order);
 		$query .= $this->_limit($limit, $offset);
 		//TODO: figure out how to convert this over to 'TOP' syntax
