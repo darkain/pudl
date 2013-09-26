@@ -464,6 +464,7 @@ abstract class pudl extends pudlQuery {
 			$query = "REPLACE INTO $table ($cols) VALUES ($vals)";
 		} else {
 			$query = "INSERT INTO $table ($cols) VALUES ($vals)";
+			if ($update === true) $update = $data;
 			if ($update !== false) {
 				$query .= ' ON DUPLICATE KEY UPDATE ';
 				$query .= $this->_update($update, $safe);
