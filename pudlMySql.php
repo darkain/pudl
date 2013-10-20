@@ -29,13 +29,15 @@ class pudlMySql extends pudl {
 			die($error);
 		}
 
-		$selected = false;
-		$selected = @mysql_select_db($database, $this->mysql);
-		if (!$selected) {
+		if (!@mysql_select_db($database, $this->mysql)) {
 			$error  = "<br />\r\n";
 			$error .= 'Unable to select database : "' . $database;
 			$error .= "\"<br />\r\nError " . mysql_errno() . ': ' . mysql_error(); 
 			die($error);
+		}
+
+		if (!@mysql_set_charset('utf8', $this->mysql)) {
+			die('Error loading character set utf8: ' . mysql_error());
 		}
 	}
 

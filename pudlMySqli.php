@@ -17,16 +17,20 @@ class pudlMySqli extends pudl {
 		$this->mysqli = false;
 		$this->mysqli = @new mysqli("p:$server", $username, $password, $database);
 
-		if ($this->mysqli ===  false  ||  $this->mysqli->connect_error) {
+		if (empty($this->mysqli)  ||  $this->mysqli->connect_error) {
 			$this->mysqli = @new mysqli($server, $username, $password, $database);
 		}
 
-		if ($this->mysqli ===  false  ||  $this->mysqli->connect_error) {
+		if (empty($this->mysqli)  ||  $this->mysqli->connect_error) {
 			$error  = "<br />\r\n";
 			$error .= 'Unable to connect to database server: "' . $server;
 			$error .= '" with the username: "' . $username;
 			$error .= "\"<br />\r\nError " . $this->mysqli->connect_errno . ': ' . $this->mysqli->connect_error; 
 			die($error);
+		}
+
+		if (!$this->mysqli->set_charset('utf8')) {
+			die('Error loading character set utf8: ' . $mysqli->error);
 		}
 	}
 
