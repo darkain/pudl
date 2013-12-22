@@ -22,17 +22,17 @@ class pudlMySql extends pudl {
 		}
 
 		if (!$this->mysql) {
-			$error  = "<br />\r\n";
+			$error  = "<br />\n";
 			$error .= 'Unable to connect to database server: "' . $server;
 			$error .= '" with the username: "' . $username;
-			$error .= "\"<br />\r\nError " . mysql_errno() . ': ' . mysql_error(); 
+			$error .= "\"<br />\nError " . mysql_errno() . ': ' . mysql_error(); 
 			die($error);
 		}
 
 		if (!@mysql_select_db($database, $this->mysql)) {
-			$error  = "<br />\r\n";
+			$error  = "<br />\n";
 			$error .= 'Unable to select database : "' . $database;
-			$error .= "\"<br />\r\nError " . mysql_errno() . ': ' . mysql_error(); 
+			$error .= "\"<br />\nError " . mysql_errno() . ': ' . mysql_error(); 
 			die($error);
 		}
 

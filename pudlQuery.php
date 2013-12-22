@@ -226,7 +226,7 @@ abstract class pudlQuery {
 		$escstart = $this->escstart;
 		$escend = $this->escend;
 
-		if (!is_array($join_table)) return ' LEFT JOIN (' . self::_table2($join_table) . ')';
+		if (!is_array($join_table)) return ' LEFT JOIN (' . self::_table($join_table) . ')';
 
 		// $query = " LEFT JOIN (";
 		$query = " LEFT JOIN ";

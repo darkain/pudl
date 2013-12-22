@@ -15,6 +15,7 @@ abstract class pudl extends pudlQuery {
 		$this->locked	= false;
 		$this->query	= false;
 		$this->time		= time();
+		$this->microtime= microtime();
 	}
 	
 	
@@ -416,12 +417,15 @@ abstract class pudl extends pudlQuery {
 
 
 	public function insert($table, $data, $safe=false, $update=false) {
+		if (!is_array($data)) {
+			trigger_error('Invalid data type for pudl::insert', E_USER_ERROR);
+			return false;
+		}
+
 		$cols = '';
 		$vals = '';
 
 		$table = $this->_table($table);
-
-		//TODO: if $data is not an ARRAY, throw up an error message
 
 		$count = 0;
 		foreach ($data as $column => &$value) {
@@ -497,6 +501,11 @@ abstract class pudl extends pudlQuery {
 
 
 	public function insertEx($table, $cols, $data, $safe=false, $update=false) {
+		if (!is_array($data)) {
+			trigger_error('Invalid data type for pudl::insertEx', E_USER_ERROR);
+			return false;
+		}
+
 		$table = $this->_table($table);
 
 		$query = '';
@@ -706,6 +715,9 @@ abstract class pudl extends pudlQuery {
 	
 	
 	public function debugger($debugger) {
+		if (!function_exists($debugger)) {
+			die("<br />\nERROR: PUDL debugger function does not exist: $debugger()");
+		}
 		$this->debug = $debugger;
 	}
 	
@@ -720,10 +732,16 @@ abstract class pudl extends pudlQuery {
 	}
 
 
+	public function microtime() {
+		return $this->microtime;
+	}
+
+
 	private $union;
 	private $locked;
 	private $debug;
 	private $bench;
 	private $query;
 	private $time;
+	private $microtime;
 }

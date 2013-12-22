@@ -22,10 +22,10 @@ class pudlMySqli extends pudl {
 		}
 
 		if (empty($this->mysqli)  ||  $this->mysqli->connect_error) {
-			$error  = "<br />\r\n";
+			$error  = "<br />\n";
 			$error .= 'Unable to connect to database server: "' . $server;
 			$error .= '" with the username: "' . $username;
-			$error .= "\"<br />\r\nError " . $this->mysqli->connect_errno . ': ' . $this->mysqli->connect_error; 
+			$error .= "\"<br />\nError " . $this->mysqli->connect_errno . ': ' . $this->mysqli->connect_error; 
 			die($error);
 		}
 

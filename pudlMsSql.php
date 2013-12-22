@@ -22,19 +22,19 @@ class pudlMsSql extends pudl {
 		}
 
 		if (!$this->mssql) {
-			$error  = "<br />\r\n";
+			$error  = "<br />\n";
 			$error .= 'Unable to connect to database server: "' . $server;
 			$error .= '" with the username: "' . $username;
-			$error .= "\"<br />\r\nError " . mssql_errno() . ': ' . mssql_error(); 
+			$error .= "\"<br />\nError " . mssql_errno() . ': ' . mssql_error(); 
 			die($error);
 		}
 
 		$selected = false;
 		$selected = @mssql_select_db($database, $this->mssql);
 		if (!$selected) {
-			$error  = "<br />\r\n";
+			$error  = "<br />\n";
 			$error .= 'Unable to select database : "' . $database;
-			$error .= "\"<br />\r\nError " . mssql_errno() . ': ' . mssql_error(); 
+			$error .= "\"<br />\nError " . mssql_errno() . ': ' . mssql_error(); 
 			die($error);
 		}
 	}
