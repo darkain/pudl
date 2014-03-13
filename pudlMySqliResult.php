@@ -61,7 +61,7 @@ class pudlMySqliResult extends pudlResult {
 	public function row($type='ARRAY') {
 		if (!is_object($this->result)) return false;
 		$data = false;
-		switch ($type) {
+		switch ($type) { //TODO: this should not compare to a string every single time
 			case 'ARRAY':	$data = @$this->result->fetch_array(MYSQLI_ASSOC);	break;
 			case 'NUMBER':	$data = @$this->result->fetch_array(MYSQLI_NUM);	break;
 			case 'ALL':		$data = @$this->result->fetch_array(MYSQLI_BOTH);	break;

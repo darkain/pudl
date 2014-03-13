@@ -162,8 +162,9 @@ abstract class pudlQuery {
 
 
 	protected function _lock($lock) {
-		if ($lock === "SHARE")  return ' LOCK IN SHARE MODE';
-		if ($lock === "UPDATE") return ' FOR UPDATE';
+		if ($lock === 'SHARE')	return ' LOCK IN SHARE MODE';
+		if ($lock === 'UPDATE')	return ' FOR UPDATE';
+		if ($lock === true)		return ' FOR UPDATE';
 		return '';
 	}
 
@@ -226,7 +227,7 @@ abstract class pudlQuery {
 		$escstart = $this->escstart;
 		$escend = $this->escend;
 
-		if (!is_array($join_table)) return ' LEFT JOIN (' . self::_table2($join_table) . ')';
+		if (!is_array($join_table)) return ' LEFT JOIN (' . self::_table($join_table) . ')';
 
 		// $query = " LEFT JOIN (";
 		$query = " LEFT JOIN ";
