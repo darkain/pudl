@@ -12,10 +12,11 @@ class pudlShellResult extends pudlResult {
 		$this->row		= 0;
 		$this->error	= false;
 		$this->json		= json_decode($result, true);
-		
+
 		if ($this->json === NULL) {
 			$this->result = false;
 			$this->error  = json_last_error();
+			$this->ermsg  = json_last_error_msg();
 		}
 	}
 
@@ -111,5 +112,22 @@ class pudlShellResult extends pudlResult {
 
 	private $json;
 	private $error;
+	private $ermsg;
 	private $row;
+}
+
+
+
+if (!function_exists('json_last_error_msg')) {
+	function json_last_error_msg() {
+		switch (json_last_error()) {
+			default: return;
+			case JSON_ERROR_DEPTH: $error = 'Maximum stack depth exceeded'; break;
+			case JSON_ERROR_STATE_MISMATCH: $error = 'Underflow or the modes mismatch'; break;
+			case JSON_ERROR_CTRL_CHAR: $error = 'Unexpected control character found'; break;
+			case JSON_ERROR_SYNTAX: $error = 'Syntax error, malformed JSON'; break;
+			case JSON_ERROR_UTF8: $error = 'Malformed UTF-8 characters, possibly incorrectly encoded';break;
+		}
+		throw new Exception($error);
+	}
 }

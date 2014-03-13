@@ -74,9 +74,9 @@ abstract class pudlQuery {
 
 					if (isset($val[$i]['clause'])) {
 						$query .= self::_joinClause($val[$i]['clause']);
-					}
-
-					if (isset($val[$i]['using'])) {
+					} else if (isset($val[$i]['on'])) {
+						$query .= self::_joinClause($val[$i]['on']);
+					} else if (isset($val[$i]['using'])) {
 						$query .= self::_joinUsing($val[$i]['using']);
 					}
 				}
@@ -226,7 +226,7 @@ abstract class pudlQuery {
 		$escstart = $this->escstart;
 		$escend = $this->escend;
 
-		if (!is_array($join_table)) return ' LEFT JOIN (' . self::_table($join_table) . ')';
+		if (!is_array($join_table)) return ' LEFT JOIN (' . self::_table2($join_table) . ')';
 
 		// $query = " LEFT JOIN (";
 		$query = " LEFT JOIN ";

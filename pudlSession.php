@@ -1,10 +1,14 @@
 <?php
 
+//Set the number of bits per character to max
+ini_set('session.hash_bits_per_character', 6);
+
+
 class pudlSession {
-	public function __construct($database, $table) {
+	public function __construct($database, $table, $name=false, $domain=false) {
 		$this->db = $database;
 		$this->table = $table;
-		
+
 		session_set_save_handler(
 			array($this, 'open'),
 			array($this, 'close'),
@@ -13,7 +17,9 @@ class pudlSession {
 			array($this, 'destroy'),
 			array($this, 'clean')
 		);
-		
+
+		if (!empty($name)) session_name($name);
+		if (!empty($domain)) session_set_cookie_params(0, '/', $domain);
 		session_start();
 	}
 
@@ -45,7 +51,7 @@ class pudlSession {
 			$address = '';
 		}
 
-		return $this->db->replace(
+		$this->db->replace(
 			$this->table,
 			array(
 				'id'		=> $id,
@@ -55,6 +61,8 @@ class pudlSession {
 			),
 			true
 		);
+
+		return true;
 	}
 
 
