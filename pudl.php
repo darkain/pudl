@@ -1,7 +1,7 @@
 <?php
 
 
-require_once('pudlResult.php');
+require_once('pudlStringResult.php');
 require_once('pudlQuery.php');
 
 
@@ -14,6 +14,7 @@ abstract class pudl extends pudlQuery {
 		$this->union	= false;	
 		$this->locked	= false;
 		$this->query	= false;
+		$this->tostring	= false;
 		$this->time		= time();
 		$this->microtime= microtime();
 	}
@@ -41,7 +42,12 @@ abstract class pudl extends pudlQuery {
 		if (!empty($this->bench)) $microtime = microtime();
 
 		$this->query = $query;
-		$result = $this->process($query);
+
+		if ($this->tostring) {
+			$result = new pudlStringResult($query);
+		} else {
+			$result = $this->process($query);
+		}
 
 		if (!empty($this->bench)) {
 			$bench = $this->bench;
@@ -737,6 +743,14 @@ abstract class pudl extends pudlQuery {
 	}
 
 
+	//Get or Set the TO STRING param
+	//When TRUE, no SQL execution happens
+	public function tostring($to=NULL) {
+		if ($to === NULL) return $this->tostring;
+		$this->tostring = !!$to;
+	}
+
+
 	private $union;
 	private $locked;
 	private $debug;
@@ -744,4 +758,5 @@ abstract class pudl extends pudlQuery {
 	private $query;
 	private $time;
 	private $microtime;
+	private $tostring;
 }
