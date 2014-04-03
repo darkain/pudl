@@ -266,6 +266,9 @@ abstract class pudlQuery {
 						if ($safe !== false) $sub_value['key']  = $this->safe($sub_value['key']);
 						if ($safe !== false) $sub_value['data'] = $this->safe($sub_value['data']);
 						$good = $func . '("' . $sub_value['data'] . '","' . $sub_value['key'] . '")';
+					} else if ($func == 'INCREMENT') {
+						if ($safe !== false) $sub_value = $this->safe($sub_value);
+						$good = "$escstart$column$escend+'$sub_value'";
 					} else {
 						if ($safe !== false) $sub_value = $this->safe($sub_value);
 						$good = $func . '(' . $sub_value . ')';
