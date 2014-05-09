@@ -1,6 +1,5 @@
 <?php
 
-
 require_once('pudlStringResult.php');
 require_once('pudlQuery.php');
 
@@ -15,6 +14,8 @@ abstract class pudl extends pudlQuery {
 		$this->locked	= false;
 		$this->query	= false;
 		$this->tostring	= false;
+		$this->shm		= false;
+		$this->server	= false;
 		$this->time		= time();
 		$this->microtime= microtime();
 	}
@@ -743,6 +744,67 @@ abstract class pudl extends pudlQuery {
 	}
 
 
+	public function server() {
+		return $this->server;
+	}
+
+
+	public function onlineServers($servers) {
+		//
+		if (count($servers) < 2) return $servers;
+
+		$key = ftok(__FILE__, 't');
+		$shm = shm_attach($key);
+
+		if (!shm_has_var($shm, 1)) {
+			shm_detach($shm);
+			return $servers;
+		}
+
+		$list = shm_get_var($shm, 1);
+		foreach ($servers as $index => &$item) {
+			if (in_array($item, $list)) unset($servers[$index]);
+		} unset($item);
+
+		shm_detach($shm);
+		return $servers;
+	}
+
+
+	public function onlineServer($server) {
+		$key	= ftok(__FILE__, 't');
+		$shm	= shm_attach($key);
+		$list	= shm_has_var($shm, 1) ? shm_get_var($shm, 1) : [];
+		foreach ($list as $key => &$val) {
+			if ($val === $server) unset($list[$key]);
+		} unset($val);
+		shm_put_var($shm, 1, $list);
+		shm_detach($shm);
+	}
+
+
+	public function offlineServer($server) {
+		$key	= ftok(__FILE__, 't');
+		$shm	= shm_attach($key);
+		$list	= shm_has_var($shm, 1) ? shm_get_var($shm, 1) : [];
+		if (!in_array($server, $list)) $list[] = $server;
+		shm_put_var($shm, 1, $list);
+		shm_detach($shm);
+	}
+
+
+	public function offlineServers() {
+		$key	= ftok(__FILE__, 't');
+		$shm	= shm_attach($key);
+		$list	= shm_has_var($shm, 1) ? shm_get_var($shm, 1) : [];
+		shm_detach($shm);
+		return $list;
+	}
+
+
+
+
+
 	//Get or Set the TO STRING param
 	//When TRUE, no SQL execution happens
 	public function tostring($to=NULL) {
@@ -759,4 +821,6 @@ abstract class pudl extends pudlQuery {
 	private $time;
 	private $microtime;
 	private $tostring;
+	protected $shm;
+	protected $server;
 }

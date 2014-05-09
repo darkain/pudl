@@ -6,22 +6,45 @@ require_once('pudlMySqliResult.php');
 
 
 class pudlMySqli extends pudl {
-	public function __construct($username, $password, $database, $server='localhost', $prefix=false) {
+	public function __construct($username, $password, $database, $servers='localhost', $prefix=false) {
 		parent::__construct();
 
+		//Set initial values
 		$this->limit	= true;
 		$this->escstart	= '`';
 		$this->escend	= '`';
 		$this->prefix	= $prefix;
 
-		$this->mysqli = false;
-		$this->mysqli = @new mysqli("p:$server", $username, $password, $database);
+		//Ensure we're dealing with an array, and verify they're online
+		if (!is_array($servers)) $servers = array($servers);
+		$servers = $this->onlineServers($servers);
+		shuffle($servers);
 
-		if (empty($this->mysqli)  ||  $this->mysqli->connect_error) {
-			$this->mysqli = @new mysqli($server, $username, $password, $database);
-		}
+		//Set connection timeout to 3 second if we're in a clsuter
+		$this->mysqli = mysqli_init();
+		if (count($servers)>1) $this->mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, 3);
 
-		if (empty($this->mysqli)  ||  $this->mysqli->connect_error) {
+
+		$ok = false;
+		foreach ($servers as &$server) {
+			//Attempt to create a persistant connection
+			$ok = @$this->mysqli->real_connect("p:$server", $username, $password, $database);
+
+			//Attempt to create a non-persistant connection
+			if (!$ok) {
+				$ok = @$this->mysqli->real_connect($server, $username, $password, $database);
+			}
+
+			//We're good!
+			if ($ok) { $this->server=$server; break; }
+
+			//Okay, maybe we're not
+			$this->offlineServer($server);
+		} unset($server);
+
+
+		//Cannot connect - Error out
+		if (!$ok) {
 			$error  = "<br />\n";
 			$error .= 'Unable to connect to database server: "' . $server;
 			$error .= '" with the username: "' . $username;
@@ -29,6 +52,7 @@ class pudlMySqli extends pudl {
 			die($error);
 		}
 
+		//Attempt to set UTF-8 character set
 		if (!$this->mysqli->set_charset('utf8')) {
 			die('Error loading character set utf8: ' . $mysqli->error);
 		}
