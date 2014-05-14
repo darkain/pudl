@@ -750,7 +750,6 @@ abstract class pudl extends pudlQuery {
 
 
 	public function onlineServers($servers) {
-		//
 		if (count($servers) < 2) return $servers;
 
 		$key = ftok(__FILE__, 't');
@@ -809,7 +808,28 @@ abstract class pudl extends pudlQuery {
 	//When TRUE, no SQL execution happens
 	public function tostring($to=NULL) {
 		if ($to === NULL) return $this->tostring;
+		if (is_callable($to)) {
+			$tmp = $this->tostring;
+			$this->tostring = true;
+			$to();
+			$this->tostring = $tmp;
+			return $this->query;
+		}
 		$this->tostring = !!$to;
+	}
+
+
+	//enable SQL execution
+	public function on() {
+		$this->tostring(false);
+		return $this;
+	}
+
+
+	//disable SQL execution
+	public function off() {
+		$this->tostring(true);
+		return $this;
 	}
 
 
