@@ -20,9 +20,9 @@ class pudlMySqli extends pudl {
 		$servers = $this->onlineServers($servers);
 		shuffle($servers);
 
-		//Set connection timeout to 3 second if we're in a clsuter
+		//Set connection timeout to 10 second if we're in a clsuter
 		$this->mysqli = mysqli_init();
-		if (count($servers)>1) $this->mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, 3);
+		if (count($servers)>1) $this->mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, 10);
 
 
 		$ok = false;
@@ -46,7 +46,7 @@ class pudlMySqli extends pudl {
 		//Cannot connect - Error out
 		if (!$ok) {
 			$error  = "<br />\n";
-			$error .= 'Unable to connect to database server: "' . $server;
+			$error .= 'Unable to connect to database server"';
 			$error .= '" with the username: "' . $username;
 			$error .= "\"<br />\nError " . $this->mysqli->connect_errno . ': ' . $this->mysqli->connect_error; 
 			die($error);
@@ -54,7 +54,7 @@ class pudlMySqli extends pudl {
 
 		//Attempt to set UTF-8 character set
 		if (!$this->mysqli->set_charset('utf8')) {
-			die('Error loading character set utf8: ' . $mysqli->error);
+			die('Error loading character set utf8: ' . $this->mysqli->error);
 		}
 	}
 
