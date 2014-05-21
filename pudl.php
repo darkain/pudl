@@ -18,6 +18,7 @@ abstract class pudl extends pudlQuery {
 		$this->server	= false;
 		$this->time		= time();
 		$this->microtime= microtime();
+		$this->transaction = false;
 	}
 	
 	
@@ -704,18 +705,24 @@ abstract class pudl extends pudlQuery {
 
 
 	public function begin() {
+		if ($this->transaction) return;
 		$this->query('START TRANSACTION');
+		$this->transaction = true;
 	}
 
 
 
 	public function commit() {
+		if (!$this->transaction) return;
 		$this->query('COMMIT');
+		$this->transaction = false;
 	}
 
 
 
 	public function rollback() {
+		if (!$this->transaction) return;
+		$this->transaction = false;
 		$this->query('ROLLBACK');
 	}
 	
@@ -750,6 +757,7 @@ abstract class pudl extends pudlQuery {
 
 
 	public function onlineServers($servers) {
+		return $servers;
 		if (count($servers) < 2) return $servers;
 
 		$key = ftok(__FILE__, 't');
@@ -843,4 +851,5 @@ abstract class pudl extends pudlQuery {
 	private $tostring;
 	protected $shm;
 	protected $server;
+	protected $transaction;
 }
