@@ -712,10 +712,11 @@ abstract class pudl extends pudlQuery {
 
 
 
-	public function commit() {
+	public function commit($sleep=0) {
 		if (!$this->transaction) return;
 		$this->query('COMMIT');
 		$this->transaction = false;
+		if (!empty($sleep)) usleep($sleep);
 	}
 
 
