@@ -586,6 +586,19 @@ abstract class pudl extends pudlQuery {
 
 
 
+	public function updateIgnore($table, $data, $clause, $safe=false, $limit=false, $offset=false) {
+		$query  = 'UPDATE IGNORE ';
+		$query .= $this->_top($limit);
+		$query .= $this->_table($table);
+		$query .= ' SET ';
+		$query .= $this->_update($data, $safe);
+		$query .= $this->_clause($clause);
+		$query .= $this->_limit($limit, $offset);
+		return $this->query($query);
+	}
+
+
+
 	public function updateIn($table, $data, $field, $in, $safe=false, $limit=false, $offset=false) {
 		if (is_array($in)) $in = implode(',', $in);
 		$query  = 'UPDATE ';
