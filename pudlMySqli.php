@@ -80,6 +80,15 @@ class pudlMySqli extends pudl {
 	protected function process($query) {
 		$result = false;
 		$result = @$this->mysqli->query($query);
+
+		//If we deadlock, then retry once!
+		if ($this->errno() == 1213  &&  !$this->transaction) {
+			$this->mysqli->errno = 0;
+			$this->mysqli->error = '';
+			usleep(2000);
+			$result = @$this->mysqli->query($query);
+		}
+
 		return new pudlMySqliResult($result, $query);
 	}
 
