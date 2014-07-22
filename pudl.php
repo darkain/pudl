@@ -118,6 +118,22 @@ abstract class pudl extends pudlQuery {
 
 
 
+	public function selectGroupHaving($col, $table, $clause=false, $group=false, $having=false, $order=false, $limit=false, $offset=false, $lock=false) {
+		$query  = 'SELECT ';
+		$query .= $this->_top($limit);
+		$query .= $this->_column($col);
+		$query .= $this->_tables($table);
+		$query .= $this->_clause($clause);
+		$query .= $this->_group($group);
+		if (empty($having)) $query .= " HAVING $having ";
+		$query .= $this->_order($order);
+		$query .= $this->_limit($limit, $offset);
+		$query .= $this->_lock($lock);
+		return $this->query($query);
+	}
+
+
+
 	public function selectOrderGroup($col, $table, $clause=false, $group=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT *, COUNT(*) FROM (SELECT ';
 		$query .= $this->_top($limit);
@@ -125,10 +141,12 @@ abstract class pudl extends pudlQuery {
 		$query .= $this->_tables($table);
 		$query .= $this->_clause($clause);
 		$query .= $this->_order($order);
+		if (is_array($limit)) $query .= $this->_limit($limit[0]);
 		$query .= ') groupbyorderby ';
 		$query .= $this->_group($group);
 		$query .= $this->_order($order);
-		$query .= $this->_limit($limit, $offset);
+		if (is_array($limit))  $query .= $this->_limit($limit[1], $offset);
+		else $query .= $this->_limit($limit, $offset);
 		$query .= $this->_lock($lock);
 		return $this->query($query);
 	}
