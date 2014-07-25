@@ -153,6 +153,26 @@ abstract class pudl extends pudlQuery {
 
 
 
+	public function selectOrderGroupEx($col, $table, $clause=false, $inner_group=false, $outer_group=false, $order=false, $limit=false, $offset=false, $lock=false) {
+		$query  = 'SELECT *, COUNT(*) FROM (SELECT ';
+		$query .= $this->_top($limit);
+		$query .= $this->_column($col);
+		$query .= $this->_tables($table);
+		$query .= $this->_clause($clause);
+		$query .= $this->_group($inner_group);
+		$query .= $this->_order($order);
+		if (is_array($limit)) $query .= $this->_limit($limit[0]);
+		$query .= ') groupbyorderby ';
+		$query .= $this->_group($outer_group);
+		$query .= $this->_order($order);
+		if (is_array($limit))  $query .= $this->_limit($limit[1], $offset);
+		else $query .= $this->_limit($limit, $offset);
+		$query .= $this->_lock($lock);
+		return $this->query($query);
+	}
+
+
+
 	public function selectJoin($col, $table, $join_table, $join_clause, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_top($limit);
