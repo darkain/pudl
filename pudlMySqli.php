@@ -71,22 +71,23 @@ class pudlMySqli extends pudl {
 
 
 	public function safe($str) {
-		$return = false;
-		$return = @$this->mysqli->real_escape_string($str);
-		return $return;
+		return @$this->mysqli->real_escape_string($str);
 	}
 
 
 	protected function process($query) {
-		$result = false;
 		$result = @$this->mysqli->query($query);
 
 		//If we deadlock, then retry once!
 		if ($this->errno() == 1213  &&  !$this->transaction) {
-			$this->mysqli->errno = 0;
-			$this->mysqli->error = '';
 			usleep(2000);
 			$result = @$this->mysqli->query($query);
+
+			//If we deadlock again, try once more but wait longer
+			if ($this->errno() == 1213) {
+				usleep(15000);
+				$result = @$this->mysqli->query($query);
+			}
 		}
 
 		return new pudlMySqliResult($result, $query);
