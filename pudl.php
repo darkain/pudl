@@ -11,7 +11,6 @@ abstract class pudl extends pudlQuery {
 	public function __construct() {
 		$this->bench	= false;
 		$this->debug	= false;
-		$this->union	= false;	
 		$this->locked	= false;
 		$this->query	= false;
 		$this->tostring	= false;
@@ -441,19 +440,25 @@ abstract class pudl extends pudlQuery {
 
 	public function unionEnd($order=false, $limit=false, $offset=false, $type='') {
 		if (!is_array($this->union)) return false;
-		if ($type !== 'ALL'  &&  $type !== 'DISTINCT') $type = '';
 
-		$query = '(';
-		$first = true;
-
-		foreach($this->union as &$union) {
-			if (!$first) $query .= ") UNION $type (";
-			$first = false;
-			$query .= $union;
-		} unset($union);
-
-		$query .= ')';
+		$query  = $this->_union($type);
 		$query .= $this->_order($order);
+		$query .= $this->_limit($limit, $offset);
+		//TODO: figure out how to convert this over to 'TOP' syntax
+
+		$this->union = false;
+		return $this->query($query);
+	}
+
+
+
+	public function unionGroup($group=false, $limit=false, $offset=false, $type='') {
+		if (!is_array($this->union)) return false;
+
+		$query  = 'SELECT * FROM (';
+		$query .= $this->_union($type);
+		$query .= ') pudltablealias';
+		$query .= $this->_group($group);
 		$query .= $this->_limit($limit, $offset);
 		//TODO: figure out how to convert this over to 'TOP' syntax
 
@@ -894,7 +899,6 @@ abstract class pudl extends pudlQuery {
 	}
 
 
-	private $union;
 	private $locked;
 	private $debug;
 	private $bench;

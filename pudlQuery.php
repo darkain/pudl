@@ -27,8 +27,9 @@ abstract class pudlQuery {
 		$query = '';
 		$first = true;
 
-		foreach ($col as $key => &$val) {
+		foreach ($col as $key => $val) {
 			if (!$first) $query .= ', ';
+			if (is_null($val)) $val = 'NULL';
 			if (is_numeric($key)) {
 				$query .= $val;
 			} else {
@@ -166,6 +167,23 @@ abstract class pudlQuery {
 		if ($lock === 'UPDATE')	return ' FOR UPDATE';
 		if ($lock === true)		return ' FOR UPDATE';
 		return '';
+	}
+
+
+
+	protected function _union($type='') {
+		if ($type !== 'ALL'  &&  $type !== 'DISTINCT') $type = '';
+
+		$query = '(';
+		$first = true;
+
+		foreach($this->union as &$union) {
+			if (!$first) $query .= ") UNION $type (";
+			$first = false;
+			$query .= $union;
+		} unset($union);
+
+		return $query . ')';
 	}
 
 
@@ -337,9 +355,10 @@ abstract class pudlQuery {
 
 
 
-	protected $escstart = '`';
-	protected $escend = '`';
-	protected $top = false;
-	protected $limit = false;
-	protected $prefix = false;
+	protected $escstart	= '`';
+	protected $escend	= '`';
+	protected $top		= false;
+	protected $limit	= false;
+	protected $prefix	= false;
+	protected $union	= false;
 }
