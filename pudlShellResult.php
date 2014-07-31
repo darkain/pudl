@@ -60,19 +60,19 @@ class pudlShellResult extends pudlResult {
 	}
 
 
-	public function row($type='ARRAY', $trim=true) {
+	public function row($type=PUDL_ARRAY, $trim=true) {
 		if (!$this->result) return false;
 		if (!isset($this->json['data'][$this->row])) return false;
 
 		$data = $this->json['data'][$this->row];
 
-		if ($type === 'ARRAY') {
+		if ($type === PUDL_ARRAY) {
 			$return = array();
 			foreach ($data as $key => &$val) {
 				$return[$this->json['header'][$key]] = $val;
 			} unset($val);
 
-		} else if ($type === 'NUMBER') {
+		} else if ($type === PUDL_NUMBER) {
 			$return = &$data;
 
 		} else { //BOTH

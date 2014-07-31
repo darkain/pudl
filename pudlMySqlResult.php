@@ -51,14 +51,14 @@ class pudlMySqlResult extends pudlResult {
 	}
 
 	
-	public function row($type='ARRAY') {
+	public function row($type=PUDL_ARRAY) {
 		if (!$this->result) return false;
 		$data = false;
 		switch ($type) {
-			case 'ARRAY':	$data = @mysql_fetch_array($this->result, MYSQL_ASSOC);		break;
-			case 'NUMBER':	$data = @mysql_fetch_array($this->result, MYSQL_NUM);		break;
-			case 'ALL':		$data = @mysql_fetch_array($this->result, MYSQL_BOTH);		break;
-			default:		$data = @mysql_fetch_array($this->result);
+			case PUDL_ARRAY:	$data = @mysql_fetch_array($this->result, MYSQL_ASSOC);		break;
+			case PUDL_NUMBER:	$data = @mysql_fetch_array($this->result, MYSQL_NUM);		break;
+			case PUDL_BOTH:		$data = @mysql_fetch_array($this->result, MYSQL_BOTH);		break;
+			default:			$data = @mysql_fetch_array($this->result);
 		}
 		return $data;
 	}

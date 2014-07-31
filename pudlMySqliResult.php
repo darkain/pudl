@@ -27,7 +27,7 @@ class pudlMySqliResult extends pudlResult {
 		$return = false;
 		if (is_object($this->result)) {
 			@$this->result->data_seek($row);
-			$data = $this->row('NUMBER');
+			$data = $this->row(PUDL_NUMBER);
 			if (isset($data[$column])) $return = $data[$column];
 		}
 		return $return;
@@ -58,14 +58,14 @@ class pudlMySqliResult extends pudlResult {
 	}
 
 	
-	public function row($type='ARRAY') {
+	public function row($type=PUDL_ARRAY) {
 		if (!is_object($this->result)) return false;
 		$data = false;
-		switch ($type) { //TODO: this should not compare to a string every single time
-			case 'ARRAY':	$data = @$this->result->fetch_array(MYSQLI_ASSOC);	break;
-			case 'NUMBER':	$data = @$this->result->fetch_array(MYSQLI_NUM);	break;
-			case 'ALL':		$data = @$this->result->fetch_array(MYSQLI_BOTH);	break;
-			default:		$data = @$this->result->fetch_array();
+		switch ($type) {
+			case PUDL_ARRAY:	$data = @$this->result->fetch_array(MYSQLI_ASSOC);	break;
+			case PUDL_NUMBER:	$data = @$this->result->fetch_array(MYSQLI_NUM);	break;
+			case PUDL_BOTH:		$data = @$this->result->fetch_array(MYSQLI_BOTH);	break;
+			default:			$data = @$this->result->fetch_array();
 		}
 		return is_array($data) ? $data : false;
 	}

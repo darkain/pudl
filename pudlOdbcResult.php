@@ -52,7 +52,7 @@ class pudlOdbcResult extends pudlResult {
 	}
 
 
-	public function row($type='ARRAY') {
+	public function row($type=PUDL_ARRAY) {
 		if (!$this->result) return false;
 		$fetch = @odbc_fetch_row($this->result);
 		if ($fetch === false) return false;
@@ -61,11 +61,11 @@ class pudlOdbcResult extends pudlResult {
 		$data = array();
 		
 		//TODO: make trim() OPTIONAL!!! :-O
-		if ($type === 'ARRAY') {
+		if ($type === PUDL_ARRAY) {
 			for ($i=1; $i<=$fields; $i++) {
 				$data[odbc_field_name($this->result, $i)] = trim(@odbc_result($this->result, $i));
 			}
-		} else if ($type === 'NUMBER') {
+		} else if ($type === PUDL_NUMBER) {
 			for ($i=1; $i<=$fields; $i++) {
 				$data[$i] = trim(@odbc_result($this->result, $i));
 			}

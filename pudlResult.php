@@ -42,11 +42,11 @@ abstract class pudlResult {
 
 
 
-	abstract public function row($type='ARRAY');
+	abstract public function row($type=PUDL_ARRAY);
 	
 
 
-	public function rows($type='ARRAY') {
+	public function rows($type=PUDL_ARRAY) {
 		if (!$this->result) return false;
 		$return = array();
 		while ($data = $this->row($type)) { $return[] = $data; }
@@ -56,7 +56,7 @@ abstract class pudlResult {
 
 
 	public function get() {
-		$data = $this->row('NUMBER');
+		$data = $this->row(PUDL_NUMBER);
 		if (!$data) return false;
 
 		$fields = $this->fields();

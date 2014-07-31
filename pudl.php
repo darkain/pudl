@@ -1,5 +1,6 @@
 <?php
 
+require_once('pudlDefine.php');
 require_once('pudlStringResult.php');
 require_once('pudlQuery.php');
 
