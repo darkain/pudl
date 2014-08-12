@@ -452,13 +452,14 @@ abstract class pudl extends pudlQuery {
 
 
 
-	public function unionGroup($group=false, $limit=false, $offset=false, $type='') {
+	public function unionGroup($group=false, $order=false, $limit=false, $offset=false, $type='') {
 		if (!is_array($this->union)) return false;
 
 		$query  = 'SELECT * FROM (';
 		$query .= $this->_union($type);
 		$query .= ') pudltablealias';
 		$query .= $this->_group($group);
+		$query .= $this->_order($order);
 		$query .= $this->_limit($limit, $offset);
 		//TODO: figure out how to convert this over to 'TOP' syntax
 
