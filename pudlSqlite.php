@@ -8,7 +8,14 @@ require_once('pudlSqliteResult.php');
 class pudlSqlite extends pudl {
 	public function __construct($filename, $prefix=false) {
 		parent::__construct();
-
+		
+		//Set initial values
+		$this->limit	= true;
+		$this->escstart	= '`';
+		$this->escend	= '`';
+		$this->prefix	= $prefix;
+		
+		//Create Sqlite3 object instance
 		$this->sqlite = new SQLite3($filename);
 
 		//Cannot connect - Error out
