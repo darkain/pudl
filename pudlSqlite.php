@@ -27,6 +27,8 @@ class pudlSqlite extends pudl {
 
 
 	public static function instance($data) {
+		$prefix = empty($data['pudl_prefix']) ? false : $data['pudl_prefix'];
+
 		$database = 'sqlite.db';
 		if (is_string($data)) {
 			$database = $data;
@@ -34,7 +36,8 @@ class pudlSqlite extends pudl {
 			if (!empty($data['pudl_database'])) $database = $data['pudl_database'];
 			else if (!empty($data[0])) $database = $data[0];
 		}
-		return new pudlSqlite($database);
+
+		return new pudlSqlite($database, $prefix);
 	}
 
 
