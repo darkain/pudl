@@ -7,6 +7,8 @@ require_once('pudlResult.php');
 class pudlSqliteResult extends pudlResult {
 	public function __construct($result, $query) {
 		parent::__construct($result, $query);
+
+		$this->rownum = 0;
 	}
 	
 	
@@ -27,11 +29,20 @@ class pudlSqliteResult extends pudlResult {
 
 	public function cell($row=0, $column=0) {
 		$return = false;
+
 		if (is_object($this->result)) {
-			sqlite_seek($this->result, $row);
-			$data = $this->row(PUDL_NUMBER);
+			if ($row > $this->rownum) {
+				$this->rownum = 0;
+				$this->result->reset();
+			}
+
+			for ($i=$this->rownum; $i<=$row; $i++) {
+				$data = $this->row(PUDL_NUMBER);
+			}
+
 			if (isset($data[$column])) $return = $data[$column];
 		}
+
 		return $return;
 	}
 
@@ -61,6 +72,9 @@ class pudlSqliteResult extends pudlResult {
 	
 	public function row($type=PUDL_ARRAY) {
 		if (!is_object($this->result)) return false;
+
+		$this->rownum++;
+
 		$data = false;
 		switch ($type) {
 			case PUDL_ARRAY:	$data = $this->result->fetchArray(SQLITE3_ASSOC);	break;
@@ -70,5 +84,8 @@ class pudlSqliteResult extends pudlResult {
 		}
 		return is_array($data) ? $data : false;
 	}
+
+
+	private $rownum;
 	
 }
