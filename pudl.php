@@ -380,7 +380,7 @@ abstract class pudl extends pudlQuery {
 
 
 	public function cell($table, $col, $clause=false, $order=false) { 
-		$result = $this->selectCache($col, $table, $clause, $order, 1);
+		$result = $this->select($col, $table, $clause, $order, 1);
 		$return = $result->cell();
 		$result->free();
 		return $return;
