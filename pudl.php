@@ -41,7 +41,7 @@ abstract class pudl extends pudlQuery {
 			return true;
 		}
 
-		if (!empty($this->bench)) $microtime = microtime();
+		if (!empty($this->bench)) $microtime = microtime(true);
 
 		$this->query = $query;
 
@@ -53,7 +53,7 @@ abstract class pudl extends pudlQuery {
 
 		if (!empty($this->bench)) {
 			$bench = $this->bench;
-			$diff = round(microtime()-$microtime, 6);
+			$diff = round(microtime(true)-$microtime, 6);
 			$bench($query, $diff, $this);
 		}
 
