@@ -79,7 +79,7 @@ class pudlMySqli extends pudl {
 		$result = @$this->mysqli->query($query);
 
 		//If we deadlock, then retry once!
-		if ($this->errno() == 1213  &&  !$this->transaction) {
+		if ($this->errno() == 1213) {
 			usleep(2000);
 			$result = @$this->mysqli->query($query);
 
