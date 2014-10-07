@@ -28,7 +28,11 @@ class pudlMySqli extends pudl {
 		$ok = false;
 		foreach ($servers as &$server) {
 			//Attempt to create a persistant connection
-			$ok = @$this->mysqli->real_connect("p:$server", $username, $password, $database);
+			//NOTE: THIS CURRENTLY BREAKS HHVM!!
+			//https://github.com/facebook/hhvm/issues/3414
+			if (!defined('HHVM_VERSION')) {
+				$ok = @$this->mysqli->real_connect("p:$server", $username, $password, $database);
+			}
 
 			//Attempt to create a non-persistant connection
 			if (!$ok) {
