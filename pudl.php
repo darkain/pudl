@@ -407,7 +407,8 @@ abstract class pudl extends pudlQuery {
 
 
 	public function count($table, $clause='1') {
-		return $this->cell($table, 'COUNT(*)', $clause);
+		$x = $this->cell($table, 'COUNT(*)', $clause);
+		return $x === false ? $x : (int) $x;
 	}
 
 
