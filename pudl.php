@@ -413,6 +413,17 @@ abstract class pudl extends pudlQuery {
 
 
 
+	public function found() {
+		$result = $this->query('SELECT FOUND_ROWS()');
+		$data = $result->row(PUDL_NUMBER);
+		$result->free();
+		if (empty($data[0])) return false;
+		var_dump($data);
+		return (int) $data[0];
+	}
+
+
+
 	public function countGroup($table, $clause, $group, $col='*') {
 		$query  = 'SELECT COUNT(*) FROM (';
 		$query .= 'SELECT ';
