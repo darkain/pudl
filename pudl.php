@@ -407,24 +407,15 @@ abstract class pudl extends pudlQuery {
 
 
 	public function count($table, $clause='1') {
-		$x = $this->cell($table, 'COUNT(*)', $clause);
-		return $x === false ? $x : (int) $x;
+		$return = $this->cell($table, 'COUNT(*)', $clause);
+		return $return === false ? $return : (int) $return;
 	}
 
 
 
-	public function found() {
-		$result = $this->query('SELECT FOUND_ROWS()');
-		$data = $result->row(PUDL_NUMBER);
-		$result->free();
-		if (empty($data[0])) return false;
-		var_dump($data);
-		return (int) $data[0];
-	}
+	public function countGroup($table, $clause, $group, $col=false) {
+		if ($col === false) $col = $group;
 
-
-
-	public function countGroup($table, $clause, $group, $col='*') {
 		$query  = 'SELECT COUNT(*) FROM (';
 		$query .= 'SELECT ';
 		$query .= $this->_column($col);
@@ -436,7 +427,17 @@ abstract class pudl extends pudlQuery {
 		$result = $this->query($query);
 		$return = $result->cell();
 		$result->free();
-		return $return;
+
+		return $return === false ? $return : (int) $return;
+	}
+
+
+
+	public function found() {
+		$result = $this->query('SELECT FOUND_ROWS()');
+		$return = $result->cell();
+		$result->free();
+		return $return === false ? $return : (int) $return;
 	}
 
 
