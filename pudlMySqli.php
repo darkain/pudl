@@ -50,7 +50,8 @@ class pudlMySqli extends pudl {
 		//Cannot connect - Error out
 		if (!$ok) {
 			$error  = "<br />\n";
-			$error .= 'Unable to connect to database server"';
+			$error .= 'Unable to connect to database server "';
+			$error .= implode(', ', $servers);
 			$error .= '" with the username: "' . $username;
 			$error .= "\"<br />\nError " . $this->mysqli->connect_errno . ': ' . $this->mysqli->connect_error; 
 			die($error);
@@ -83,12 +84,13 @@ class pudlMySqli extends pudl {
 		$result = @$this->mysqli->query($query);
 
 		//If we deadlock, then retry once!
-		if ($this->errno() == 1213) {
+		//1205 = deadlock wait timeout : 1213 = deadlocked
+		if ($this->errno() == 1205  ||  $this->errno() == 1213) {
 			usleep(2000);
 			$result = @$this->mysqli->query($query);
 
 			//If we deadlock again, try once more but wait longer
-			if ($this->errno() == 1213) {
+			if ($this->errno() == 1205  ||  $this->errno() == 1213) {
 				usleep(15000);
 				$result = @$this->mysqli->query($query);
 			}
