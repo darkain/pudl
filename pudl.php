@@ -45,6 +45,8 @@ abstract class pudl extends pudlQuery {
 
 		$this->query = $query;
 
+		if (is_array($this->transaction)) $this->transaction[] = $query;
+
 		if ($this->tostring) {
 			$result = new pudlStringResult($query);
 		} else {
@@ -776,15 +778,15 @@ abstract class pudl extends pudlQuery {
 
 
 	public function begin() {
-		if ($this->transaction) return;
+		if (!empty($this->transaction)) return;
+		$this->transaction = [];
 		$this->query('START TRANSACTION');
-		$this->transaction = true;
 	}
 
 
 
 	public function commit($sleep=0) {
-		if (!$this->transaction) return;
+		if (empty($this->transaction)) return;
 		$this->query('COMMIT');
 		$this->transaction = false;
 		if (!empty($sleep)) usleep($sleep);
@@ -793,9 +795,31 @@ abstract class pudl extends pudlQuery {
 
 
 	public function rollback() {
-		if (!$this->transaction) return;
+		if (empty($this->transaction)) return;
 		$this->transaction = false;
 		$this->query('ROLLBACK');
+	}
+
+
+
+	protected function retryTransaction() {
+		if (empty($this->transaction)) return;
+
+		$list = $this->transaction;
+		$this->transaction = false;
+
+		$return = false;
+		foreach ($list as &$item) {
+			$return = $this->query($item);
+		}
+
+		return $return;
+	}
+
+
+
+	public function inTransaction() {
+		return is_array($this->transaction);
 	}
 	
 	

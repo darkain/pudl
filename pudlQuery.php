@@ -71,13 +71,29 @@ abstract class pudlQuery {
 			} else {
 				$query .= self::_table($val[0]) . ' ' . $key;
 				for ($i=1; $i<count($val); $i++) {
-					$query .= self::_joinTable( $val[$i]['join']);
+					if (!empty($val[$i]['join'])) {
+						$query .= self::_joinTable($val[$i]['join'], '');
+					} else if (!empty($val[$i]['cross'])) {
+						$query .= self::_joinTable($val[$i]['cross'], 'CROSS');
+					} else if (!empty($val[$i]['left'])) {
+						$query .= self::_joinTable($val[$i]['left'], 'LEFT');
+					} else if (!empty($val[$i]['right'])) {
+						$query .= self::_joinTable($val[$i]['right'], 'RIGHT');
+					} else if (!empty($val[$i]['natural'])) {
+						$query .= self::_joinTable($val[$i]['natural'], 'NATURAL');
+					} else if (!empty($val[$i]['inner'])) {
+						$query .= self::_joinTable($val[$i]['inner'], 'INNER');
+					} else if (!empty($val[$i]['outer'])) {
+						$query .= self::_joinTable($val[$i]['outer'], 'OUTER');
+					} else if (!empty($val[$i]['hack'])) {
+						$query .= ' LEFT JOIN (' . $val[$i]['hack'] . ')';
+					}
 
-					if (isset($val[$i]['clause'])) {
+					if (!empty($val[$i]['clause'])) {
 						$query .= self::_joinClause($val[$i]['clause']);
-					} else if (isset($val[$i]['on'])) {
+					} else if (!empty($val[$i]['on'])) {
 						$query .= self::_joinClause($val[$i]['on']);
-					} else if (isset($val[$i]['using'])) {
+					} else if (!empty($val[$i]['using'])) {
 						$query .= self::_joinUsing($val[$i]['using']);
 					}
 				}
@@ -241,24 +257,19 @@ abstract class pudlQuery {
 
 
 
-	protected function _joinTable($join_table) {
+	protected function _joinTable($join, $type='LEFT') {
 		$escstart = $this->escstart;
 		$escend = $this->escend;
 
-		if (!is_array($join_table)) return ' LEFT JOIN (' . self::_table($join_table) . ')';
+		if (!is_array($join)) return " $type JOIN (" . self::_table($join) . ')';
 
-		// $query = " LEFT JOIN (";
-		$query = " LEFT JOIN ";
-		$first = true;
+		$query = " $type JOIN ";
 
-		foreach ($join_table as $key => &$val) {
-			// if (!$first) $query .= ', ';
+		foreach ($join as $key => &$val) {
 			$query .= self::_table($val) . ' ' . $key;
 			break;
-			// $first = false;
 		}
 
-		// $query .= ')';
 		return $query;
 	}
 
@@ -318,7 +329,7 @@ abstract class pudlQuery {
 				if (is_array($val)) {
 					foreach ($val as $subtable) {
 						if (is_array($subtable)) {
-							foreach ($subtable['join'] as $subkey => $subname) {
+							foreach ($subtable['left'] as $subkey => $subname) {
 								$fields = $this->listFields($subname);
 								foreach ($fields as $field) {
 									if (!isset($prefix[$field['Field']])) $prefix[$field['Field']] = $subkey;
