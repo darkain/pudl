@@ -6,7 +6,7 @@ function xmlheader() {
 
 
 
-function pudlExcel($result, $filename) {
+function pudlExcel($result, $filename, $headers=false) {
 	$zip = new ZipArchive();
 
 	@unlink($filename);
@@ -38,6 +38,7 @@ function pudlExcel($result, $filename) {
 	echo '<row r="' . $x . '" spans="1:' . $colcount . '" s="1" customFormat="1">';
 	foreach ($fields as $key => $val) {
 		$name = $val->name;
+		if (!empty($headers[$name])) $name = $headers[$name];
 		$total++;
 		$index = array_search($name, $strings, true);
 		if ($index === false) {
@@ -64,7 +65,7 @@ function pudlExcel($result, $filename) {
 				$cell = chr(65 + $key) . $x;
 			} else {
 				$cell = chr(64 + floor($key / 26)) . chr(65 + ($key % 26)) . $x;
-			}				
+			}
 			if ($val==='0'  ||  $val==='0.0') {
 				echo '<c r="' . $cell . '"><v>' . $val . '</v></c>';
 			} else if (preg_match('/^[1-9][0-9]{0,12}\.?[0-9]{0,10}$/', $val)) {
