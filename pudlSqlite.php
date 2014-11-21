@@ -8,13 +8,13 @@ require_once('pudlSqliteResult.php');
 class pudlSqlite extends pudl {
 	public function __construct($filename, $prefix=false) {
 		parent::__construct();
-		
+
 		//Set initial values
 		$this->limit	= true;
 		$this->escstart	= '`';
 		$this->escend	= '`';
 		$this->prefix	= $prefix;
-		
+
 		//Create Sqlite3 object instance
 		$this->sqlite = new SQLite3($filename);
 
@@ -22,6 +22,18 @@ class pudlSqlite extends pudl {
 		if (empty($this->sqlite)) {
 			die('Unable to open Sqlite database file: ' . $filename);
 		}
+
+		//Set a busy timeout for Sqlite to 5 seconds
+		$this->sqlite->busyTimeout(5000);
+	}
+
+
+
+	function __destruct() {
+		parent::__destruct();
+		if (!$this->sqlite) return;
+		@$this->sqlite->close();
+		$this->sqlite = false;
 	}
 
 
@@ -51,7 +63,7 @@ class pudlSqlite extends pudl {
 		return new pudlSqliteResult($result, $query);
 	}
 
-	
+
 	public function insertId() {
 		return $this->sqlite->lastInsertRowID();
 	}
@@ -61,12 +73,12 @@ class pudlSqlite extends pudl {
 		return $this->sqlite->changes();
 	}
 
-	
+
 	public function errno() {
 		return $this->sqlite->lastErrorCode();
 	}
-	
-	
+
+
 	public function error() {
 		return $this->sqlite->lastErrorMsg();
 	}
