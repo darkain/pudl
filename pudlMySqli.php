@@ -25,17 +25,12 @@ class pudlMySqli extends pudl {
 		if (count($servers)>1) $this->mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, 10);
 
 
-		$ok = false;
 		foreach ($servers as &$server) {
 			//Attempt to create a persistant connection
-			//NOTE: THIS CURRENTLY BREAKS HHVM!!
-			//https://github.com/facebook/hhvm/issues/3414
-			if (!defined('HHVM_VERSION')) {
-				$ok = @$this->mysqli->real_connect("p:$server", $username, $password, $database);
-			}
+			$ok = @$this->mysqli->real_connect("p:$server", $username, $password, $database);
 
 			//Attempt to create a non-persistant connection
-			if (!$ok) {
+			if (empty($ok)) {
 				$ok = @$this->mysqli->real_connect($server, $username, $password, $database);
 			}
 
@@ -48,7 +43,7 @@ class pudlMySqli extends pudl {
 
 
 		//Cannot connect - Error out
-		if (!$ok) {
+		if (empty($ok)) {
 			$error  = "<br />\n";
 			$error .= 'Unable to connect to database server "';
 			$error .= implode(', ', $servers);
