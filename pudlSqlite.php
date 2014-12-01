@@ -31,9 +31,7 @@ class pudlSqlite extends pudl {
 
 	function __destruct() {
 		parent::__destruct();
-		if (!$this->sqlite) return;
-		@$this->sqlite->close();
-		$this->sqlite = false;
+		$this->disconnect();
 	}
 
 
@@ -51,6 +49,16 @@ class pudlSqlite extends pudl {
 
 		return new pudlSqlite($database, $prefix);
 	}
+
+
+
+	public function disconnect() {
+		parent::disconnect();
+		if (!$this->sqlite) return;
+		@$this->sqlite->close();
+		$this->sqlite = false;
+	}	
+
 
 
 	public function safe($str) {

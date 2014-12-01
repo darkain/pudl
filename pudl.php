@@ -20,6 +20,9 @@ abstract class pudl extends pudlQuery {
 		$this->microtime= microtime();
 		$this->transaction = false;
 	}
+
+
+	function __destruct() {}
 	
 	
 	
@@ -31,6 +34,10 @@ abstract class pudl extends pudlQuery {
 	abstract public function errno();
 	abstract public function error();
 	
+
+	public function disconnect() {
+		session_write_close();
+	}
 	
 	
 	public function query($query=false) {

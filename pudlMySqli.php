@@ -60,6 +60,13 @@ class pudlMySqli extends pudl {
 
 
 
+	function __destruct() {
+		parent::__destruct();
+		$this->disconnect();
+	}
+
+
+
 	public static function instance($data) {
 		$username	= empty($data['pudl_username']) ? '' : $data['pudl_username'];
 		$password	= empty($data['pudl_password']) ? '' : $data['pudl_password'];
@@ -67,6 +74,14 @@ class pudlMySqli extends pudl {
 		$server		= empty($data['pudl_server']) ? 'localhost' : $data['pudl_server'];
 		$prefix		= empty($data['pudl_prefix']) ? false : $data['pudl_prefix'];
 		return new pudlMySqli($username, $password, $database, $server, $prefix);
+	}
+
+
+	public function disconnect() {
+		parent::disconnect();
+		if (!$this->mysqli) return;
+		@$this->mysqli->close();
+		$this->mysqli = false;
 	}
 
 
