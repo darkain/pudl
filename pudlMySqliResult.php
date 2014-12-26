@@ -1,4 +1,4 @@
-<?php
+        <?php
 
 
 require_once('pudlResult.php');
@@ -24,13 +24,12 @@ class pudlMySqliResult extends pudlResult {
 
 
 	public function cell($row=0, $column=0) {
-		$return = false;
 		if (is_object($this->result)) {
 			@$this->result->data_seek($row);
 			$data = $this->row(PUDL_NUMBER);
-			if (isset($data[$column])) $return = $data[$column];
+			if (isset($data[$column])) return $data[$column];
 		}
-		return $return;
+		return false;
 	}
 
 
@@ -55,6 +54,12 @@ class pudlMySqliResult extends pudlResult {
 			$field = @$this->result->fetch_field();
 		}
 		return ($field !== false) ? $field : 0;
+	}
+
+
+	public function seek($row) {
+		if (!is_object($this->result)) return false;
+		@$this->result->data_seek($row);
 	}
 
 	

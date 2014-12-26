@@ -20,6 +20,8 @@ abstract class pudlResult {
 
 	abstract public function getField($column);
 
+	abstract public function seek($row);
+
 
 	public function hasRows() {
 		return ($this->count() > 0);

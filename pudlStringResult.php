@@ -18,6 +18,7 @@ class pudlStringResult extends pudlResult {
 	public function fields() { return 0; }
 	public function getField($column) { return array();	}
 	public function row($type=PUDL_ARRAY) { return false; }
+	public function seek($row) { return false; }
 	public function error() { return false; }
 
 }

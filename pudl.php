@@ -2,6 +2,7 @@
 
 require_once('pudlDefine.php');
 require_once('pudlStringResult.php');
+require_once('pudlCacheResult.php');
 require_once('pudlQuery.php');
 
 
@@ -16,6 +17,8 @@ abstract class pudl extends pudlQuery {
 		$this->tostring	= false;
 		$this->shm		= false;
 		$this->server	= false;
+		$this->cache	= false;
+		$this->redis	= false;
 		$this->time		= time();
 		$this->microtime= microtime();
 		$this->transaction = false;
@@ -56,6 +59,16 @@ abstract class pudl extends pudlQuery {
 
 		if ($this->tostring) {
 			$result = new pudlStringResult($query);
+		} else if ($this->cache  &&  $this->redis) {
+			$hash = md5($query);
+			$data = $this->redis->get("sql:$hash");
+			if (empty($data)) {
+				$result	= $this->process($query);
+				$data	= $result->rows();
+				$this->redis->set("sql:$hash", $data, $this->cache);
+			}
+			$result = new pudlCacheResult($data, $query);
+			$this->cache = false;
 		} else {
 			$result = $this->process($query);
 		}
@@ -913,6 +926,15 @@ abstract class pudl extends pudlQuery {
 
 
 
+	public function cache($seconds=0) {
+		$this->cache = $seconds;
+		return $this;
+	}
+
+
+	public function redis() { return $this->redis; }
+
+
 
 
 	//Get or Set the TO STRING param
@@ -951,6 +973,8 @@ abstract class pudl extends pudlQuery {
 	private $time;
 	private $microtime;
 	private $tostring;
+	private $cache;
+	protected $redis;
 	protected $shm;
 	protected $server;
 	protected $transaction;

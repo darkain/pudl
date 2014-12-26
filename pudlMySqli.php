@@ -73,7 +73,20 @@ class pudlMySqli extends pudl {
 		$database	= empty($data['pudl_database']) ? '' : $data['pudl_database'];
 		$server		= empty($data['pudl_server']) ? 'localhost' : $data['pudl_server'];
 		$prefix		= empty($data['pudl_prefix']) ? false : $data['pudl_prefix'];
-		return new pudlMySqli($username, $password, $database, $server, $prefix);
+
+		$db = new pudlMySqli($username, $password, $database, $server, $prefix);
+
+		if (!empty($data['pudl_redis'])) {
+			if (is_object($data['pudl_redis'])) {
+				$db->redis = $data['pudl_redis'];
+			} else {
+				$db->redis = new Redis();
+				$db->redis->connect($data['pudl_redis'], -1, 1);
+				$db->redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
+			}
+		}
+
+		return $db;
 	}
 
 
