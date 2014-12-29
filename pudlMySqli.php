@@ -34,8 +34,11 @@ class pudlMySqli extends pudl {
 				$ok = @$this->mysqli->real_connect($server, $username, $password, $database);
 			}
 
-			//We're good!
-			if ($ok) { $this->server=$server; break; }
+			//Attempt to set UTF-8 character set
+			if ($ok  &&  $this->mysqli->set_charset('utf8')) {
+				$this->server = $server;
+				break;
+			} else { $ok = false; }
 
 			//Okay, maybe we're not
 			$this->offlineServer($server);
@@ -52,10 +55,6 @@ class pudlMySqli extends pudl {
 			die($error);
 		}
 
-		//Attempt to set UTF-8 character set
-		if (!$this->mysqli->set_charset('utf8')) {
-			die('Error loading character set utf8: ' . $this->mysqli->error);
-		}
 	}
 
 
