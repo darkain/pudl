@@ -8,8 +8,8 @@ class pudlMySqliResult extends pudlResult {
 	public function __construct($result, $query) {
 		parent::__construct($result, $query);
 	}
-	
-	
+
+
 	public function __destruct() {
 		$this->free();
 	}
@@ -39,7 +39,7 @@ class pudlMySqliResult extends pudlResult {
 		return ($rows !== false) ? $rows : 0;
 	}
 
-	
+
 	public function fields() {
 		$fields = false;
 		if (is_object($this->result)) $fields = $this->result->field_count;
@@ -62,7 +62,7 @@ class pudlMySqliResult extends pudlResult {
 		@$this->result->data_seek($row);
 	}
 
-	
+
 	public function row($type=PUDL_ARRAY) {
 		if (!is_object($this->result)) return false;
 		$data = false;
@@ -74,5 +74,5 @@ class pudlMySqliResult extends pudlResult {
 		}
 		return is_array($data) ? $data : false;
 	}
-	
+
 }

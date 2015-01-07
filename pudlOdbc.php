@@ -14,7 +14,7 @@ class pudlOdbc extends pudl {
 		$this->numrows	= 0;
 		$this->top		= true;
 		$this->prefix	= $prefix;
-		
+
 		$this->odbc = false;
 		$this->odbc = @odbc_connect($database, $username, $password);
 		if ($this->odbc === false) {
@@ -33,7 +33,7 @@ class pudlOdbc extends pudl {
 		return new pudlOdbc($username, $password, $database, $server, $prefix);
 	}
 
-	
+
 
 	protected function process($query) {
 		$result = false;

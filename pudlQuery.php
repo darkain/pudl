@@ -18,7 +18,7 @@ abstract class pudlQuery {
 	protected function _column(&$col) {
 		$escstart = $this->escstart;
 		$escend = $this->escend;
-		
+
 		if (!is_array($col)) {
 			if ($col === false  ||  $col === ''  ||  $col === null) return '*';
 			return $col;
@@ -165,7 +165,7 @@ abstract class pudlQuery {
 		}
 
 		return $query;
-	}	
+	}
 
 
 
@@ -174,7 +174,7 @@ abstract class pudlQuery {
 		if ($limit !== false  &&  $offset === false) return " LIMIT $limit";
 		if ($limit !== false  &&  $offset !== false) return " LIMIT $offset,$limit";
 		return '';
-	}	
+	}
 
 
 
@@ -317,13 +317,13 @@ abstract class pudlQuery {
 		}
 
 		return $query;
-	}	
+	}
 
 
 
 	public function prefixColumns($table, $col=false, $unprefixed=true) {
 		$prefix = array();
-		
+
 		if (is_array($table)) {
 			foreach ($table as $key => $val) {
 				if (is_array($val)) {
@@ -350,9 +350,9 @@ abstract class pudlQuery {
 				}
 			}
 		}
-		
+
 		if ($col === false) return $prefix;
-		
+
 		$column = array();
 		foreach ($col as $val) {
 			if (isset($prefix[$val])) {

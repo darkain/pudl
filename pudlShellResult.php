@@ -88,8 +88,8 @@ class pudlShellResult extends pudlResult {
 			} unset($val);
 		}
 
-		$this->row++;		
-		return $return;		
+		$this->row++;
+		return $return;
 	}
 
 

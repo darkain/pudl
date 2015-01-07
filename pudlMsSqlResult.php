@@ -8,8 +8,8 @@ class pudlMsSqlResult extends pudlResult {
 	public function __construct($result, $query) {
 		parent::__construct($result, $query);
 	}
-	
-	
+
+
 	public function __destruct() {
 		$this->free();
 	}
@@ -36,7 +36,7 @@ class pudlMsSqlResult extends pudlResult {
 		return ($rows !== false) ? $rows : 0;
 	}
 
-	
+
 	public function fields() {
 		$fields = false;
 		if ($this->result) $fields = @mssql_num_fields($this->result);
@@ -50,7 +50,7 @@ class pudlMsSqlResult extends pudlResult {
 		return ($field !== false) ? $field : 0;
 	}
 
-	
+
 	public function row($type=PUDL_ARRAY) {
 		if (!$this->result) return false;
 		$data = false;
@@ -62,5 +62,5 @@ class pudlMsSqlResult extends pudlResult {
 		}
 		return $data;
 	}
-	
+
 }

@@ -57,7 +57,7 @@ class pudlSqlite extends pudl {
 		if (!$this->sqlite) return;
 		@$this->sqlite->close();
 		$this->sqlite = false;
-	}	
+	}
 
 
 

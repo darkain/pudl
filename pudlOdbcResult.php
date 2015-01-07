@@ -59,7 +59,7 @@ class pudlOdbcResult extends pudlResult {
 
 		$fields = $this->fields();
 		$data = array();
-		
+
 		//TODO: make trim() OPTIONAL!!! :-O
 		if ($type === PUDL_ARRAY) {
 			for ($i=1; $i<=$fields; $i++) {
@@ -75,8 +75,8 @@ class pudlOdbcResult extends pudlResult {
 				$data[odbc_field_name($this->result, $i)] = trim(@odbc_result($this->result, $i));
 			}
 		}
-		
-		return $data;		
+
+		return $data;
 	}
 
 }

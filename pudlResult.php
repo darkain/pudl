@@ -15,7 +15,7 @@ abstract class pudlResult {
 	abstract public function cell($row=0, $column=0);
 
 	abstract public function count();
-	
+
 	abstract public function fields();
 
 	abstract public function getField($column);
@@ -36,7 +36,7 @@ abstract class pudlResult {
 			$total = $this->fields($this->result);
 			for ($i=0; $i<$total; $i++) {
 				$this->fields[] = $this->getField($i);
-			} 
+			}
 		}
 
 		return $this->fields;
@@ -45,7 +45,7 @@ abstract class pudlResult {
 
 
 	abstract public function row($type=PUDL_ARRAY);
-	
+
 
 
 	public function rows($type=PUDL_ARRAY) {
@@ -67,7 +67,7 @@ abstract class pudlResult {
 			if (!isset($data[$name])  ||  is_null($data[$name])) {
 				$data[$name] = &$data[$i];
 			}
-		} 
+		}
 
 		return $data;
 	}
@@ -77,15 +77,15 @@ abstract class pudlResult {
 	public function query() {
 		return $this->query;
 	}
-	
-	
+
+
 
 	public function result() {
 		return $this->result;
 	}
-	
-	
-	
+
+
+
 	public function error() {
 		return $this->result === false;
 	}

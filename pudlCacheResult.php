@@ -24,8 +24,8 @@ class pudlCacheResult extends pudlResult {
 
 	public function count() { return count($this->rows()); }
 
-	
-	public function fields() { 
+
+	public function fields() {
 		if (empty($this->rows)) return false;
 		return array_keys($this->rows[0]);
 	}

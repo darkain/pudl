@@ -11,7 +11,7 @@ function pudlExcel($result, $filename, $headers=false) {
 
 	@unlink($filename);
 	if ($zip->open($filename, ZIPARCHIVE::CREATE) !== true) {
-	    return 'Cannot open file: ' . $filename;
+		return 'Cannot open file: ' . $filename;
 	}
 
 	$zip->addFromString('[Content_Types].xml', xmlheader().'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Override PartName="/xl/theme/theme1.xml" ContentType="application/vnd.openxmlformats-officedocument.theme+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/sharedStrings.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/></Types>');
@@ -49,7 +49,7 @@ function pudlExcel($result, $filename, $headers=false) {
 			$cell = chr(65 + $key) . $x;
 		} else {
 			$cell = chr(64 + floor($key / 26)) . chr(65 + ($key % 26)) . $x;
-		}		
+		}
 		echo '<c r="' . $cell . '" s="1" t="s"><v>' . $index . '</v></c>';
 	}
 	echo '</row>';
@@ -100,14 +100,14 @@ function pudlExcel($result, $filename, $headers=false) {
 
 	$zip->close();
 
-    header('Content-Description: File Transfer');
-    header('Content-Type: application/octet-stream');
-    header('Content-Disposition: attachment; filename='.basename($filename));
-    header('Content-Transfer-Encoding: binary');
-    header('Expires: 0');
-    header('Cache-Control: must-revalidate');
-    header('Pragma: public');
-    header('Content-Length: ' . filesize($filename));
+	header('Content-Description: File Transfer');
+	header('Content-Type: application/octet-stream');
+	header('Content-Disposition: attachment; filename='.basename($filename));
+	header('Content-Transfer-Encoding: binary');
+	header('Expires: 0');
+	header('Cache-Control: must-revalidate');
+	header('Pragma: public');
+	header('Content-Length: ' . filesize($filename));
 
 	readfile($filename);
 	@unlink($filename);
@@ -118,18 +118,18 @@ function pudlExcel($result, $filename, $headers=false) {
 
 function pudlPHPExcel($list, $filename) {
 	global $site;
-	
+
 	if (is_a($list, 'pudlResult')) {
 		$list = $list->rows();
 	}
-	
+
 	if (!is_array($list)) {
 		return false;
 	}
-	
+
 
 	define('PHPEXCEL_ROOT', '');
-	
+
 	require_once('PHPExcel/Autoloader.php');
 	require_once('PHPExcel/PHPExcel.php');
 	require_once('PHPExcel/Writer/Excel2007.php');
@@ -163,7 +163,7 @@ function pudlPHPExcel($list, $filename) {
 	} unset($val);
 
 
-	$row = 2;	
+	$row = 2;
 	foreach ($list as $item) {
 		$i = 0;
 		foreach ($item as $key => &$val) {
@@ -178,11 +178,11 @@ function pudlPHPExcel($list, $filename) {
 			if ($key === 'price'  ||  $key === 'list'  ||  $key === 'cost'  ||  $key === 'part_cost') {
 				$style->getNumberFormat()->setFormatCode('$ #,##0.00');
 			}
-			
+
 			if ($key === 'part_number'  ||  $key === 'part_description'  ||  $key === 'part_information'  ||  $key === 'part_inactive_text') {
 				$style->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 			}
-			
+
 			$i++;
 		}
 		$row++;
@@ -208,6 +208,6 @@ function pudlPHPExcel($list, $filename) {
 
 	$writer = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
 	$writer->save('php://output');
-	
+
 	return true;
 }

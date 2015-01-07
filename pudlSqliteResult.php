@@ -10,8 +10,8 @@ class pudlSqliteResult extends pudlResult {
 
 		$this->rownum = 0;
 	}
-	
-	
+
+
 	public function __destruct() {
 		$this->free();
 	}
@@ -47,6 +47,12 @@ class pudlSqliteResult extends pudlResult {
 	}
 
 
+	public function seek($row) {
+		return false;
+		//TODO: IMPLEMENT THIS!
+	}
+
+
 	public function count() {
 		return 0;
 		//TODO: IMPLEMENT THIS (but it'll be hacky, since Sqlite doesn't support it!)
@@ -55,7 +61,7 @@ class pudlSqliteResult extends pudlResult {
 //		return ($rows !== false) ? $rows : 0;
 	}
 
-	
+
 	public function fields() {
 		$fields = false;
 		if (is_object($this->result)) $fields = $this->result->numColumns();
@@ -69,7 +75,7 @@ class pudlSqliteResult extends pudlResult {
 		return ($field !== false) ? $field : false;
 	}
 
-	
+
 	public function row($type=PUDL_ARRAY) {
 		if (!is_object($this->result)) return false;
 
@@ -87,5 +93,5 @@ class pudlSqliteResult extends pudlResult {
 
 
 	private $rownum;
-	
+
 }

@@ -8,7 +8,7 @@ require_once('pudlQuery.php');
 
 abstract class pudl extends pudlQuery {
 
-	
+
 	public function __construct() {
 		$this->bench	= false;
 		$this->debug	= false;
@@ -26,23 +26,23 @@ abstract class pudl extends pudlQuery {
 
 
 	function __destruct() {}
-	
-	
-	
+
+
+
 	abstract protected function process($query);
-	
+
 	abstract public function insertId();
 	abstract public function updated();
-	
+
 	abstract public function errno();
 	abstract public function error();
-	
+
 
 	public function disconnect() {
 		session_write_close();
 	}
-	
-	
+
+
 	public function query($query=false) {
 		if ($query === false) return $this->query;
 
@@ -86,9 +86,9 @@ abstract class pudl extends pudlQuery {
 
 		return $result;
 	}
-	
-	
-	
+
+
+
 	public function listFields($table, $safe=false) {
 		$return = array();
 		if (is_array($table)) {
@@ -107,7 +107,7 @@ abstract class pudl extends pudlQuery {
 			$result->free();
 		}
 		return $return;
-	}	
+	}
 
 
 
@@ -296,9 +296,9 @@ abstract class pudl extends pudlQuery {
 		$query .= $this->_lock($lock);
 		return $this->query($query);
 	}
-	
-	
-	
+
+
+
 	public function selectEx(&$params) {
 		if (isset($params['group'])  &&  isset($params['order'])) {
 			$query = 'SELECT *, COUNT(*) FROM (SELECT ';
@@ -333,7 +333,7 @@ abstract class pudl extends pudlQuery {
 		$params['rows'] = $result->count();
 		return $result;
 	}
-	
+
 
 
 	public function selectRow($col, $table, $clause=false, $order=false, $limit=1, $offset=false, $lock=false) {
@@ -401,7 +401,7 @@ abstract class pudl extends pudlQuery {
 
 
 
-	public function cell($table, $col, $clause=false, $order=false) { 
+	public function cell($table, $col, $clause=false, $order=false) {
 		$result = $this->select($col, $table, $clause, $order, 1);
 		$return = $result->cell();
 		$result->free();
@@ -566,9 +566,9 @@ abstract class pudl extends pudlQuery {
 		$this->query($query);
 		return $this->insertId();
 	}
-	
-	
-	
+
+
+
 	public function replace($table, $data, $safe=false) {
 		return $this->insert($table, $data, $safe, "REPLACE");
 	}
@@ -841,17 +841,17 @@ abstract class pudl extends pudlQuery {
 	public function inTransaction() {
 		return is_array($this->transaction);
 	}
-	
-	
-	
+
+
+
 	public function debugger($debugger) {
 		if (!function_exists($debugger)) {
 			die("<br />\nERROR: PUDL debugger function does not exist: $debugger()");
 		}
 		$this->debug = $debugger;
 	}
-	
-	
+
+
 	public function benchmark($benchmark) {
 		$this->bench = $benchmark;
 	}

@@ -51,7 +51,7 @@ class pudlMySqli extends pudl {
 			$error .= 'Unable to connect to database server "';
 			$error .= implode(', ', $servers);
 			$error .= '" with the username: "' . $username;
-			$error .= "\"<br />\nError " . $this->mysqli->connect_errno . ': ' . $this->mysqli->connect_error; 
+			$error .= "\"<br />\nError " . $this->mysqli->connect_errno . ': ' . $this->mysqli->connect_error;
 			die($error);
 		}
 
@@ -129,7 +129,7 @@ class pudlMySqli extends pudl {
 		return new pudlMySqliResult($result, $query);
 	}
 
-	
+
 	public function insertId() {
 		return $this->mysqli->insert_id;
 	}
@@ -139,12 +139,12 @@ class pudlMySqli extends pudl {
 		return $this->mysqli->affected_rows;
 	}
 
-	
+
 	public function errno() {
 		return $this->mysqli->errno;
 	}
-	
-	
+
+
 	public function error() {
 		return $this->mysqli->error;
 	}

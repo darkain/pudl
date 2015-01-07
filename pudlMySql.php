@@ -25,14 +25,14 @@ class pudlMySql extends pudl {
 			$error  = "<br />\n";
 			$error .= 'Unable to connect to database server: "' . $server;
 			$error .= '" with the username: "' . $username;
-			$error .= "\"<br />\nError " . mysql_errno() . ': ' . mysql_error(); 
+			$error .= "\"<br />\nError " . mysql_errno() . ': ' . mysql_error();
 			die($error);
 		}
 
 		if (!@mysql_select_db($database, $this->mysql)) {
 			$error  = "<br />\n";
 			$error .= 'Unable to select database : "' . $database;
-			$error .= "\"<br />\nError " . mysql_errno() . ': ' . mysql_error(); 
+			$error .= "\"<br />\nError " . mysql_errno() . ': ' . mysql_error();
 			die($error);
 		}
 
@@ -66,7 +66,7 @@ class pudlMySql extends pudl {
 		return new pudlMySqlResult($result, $query);
 	}
 
-	
+
 	public function insertId() {
 		$return = false;
 		$return = @mysql_insert_id($this->mysql);
@@ -80,14 +80,14 @@ class pudlMySql extends pudl {
 		return $return;
 	}
 
-	
+
 	public function errno() {
 		$return = false;
 		$return = @mysql_errno($this->mysql);
 		return $return;
 	}
-	
-	
+
+
 	public function error() {
 		$return = false;
 		$return = @mysql_error($this->mysql);

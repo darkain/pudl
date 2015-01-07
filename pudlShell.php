@@ -24,7 +24,7 @@ class pudlShell extends pudl {
 		return new pudlShell($path, $prefix);
 	}
 
-	
+
 
 	protected function process($query) {
 		$result = false;
