@@ -18,6 +18,7 @@ abstract class pudl extends pudlQuery {
 		$this->shm		= false;
 		$this->server	= false;
 		$this->cache	= false;
+		$this->cachekey	= false;
 		$this->redis	= false;
 		$this->time		= time();
 		$this->microtime= microtime();
@@ -60,15 +61,16 @@ abstract class pudl extends pudlQuery {
 		if ($this->tostring) {
 			$result = new pudlStringResult($query);
 		} else if ($this->cache  &&  $this->redis) {
-			$hash = md5($query);
-			$data = $this->redis->get("sql:$hash");
+			$hash = $this->cachekey;
+			if (empty($hash)) $hash = md5($query);
+			$data = $this->redis->get("pudl:$hash");
 			if (empty($data)) {
 				$result	= $this->process($query);
 				$data	= $result->rows();
-				$this->redis->set("sql:$hash", $data, $this->cache);
+				$this->redis->set("pudl:$hash", $data, $this->cache);
 			}
 			$result = new pudlCacheResult($data, $query);
-			$this->cache = false;
+			$this->cache = $this->cachekey = false;
 		} else {
 			$result = $this->process($query);
 		}
@@ -926,8 +928,9 @@ abstract class pudl extends pudlQuery {
 
 
 
-	public function cache($seconds=0) {
-		$this->cache = $seconds;
+	public function cache($seconds=0, $key=false) {
+		$this->cache	= $seconds;
+		$this->cachekey	= $key;
 		return $this;
 	}
 
@@ -974,6 +977,7 @@ abstract class pudl extends pudlQuery {
 	private $microtime;
 	private $tostring;
 	private $cache;
+	private $cachekey;
 	protected $redis;
 	protected $shm;
 	protected $server;
