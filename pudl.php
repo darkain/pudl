@@ -274,32 +274,6 @@ abstract class pudl extends pudlQuery {
 
 
 
-	public function selectCache($col, $table, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
-		$query  = 'SELECT SQL_CACHE ';
-		$query .= $this->_column($col);
-		$query .= $this->_tables($table);
-		$query .= $this->_clause($clause);
-		$query .= $this->_order($order);
-		$query .= $this->_limit($limit, $offset);
-		$query .= $this->_lock($lock);
-		return $this->query($query);
-	}
-
-
-
-	public function selectNoCache($col, $table, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
-		$query  = 'SELECT SQL_NO_CACHE ';
-		$query .= $this->_top($limit);
-		$query .= $this->_column($col);
-		$query .= $this->_tables($table);
-		$query .= $this->_clause($clause);
-		$query .= $this->_order($order);
-		$query .= $this->_limit($limit, $offset);
-		$query .= $this->_lock($lock);
-		return $this->query($query);
-	}
-
-
 
 	public function selectEx(&$params) {
 		if (isset($params['group'])  &&  isset($params['order'])) {
@@ -721,7 +695,7 @@ abstract class pudl extends pudlQuery {
 		}
 
 		//TODO: convert this to some sort of standard SQL
-		$query = "SELECT SQL_CACHE COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='$table' AND COLUMN_NAME='$column'";
+		$query = "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='$table' AND COLUMN_NAME='$column'";
 		$result = $this->query($query);
 		$return = $result->cell();
 		$result->free();
