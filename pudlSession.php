@@ -51,7 +51,7 @@ class pudlSession {
 			$address = '';
 		}
 
-		$this->db->replace(
+		$this->db->insert(
 			$this->table,
 			array(
 				'id'		=> $id,
@@ -59,7 +59,7 @@ class pudlSession {
 				'address'	=> $address,
 				'data'		=> $data,
 			),
-			true
+			true, true
 		);
 
 		return true;
