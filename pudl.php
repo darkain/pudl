@@ -909,6 +909,12 @@ abstract class pudl extends pudlQuery {
 	}
 
 
+	public function purge($key) {
+		if (!$this->redis) return;
+		$this->redis->delete($key);
+	}
+
+
 	public function redis() { return $this->redis; }
 
 
