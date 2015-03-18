@@ -51,8 +51,8 @@ class pudlMySqli extends pudl {
 			$error .= 'Unable to connect to database server "';
 			$error .= implode(', ', $servers);
 			$error .= '" with the username: "' . $username;
-			$error .= "\"<br />\nError " . $this->mysqli->connect_errno . ': ' . $this->mysqli->connect_error;
-			die($error);
+			$error .= "\"<br />\nError " . $this->connectErrno() . ': ' . $this->connectError();
+			if (self::$die) die($error);
 		}
 
 	}
@@ -150,6 +150,16 @@ class pudlMySqli extends pudl {
 	}
 
 
+	public function connectErrno() {
+		return $this->mysqli->connect_errno;
+	}
+
+
+	public function connectError() {
+		return $this->mysqli->connect_error;
+	}
+
+
 	public static function aesKey($key) {
 		$aes = str_repeat(chr(0), 16);
 		$len = strlen($key);
@@ -174,5 +184,13 @@ class pudlMySqli extends pudl {
 	}
 
 
+
+	public static function dieOnError($die) {
+		self::$die = $die;
+	}
+
+
+
 	private $mysqli;
+	private static $die=true;
 }
