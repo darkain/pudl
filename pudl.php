@@ -688,6 +688,38 @@ abstract class pudl extends pudlQuery {
 
 
 
+	public function listItems($type, $like=false) {
+		$query = 'SHOW ' . $type;
+		if (!empty($like)) $query .= ' LIKE "' . $like . '"';
+		$result = $this->query($query);
+
+		$return = [];
+		while ($data = $result->row()) {
+			$return[reset($data)] = end($data);
+		}
+
+		$result->free();
+		return $return;
+	}
+
+
+
+	public function globals($like=false) {
+		return $this->listItems('GLOBAL STATUS', $like);
+	}
+
+
+	public function variables($like=false) {
+		return $this->listItems('VARIABLES', $like);
+	}
+
+
+	public function status($like=false) {
+		return $this->listItems('STATUS', $like);
+	}
+
+
+
 	public function fieldType($table, $column, $safe=false) {
 		if ($safe) {
 			$table  = $this->safe($table);
