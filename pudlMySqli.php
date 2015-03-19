@@ -109,18 +109,18 @@ class pudlMySqli extends pudl {
 		//1205 = deadlock wait timeout : 1213 = deadlocked
 		if ($this->errno() == 1205  ||  $this->errno() == 1213) {
 			if ($this->inTransaction()) {
-				usleep(30000);
+				usleep(50000);
 				$result = $this->retryTransaction();
 
 				//It is possible to deadlock with a single query
 				//This condition is simple: just retry the query!
 			} else {
-				usleep(15000);
+				usleep(25000);
 				$result = @$this->mysqli->query($query);
 
 				//If we deadlock again, try once more but wait longer
 				if ($this->errno() == 1205  ||  $this->errno() == 1213) {
-					usleep(30000);
+					usleep(50000);
 					$result = @$this->mysqli->query($query);
 				}
 			}
