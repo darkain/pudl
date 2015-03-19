@@ -21,7 +21,6 @@ class pudlMySqli extends pudl {
 		shuffle($servers);
 
 
-
 		foreach ($servers as &$server) {
 			$this->mysqli = mysqli_init();
 
