@@ -13,49 +13,18 @@ class pudlMySqli extends pudl {
 		$this->limit	= true;
 		$this->escstart	= '`';
 		$this->escend	= '`';
+		$this->username	= $username;
+		$this->password	= $password;
+		$this->database	= $database;
 		$this->prefix	= $prefix;
 
 		//Ensure we're dealing with an array, and verify they're online
-		if (!is_array($servers)) $servers = array($servers);
-		$servers = $this->onlineServers($servers);
-		shuffle($servers);
+		$this->pool = $servers;
+		if (!is_array($this->pool)) $this->pool = array($this->pool);
+		$this->pool = $this->onlineServers($this->pool);
+		shuffle($this->pool);
 
-
-		foreach ($servers as &$server) {
-			$this->mysqli = mysqli_init();
-
-			//Set connection timeout to 10 second if we're in a clsuter
-			if (count($servers)>1) $this->mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, 10);
-
-			//Attempt to create a persistant connection
-			$ok = @$this->mysqli->real_connect("p:$server", $username, $password, $database);
-
-			//Attempt to create a non-persistant connection
-			if (empty($ok)) {
-				$ok = @$this->mysqli->real_connect($server, $username, $password, $database);
-			}
-
-			//Attempt to set UTF-8 character set
-			if ($ok  &&  $this->mysqli->set_charset('utf8')) {
-				$this->server = $server;
-				break;
-			} else { $ok = false; }
-
-			//Okay, maybe we're not
-			$this->offlineServer($server);
-		} unset($server);
-
-
-		//Cannot connect - Error out
-		if (empty($ok)) {
-			$error  = "<br />\n";
-			$error .= 'Unable to connect to database server "';
-			$error .= implode(', ', $servers);
-			$error .= '" with the username: "' . $username;
-			$error .= "\"<br />\nError " . $this->connectErrno() . ': ' . $this->connectError();
-			if (self::$die) die($error);
-		}
-
+		$this->connect($username, $password, $database, $this->pool);
 	}
 
 
@@ -90,6 +59,61 @@ class pudlMySqli extends pudl {
 	}
 
 
+
+	public function connect() {
+		foreach ($this->pool as $server) {
+			$this->mysqli = mysqli_init();
+
+			//Set connection timeout to 10 second if we're in a clsuter
+			if (count($this->pool)>1) $this->mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, 10);
+
+			//Attempt to create a persistant connection
+			$ok = @$this->mysqli->real_connect("p:$server", $this->username, $this->password, $this->database);
+
+			//Attempt to create a non-persistant connection
+			if (empty($ok)) {
+				$ok = @$this->mysqli->real_connect($server, $this->username, $this->password, $this->database);
+			}
+
+			//Attempt to set UTF-8 character set
+			if ($ok  &&  $this->mysqli->set_charset('utf8')) {
+				$this->server = $server;
+				break;
+			} else { $ok = false; }
+
+			//Okay, maybe we're not
+			$this->offlineServer($server);
+		}
+
+
+		//Cannot connect - Error out
+		if (empty($ok)) {
+			$error  = "<br />\n";
+			$error .= 'Unable to connect to database server "';
+			$error .= implode(', ', $this->pool);
+			$error .= '" with the username: "' . $this->username;
+			$error .= "\"<br />\nError " . $this->connectErrno() . ': ' . $this->connectError();
+			if (self::$die) die($error);
+		}
+	}
+
+
+
+	public function reconnect() {
+		if (empty($this->pool)) return;
+
+		array_shift($this->pool);
+
+		if (empty($this->pool)) {
+			if (self::$die) die('No more servers available in server pool');
+			return;
+		}
+
+		$this->connect();
+	}
+
+
+
 	public function disconnect() {
 		parent::disconnect();
 		if (!$this->mysqli) return;
@@ -98,17 +122,29 @@ class pudlMySqli extends pudl {
 	}
 
 
+
 	public function safe($str) {
 		return @$this->mysqli->real_escape_string($str);
 	}
 
 
+
 	protected function process($query) {
 		$result = @$this->mysqli->query($query);
 
+		$err = $this->errno();
+
+		//An error occured with this node
+		//so let's connect to a different node in the cluster!
+		if ($err === 1047  ||  $err === 2006) {
+			$this->reconnect();
+			$result = @$this->mysqli->query($query);
+		}
+
+
 		//If we deadlock, then retry!
 		//1205 = deadlock wait timeout : 1213 = deadlocked
-		if ($this->errno() == 1205  ||  $this->errno() == 1213) {
+		if ($err == 1205  ||  $err == 1213) {
 			if ($this->inTransaction()) {
 				usleep(50000);
 				$result = $this->retryTransaction();
@@ -120,7 +156,7 @@ class pudlMySqli extends pudl {
 				$result = @$this->mysqli->query($query);
 
 				//If we deadlock again, try once more but wait longer
-				if ($this->errno() == 1205  ||  $this->errno() == 1213) {
+				if ($err == 1205  ||  $err == 1213) {
 					usleep(50000);
 					$result = @$this->mysqli->query($query);
 				}
@@ -193,5 +229,9 @@ class pudlMySqli extends pudl {
 
 
 	private $mysqli;
+	private $pool;
+	private $username;
+	private $password;
+	private $database;
 	private static $die=true;
 }
