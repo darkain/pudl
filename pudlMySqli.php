@@ -136,7 +136,7 @@ class pudlMySqli extends pudl {
 
 		//An error occured with this node
 		//so let's connect to a different node in the cluster!
-		if ($err === 1047  ||  $err === 2006) {
+		if ($err === 1047  ||  $err === 2006  ||  $err === 2062) {
 			$this->reconnect();
 			$result = @$this->mysqli->query($query);
 		}
