@@ -98,7 +98,7 @@ abstract class pudlQuery {
 					}
 				}
 			}
-		}
+		} unset($val);
 
 		return $query;
 	}
@@ -125,7 +125,7 @@ abstract class pudlQuery {
 			} else {
 				$query .= $val;
 			}
-		}
+		} unset($val);
 		return $query;
 	}
 
@@ -143,7 +143,7 @@ abstract class pudlQuery {
 			if (!$first) $query .= ', ';
 			$first = false;
 			$query .= $val;
-		}
+		} unset($val);
 
 		return $query;
 	}
@@ -162,7 +162,7 @@ abstract class pudlQuery {
 			if (!$first) $query .= ', ';
 			$first = false;
 			$query .= $val;
-		}
+		} unset($val);
 
 		return $query;
 	}
@@ -223,13 +223,13 @@ abstract class pudlQuery {
 					if (!$val_first) $query .= ' OR ';
 					$val_first = false;
 					$query .= $val_val;
-				}
+				} unset($val_val);
 				$query .= ')';
 
 			} else {
 				$query .= $val;
 			}
-		}
+		} unset($val);
 
 		$query .= ')';
 		return $query;
@@ -249,7 +249,7 @@ abstract class pudlQuery {
 			if (!$first) $query .= ', ';
 			$first = false;
 			$query .= $val;
-		}
+		} unset($val);
 
 		$query .= ')';
 		return $query;
@@ -268,7 +268,7 @@ abstract class pudlQuery {
 		foreach ($join as $key => &$val) {
 			$query .= self::_table($val) . ' ' . $key;
 			break;
-		}
+		} unset($val);
 
 		return $query;
 	}
@@ -284,7 +284,7 @@ abstract class pudlQuery {
 		$query = '';
 
 		$first = true;
-		foreach ($data as $column => &$value) {
+		foreach ($data as $column => $value) {
 			$good = false;
 
 			if (is_null($value)) {

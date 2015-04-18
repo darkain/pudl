@@ -366,6 +366,11 @@ abstract class pudl extends pudlQuery {
 	}
 
 
+	public function deleteId($table, $idcol, $id) {
+		return $this->delete($table, "{$this->escstart}$idcol{$this->escend}='$id'");
+	}
+
+
 
 	public function explain($query) {
 		$return = '';
@@ -492,7 +497,7 @@ abstract class pudl extends pudlQuery {
 		$table = $this->_table($table);
 
 		$count = 0;
-		foreach ($data as $column => &$value) {
+		foreach ($data as $column => $value) {
 			$good = false;
 
 			if (is_null($value)) {
@@ -579,7 +584,7 @@ abstract class pudl extends pudlQuery {
 			if (!first) $query .= ',';
 			$first = false;
 			$query .= "{$this->escstart}$name{$this->escend}";
-		}
+		} unst($name);
 
 		$query .= ') VALUES ';
 
@@ -594,10 +599,10 @@ abstract class pudl extends pudlQuery {
 				if (!firstitem) $query .= ',';
 				$firstitem = false;
 				$query .= "'$item'";
-			}
+			} unset($item);
 
 			$query .= ')';
-		}
+		} unset($set);
 
 		if ($update === 'IGNORE') {
 			$query = "INSERT IGNORE INTO $table (" . $query;
@@ -738,7 +743,7 @@ abstract class pudl extends pudlQuery {
 			foreach ($return as $key => &$val) {
 				if (substr($val, 0,  1) === "'") $val = substr($val, 1);
 				if (substr($val, -1, 1) === "'") $val = substr($val, 0, strlen($val)-1);
-			}
+			} unset($val);
 		}
 
 		return $return;
@@ -761,7 +766,7 @@ abstract class pudl extends pudlQuery {
 					} else {
 						$query .= "{$this->escstart}$val{$this->escend} READ";
 					}
-				}
+				} unset($val);
 			}
 
 			if (isset($table['write'])) {
@@ -773,7 +778,7 @@ abstract class pudl extends pudlQuery {
 					} else {
 						$query .= "{$this->escstart}$val{$this->escend} WRITE";
 					}
-				}
+				} unset($val);
 			}
 
 			foreach ($table as $key => &$val) {
@@ -786,7 +791,7 @@ abstract class pudl extends pudlQuery {
 						$query .= "{$this->escstart}$val{$this->escend} WRITE";
 					}
 				}
-			}
+			} unset($val);
 		} else {
 			$query .= $table;
 		}
@@ -839,7 +844,7 @@ abstract class pudl extends pudlQuery {
 		$return = false;
 		foreach ($list as &$item) {
 			$return = $this->query($item);
-		}
+		} unset($item);
 
 		return $return;
 	}
