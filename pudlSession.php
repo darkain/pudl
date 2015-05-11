@@ -42,7 +42,8 @@ class pudlSession {
 
 
 	function read($id) {
-		return $this->db->cache(60*60, $this->cache($id))->cellId(
+//		return $this->db->cache(60*60, $this->cache($id))->cellId(
+		return $this->db->cellId(
 			$this->table,
 			'data',
 			'id',
