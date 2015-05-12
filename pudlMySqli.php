@@ -135,39 +135,47 @@ class pudlMySqli extends pudl {
 	protected function process($query) {
 		$result = @$this->mysqli->query($query);
 
-		$err = $this->errno();
+		switch ($this->errno()) {
+			case 0: break; //NO ERRORS!
 
-		//An error occured with this node
-		//so let's connect to a different node in the cluster!
-		if ($err === 1047  ||  $err === 2006  ||  $err === 2062) {
-			$this->reconnect();
-			$result = @$this->mysqli->query($query);
-		}
+			//An error occurred with this node, so let's connect to a different node in the cluster
+			case 1047: //Unknown command
+			case 1053: //Server shutdown in progress
+			case 2006: //MySQL server has gone away
+			case 2062: //Read timeout is reached
+				$this->reconnect();
+				if ($this->inTransaction()) {
+					$result = $this->retryTransaction();
+				} else {
+					$result = @$this->mysqli->query($query);
+				}
+			break;
 
-
-		//If we deadlock, then retry!
-		//1205 = deadlock wait timeout : 1213 = deadlocked
-		if ($err == 1205  ||  $err == 1213) {
-			if ($this->inTransaction()) {
-				usleep(50000);
-				$result = $this->retryTransaction();
+			//A deadlocking condition occurred, simple, let's retry!
+			case 1205: //Lock wait timeout exceeded; try restarting transaction
+			case 1213: //Deadlock found when trying to get lock; try restarting transaction
+				if ($this->inTransaction()) {
+					usleep(50000);
+					$result = $this->retryTransaction();
 
 				//It is possible to deadlock with a single query
 				//This condition is simple: just retry the query!
-			} else {
-				usleep(25000);
-				$result = @$this->mysqli->query($query);
-
-				//If we deadlock again, try once more but wait longer
-				if ($err == 1205  ||  $err == 1213) {
-					usleep(50000);
+				} else {
+					usleep(25000);
 					$result = @$this->mysqli->query($query);
+
+					//If we deadlock again, try once more but wait longer
+					if ($this->errno() == 1205  ||  $this->errno() == 1213) {
+						usleep(50000);
+						$result = @$this->mysqli->query($query);
+					}
 				}
-			}
+			break;
 		}
 
 		return new pudlMySqliResult($result, $query);
 	}
+
 
 
 	public function insertId() {
