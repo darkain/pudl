@@ -487,7 +487,6 @@ abstract class pudl extends pudlQuery {
 
 	public function unionGroup($group=false, $order=false, $limit=false, $offset=false, $type='') {
 		if (!is_array($this->union)) return false;
-		$this->union = false;
 
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
@@ -499,6 +498,7 @@ abstract class pudl extends pudlQuery {
 		$query .= $this->_limit($limit, $offset);
 		//TODO: figure out how to convert this over to 'TOP' syntax
 
+		$this->union = false;
 		return $this->query($query);
 	}
 
