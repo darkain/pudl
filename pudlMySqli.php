@@ -239,6 +239,15 @@ class pudlMySqli extends pudl {
 
 
 
+	protected function _cache() {
+		if (is_array($this->union))	return '';
+		if (!$this->cache)			return '';
+		if (!$this->redis)			return 'SQL_CACHE ';
+		return 'SQL_NO_CACHE ';
+	}
+
+
+
 	private $mysqli;
 	private $pool;
 	private $username;

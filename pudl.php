@@ -115,6 +115,7 @@ abstract class pudl extends pudlQuery {
 
 	public function select($col, $table, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT ';
+		$query .= $this->_cache();
 		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
 		$query .= $this->_tables($table);
@@ -129,6 +130,7 @@ abstract class pudl extends pudlQuery {
 
 	public function selectGroup($col, $table, $clause=false, $group=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT ';
+		$query .= $this->_cache();
 		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
 		$query .= $this->_tables($table);
@@ -144,6 +146,7 @@ abstract class pudl extends pudlQuery {
 
 	public function selectGroupHaving($col, $table, $clause=false, $group=false, $having=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT ';
+		$query .= $this->_cache();
 		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
 		$query .= $this->_tables($table);
@@ -159,7 +162,9 @@ abstract class pudl extends pudlQuery {
 
 
 	public function selectOrderGroup($col, $table, $clause=false, $group=false, $order=false, $limit=false, $offset=false, $lock=false) {
-		$query  = 'SELECT *, COUNT(*) FROM (SELECT ';
+		$query  = 'SELECT ';
+		$query .= $this->_cache();
+		$query .= '*, COUNT(*) FROM (SELECT ';
 		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
 		$query .= $this->_tables($table);
@@ -178,7 +183,9 @@ abstract class pudl extends pudlQuery {
 
 
 	public function selectOrderGroupEx($col, $table, $clause=false, $inner_group=false, $outer_group=false, $order=false, $limit=false, $offset=false, $lock=false) {
-		$query  = 'SELECT *, COUNT(*) FROM (SELECT ';
+		$query  = 'SELECT ';
+		$query .= $this->_cache();
+		$query .= '*, COUNT(*) FROM (SELECT ';
 		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
 		$query .= $this->_tables($table);
@@ -199,6 +206,7 @@ abstract class pudl extends pudlQuery {
 
 	public function selectJoin($col, $table, $join_table, $join_clause, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT ';
+		$query .= $this->_cache();
 		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
 		$query .= $this->_tables($table);
@@ -214,7 +222,9 @@ abstract class pudl extends pudlQuery {
 
 
 	public function selectDistinct($col, $table, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
-		$query  = 'SELECT DISTINCT ';
+		$query  = 'SELECT ';
+		$query .= $this->_cache();
+		$query .= 'DISTINCT ';
 		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
 		$query .= $this->_tables($table);
@@ -228,7 +238,9 @@ abstract class pudl extends pudlQuery {
 
 
 	public function selectDistinctGroup($col, $table, $clause=false, $group=false, $order=false, $limit=false, $offset=false, $lock=false) {
-		$query  = 'SELECT DISTINCT * FROM (SELECT ';
+		$query  = 'SELECT ';
+		$query .= $this->_cache();
+		$query .= 'DISTINCT * FROM (SELECT ';
 		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
 		$query .= $this->_tables($table);
@@ -245,7 +257,9 @@ abstract class pudl extends pudlQuery {
 
 
 	public function selectDistinctJoin($col, $table, $join_table, $join_clause, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
-		$query  = 'SELECT DISTINCT ';
+		$query  = 'SELECT ';
+		$query .= $this->_cache();
+		$query .= 'DISTINCT ';
 		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
 		$query .= $this->_tables($table);
@@ -276,10 +290,11 @@ abstract class pudl extends pudlQuery {
 
 
 	public function selectEx(&$params) {
+		$query = 'SELECT ';
+		$query .= $this->_cache();
+
 		if (isset($params['group'])  &&  isset($params['order'])) {
-			$query = 'SELECT *, COUNT(*) FROM (SELECT ';
-		} else {
-			$query = 'SELECT ';
+			$query .= ' *, COUNT(*) FROM (SELECT ';
 		}
 
 		if (isset($params['limit' ])) $query .= $this->_top(   $params['limit ']);
@@ -419,7 +434,9 @@ abstract class pudl extends pudlQuery {
 	public function countGroup($table, $clause, $group, $col=false) {
 		if ($col === false) $col = $group;
 
-		$query  = 'SELECT COUNT(*) FROM (';
+		$query  = 'SELECT ';
+		$query .= $this->_cache();
+		$query .= 'COUNT(*) FROM (';
 		$query .= 'SELECT ';
 		$query .= $this->_column($col);
 		$query .= $this->_tables($table);
@@ -470,8 +487,11 @@ abstract class pudl extends pudlQuery {
 
 	public function unionGroup($group=false, $order=false, $limit=false, $offset=false, $type='') {
 		if (!is_array($this->union)) return false;
+		$this->union = false;
 
-		$query  = 'SELECT * FROM (';
+		$query  = 'SELECT ';
+		$query .= $this->_cache();
+		$query .= '* FROM (';
 		$query .= $this->_union($type);
 		$query .= ') pudltablealias';
 		$query .= $this->_group($group);
@@ -479,7 +499,6 @@ abstract class pudl extends pudlQuery {
 		$query .= $this->_limit($limit, $offset);
 		//TODO: figure out how to convert this over to 'TOP' syntax
 
-		$this->union = false;
 		return $this->query($query);
 	}
 
@@ -1053,8 +1072,8 @@ abstract class pudl extends pudlQuery {
 	private $time;
 	private $microtime;
 	private $tostring;
-	private $cache;
-	private $cachekey;
+	protected $cache;
+	protected $cachekey;
 	protected $redis;
 	protected $shm;
 	protected $server;

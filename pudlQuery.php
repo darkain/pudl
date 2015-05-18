@@ -7,6 +7,12 @@ abstract class pudlQuery {
 
 
 
+	protected function _cache() {
+		return '';
+	}
+
+
+
 	protected function _top($limit) {
 		if (!$this->top) return '';
 		if ($limit === false) return '';
