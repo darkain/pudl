@@ -295,6 +295,18 @@ abstract class pudlQuery {
 
 			if (is_null($value)) {
 				$good = 'NULL';
+			} else if ($value instanceof pudlFunction) {
+				foreach ($value as $func => $sub_value) {
+					$good	= ltrim($func, '_') . '(';
+					$first	= true;
+					foreach ($sub_value as $item) {
+						if (!$first) $good .= ','; else $first = false;
+						if ($safe !== false) $item = $this->safe($item);
+						$good .= $item;
+					}
+					$good .= ')';
+					break;
+				}
 			} else if (is_array($value)) {
 				foreach ($value as $func => $sub_value) {
 					if ($func == 'AES_ENCRYPT') {
