@@ -506,84 +506,18 @@ abstract class pudl extends pudlQuery {
 
 
 	public function insertValues($table, $data, $safe=false, $update=false) {
-		if (!is_array($data)) {
-			trigger_error('Invalid data type for pudl::insertValues', E_USER_ERROR);
-			return false;
-		}
-
-		$vals = '';
-
-		$table = $this->_table($table);
-
-		$count = 0;
-		foreach ($data as $column => $value) {
-			$good = false;
-
-			if (is_null($value)) {
-				$good = 'NULL';
-			} else if ($value instanceof pudlFunction) {
-				foreach ($value as $func => $sub_value) {
-					$good	= ltrim($func, '_') . '(';
-					$first	= true;
-					foreach ($sub_value as $item) {
-						if (!$first) $good .= ','; else $first = false;
-						if ($safe !== false) $item = $this->safe($item);
-						$good .= $item;
-					}
-					$good .= ')';
-					break;
-				}
-			} else if (is_array($value)) {
-				foreach ($value as $func => $sub_value) {
-					if ($func == 'AES_ENCRYPT') {
-						if ($safe !== false) $sub_value['key']  = $this->safe($sub_value['key']);
-						if ($safe !== false) $sub_value['data'] = $this->safe($sub_value['data']);
-						$good = $func . '("' . $sub_value['data'] . '","' . $sub_value['key'] . '")';
-					} else {
-						if ($safe !== false) $sub_value = $this->safe($sub_value);
-						$good = $func . '(' . $sub_value . ')';
-					}
-					break;
-				}
-
-			} else {
-				if ($safe !== false) $value = $this->safe($value);
-				$good = "'$value'";
-			}
-
-			if ($good !== false) {
-				if ($count != 0) $vals .= ', ';
-				$vals .= $good;
-				$count++;
-			}
-		}
-
-		if ($update === 'IGNORE') {
-			$query = "INSERT IGNORE INTO $table VALUES ($vals)";
-		} else if ($update === 'REPLACE') {
-			$query = "REPLACE INTO $table VALUES ($vals)";
-		} else {
-			$query = "INSERT INTO $table VALUES ($vals)";
-			if ($update === true) $update = $data;
-			if ($update !== false) {
-				$query .= ' ON DUPLICATE KEY UPDATE ';
-				$query .= $this->_update($update, $safe);
-			}
-		}
-
-		$this->query($query);
-		return $this->insertId();
+		return $this->insert($table, $data, $safe, $update, false);
 	}
 
 
 
-	public function insert($table, $data, $safe=false, $update=false) {
+	public function insert($table, $data, $safe=false, $update=false, $prefix=true) {
 		if (!is_array($data)) {
 			trigger_error('Invalid data type for pudl::insert', E_USER_ERROR);
 			return false;
 		}
 
-		$cols = '';
+		$cols = '(';
 		$vals = '';
 
 		$table = $this->_table($table);
@@ -594,30 +528,15 @@ abstract class pudl extends pudlQuery {
 
 			if (is_null($value)) {
 				$good = 'NULL';
+
 			} else if ($value instanceof pudlFunction) {
-				foreach ($value as $func => $sub_value) {
-					$good	= ltrim($func, '_') . '(';
-					$first	= true;
-					foreach ($sub_value as $item) {
-						if (!$first) $good .= ','; else $first = false;
-						if ($safe !== false) $item = $this->safe($item);
-						$good .= $item;
-					}
-					$good .= ')';
-					break;
-				}
+				$good = $this->_function($value, $safe);
+
 			} else if (is_array($value)) {
-				foreach ($value as $func => $sub_value) {
-					if ($func == 'AES_ENCRYPT') {
-						if ($safe !== false) $sub_value['key']  = $this->safe($sub_value['key']);
-						if ($safe !== false) $sub_value['data'] = $this->safe($sub_value['data']);
-						$good = $func . '("' . $sub_value['data'] . '","' . $sub_value['key'] . '")';
-					} else {
-						if ($safe !== false) $sub_value = $this->safe($sub_value);
-						$good = $func . '(' . $sub_value . ')';
-					}
-					break;
-				}
+				$good = 'COLUMN_CREATE(' . $this->_dynamic($value, $safe) . ')';
+
+			} else if (is_int($value)) {
+				$good = $value;
 
 			} else {
 				if ($safe !== false) $value = $this->safe($value);
@@ -635,12 +554,14 @@ abstract class pudl extends pudlQuery {
 			}
 		}
 
+		if ($prefix) $cols .= ')'; else $cols = '';
+
 		if ($update === 'IGNORE') {
-			$query = "INSERT IGNORE INTO $table ($cols) VALUES ($vals)";
+			$query = "INSERT IGNORE INTO $table $cols VALUES ($vals)";
 		} else if ($update === 'REPLACE') {
-			$query = "REPLACE INTO $table ($cols) VALUES ($vals)";
+			$query = "REPLACE INTO $table $cols VALUES ($vals)";
 		} else {
-			$query = "INSERT INTO $table ($cols) VALUES ($vals)";
+			$query = "INSERT INTO $table $cols VALUES ($vals)";
 			if ($update === true) $update = $data;
 			if ($update !== false) {
 				$query .= ' ON DUPLICATE KEY UPDATE ';

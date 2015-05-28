@@ -65,6 +65,7 @@ class pudlMySqliResult extends pudlResult {
 
 	public function row($type=PUDL_ARRAY) {
 		if (!is_object($this->result)) return false;
+
 		$data = false;
 		switch ($type) {
 			case PUDL_ARRAY:	$data = @$this->result->fetch_array(MYSQLI_ASSOC);	break;
@@ -72,7 +73,27 @@ class pudlMySqliResult extends pudlResult {
 			case PUDL_BOTH:		$data = @$this->result->fetch_array(MYSQLI_BOTH);	break;
 			default:			$data = @$this->result->fetch_array();
 		}
-		return is_array($data) ? $data : false;
+		if (!is_array($data)) return false;
+
+		if ($this->first) {
+			$this->first = false;
+			foreach ($data as $key => &$val) {
+				if (substr_compare($key, 'COLUMN_JSON', 0, 11) === 0) {
+					$this->json[] = $key;
+				}
+			} unset($val);
+		}
+
+		foreach ($this->json as &$key) {
+			$new = substr($key, 12, -1);
+			$data[$new] = @json_decode($data[$key], true);
+		} unset($key);
+
+		return $data;
 	}
+
+
+	private $first	= true;
+	private $json	= [];
 
 }

@@ -295,18 +295,17 @@ abstract class pudlQuery {
 
 			if (is_null($value)) {
 				$good = 'NULL';
+
 			} else if ($value instanceof pudlFunction) {
-				foreach ($value as $func => $sub_value) {
-					$good	= ltrim($func, '_') . '(';
-					$first	= true;
-					foreach ($sub_value as $item) {
-						if (!$first) $good .= ','; else $first = false;
-						if ($safe !== false) $item = $this->safe($item);
-						$good .= $item;
-					}
-					$good .= ')';
-					break;
-				}
+				$good = $this->_function($value, $safe);
+
+			} else if (is_array($value)) {
+				$good = "COLUMN_ADD($escstart$column$escend," . $this->_dynamic($value) . ')';
+
+			} else if (is_int($value)) {
+				$good = $value;
+
+/*
 			} else if (is_array($value)) {
 				foreach ($value as $func => $sub_value) {
 					if ($func == 'AES_ENCRYPT') {
@@ -322,6 +321,8 @@ abstract class pudlQuery {
 					}
 					break;
 				}
+*/
+
 			} else {
 				if ($safe !== false) $value = $this->safe($value);
 				$good = "'$value'";
@@ -334,6 +335,49 @@ abstract class pudlQuery {
 			}
 		}
 
+		return $query;
+	}
+
+
+
+	public function _function($data, $safe=false) {
+		$query = '';
+		foreach ($data as $property => $value) {
+			$query	= ltrim($property, '_') . '(';
+			$first	= true;
+			foreach ($value as $item) {
+				if (!$first) $query .= ','; else $first = false;
+
+				if (is_int($value)) {
+					$query .= $value;
+				} else {
+					if ($safe !== false) $item = $this->safe($item);
+					$query .= "'" . $item . "'";
+				}
+			}
+			$query .= ')';
+			break;
+		}
+		return $query;
+	}
+
+
+
+	public function _dynamic($data, $safe=false) {
+		$query = '';
+		$first = true;
+		foreach ($data as $property => $value) {
+			if (!$first) $query .= ','; else $first = false;
+			if ($safe !== false) {
+				$property = $this->safe($property);
+				$value = $this->safe($value);
+			}
+			if (is_int($value)) {
+				$query .= "'" . $property . "'," . $value;
+			} else {
+				$query .= "'" . $property . "','" . $value . "'";
+			}
+		}
 		return $query;
 	}
 

@@ -14,8 +14,7 @@ class pudlMySql extends pudl {
 		$this->escend	= '`';
 		$this->prefix	= $prefix;
 
-		$this->mysql  = false;
-		$this->mysql  = @mysql_pconnect($server, $username, $password);
+		$this->mysql	= @mysql_pconnect($server, $username, $password);
 
 		if (!$this->mysql) {
 			$this->mysql = @mysql_connect($server, $username, $password);
@@ -54,44 +53,34 @@ class pudlMySql extends pudl {
 
 
 	public function safe($str) {
-		$return = false;
-		$return = @mysql_real_escape_string($str, $this->mysql);
-		return $return;
+		if (is_int($str)) return $str;
+		return @mysql_real_escape_string($str, $this->mysql);
 	}
 
 
 	protected function process($query) {
-		$result = false;
 		$result = @mysql_query($query, $this->mysql);
 		return new pudlMySqlResult($result, $query);
 	}
 
 
 	public function insertId() {
-		$return = false;
-		$return = @mysql_insert_id($this->mysql);
-		return $return;
+		return @mysql_insert_id($this->mysql);
 	}
 
 
 	public function updated() {
-		$return = false;
-		$return = @mysql_affected_rows($this->mysql);
-		return $return;
+		return @mysql_affected_rows($this->mysql);
 	}
 
 
 	public function errno() {
-		$return = false;
-		$return = @mysql_errno($this->mysql);
-		return $return;
+		return @mysql_errno($this->mysql);
 	}
 
 
 	public function error() {
-		$return = false;
-		$return = @mysql_error($this->mysql);
-		return $return;
+		return @mysql_error($this->mysql);
 	}
 
 
