@@ -51,8 +51,8 @@ class pudlMsSql extends pudl {
 	}
 
 
-	public function safe($str) {
-		if ( is_numeric($str) ) return $str;
+	public function safe($value) {
+		if (is_int($value)  ||  is_float($value)) return $value;
 
 		$encode = array(
 			'/%0[0-8bcef]/',            // url encoded 00-08, 11, 12, 14, 15
@@ -62,9 +62,9 @@ class pudlMsSql extends pudl {
 			'/\x0c/',                   // 12
 			'/[\x0e-\x1f]/'             // 14-31
 		);
-		foreach ($encode as $regex) $str = preg_replace($regex, '', $str);
+		foreach ($encode as $regex) $value = preg_replace($regex, '', $value);
 
-		return str_replace("'", "''", $str );;
+		return str_replace("'", "''", $value);
 	}
 
 

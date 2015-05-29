@@ -535,7 +535,7 @@ abstract class pudl extends pudlQuery {
 			} else if (is_array($value)) {
 				$good = 'COLUMN_CREATE(' . $this->_dynamic($value, $safe) . ')';
 
-			} else if (is_int($value)) {
+			} else if (is_int($value)  ||  is_float($value)) {
 				$good = $value;
 
 			} else {

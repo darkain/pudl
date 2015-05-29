@@ -41,9 +41,9 @@ class pudlWeb extends pudl {
 	}
 
 
-	public function safe($str) {
+	public function safe($value) {
 		//TODO: IMPLEMENT THIS BIG TIEMZ!
-		return $str;
+		return $value;
 	}
 
 
@@ -74,7 +74,7 @@ class pudlWeb extends pudl {
 			case JSON_ERROR_SYNTAX:			return 'Syntax error, malformed JSON';
 			case JSON_ERROR_UTF8:			return 'Malformed UTF-8 characters';
 		}
-        return 'Unknown error';
+		return 'Unknown error';
 	}
 
 

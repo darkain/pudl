@@ -35,9 +35,9 @@ class pudlShell extends pudl {
 	}
 
 
-	public function safe($str) {
+	public function safe($value) {
 		//TODO: IMPLEMENT THIS BIG TIEMZ!
-		return $str;
+		return $value;
 	}
 
 

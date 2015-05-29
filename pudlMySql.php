@@ -52,9 +52,9 @@ class pudlMySql extends pudl {
 	}
 
 
-	public function safe($str) {
-		if (is_int($str)) return $str;
-		return @mysql_real_escape_string($str, $this->mysql);
+	public function safe($value) {
+		if (is_int($value)  ||  is_float($value)) return $value;
+		return @mysql_real_escape_string($value, $this->mysql);
 	}
 
 

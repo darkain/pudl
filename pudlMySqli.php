@@ -126,9 +126,9 @@ class pudlMySqli extends pudl {
 
 
 
-	public function safe($str) {
-		if (is_int($str)) return $str;
-		return @$this->mysqli->real_escape_string($str);
+	public function safe($value) {
+		if (is_int($value)  ||  is_float($value)) return $value;
+		return @$this->mysqli->real_escape_string($value);
 	}
 
 

@@ -3,7 +3,7 @@
 abstract class pudlQuery {
 
 
-	abstract public function safe($str);
+	abstract public function safe($value);
 
 
 
@@ -297,31 +297,17 @@ abstract class pudlQuery {
 				$good = 'NULL';
 
 			} else if ($value instanceof pudlFunction) {
-				$good = $this->_function($value, $safe);
+				if (isset($value->_INCREMENT)) {
+					$good = "$escstart$column$escend+'" . reset($value->_INCREMENT) . "'";
+				} else {
+					$good = $this->_function($value, $safe);
+				}
 
 			} else if (is_array($value)) {
 				$good = "COLUMN_ADD($escstart$column$escend," . $this->_dynamic($value) . ')';
 
-			} else if (is_int($value)) {
+			} else if (is_int($value)  ||  is_float($value)) {
 				$good = $value;
-
-/*
-			} else if (is_array($value)) {
-				foreach ($value as $func => $sub_value) {
-					if ($func == 'AES_ENCRYPT') {
-						if ($safe !== false) $sub_value['key']  = $this->safe($sub_value['key']);
-						if ($safe !== false) $sub_value['data'] = $this->safe($sub_value['data']);
-						$good = $func . '("' . $sub_value['data'] . '","' . $sub_value['key'] . '")';
-					} else if ($func == 'INCREMENT') {
-						if ($safe !== false) $sub_value = $this->safe($sub_value);
-						$good = "$escstart$column$escend+'$sub_value'";
-					} else {
-						if ($safe !== false) $sub_value = $this->safe($sub_value);
-						$good = $func . '(' . $sub_value . ')';
-					}
-					break;
-				}
-*/
 
 			} else {
 				if ($safe !== false) $value = $this->safe($value);
@@ -348,7 +334,7 @@ abstract class pudlQuery {
 			foreach ($value as $item) {
 				if (!$first) $query .= ','; else $first = false;
 
-				if (is_int($value)) {
+				if (is_int($value)  ||  is_float($value)) {
 					$query .= $value;
 				} else {
 					if ($safe !== false) $item = $this->safe($item);
@@ -372,7 +358,7 @@ abstract class pudlQuery {
 				$property = $this->safe($property);
 				$value = $this->safe($value);
 			}
-			if (is_int($value)) {
+			if (is_int($value)  ||  is_float($value)) {
 				$query .= "'" . $property . "'," . $value;
 			} else {
 				$query .= "'" . $property . "','" . $value . "'";
