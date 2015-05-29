@@ -174,7 +174,7 @@ class pudlMySqli extends pudl {
 			break;
 		}
 
-		return new pudlMySqliResult($result, $query);
+		return new pudlMySqliResult($result, $this);
 	}
 
 

@@ -71,7 +71,7 @@ class pudlMsSql extends pudl {
 	protected function process($query) {
 		$result = false;
 		$result = @mssql_query($query, $this->mssql);
-		return new pudlMsSqlResult($result, $query);
+		return new pudlMsSqlResult($result, $this);
 	}
 
 

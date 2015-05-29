@@ -68,7 +68,7 @@ class pudlSqlite extends pudl {
 
 	protected function process($query) {
 		$result = $this->sqlite->query($query);
-		return new pudlSqliteResult($result, $query);
+		return new pudlSqliteResult($result, $this);
 	}
 
 

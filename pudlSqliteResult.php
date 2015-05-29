@@ -5,8 +5,8 @@ require_once('pudlResult.php');
 
 
 class pudlSqliteResult extends pudlResult {
-	public function __construct($result, $query) {
-		parent::__construct($result, $query);
+	public function __construct($result, $db) {
+		parent::__construct($result, $db);
 
 		$this->rownum = 0;
 	}

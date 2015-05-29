@@ -2,8 +2,8 @@
 
 class pudlCacheResult extends pudlResult {
 
-	public function __construct($data, $query) {
-		parent::__construct(count($data), $query);
+	public function __construct($data, $db) {
+		parent::__construct(count($data), $db);
 		$this->rows	= $data;
 		$this->cur	= 0;
 	}

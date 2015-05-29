@@ -6,8 +6,8 @@ require_once('pudlResult.php');
 
 class pudlStringResult extends pudlResult {
 
-	public function __construct($query) {
-		parent::__construct(false, $query);
+	public function __construct($db) {
+		parent::__construct(false, $db);
 	}
 
 	public function __destruct() {}

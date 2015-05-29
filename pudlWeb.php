@@ -35,7 +35,7 @@ class pudlWeb extends pudl {
 		$result = curl_exec($ch);
 		curl_close($ch);
 
-		$item = new pudlShellResult($result, $query);
+		$item = new pudlShellResult($result, $this);
 		$this->error = $item->error();
 		return $item;
 	}

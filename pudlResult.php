@@ -2,10 +2,11 @@
 
 abstract class pudlResult {
 
-	public function __construct($result, $query) {
-		$this->result = $result;
-		$this->query  = $query;
-		$this->fields = false;
+	public function __construct($result, $db) {
+		$this->result	= $result;
+		$this->db		= $db;
+		$this->query	= $db->query();
+		$this->fields	= false;
 	}
 
 
@@ -91,6 +92,7 @@ abstract class pudlResult {
 	}
 
 
+	protected $db;
 	protected $fields;
 	protected $result;
 	protected $query;

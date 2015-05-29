@@ -29,7 +29,7 @@ class pudlShell extends pudl {
 	protected function process($query) {
 		$result = false;
 		exec('php5 ' . $this->path . ' ' . escapeshellarg($query), $result);
-		$item = new pudlShellResult($result[0], $query);
+		$item = new pudlShellResult($result[0], $this);
 		$this->error = $item->error();
 		return $item;
 	}

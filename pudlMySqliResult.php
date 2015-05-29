@@ -5,8 +5,8 @@ require_once('pudlResult.php');
 
 
 class pudlMySqliResult extends pudlResult {
-	public function __construct($result, $query) {
-		parent::__construct($result, $query);
+	public function __construct($result, $db) {
+		parent::__construct($result, $db);
 	}
 
 
@@ -79,13 +79,14 @@ class pudlMySqliResult extends pudlResult {
 			$this->first = false;
 			foreach ($data as $key => &$val) {
 				if (substr_compare($key, 'COLUMN_JSON', 0, 11) === 0) {
-					$this->json[] = $key;
+					$new = substr($key, 12, -1);
+					$new = trim($new, " \t\n\r\0\x0B" . $this->db->_escape());
+					$this->json[$key] = $new;
 				}
 			} unset($val);
 		}
 
-		foreach ($this->json as &$key) {
-			$new = substr($key, 12, -1);
+		foreach ($this->json as $key => $new) {
 			$data[$new] = @json_decode($data[$key], true);
 		} unset($key);
 

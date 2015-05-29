@@ -39,7 +39,7 @@ class pudlOdbc extends pudl {
 		$result = false;
 		$result = @odbc_exec($this->odbc, $query);
 		$this->numrows = ($result !== false) ? @odbc_num_rows($result) : 0;
-		return new pudlOdbcResult($result, $query);
+		return new pudlOdbcResult($result, $this);
 	}
 
 

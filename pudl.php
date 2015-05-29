@@ -60,7 +60,7 @@ abstract class pudl extends pudlQuery {
 		if (is_array($this->transaction)) $this->transaction[] = $query;
 
 		if ($this->tostring) {
-			$result = new pudlStringResult($query);
+			$result = new pudlStringResult($this);
 		} else if ($this->cache  &&  $this->redis) {
 			$hash = $this->cachekey;
 			if (empty($hash)) $hash = md5($query);
@@ -70,7 +70,7 @@ abstract class pudl extends pudlQuery {
 				$data	= $result->rows();
 				$this->redis->set("pudl:$hash", $data, $this->cache);
 			}
-			$result = new pudlCacheResult($data, $query);
+			$result = new pudlCacheResult($data, $this);
 			$this->cache = $this->cachekey = false;
 		} else {
 			$result = $this->process($query);
