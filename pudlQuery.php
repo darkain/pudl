@@ -352,18 +352,28 @@ abstract class pudlQuery {
 	public function _dynamic($data, $safe=false) {
 		$query = '';
 		$first = true;
+
 		foreach ($data as $property => $value) {
 			if (!$first) $query .= ','; else $first = false;
+
 			if ($safe !== false) {
 				$property = $this->safe($property);
 				$value = $this->safe($value);
 			}
+
+			$query .= "'" . $property . "',";
+
 			if (is_int($value)  ||  is_float($value)) {
-				$query .= "'" . $property . "'," . $value;
+				$query .= $value;
+
+			} else if ($value instanceof pudlFunction) {
+				$query .= $this->_function($value, $safe);
+
 			} else {
-				$query .= "'" . $property . "','" . $value . "'";
+				$query .= "'" . $value . "'";
 			}
 		}
+
 		return $query;
 	}
 
