@@ -304,7 +304,7 @@ abstract class pudlQuery {
 				}
 
 			} else if (is_array($value)) {
-				$good = "COLUMN_ADD($escstart$column$escend," . $this->_dynamic($value) . ')';
+				$good = "COLUMN_ADD($escstart$column$escend," . $this->_dynamic($value, $safe) . ')';
 
 			} else if (is_int($value)  ||  is_float($value)) {
 				$good = $value;
@@ -368,6 +368,9 @@ abstract class pudlQuery {
 
 			} else if ($value instanceof pudlFunction) {
 				$query .= $this->_function($value, $safe);
+
+			} else if (is_array($value)) {
+				$query .= 'COLUMN_CREATE(' . $this->_dynamic($value, $safe) . ')';
 
 			} else {
 				$query .= "'" . $value . "'";
