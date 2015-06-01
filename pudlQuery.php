@@ -22,16 +22,15 @@ abstract class pudlQuery {
 
 
 	protected function _column(&$col) {
-		$escstart = $this->escstart;
-		$escend = $this->escend;
-
 		if (!is_array($col)) {
 			if ($col === false  ||  $col === ''  ||  $col === null) return '*';
 			return $col;
 		}
 
-		$query = '';
-		$first = true;
+		$escstart	= $this->escstart;
+		$escend		= $this->escend;
+		$query		= '';
+		$first		= true;
 
 		foreach ($col as $key => $val) {
 			if (!$first) $query .= ', ';
@@ -112,9 +111,9 @@ abstract class pudlQuery {
 
 
 	protected function _clause(&$clause) {
-		if ($clause === false) return '';
-		if (!is_array($clause)) return " WHERE $clause";
-		if (!count($clause)) return '';
+		if ($clause === false)	return '';
+		if (!is_array($clause))	return " WHERE $clause";
+		if (!count($clause))	return '';
 		return " WHERE " . self::_clause_recurse($clause);
 	}
 
@@ -138,9 +137,9 @@ abstract class pudlQuery {
 
 
 	protected function _order(&$order) {
-		if ($order === false)  return '';
-		if (!is_array($order)) return " ORDER BY $order";
-		if (!count($order)) return '';
+		if ($order === false)	return '';
+		if (!is_array($order))	return " ORDER BY $order";
+		if (!count($order))		return '';
 
 		$query = " ORDER BY ";
 		$first = true;
@@ -157,9 +156,9 @@ abstract class pudlQuery {
 
 
 	protected function _group(&$group) {
-		if ($group === false)  return '';
-		if (!is_array($group)) return " GROUP BY $group";
-		if (!count($group)) return '';
+		if ($group === false)	return '';
+		if (!is_array($group))	return " GROUP BY $group";
+		if (!count($group))		return '';
 
 		$query = " GROUP BY ";
 		$first = true;
@@ -244,9 +243,9 @@ abstract class pudlQuery {
 
 
 	protected function _joinUsing($join_using) {
-		if ($join_using === false)  return '';
-		if (!is_array($join_using)) return " USING ($join_using)";
-		if (!count($join_using)) return '';
+		if ($join_using === false)	return '';
+		if (!is_array($join_using))	return " USING ($join_using)";
+		if (!count($join_using))	return '';
 
 		$query = ' USING (';
 
@@ -264,12 +263,11 @@ abstract class pudlQuery {
 
 
 	protected function _joinTable($join, $type='LEFT') {
-		$escstart = $this->escstart;
-		$escend = $this->escend;
-
 		if (!is_array($join)) return " $type JOIN (" . self::_table($join) . ')';
 
-		$query = " $type JOIN ";
+		$escstart	= $this->escstart;
+		$escend		= $this->escend;
+		$query		= " $type JOIN ";
 
 		foreach ($join as $key => &$val) {
 			$query .= self::_table($val) . ' ' . $key;
@@ -282,14 +280,13 @@ abstract class pudlQuery {
 
 
 	protected function _update($data, $safe=false) {
-		$escstart = $this->escstart;
-		$escend = $this->escend;
-
 		if (!is_array($data)) return $data;
 
-		$query = '';
+		$escstart	= $this->escstart;
+		$escend		= $this->escend;
+		$query		= '';
+		$first		= true;
 
-		$first = true;
 		foreach ($data as $column => $value) {
 			$good = false;
 
