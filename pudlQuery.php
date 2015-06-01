@@ -288,37 +288,47 @@ abstract class pudlQuery {
 		$first		= true;
 
 		foreach ($data as $column => $value) {
-			$good = false;
-
-			if (is_null($value)) {
-				$good = 'NULL';
-
-			} else if ($value instanceof pudlFunction) {
-				if (isset($value->_INCREMENT)) {
-					$good = "$escstart$column$escend+'" . reset($value->_INCREMENT) . "'";
-				} else {
-					$good = $this->_function($value, $safe);
-				}
-
-			} else if (is_array($value)) {
-				$good = "COLUMN_ADD($escstart$column$escend," . $this->_dynamic($value, $safe) . ')';
-
-			} else if (is_int($value)  ||  is_float($value)) {
-				$good = $value;
-
+			if ($value instanceof pudlFunction  &&  isset($value->_INCREMENT)) {
+				$good = "$escstart$column$escend+'" . reset($value->_INCREMENT) . "'";
 			} else {
-				if ($safe !== false) $value = $this->safe($value);
-				$good = "'$value'";
+				$good = $this->_columnData($value, $safe);
 			}
 
-			if ($good !== false) {
-				if (!$first) $query .= ', ';
-				$first  = false;
-				$query .= "$escstart$column$escend=$good";
-			}
+			if (!$first) $query .= ', '; else $first = false;
+			$query .= "$escstart$column$escend=$good";
 		}
 
 		return $query;
+	}
+
+
+
+	public function _columnData($value, $safe=false) {
+		if (is_null($value)) {
+			return 'NULL';
+
+		} else if (is_int($value)  ||  is_float($value)) {
+			return $value;
+
+		} else if (is_bool($value)) {
+			return $value ? 'TRUE' : 'FALSE';
+
+		} else if (is_string($value)) {
+			if ($safe !== false) $value = $this->safe($value);
+			return "'$value'";
+
+		} else if (is_array($value)) {
+			return 'COLUMN_CREATE(' . $this->_dynamic($value, $safe) . ')';
+
+		} else if ($value instanceof pudlFunction) {
+			return $this->_function($value, $safe);
+		}
+
+
+		trigger_error(
+			'Invalid data type for column: ' . (gettype($value)=='object'?get_class($value):gettype($value)),
+			E_USER_ERROR
+		);
 	}
 
 
@@ -358,20 +368,7 @@ abstract class pudlQuery {
 				$value = $this->safe($value);
 			}
 
-			$query .= "'" . $property . "',";
-
-			if (is_int($value)  ||  is_float($value)) {
-				$query .= $value;
-
-			} else if ($value instanceof pudlFunction) {
-				$query .= $this->_function($value, $safe);
-
-			} else if (is_array($value)) {
-				$query .= 'COLUMN_CREATE(' . $this->_dynamic($value, $safe) . ')';
-
-			} else {
-				$query .= "'" . $value . "'";
-			}
+			$query .= "'" . $property . "'," . $this->_columnData($value);
 		}
 
 		return $query;

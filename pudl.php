@@ -517,45 +517,22 @@ abstract class pudl extends pudlQuery {
 			return false;
 		}
 
-		$cols = '(';
-		$vals = '';
-
-		$table = $this->_table($table);
-
-		$count = 0;
+		$cols	= '(';
+		$vals	= '';
+		$first	= true;
 		foreach ($data as $column => $value) {
-			$good = false;
+			if (!$first) {
+				$cols .= ', ';
+				$vals .= ', ';
+			} else $first = false;
 
-			if (is_null($value)) {
-				$good = 'NULL';
-
-			} else if ($value instanceof pudlFunction) {
-				$good = $this->_function($value, $safe);
-
-			} else if (is_array($value)) {
-				$good = 'COLUMN_CREATE(' . $this->_dynamic($value, $safe) . ')';
-
-			} else if (is_int($value)  ||  is_float($value)) {
-				$good = $value;
-
-			} else {
-				if ($safe !== false) $value = $this->safe($value);
-				$good = "'$value'";
-			}
-
-			if ($good !== false) {
-				if ($count != 0) {
-					$cols .= ', ';
-					$vals .= ', ';
-				}
-				$cols .= "{$this->escstart}$column{$this->escend}";
-				$vals .= $good;
-				$count++;
-			}
+			$cols .= $this->escstart . $column . $this->escend;
+			$vals .= $this->_columnData($value);
 		}
 
 		if ($prefix) $cols .= ')'; else $cols = '';
 
+		$table = $this->_table($table);
 		if ($update === 'IGNORE') {
 			$query = "INSERT IGNORE INTO $table $cols VALUES ($vals)";
 		} else if ($update === 'REPLACE') {
