@@ -80,9 +80,9 @@ class pudlMySqliResult extends pudlResult {
 			foreach ($data as $key => &$val) {
 				if (substr_compare($key, 'COLUMN_JSON', 0, 11) === 0) {
 					$new = substr($key, 12, -1);
-					$new = trim($new, " \t\n\r\0\x0B" . $this->db->_escape());
 					$pos = strrpos($new, '.');
 					if ($pos !== false) $new = substr($new, $pos+1);
+					$new = trim($new, " \t\n\r\0\x0B" . $this->db->_escape());
 					$this->json[$key] = $new;
 				}
 			} unset($val);
