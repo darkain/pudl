@@ -303,7 +303,7 @@ abstract class pudlQuery {
 
 
 
-	public function _columnData($value, $safe=false) {
+	protected function _columnData($value, $safe=false) {
 		if (is_null($value)) {
 			return 'NULL';
 
@@ -333,7 +333,7 @@ abstract class pudlQuery {
 
 
 
-	public function _function($data, $safe=false) {
+	protected function _function($data, $safe=false) {
 		$query = '';
 		foreach ($data as $property => $value) {
 			$query	= ltrim($property, '_') . '(';
@@ -356,7 +356,7 @@ abstract class pudlQuery {
 
 
 
-	public function _dynamic($data, $safe=false) {
+	protected function _dynamic($data, $safe=false) {
 		static $depth = 0;
 		if ($depth > 31) {
 			trigger_error('Recursion limit reached', E_USER_ERROR);
