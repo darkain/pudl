@@ -512,7 +512,7 @@ abstract class pudl extends pudlQuery {
 
 
 	public function insert($table, $data, $safe=false, $update=false, $prefix=true) {
-		if (!is_array($data)) {
+		if (!is_array($data)  &&  !is_object($data)) {
 			trigger_error('Invalid data type for pudl::insert', E_USER_ERROR);
 			return false;
 		}

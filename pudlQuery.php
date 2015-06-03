@@ -280,7 +280,7 @@ abstract class pudlQuery {
 
 
 	protected function _update($data, $safe=false) {
-		if (!is_array($data)) return $data;
+		if (!is_array($data)  &&  !is_object($data)) return $data;
 
 		$escstart	= $this->escstart;
 		$escend		= $this->escend;
