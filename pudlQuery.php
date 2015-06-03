@@ -317,11 +317,11 @@ abstract class pudlQuery {
 			if ($safe !== false) $value = $this->safe($value);
 			return "'$value'";
 
-		} else if (is_array($value)) {
-			return 'COLUMN_CREATE(' . $this->_dynamic($value, $safe) . ')';
-
 		} else if ($value instanceof pudlFunction) {
 			return $this->_function($value, $safe);
+
+		} else if (is_array($value)  ||  is_object($value)) {
+			return 'COLUMN_CREATE(' . $this->_dynamic($value, $safe) . ')';
 		}
 
 
