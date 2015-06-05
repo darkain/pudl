@@ -365,8 +365,9 @@ abstract class pudl extends pudlQuery {
 
 
 
-	public function rowId($table, $idcol, $id, $lock=false) {
-		return $this->row($table, "{$this->escstart}$idcol{$this->escend}='$id'", false, $lock);
+	public function rowId($table, $column, $id, $lock=false) {
+		if (is_array($id)) $id = $id[$column];
+		return $this->row($table, "{$this->escstart}$column{$this->escend}='$id'", false, $lock);
 	}
 
 
@@ -382,8 +383,9 @@ abstract class pudl extends pudlQuery {
 	}
 
 
-	public function deleteId($table, $idcol, $id) {
-		return $this->delete($table, "{$this->escstart}$idcol{$this->escend}='$id'");
+	public function deleteId($table, $column, $id) {
+		if (is_array($id)) $id = $id[$column];
+		return $this->delete($table, "{$this->escstart}$column{$this->escend}='$id'");
 	}
 
 
@@ -407,8 +409,9 @@ abstract class pudl extends pudlQuery {
 
 
 
-	public function cellId($table, $col, $idcol, $id) {
-		return $this->cell($table, $col, "{$this->escstart}$idcol{$this->escend}='$id'");
+	public function cellId($table, $col, $column, $id) {
+		if (is_array($id)) $id = $id[$column];
+		return $this->cell($table, $col, "{$this->escstart}$column{$this->escend}='$id'");
 	}
 
 
@@ -564,8 +567,8 @@ abstract class pudl extends pudlQuery {
 
 
 
-	public function insertUpdate($table, $data, $idcol, $safe=false) {
-		$update = "{$this->escstart}$idcol{$this->escend}=LAST_INSERT_ID({$this->escstart}$idcol{$this->escend})";
+	public function insertUpdate($table, $data, $column, $safe=false) {
+		$update = "{$this->escstart}$column{$this->escend}=LAST_INSERT_ID({$this->escstart}$column{$this->escend})";
 		return $this->insert($table, $data, $safe, $update);
 	}
 
