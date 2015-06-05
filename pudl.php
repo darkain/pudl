@@ -530,7 +530,7 @@ abstract class pudl extends pudlQuery {
 			} else $first = false;
 
 			$cols .= $this->escstart . $column . $this->escend;
-			$vals .= $this->_columnData($value);
+			$vals .= $this->_columnData($value, $safe);
 		}
 
 		if ($prefix) $cols .= ')'; else $cols = '';

@@ -376,7 +376,7 @@ abstract class pudlQuery {
 				$value = $this->safe($value);
 			}
 
-			$query .= "'" . $property . "'," . $this->_columnData($value);
+			$query .= "'" . $property . "'," . $this->_columnData($value, $safe);
 		}
 
 		$depth--;
