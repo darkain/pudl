@@ -321,6 +321,7 @@ abstract class pudlQuery {
 			return $this->_function($value, $safe);
 
 		} else if (is_array($value)  ||  is_object($value)) {
+			if (empty($value)) return 'NULL';
 			return 'COLUMN_CREATE(' . $this->_dynamic($value, $safe) . ')';
 		}
 

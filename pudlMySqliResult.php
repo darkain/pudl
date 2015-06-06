@@ -90,6 +90,7 @@ class pudlMySqliResult extends pudlResult {
 
 		foreach ($this->json as $key => $new) {
 			$data[$new] = @json_decode($data[$key], true);
+			if ($data[$new] === NULL) $data[$new] = [];
 		} unset($key);
 
 		return $data;
