@@ -141,7 +141,7 @@ function pudlPHPExcel($list, $filename) {
 	$sheet = $excel->getActiveSheet();
 	$sheet->freezePane('A2');
 
-	$excel->getActiveSheet()->setTitle('Price Sheet');
+	$excel->getActiveSheet()->setTitle('PUDL');
 
 
 	$i = 0;
@@ -175,7 +175,7 @@ function pudlPHPExcel($list, $filename) {
 			$sheet->SetCellValue($cell, $val);
 			$style = $sheet->getStyle($cell);
 
-			if ($key === 'price'  ||  $key === 'list'  ||  $key === 'cost'  ||  $key === 'part_cost') {
+			if ($key === 'part_retail'  ||  $key === 'list'  ||  $key === 'cost'  ||  $key === 'part_cost') {
 				$style->getNumberFormat()->setFormatCode('$ #,##0.00');
 			}
 
