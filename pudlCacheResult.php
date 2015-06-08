@@ -18,9 +18,15 @@ class pudlCacheResult extends pudlResult {
 
 	public function cell($row=0, $column=0) {
 		if (!isset($this->rows[$row])) return false;
+
 		$row = &$this->rows[$row];
 		if (count($row) < $column) return false;
-		return reset(array_slice($row, $column, 1));
+
+		//Thanks to PHP's requirement of reset() needing
+		//the array to be passed by reference, we have
+		//to assign said array to a temporary variable
+		$slice = array_slice($row, $column, 1);
+		return reset($slice);
 	}
 
 
