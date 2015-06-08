@@ -27,8 +27,14 @@ class pudlSession {
 
 
 	private function cache($id) {
-		return 'PUDL-SESSION-' . $this->name . '-' . $this->domain . '-' . $id;
+		return 'session-' . $this->name . '-' . $this->domain . '-' . $id;
 	}
+
+
+	private function purge($id) {
+		$this->db->purge( $this->cache($id) );
+	}
+
 
 
 	function open($path, $name) {
@@ -42,18 +48,22 @@ class pudlSession {
 
 
 	function read($id) {
-//		return $this->db->cache(60*60, $this->cache($id))->cellId(
-		return $this->db->cellId(
+		$data = $this->db->cache(60*60, $this->cache($id))->cellId(
 			$this->table,
 			'data',
 			'id',
 			$this->db->safe($id)
 		);
+
+		if (!empty($data)) $this->hash = md5($data);
+
+		return $data;
 	}
 
 
 	function write($id, $data) {
 		if (empty($data)) return $this->destroy($id);
+		if ($this->hash === md5($data)) return true;
 
 		if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 			$address = $_SERVER['HTTP_X_FORWARDED_FOR'];
@@ -76,7 +86,7 @@ class pudlSession {
 		);
 
 		//Purge the cache for this ID
-		$this->db->purge( $this->cache($id) );
+		$this->purge($id);
 
 		return true;
 	}
@@ -84,10 +94,12 @@ class pudlSession {
 
 	function destroy($id) {
 		//Delete the object
-		$this->db->deleteId($this->table, 'id', $this->db->safe($id));
+		if ($this->hash !== false) {
+			$this->db->deleteId($this->table, 'id', $this->db->safe($id));
+		}
 
 		//Purge the cache for this ID
-		$this->db->purge( $this->cache($id) );
+		$this->purge($id);
 
 		return true;
 	}
@@ -104,4 +116,6 @@ class pudlSession {
 	private $table;
 	private $name;
 	private $domain;
+	private $hasdata = false;
+	private $hash = false;
 }

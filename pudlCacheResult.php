@@ -17,8 +17,10 @@ class pudlCacheResult extends pudlResult {
 
 
 	public function cell($row=0, $column=0) {
-		if (!isset($this->rows[$row][$column])) return false;
-		return $this->rows[$row][$column];
+		if (!isset($this->rows[$row])) return false;
+		$row = &$this->rows[$row];
+		if (count($row) < $column) return false;
+		return reset(array_slice($row, $column, 1));
 	}
 
 
