@@ -367,6 +367,7 @@ abstract class pudl extends pudlQuery {
 
 	public function rowId($table, $column, $id, $lock=false) {
 		if (is_array($id)) $id = $id[$column];
+		if (is_null($id)) return $this->row($table, "{$this->escstart}$column{$this->escend} IS NULL", false, $lock);
 		return $this->row($table, "{$this->escstart}$column{$this->escend}='$id'", false, $lock);
 	}
 
@@ -385,6 +386,7 @@ abstract class pudl extends pudlQuery {
 
 	public function deleteId($table, $column, $id) {
 		if (is_array($id)) $id = $id[$column];
+		if (is_null($id)) return $this->delete($table, "{$this->escstart}$column{$this->escend} IS NULL");
 		return $this->delete($table, "{$this->escstart}$column{$this->escend}='$id'");
 	}
 
@@ -411,6 +413,7 @@ abstract class pudl extends pudlQuery {
 
 	public function cellId($table, $col, $column, $id) {
 		if (is_array($id)) $id = $id[$column];
+		if (is_null($id)) return $this->cell($table, $col, "{$this->escstart}$column{$this->escend} IS NULL");
 		return $this->cell($table, $col, "{$this->escstart}$column{$this->escend}='$id'");
 	}
 
@@ -431,6 +434,14 @@ abstract class pudl extends pudlQuery {
 	public function count($table, $clause='1') {
 		$return = $this->cell($table, 'COUNT(*)', $clause);
 		return $return === false ? $return : (int) $return;
+	}
+
+
+
+	public function countId($table, $column, $id) {
+		if (is_array($id)) $id = $id[$column];
+		if (is_null($id)) return $this->count($table, "{$this->escstart}$column{$this->escend} IS NULL");
+		return $this->count($table, "{$this->escstart}$column{$this->escend}='$id'");
 	}
 
 
@@ -681,6 +692,7 @@ abstract class pudl extends pudlQuery {
 
 	public function updateId($table, $data, $column, $id, $safe=false) {
 		if (is_array($id)) $id = $id[$column];
+		if (is_null($id)) return $this->update($table, $data, "{$this->escstart}$column{$this->escend} IS NULL", $safe);
 		return $this->update($table, $data, "{$this->escstart}$column{$this->escend}='$id'", $safe);
 	}
 
