@@ -75,31 +75,31 @@ abstract class pudlQuery {
 				$query .= self::_table($val) . ' ' . $key;
 			} else {
 				$query .= self::_table($val[0]) . ' ' . $key;
-				for ($i=1; $i<count($val); $i++) {
-					if (!empty($val[$i]['join'])) {
-						$query .= self::_joinTable($val[$i]['join'], '');
-					} else if (!empty($val[$i]['cross'])) {
-						$query .= self::_joinTable($val[$i]['cross'], 'CROSS');
-					} else if (!empty($val[$i]['left'])) {
-						$query .= self::_joinTable($val[$i]['left'], 'LEFT');
-					} else if (!empty($val[$i]['right'])) {
-						$query .= self::_joinTable($val[$i]['right'], 'RIGHT');
-					} else if (!empty($val[$i]['natural'])) {
-						$query .= self::_joinTable($val[$i]['natural'], 'NATURAL');
-					} else if (!empty($val[$i]['inner'])) {
-						$query .= self::_joinTable($val[$i]['inner'], 'INNER');
-					} else if (!empty($val[$i]['outer'])) {
-						$query .= self::_joinTable($val[$i]['outer'], 'OUTER');
-					} else if (!empty($val[$i]['hack'])) {
-						$query .= ' LEFT JOIN (' . $val[$i]['hack'] . ')';
+				foreach ($val as $join) {
+					if (!empty($join['join'])) {
+						$query .= self::_joinTable($join['join'], '');
+					} else if (!empty($join['cross'])) {
+						$query .= self::_joinTable($join['cross'], 'CROSS');
+					} else if (!empty($join['left'])) {
+						$query .= self::_joinTable($join['left'], 'LEFT');
+					} else if (!empty($join['right'])) {
+						$query .= self::_joinTable($join['right'], 'RIGHT');
+					} else if (!empty($join['natural'])) {
+						$query .= self::_joinTable($join['natural'], 'NATURAL');
+					} else if (!empty($join['inner'])) {
+						$query .= self::_joinTable($join['inner'], 'INNER');
+					} else if (!empty($join['outer'])) {
+						$query .= self::_joinTable($join['outer'], 'OUTER');
+					} else if (!empty($join['hack'])) {
+						$query .= ' LEFT JOIN (' . $join['hack'] . ')';
 					}
 
-					if (!empty($val[$i]['clause'])) {
-						$query .= self::_joinClause($val[$i]['clause']);
-					} else if (!empty($val[$i]['on'])) {
-						$query .= self::_joinClause($val[$i]['on']);
-					} else if (!empty($val[$i]['using'])) {
-						$query .= self::_joinUsing($val[$i]['using']);
+					if (!empty($join['clause'])) {
+						$query .= self::_joinClause($join['clause']);
+					} else if (!empty($join['on'])) {
+						$query .= self::_joinClause($join['on']);
+					} else if (!empty($join['using'])) {
+						$query .= self::_joinUsing($join['using']);
 					}
 				}
 			}
