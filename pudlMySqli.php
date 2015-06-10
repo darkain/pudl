@@ -67,8 +67,8 @@ class pudlMySqli extends pudl {
 		foreach ($this->pool as $server) {
 			$this->mysqli = mysqli_init();
 
-			//Set connection timeout to 10 second if we're in a clsuter
-			if (count($this->pool)>1) $this->mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, 10);
+			//Set connection timeout to 1 second if we're in a clsuter, else 10 seconds
+			$this->mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, count($this->pool)>1 ? 1 : 10);
 
 			//Attempt to create a persistant connection
 			$ok = @$this->mysqli->real_connect("p:$server", $this->username, $this->password, $this->database);
