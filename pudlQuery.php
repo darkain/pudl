@@ -313,8 +313,10 @@ abstract class pudlQuery {
 		} else if (is_bool($value)) {
 			return $value ? 'TRUE' : 'FALSE';
 
+		} else if (is_string($value)  &&  $safe !== false) {
+			return "'" . $this->safe($value) . "'";
+
 		} else if (is_string($value)) {
-			if ($safe !== false) $value = $this->safe($value);
 			return "'$value'";
 
 		} else if ($value instanceof pudlFunction) {
@@ -327,7 +329,8 @@ abstract class pudlQuery {
 
 
 		trigger_error(
-			'Invalid data type for column: ' . (gettype($value)=='object'?get_class($value):gettype($value)),
+			'Invalid data type for column: ' .
+			(gettype($value)==='object'?get_class($value):gettype($value)),
 			E_USER_ERROR
 		);
 	}
@@ -341,13 +344,7 @@ abstract class pudlQuery {
 			$first	= true;
 			foreach ($value as $item) {
 				if (!$first) $query .= ','; else $first = false;
-
-				if (is_int($value)  ||  is_float($value)) {
-					$query .= $value;
-				} else {
-					if ($safe !== false) $item = $this->safe($item);
-					$query .= "'" . $item . "'";
-				}
+				$query .= $this->_columnData($item);
 			}
 			$query .= ')';
 			break;
@@ -366,16 +363,10 @@ abstract class pudlQuery {
 		$depth++;
 
 		$query = '';
-		$first = true;
-
-
 		foreach ($data as $property => $value) {
-			if (!$first) $query .= ','; else $first = false;
+			if (!empty($query)) $query .= ',';
 
-			if ($safe !== false) {
-				$property = $this->safe($property);
-				$value = $this->safe($value);
-			}
+			if ($safe !== false) $property = $this->safe($property);
 
 			$query .= "'" . $property . "'," . $this->_columnData($value, $safe);
 		}
