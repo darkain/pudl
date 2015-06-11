@@ -33,14 +33,14 @@ abstract class pudlQuery {
 		$first		= true;
 
 		foreach ($col as $key => $val) {
-			if (!$first) $query .= ', ';
-			if (is_null($val)) $val = 'NULL';
-			if (is_numeric($key)) {
+			if (!$first) $query .= ', '; else $first = false;
+			if (is_null($val)) {
+				$query .= 'NULL';
+			} else if (is_numeric($key)) {
 				$query .= $val;
 			} else {
 				$query .= "$escstart$key$escend.$escstart$val$escend";
 			}
-			$first = false;
 		}
 
 		return $query;
@@ -68,8 +68,7 @@ abstract class pudlQuery {
 		$first = true;
 
 		foreach ($table as $key => &$val) {
-			if (!$first) $query .= ', ';
-			$first = false;
+			if (!$first) $query .= ', '; else $first = false;
 
 			if (!is_array($val)) {
 				$query .= self::_table($val) . ' ' . $key;
@@ -114,7 +113,7 @@ abstract class pudlQuery {
 		if ($clause === false)	return '';
 		if (!is_array($clause))	return " WHERE $clause";
 		if (!count($clause))	return '';
-		return " WHERE " . self::_clause_recurse($clause);
+		return ' WHERE ' . self::_clause_recurse($clause);
 	}
 
 
@@ -126,11 +125,9 @@ abstract class pudlQuery {
 		}
 		$depth++;
 
-		$first = true;
 		$query = '';
 		foreach ($clause as $key => &$val) {
-			if (!$first) $query .= ($or ? ' OR ' : ' AND ');
-			$first = false;
+			if (!empty($query)) $query .= ($or ? ' OR ' : ' AND ');
 
 			if (is_array($val)) {
 				$query .= '(' . self::_clause_recurse($val, !$or) . ')';
@@ -149,17 +146,7 @@ abstract class pudlQuery {
 		if ($order === false)	return '';
 		if (!is_array($order))	return " ORDER BY $order";
 		if (!count($order))		return '';
-
-		$query = " ORDER BY ";
-		$first = true;
-
-		foreach ($order as $key => &$val) {
-			if (!$first) $query .= ', ';
-			$first = false;
-			$query .= $val;
-		} unset($val);
-
-		return $query;
+		return ' ORDER BY ' . implode(',', $order);
 	}
 
 
@@ -168,17 +155,7 @@ abstract class pudlQuery {
 		if ($group === false)	return '';
 		if (!is_array($group))	return " GROUP BY $group";
 		if (!count($group))		return '';
-
-		$query = " GROUP BY ";
-		$first = true;
-
-		foreach ($group as $key => &$val) {
-			if (!$first) $query .= ', ';
-			$first = false;
-			$query .= $val;
-		} unset($val);
-
-		return $query;
+		return ' GROUP BY ' . implode(',', $group);
 	}
 
 
@@ -203,17 +180,7 @@ abstract class pudlQuery {
 
 	protected function _union($type='') {
 		if ($type !== 'ALL'  &&  $type !== 'DISTINCT') $type = '';
-
-		$query = '(';
-		$first = true;
-
-		foreach($this->union as &$union) {
-			if (!$first) $query .= ") UNION $type (";
-			$first = false;
-			$query .= $union;
-		} unset($union);
-
-		return $query . ')';
+		return '(' . implode(") UNION $type (", $this->union) . ')';
 	}
 
 
@@ -227,8 +194,7 @@ abstract class pudlQuery {
 		$first = true;
 
 		foreach ($join_clause as $key => &$val) {
-			if (!$first) $query .= ' AND ';
-			$first = false;
+			if (!$first) $query .= ' AND '; else  $first = false;
 
 			if (is_array($val)) {
 				$query .= '(';
@@ -255,18 +221,7 @@ abstract class pudlQuery {
 		if ($join_using === false)	return '';
 		if (!is_array($join_using))	return " USING ($join_using)";
 		if (!count($join_using))	return '';
-
-		$query = ' USING (';
-
-		$first = true;
-		foreach ($join_using as $key => &$val) {
-			if (!$first) $query .= ', ';
-			$first = false;
-			$query .= $val;
-		} unset($val);
-
-		$query .= ')';
-		return $query;
+		return ' USING (' . implode(',', $join_using) . ')';
 	}
 
 
@@ -347,18 +302,16 @@ abstract class pudlQuery {
 
 
 	protected function _function($data, $safe=false) {
-		$query = '';
 		foreach ($data as $property => $value) {
-			$query	= ltrim($property, '_') . '(';
-			$first	= true;
+			$query	= '';
 			foreach ($value as $item) {
-				if (!$first) $query .= ','; else $first = false;
-				$query .= $this->_columnData($item);
+				if (!empty($query)) $query .= ',';
+				$query .= $this->_columnData($item, $safe);
 			}
-			$query .= ')';
-			break;
+			return ltrim($property, '_') . '(' . $query . ')';
 		}
-		return $query;
+
+		trigger_error('Invalid pudlFunction', E_USER_ERROR);
 	}
 
 
