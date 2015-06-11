@@ -119,6 +119,13 @@ abstract class pudlQuery {
 
 
 	private function _clause_recurse(&$clause, $or=false) {
+		static $depth = 0;
+		if ($depth > 31) {
+			trigger_error('Recursion limit reached', E_USER_ERROR);
+			return '';
+		}
+		$depth++;
+
 		$first = true;
 		$query = '';
 		foreach ($clause as $key => &$val) {
@@ -131,6 +138,8 @@ abstract class pudlQuery {
 				$query .= $val;
 			}
 		} unset($val);
+
+		$depth--;
 		return $query;
 	}
 
