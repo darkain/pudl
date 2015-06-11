@@ -21,29 +21,52 @@ abstract class pudlQuery {
 
 
 
-	protected function _column(&$col) {
-		if (!is_array($col)) {
-			if ($col === false  ||  $col === ''  ||  $col === null) return '*';
-			return $col;
+	protected function _column(&$column) {
+		if (!is_array($column)) {
+			if ($column === false  ||
+				$column === ''  ||
+				$column === null  ||
+				$column === '*') return '*';
+			return $this->_columnValue(false, $column);
 		}
 
-		$escstart	= $this->escstart;
-		$escend		= $this->escend;
 		$query		= '';
 		$first		= true;
-
-		foreach ($col as $key => $val) {
-			if (!$first) $query .= ', '; else $first = false;
-			if (is_null($val)) {
-				$query .= 'NULL';
-			} else if (is_numeric($key)) {
-				$query .= $val;
-			} else {
-				$query .= "$escstart$key$escend.$escstart$val$escend";
-			}
+		foreach ($column as $key => $value) {
+			if (!empty($query)) $query .= ', ';
+			$query .= $this->_columnValue($key, $value);
 		}
 
 		return $query;
+	}
+
+
+	protected function _columnValue($key, $value) {
+		if (is_null($value)) {
+			return 'NULL';
+
+		} else if (is_int($value)  ||  is_float($value)) {
+			return $value;
+
+		} else if (is_bool($value)) {
+			return $value ? 'TRUE' : 'FALSE';
+
+		} else if (is_int($key)) {
+			return $value;
+
+		} else if (!empty($key)) {
+			return $this->escstart . $key . $this->escend . $this->escstart . $value . $this->escend;
+
+		} else if (is_string($value)) {
+			return $this->escstart . $value . $this->escend;
+
+		} else {
+			trigger_error(
+				'Invalid data type for column: ' .
+				(gettype($value)==='object'?get_class($value):gettype($value)),
+				E_USER_ERROR
+			);
+		}
 	}
 
 
