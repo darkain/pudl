@@ -58,7 +58,7 @@ abstract class pudlQuery {
 			return $this->escstart . $key . $this->escend . $this->escstart . $value . $this->escend;
 
 		} else if (is_string($value)) {
-			return $this->escstart . $value . $this->escend;
+			return $value;
 
 		} else {
 			trigger_error(
