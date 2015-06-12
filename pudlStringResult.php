@@ -12,13 +12,26 @@ class pudlStringResult extends pudlResult {
 
 	public function __destruct() {}
 
-	public function free() { return false; }
-	public function cell($row=0, $column=0) { return false; }
-	public function count() { return 0; }
-	public function fields() { return 0; }
-	public function getField($column) { return array();	}
-	public function row($type=PUDL_ARRAY) { return false; }
-	public function seek($row) { return false; }
-	public function error() { return false; }
+	public function free()						{ return false; }
+	public function cell($row=0, $column=0)		{ return $this->query; }
+	public function count()						{ return $this->query; }
+	public function fields()					{ return $this->query; }
+	public function getField($column)			{ return $this->query; }
+	public function seek($row)					{ return $this->returned=false; }
+	public function error()						{ return false; }
 
+	public function row($type=PUDL_ARRAY) {
+		if ($this->returned) return false;
+		$this->returned = true;
+		return $this->query;
+	}
+
+	public function rows($type=PUDL_ARRAY) {
+		if ($this->returned) return false;
+		$this->returned = true;
+		return $this->query;
+	}
+
+
+	private $returned = false;
 }

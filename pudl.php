@@ -15,7 +15,7 @@ abstract class pudl extends pudlQuery {
 		$this->debug	= false;
 		$this->locked	= false;
 		$this->query	= false;
-		$this->tostring	= false;
+		$this->string	= false;
 		$this->shm		= false;
 		$this->server	= false;
 		$this->cache	= false;
@@ -59,8 +59,20 @@ abstract class pudl extends pudlQuery {
 
 		if (is_array($this->transaction)) $this->transaction[] = $query;
 
-		if ($this->tostring) {
+		if ($this->string === PUDL_STRING) {
 			$result = new pudlStringResult($this);
+			$this->string = false;
+
+		} else if ($this->string === PUDL_IN) {
+			$this->query = ' IN (' . $this->query . ')';
+			$result = new pudlStringResult($this);
+			$this->string = false;
+
+		} else if ($this->string === PUDL_NOTIN) {
+			$this->query = ' NOT IN (' . $this->query . ')';
+			$result = new pudlStringResult($this);
+			$this->string = false;
+
 		} else if ($this->cache  &&  $this->redis) {
 			$hash = $this->cachekey;
 			if (empty($hash)) $hash = md5($query);
@@ -72,6 +84,7 @@ abstract class pudl extends pudlQuery {
 			}
 			$result = new pudlCacheResult($data, $this);
 			$this->cache = $this->cachekey = false;
+
 		} else {
 			$result = $this->process($query);
 		}
@@ -351,8 +364,7 @@ abstract class pudl extends pudlQuery {
 
 	public function selectRows($col, $table, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$result = $this->select($col, $table, $clause, $order, $limit, $offset, $lock);
-		$return = array();
-		while ($data = $result->row()) { $return[] = $data; }
+		$return = $result->rows();
 		$result->free();
 		return $return;
 	}
@@ -963,32 +975,20 @@ abstract class pudl extends pudlQuery {
 
 
 
-
-	//Get or Set the TO STRING param
-	//When TRUE, no SQL execution happens
-	public function tostring($to=NULL) {
-		if ($to === NULL) return $this->tostring;
-		if (is_callable($to)) {
-			$tmp = $this->tostring;
-			$this->tostring = true;
-			$to();
-			$this->tostring = $tmp;
-			return $this->query;
-		}
-		$this->tostring = !!$to;
-	}
-
-
-	//enable SQL execution
-	public function on() {
-		$this->tostring(false);
+	public function string() {
+		$this->string = PUDL_STRING;
 		return $this;
 	}
 
 
-	//disable SQL execution
-	public function off() {
-		$this->tostring(true);
+	public function in() {
+		$this->string = PUDL_IN;
+		return $this;
+	}
+
+
+	public function notin() {
+		$this->string = PUDL_NOTIN;
 		return $this;
 	}
 
@@ -999,7 +999,7 @@ abstract class pudl extends pudlQuery {
 	private $query;
 	private $time;
 	private $microtime;
-	private $tostring;
+	private $string;
 	protected $cache;
 	protected $cachekey;
 	protected $redis;
