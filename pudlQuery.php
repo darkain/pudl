@@ -141,6 +141,13 @@ abstract class pudlQuery {
 	}
 
 
+	protected function _clauseId($column, $id) {
+		if (is_array($id)) $id = $id[$column];
+		$id = is_null($id) ? ' IS NULL' : "='$id'";
+		return $this->escstart.$column.$this->escend.$id;
+	}
+
+
 
 	protected function _order(&$order) {
 		if ($order === false)	return '';
