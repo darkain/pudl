@@ -420,7 +420,7 @@ abstract class pudl extends pudlQuery {
 
 
 	public function clauseExists($table, $clause) {
-		return ($this->cell($table, '*', $clause) !== false);
+		return ($this->cell($table, true, $clause) !== false);
 	}
 
 
