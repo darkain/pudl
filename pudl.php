@@ -59,17 +59,12 @@ abstract class pudl extends pudlQuery {
 
 		if (is_array($this->transaction)) $this->transaction[] = $query;
 
-		if ($this->string === PUDL_STRING) {
+		if ($this->string === true) {
 			$result = new pudlStringResult($this);
 			$this->string = false;
 
-		} else if ($this->string === PUDL_IN) {
-			$this->query = ' IN (' . $this->query . ')';
-			$result = new pudlStringResult($this);
-			$this->string = false;
-
-		} else if ($this->string === PUDL_NOTIN) {
-			$this->query = ' NOT IN (' . $this->query . ')';
+		} else if ($this->string !== false) {
+			$this->query = $this->string . '(' . $this->query . ')';
 			$result = new pudlStringResult($this);
 			$this->string = false;
 
@@ -976,19 +971,19 @@ abstract class pudl extends pudlQuery {
 
 
 	public function string() {
-		$this->string = PUDL_STRING;
+		$this->string = true;
 		return $this;
 	}
 
 
-	public function in() {
-		$this->string = PUDL_IN;
+	public function in($column=false) {
+		$this->string = ($column===false ? '' :  $this->_columnValue(false,$column)) . ' IN ';
 		return $this;
 	}
 
 
-	public function notin() {
-		$this->string = PUDL_NOTIN;
+	public function notIn($column=false) {
+		$this->string = ($column===false ? '' :  $this->_columnValue(false,$column)) . ' NOT IN ';
 		return $this;
 	}
 
