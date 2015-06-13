@@ -15,7 +15,7 @@ abstract class pudl extends pudlQuery {
 		$this->debug	= false;
 		$this->locked	= false;
 		$this->query	= false;
-		$this->string	= false;
+		$this->string	= [];
 		$this->shm		= false;
 		$this->server	= false;
 		$this->cache	= false;
@@ -59,14 +59,16 @@ abstract class pudl extends pudlQuery {
 
 		if (is_array($this->transaction)) $this->transaction[] = $query;
 
-		if ($this->string === true) {
-			$result = new pudlStringResult($this);
-			$this->string = false;
+		$string = end($this->string);
 
-		} else if ($this->string !== false) {
-			$this->query = $this->string . '(' . $this->query . ')';
+		if ($string === true) {
 			$result = new pudlStringResult($this);
-			$this->string = false;
+			array_pop($this->string);
+
+		} else if ($string !== false) {
+			$this->query = $string . '(' . $this->query . ')';
+			$result = new pudlStringResult($this);
+			array_pop($this->string);
 
 		} else if ($this->cache  &&  $this->redis) {
 			$hash = $this->cachekey;
@@ -976,23 +978,23 @@ abstract class pudl extends pudlQuery {
 
 
 
-	public function isString() { return $this->string; }
+	public function isString() { return end($this->string); }
 
 
 	public function string() {
-		$this->string = true;
+		$this->string[] = true;
 		return $this;
 	}
 
 
 	public function in($column=false) {
-		$this->string = ($column===false ? '' :  $this->_columnValue(false,$column)) . ' IN ';
+		$this->string[] = ($column===false ? '' :  $this->_columnValue(false,$column)) . ' IN ';
 		return $this;
 	}
 
 
 	public function notIn($column=false) {
-		$this->string = ($column===false ? '' :  $this->_columnValue(false,$column)) . ' NOT IN ';
+		$this->string[] = ($column===false ? '' :  $this->_columnValue(false,$column)) . ' NOT IN ';
 		return $this;
 	}
 
