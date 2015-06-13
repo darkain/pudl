@@ -378,6 +378,12 @@ abstract class pudl extends pudlQuery {
 
 
 
+	public function rowsId($table, $column, $id, $lock=false) {
+		return $this->selectRows('*', $table, $this->_clauseId($column,$id), false, false, false, $lock);
+	}
+
+
+
 	public function delete($table, $clause, $limit=false, $offset=false) {
 		$query  = 'DELETE ';
 		$query .= $this->_top($limit);
@@ -968,6 +974,9 @@ abstract class pudl extends pudlQuery {
 
 	public function redis() { return $this->redis; }
 
+
+
+	public function isString() { return $this->string; }
 
 
 	public function string() {

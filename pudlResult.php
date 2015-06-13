@@ -6,6 +6,7 @@ abstract class pudlResult {
 		$this->result	= $result;
 		$this->db		= $db;
 		$this->query	= $db->query();
+		$this->string	= $db->isString();
 		$this->fields	= false;
 	}
 
@@ -22,6 +23,9 @@ abstract class pudlResult {
 	abstract public function getField($column);
 
 	abstract public function seek($row);
+
+
+	public function isString() { return $this->string; }
 
 
 	public function hasRows() {
@@ -96,4 +100,5 @@ abstract class pudlResult {
 	protected $fields;
 	protected $result;
 	protected $query;
+	protected $string;
 }

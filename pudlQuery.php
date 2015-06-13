@@ -132,7 +132,8 @@ abstract class pudlQuery {
 
 
 
-	protected function _clause(&$clause) {
+	protected function _clause($clause) {
+		if ($clause instanceof pudlResult  &&  $clause->isString()) $clause = $clause->query();
 		if ($clause === false)	return '';
 		if (!is_array($clause))	return " WHERE $clause";
 		if (!count($clause))	return '';
@@ -140,7 +141,7 @@ abstract class pudlQuery {
 	}
 
 
-	private function _clause_recurse(&$clause, $or=false) {
+	private function _clause_recurse($clause, $or=false) {
 		static $depth = 0;
 		if ($depth > 31) {
 			trigger_error('Recursion limit reached', E_USER_ERROR);
@@ -149,15 +150,17 @@ abstract class pudlQuery {
 		$depth++;
 
 		$query = '';
-		foreach ($clause as $key => &$val) {
+		foreach ($clause as $key => &$value) {
 			if (!empty($query)) $query .= ($or ? ' OR ' : ' AND ');
 
-			if (is_array($val)) {
-				$query .= '(' . self::_clause_recurse($val, !$or) . ')';
+			if (is_array($value)) {
+				$query .= '(' . self::_clause_recurse($value, !$or) . ')';
+			} else if ($value instanceof pudlResult  &&  $value->isString()) {
+				$query .= $value->query();
 			} else {
-				$query .= $val;
+				$query .= $value;
 			}
-		} unset($val);
+		} unset($value);
 
 		$depth--;
 		return $query;
