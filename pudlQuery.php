@@ -133,7 +133,7 @@ abstract class pudlQuery {
 
 
 	protected function _clause($clause) {
-		if ($clause instanceof pudlStringResult  &&  $clause->isString()) $clause = $clause->query();
+		if ($clause instanceof pudlStringResult) $clause = $clause->query();
 		if ($clause === false)	return '';
 		if (!is_array($clause))	return " WHERE $clause";
 		if (!count($clause))	return '';
@@ -155,8 +155,8 @@ abstract class pudlQuery {
 
 			if (is_array($value)) {
 				$query .= '(' . self::_clause_recurse($value, !$or) . ')';
-			} else if ($value instanceof pudlStringResult  &&  $value->isString()) {
-				$query .= $value->query();
+			} else if ($value instanceof pudlStringResult) {
+				$query .= $value;
 			} else {
 				$query .= $value;
 			}
