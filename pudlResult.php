@@ -11,6 +11,9 @@ abstract class pudlResult {
 	}
 
 
+	public function __invoke() { return $this->row(); }
+
+
 
 	abstract public function free();
 
