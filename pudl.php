@@ -45,9 +45,7 @@ abstract class pudl extends pudlQuery {
 	}
 
 
-	public function query($query=false) {
-		if ($query === false) return $this->query;
-
+	public function __invoke($query) {
 		if (is_array($this->union)) {
 			$this->union[] = $query;
 			return true;
@@ -102,20 +100,27 @@ abstract class pudl extends pudlQuery {
 
 
 
+	public function query($query=false) {
+		if ($query === false) return $this->query;
+		return $this($query);
+	}
+
+
+
 	public function listFields($table, $safe=false) {
 		$return = array();
 		if (is_array($table)) {
 			foreach ($table as $t) {
 				if ($safe) $t = $this->safe($t);
 				$t = $this->_table($t);
-				$result = $this->query("SHOW COLUMNS FROM $t");
+				$result = $this("SHOW COLUMNS FROM $t");
 				while ($data = $result->row()) $return[$data['Field']] = $data;
 				$result->free();
 			}
 		} else {
 			if ($safe) $table = $this->safe($table);
 			$table = $this->_table($table);
-			$result = $this->query("SHOW COLUMNS FROM $table");
+			$result = $this("SHOW COLUMNS FROM $table");
 			while ($data = $result->row()) $return[$data['Field']] = $data;
 			$result->free();
 		}
@@ -134,7 +139,7 @@ abstract class pudl extends pudlQuery {
 		$query .= $this->_order($order);
 		$query .= $this->_limit($limit, $offset);
 		$query .= $this->_lock($lock);
-		return $this->query($query);
+		return $this($query);
 	}
 
 
@@ -150,7 +155,7 @@ abstract class pudl extends pudlQuery {
 		$query .= $this->_order($order);
 		$query .= $this->_limit($limit, $offset);
 		$query .= $this->_lock($lock);
-		return $this->query($query);
+		return $this($query);
 	}
 
 
@@ -167,7 +172,7 @@ abstract class pudl extends pudlQuery {
 		$query .= $this->_order($order);
 		$query .= $this->_limit($limit, $offset);
 		$query .= $this->_lock($lock);
-		return $this->query($query);
+		return $this($query);
 	}
 
 
@@ -188,7 +193,7 @@ abstract class pudl extends pudlQuery {
 		if (is_array($limit))  $query .= $this->_limit($limit[1], $offset);
 		else $query .= $this->_limit($limit, $offset);
 		$query .= $this->_lock($lock);
-		return $this->query($query);
+		return $this($query);
 	}
 
 
@@ -210,7 +215,7 @@ abstract class pudl extends pudlQuery {
 		if (is_array($limit))  $query .= $this->_limit($limit[1], $offset);
 		else $query .= $this->_limit($limit, $offset);
 		$query .= $this->_lock($lock);
-		return $this->query($query);
+		return $this($query);
 	}
 
 
@@ -227,7 +232,7 @@ abstract class pudl extends pudlQuery {
 		$query .= $this->_order($order);
 		$query .= $this->_limit($limit, $offset);
 		$query .= $this->_lock($lock);
-		return $this->query($query);
+		return $this($query);
 	}
 
 
@@ -243,7 +248,7 @@ abstract class pudl extends pudlQuery {
 		$query .= $this->_order($order);
 		$query .= $this->_limit($limit, $offset);
 		$query .= $this->_lock($lock);
-		return $this->query($query);
+		return $this($query);
 	}
 
 
@@ -262,7 +267,7 @@ abstract class pudl extends pudlQuery {
 		$query .= $this->_order($order);
 		$query .= $this->_limit($limit, $offset);
 		$query .= $this->_lock($lock);
-		return $this->query($query);
+		return $this($query);
 	}
 
 
@@ -280,7 +285,7 @@ abstract class pudl extends pudlQuery {
 		$query .= $this->_order($order);
 		$query .= $this->_limit($limit, $offset);
 		$query .= $this->_lock($lock);
-		return $this->query($query);
+		return $this($query);
 	}
 
 
@@ -331,7 +336,7 @@ abstract class pudl extends pudlQuery {
 
 		if (isset($params['lock'])) $query .= $this->_lock($params['lock']);
 
-		$result = $this->query($query);
+		$result = $this($query);
 		$params['rows'] = $result->count();
 		return $result;
 	}
@@ -393,7 +398,7 @@ abstract class pudl extends pudlQuery {
 		$query .= $this->_table($table);
 		$query .= $this->_clause($clause);
 		$query .= $this->_limit($limit, $offset);
-		return $this->query($query);
+		return $this($query);
 	}
 
 
@@ -405,7 +410,7 @@ abstract class pudl extends pudlQuery {
 
 	public function explain($query) {
 		$return = '';
-		$result = $this->query("EXPLAIN $query");
+		$result = $this("EXPLAIN $query");
 		while ($data = $result->row()) $return .= print_r($data, true);
 		$result->free();
 		return $return;
@@ -466,7 +471,7 @@ abstract class pudl extends pudlQuery {
 		$query .= $this->_group($group);
 		$query .= ') groupbycount';
 
-		$result = $this->query($query);
+		$result = $this($query);
 		$return = $result->cell();
 		$result->free();
 
@@ -476,7 +481,7 @@ abstract class pudl extends pudlQuery {
 
 
 	public function found() {
-		$result = $this->query('SELECT FOUND_ROWS()');
+		$result = $this('SELECT FOUND_ROWS()');
 		$return = $result->cell();
 		$result->free();
 		return $return === false ? $return : (int) $return;
@@ -502,7 +507,7 @@ abstract class pudl extends pudlQuery {
 		//TODO: figure out how to convert this over to 'TOP' syntax
 
 		$this->union = false;
-		return $this->query($query);
+		return $this($query);
 	}
 
 
@@ -521,7 +526,7 @@ abstract class pudl extends pudlQuery {
 		//TODO: figure out how to convert this over to 'TOP' syntax
 
 		$this->union = false;
-		return $this->query($query);
+		return $this($query);
 	}
 
 
@@ -567,7 +572,7 @@ abstract class pudl extends pudlQuery {
 			}
 		}
 
-		$this->query($query);
+		$this($query);
 		return $this->insertId();
 	}
 
@@ -639,7 +644,7 @@ abstract class pudl extends pudlQuery {
 			}
 		}
 
-		$this->query($query);
+		$this($query);
 		return $this->insertId();
 	}
 
@@ -665,7 +670,7 @@ abstract class pudl extends pudlQuery {
 		$query .= $this->_update($data, $safe);
 		$query .= $this->_clause($clause);
 		$query .= $this->_limit($limit, $offset);
-		return $this->query($query);
+		return $this($query);
 	}
 
 
@@ -678,7 +683,7 @@ abstract class pudl extends pudlQuery {
 		$query .= $this->_update($data, $safe);
 		$query .= $this->_clause($clause);
 		$query .= $this->_limit($limit, $offset);
-		return $this->query($query);
+		return $this($query);
 	}
 
 
@@ -692,7 +697,7 @@ abstract class pudl extends pudlQuery {
 		$query .= $this->_update($data, $safe);
 		$query .= " WHERE {$this->escstart}$field{$this->escend} IN ($in)";
 		$query .= $this->_limit($limit, $offset);
-		return $this->query($query);
+		return $this($query);
 	}
 
 
@@ -710,7 +715,7 @@ abstract class pudl extends pudlQuery {
 		$query .= " SET {$this->escstart}$col{$this->escend}={$this->escstart}$col{$this->escend}+($amount) ";
 		$query .= $this->_clause($clause);
 		$query .= $this->_limit($limit, $offset);
-		return $this->query($query);
+		return $this($query);
 	}
 
 
@@ -718,7 +723,7 @@ abstract class pudl extends pudlQuery {
 	public function listItems($type, $like=false) {
 		$query = 'SHOW ' . $type;
 		if (!empty($like)) $query .= ' LIKE "' . $like . '"';
-		$result = $this->query($query);
+		$result = $this($query);
 
 		$return = [];
 		while ($data = $result->row()) {
@@ -755,7 +760,7 @@ abstract class pudl extends pudlQuery {
 
 		//TODO: convert this to some sort of standard SQL
 		$query = "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='$table' AND COLUMN_NAME='$column'";
-		$result = $this->query($query);
+		$result = $this($query);
 		$return = $result->cell();
 		$result->free();
 
@@ -818,7 +823,7 @@ abstract class pudl extends pudlQuery {
 			$query .= $table;
 		}
 
-		$this->query($query);
+		$this($query);
 		$this->locked = true;
 	}
 
@@ -826,7 +831,7 @@ abstract class pudl extends pudlQuery {
 
 	public function unlock() {
 		if (!$this->locked) return;
-		$this->query('UNLOCK TABLES');
+		$this('UNLOCK TABLES');
 		$this->locked = false;
 	}
 
@@ -835,14 +840,14 @@ abstract class pudl extends pudlQuery {
 	public function begin() {
 		if (!empty($this->transaction)) return;
 		$this->transaction = [];
-		$this->query('START TRANSACTION');
+		$this('START TRANSACTION');
 	}
 
 
 
 	public function commit($sleep=0) {
 		if (empty($this->transaction)) return;
-		$this->query('COMMIT');
+		$this('COMMIT');
 		$this->transaction = false;
 		if (!empty($sleep)) usleep($sleep);
 	}
@@ -852,7 +857,7 @@ abstract class pudl extends pudlQuery {
 	public function rollback() {
 		if (empty($this->transaction)) return;
 		$this->transaction = false;
-		$this->query('ROLLBACK');
+		$this('ROLLBACK');
 	}
 
 
@@ -865,7 +870,7 @@ abstract class pudl extends pudlQuery {
 
 		$return = false;
 		foreach ($list as &$item) {
-			$return = $this->query($item);
+			$return = $this($item);
 		} unset($item);
 
 		return $return;
