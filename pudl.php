@@ -838,7 +838,7 @@ abstract class pudl extends pudlQuery {
 
 
 	public function begin() {
-		if (!empty($this->transaction)) return;
+		if ($this->inTransaction()) return;
 		$this->transaction = [];
 		$this('START TRANSACTION');
 	}
@@ -846,7 +846,7 @@ abstract class pudl extends pudlQuery {
 
 
 	public function commit($sleep=0) {
-		if (empty($this->transaction)) return;
+		if (!$this->inTransaction()) return;
 		$this('COMMIT');
 		$this->transaction = false;
 		if (!empty($sleep)) usleep($sleep);
@@ -855,7 +855,7 @@ abstract class pudl extends pudlQuery {
 
 
 	public function rollback() {
-		if (empty($this->transaction)) return;
+		if (!$this->inTransaction()) return;
 		$this->transaction = false;
 		$this('ROLLBACK');
 	}
@@ -863,7 +863,7 @@ abstract class pudl extends pudlQuery {
 
 
 	protected function retryTransaction() {
-		if (empty($this->transaction)) return;
+		if (!$this->inTransaction()) return;
 
 		$list = $this->transaction;
 		$this->transaction = false;
