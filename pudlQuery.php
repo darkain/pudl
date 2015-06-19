@@ -96,7 +96,7 @@ abstract class pudlQuery {
 			if (!is_array($val)) {
 				$query .= self::_table($val) . ' ' . $key;
 			} else {
-				$query .= self::_table($val[0]) . ' ' . $key;
+				$query .= self::_table(reset($val)) . ' ' . $key;
 				foreach ($val as $join) {
 					if (!empty($join['join'])) {
 						$query .= self::_joinTable($join['join'], '');
