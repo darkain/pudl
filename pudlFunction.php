@@ -17,4 +17,9 @@ class pudlFunction {
 		return self::from_unixtime($db->time());
 	}
 
+
+	public static function binary($data) {
+		return self::unhex(bin2hex($data));
+	}
+
 }
