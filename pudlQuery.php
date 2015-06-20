@@ -21,7 +21,7 @@ abstract class pudlQuery {
 
 
 
-	protected function _column(&$column) {
+	protected function _column($column) {
 		if (!is_array($column)) {
 			if ($column === false  ||
 				$column === ''  ||
@@ -71,7 +71,7 @@ abstract class pudlQuery {
 
 
 
-	protected function _table(&$table) {
+	protected function _table($table) {
 		if ($this->prefix !== false  &&  substr($table, 0, 5) === 'pudl_') {
 			return $this->escstart . $this->prefix . substr($table, 5) . $this->escend;
 		}
@@ -81,7 +81,7 @@ abstract class pudlQuery {
 
 
 
-	protected function _tables(&$table) {
+	protected function _tables($table) {
 		$escstart = $this->escstart;
 		$escend = $this->escend;
 
@@ -179,7 +179,7 @@ abstract class pudlQuery {
 
 
 
-	protected function _order(&$order) {
+	protected function _order($order) {
 		if ($order === false)	return '';
 		if (!is_array($order))	return " ORDER BY $order";
 		if (!count($order))		return '';
@@ -188,7 +188,7 @@ abstract class pudlQuery {
 
 
 
-	protected function _group(&$group) {
+	protected function _group($group) {
 		if ($group === false)	return '';
 		if (!is_array($group))	return " GROUP BY $group";
 		if (!count($group))		return '';
