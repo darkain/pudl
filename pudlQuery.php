@@ -72,11 +72,16 @@ abstract class pudlQuery {
 
 
 	protected function _table($table) {
-		if ($this->prefix !== false  &&  substr($table, 0, 5) === 'pudl_') {
-			return $this->escstart . $this->prefix . substr($table, 5) . $this->escend;
-		}
+		$list = explode('.', $table);
 
-		return $this->escstart . $table . $this->escend;
+		if ($this->prefix !== false) {
+			$table = array_pop($list);
+			if (substr($table, 0, 5) === 'pudl_') {
+				$table = $this->prefix . substr($table, 5);
+			}
+			$list[] = $table;
+		}
+		return $this->escstart . implode($this->escend.'.'.$this->escstart, $list) . $this->escend;
 	}
 
 

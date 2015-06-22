@@ -752,17 +752,17 @@ abstract class pudl extends pudlQuery {
 
 
 
+	//NOTE: THIS IS CURRENTLY ONLY DESIGNED FOR MYSQL/MARIADB
 	public function fieldType($table, $column, $safe=false) {
 		if ($safe) {
 			$table  = $this->safe($table);
 			$column = $this->safe($column);
 		}
 
-		//TODO: convert this to some sort of standard SQL
-		$query = "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='$table' AND COLUMN_NAME='$column'";
-		$result = $this($query);
-		$return = $result->cell();
-		$result->free();
+		$return = $this->cell('INFORMATION_SCHEMA.COLUMNS', 'COLUMN_TYPE', [
+			"TABLE_NAME='$table'",
+			"COLUMN_NAME='$column'",
+		]);
 
 		if (substr($return, 0, 5) === 'enum(') {
 			$return = substr($return, 5, strlen($return)-6);
