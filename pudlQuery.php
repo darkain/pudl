@@ -382,31 +382,40 @@ abstract class pudlQuery {
 
 
 	public function prefixColumns($table, $col=false, $unprefixed=true) {
+		$joiners = array(
+			'join', 'cross', 'left', 'right',
+			'natural', 'inner', 'outer', 'hack',
+		);
+
 		$prefix = array();
 
-		if (is_array($table)) {
-			foreach ($table as $key => $val) {
-				if (is_array($val)) {
-					foreach ($val as $subtable) {
-						if (is_array($subtable)) {
-							foreach ($subtable['left'] as $subkey => $subname) {
-								$fields = $this->listFields($subname);
-								foreach ($fields as $field) {
-									if (!isset($prefix[$field['Field']])) $prefix[$field['Field']] = $subkey;
+		if (!is_array($table)) return false;
+
+		foreach ($table as $key => $val) {
+			if (is_array($val)) {
+				foreach ($val as $subtable) {
+					if (is_array($subtable)) {
+						foreach ($subtable as $joinkey => $jointable) {
+							if (in_array($joinkey, $joiners)) {
+								foreach ($jointable as $subkey => $subname) {
+									$fields = $this->listFields($subname);
+									foreach ($fields as $field) {
+										if (!isset($prefix[$field['Field']])) $prefix[$field['Field']] = $subkey;
+									}
 								}
 							}
-						} else {
-							$fields = $this->listFields($subtable);
-							foreach ($fields as $field) {
-								if (!isset($prefix[$field['Field']])) $prefix[$field['Field']] = $key;
-							}
+						}
+					} else {
+						$fields = $this->listFields($subtable);
+						foreach ($fields as $field) {
+							if (!isset($prefix[$field['Field']])) $prefix[$field['Field']] = $key;
 						}
 					}
-				} else {
-					$fields = $this->listFields($val);
-					foreach ($fields as $field) {
-						if (!isset($prefix[$field['Field']])) $prefix[$field['Field']] = $key;
-					}
+				}
+			} else {
+				$fields = $this->listFields($val);
+				foreach ($fields as $field) {
+					if (!isset($prefix[$field['Field']])) $prefix[$field['Field']] = $key;
 				}
 			}
 		}
