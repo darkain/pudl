@@ -885,8 +885,8 @@ abstract class pudl extends pudlQuery {
 
 
 	public function debugger($debugger) {
-		if (!function_exists($debugger)) {
-			die("<br />\nERROR: PUDL debugger function does not exist: $debugger()");
+		if (!is_callable($debugger)) {
+			trigger_error('Function does not exist for pudl::debugger', E_USER_ERROR);
 		}
 		$this->debug = $debugger;
 	}
