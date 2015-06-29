@@ -866,7 +866,7 @@ abstract class pudl extends pudlQuery {
 		if (!$this->inTransaction()) return;
 
 		$list = $this->transaction;
-		$this->transaction = false;
+		$this->transaction = [];
 
 		$return = false;
 		foreach ($list as &$item) {
