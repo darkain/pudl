@@ -46,6 +46,8 @@ class pudlMySqli extends pudl {
 		$db = new pudlMySqli($username, $password, $database, $server, $prefix);
 
 		if (!empty($data['pudl_redis'])) {
+			$redis = $db->redis;
+
 			if (is_object($data['pudl_redis'])) {
 				$db->redis = $data['pudl_redis'];
 			} else if (class_exists('Redis')) {
@@ -54,10 +56,10 @@ class pudlMySqli extends pudl {
 					if (@$db->redis->connect($data['pudl_redis'], -1, 1)) {
 						$db->redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
 					} else {
-						$db->redis = false;
+						$db->redis = $redis;
 					}
 				} catch(RedisException $e) {
-					$db->redis = false;
+					$db->redis = $redis;
 				}
 			}
 		}

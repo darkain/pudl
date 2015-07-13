@@ -5,6 +5,8 @@ require_once('pudlStringResult.php');
 require_once('pudlCacheResult.php');
 require_once('pudlQuery.php');
 require_once('pudlFunction.php');
+require_once('pudlVoid.php');
+
 
 
 abstract class pudl extends pudlQuery {
@@ -20,7 +22,7 @@ abstract class pudl extends pudlQuery {
 		$this->server	= false;
 		$this->cache	= false;
 		$this->cachekey	= false;
-		$this->redis	= false;
+		$this->redis	= new pudlVoid;
 		$this->time		= time();
 		$this->microtime= microtime();
 		$this->transaction = false;
