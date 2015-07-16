@@ -99,9 +99,11 @@ abstract class pudlQuery {
 			if (!$first) $query .= ', '; else $first = false;
 
 			if (!is_array($val)) {
-				$query .= self::_table($val) . ' ' . $key;
+				$query .= self::_table($val);
+				if (!is_int($key)) $query .= ' ' . $key;
 			} else {
-				$query .= self::_table(reset($val)) . ' ' . $key;
+				$query .= self::_table(reset($val));
+				if (!is_int($key)) $query .= ' ' . $key;
 				foreach ($val as $join) {
 					if (!empty($join['join'])) {
 						$query .= self::_joinTable($join['join'], '');
