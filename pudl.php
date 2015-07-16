@@ -79,7 +79,7 @@ abstract class pudl extends pudlQuery {
 				$data	= $result->rows();
 				$this->redis->set("pudl:$hash", $data, $this->cache);
 			}
-			$result = new pudlCacheResult($data, $this);
+			$result = new pudlCacheResult($data, $this, $hash);
 			$this->cache = $this->cachekey = false;
 
 		} else {
