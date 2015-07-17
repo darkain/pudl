@@ -13,10 +13,14 @@ class pudlMySqli extends pudl {
 		$this->limit	= true;
 		$this->escstart	= '`';
 		$this->escend	= '`';
-		$this->username	= $username;
-		$this->password	= $password;
-		$this->database	= $database;
 		$this->prefix	= $prefix;
+
+		//store in secured area hidden from var_dump/var_export
+		$this->auth([
+			'username'	=> $username,
+			'password'	=> $password,
+			'database'	=> $database,
+		]);
 
 		//Ensure we're dealing with an array, and verify they're online
 		$this->pool = $servers;
@@ -24,7 +28,7 @@ class pudlMySqli extends pudl {
 		$this->pool = $this->onlineServers($this->pool);
 		shuffle($this->pool);
 
-		$this->connect($username, $password, $database, $this->pool);
+		$this->connect();
 	}
 
 
@@ -69,7 +73,17 @@ class pudlMySqli extends pudl {
 
 
 
+	protected function auth($data=false) {
+		static $auth = [];
+		if (empty($data)) return $auth;
+		return $auth = $data;
+	}
+
+
+
 	public function connect() {
+		$auth = $this->auth();
+
 		foreach ($this->pool as $server) {
 			$this->mysqli = mysqli_init();
 
@@ -77,11 +91,21 @@ class pudlMySqli extends pudl {
 			$this->mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, count($this->pool)>1 ? 1 : 10);
 
 			//Attempt to create a persistant connection
-			$ok = @$this->mysqli->real_connect("p:$server", $this->username, $this->password, $this->database);
+			$ok = @$this->mysqli->real_connect(
+				"p:$server",
+				$auth['username'],
+				$auth['password'],
+				$auth['database']
+			);
 
 			//Attempt to create a non-persistant connection
 			if (empty($ok)) {
-				$ok = @$this->mysqli->real_connect($server, $this->username, $this->password, $this->database);
+				$ok = @$this->mysqli->real_connect(
+					$server,
+					$auth['username'],
+					$auth['password'],
+					$auth['database']
+				);
 			}
 
 			//Attempt to set UTF-8 character set
@@ -100,7 +124,7 @@ class pudlMySqli extends pudl {
 			$error  = "<br />\n";
 			$error .= 'Unable to connect to database server "';
 			$error .= implode(', ', $this->pool);
-			$error .= '" with the username: "' . $this->username;
+			$error .= '" with the username: "' . $auth['username'];
 			$error .= "\"<br />\nError " . $this->connectErrno() . ': ' . $this->connectError();
 			if (self::$die) die($error);
 		}
@@ -257,8 +281,5 @@ class pudlMySqli extends pudl {
 
 	private $mysqli;
 	private $pool;
-	private $username;
-	private $password;
-	private $database;
 	private static $die=true;
 }
