@@ -48,50 +48,75 @@ abstract class pudl extends pudlQuery {
 
 
 	public function __invoke($query) {
+		//UNIONS
 		if (is_array($this->union)) {
 			$this->union[] = $query;
 			return true;
 		}
 
+
+		//PERFORMANCE PROFILING DATA
 		if (!empty($this->bench)) $microtime = microtime(true);
 
+
+		//STORE THE QUERY STRING LOCALLY
 		$this->query = $query;
 
+
+		//STORE TRANSACTION INFORMATION
 		if (is_array($this->transaction)) $this->transaction[] = $query;
 
-		$string = end($this->string);
 
+		//RETURN A STRING
+		$string = end($this->string);
 		if ($string === true) {
 			$result = new pudlStringResult($this);
 			array_pop($this->string);
 
+
+		//RETURN A SUBQUERY STRING
 		} else if ($string !== false) {
 			$this->query = $string . '(' . $this->query . ')';
 			$result = new pudlStringResult($this);
 			array_pop($this->string);
 
-		} else if ($this->cache  &&  $this->redis) {
-			$hash = $this->cachekey;
-			if (empty($hash)) $hash = md5($query);
-			$data = $this->redis->get("pudl:$hash");
-			if (empty($data)) {
-				$result	= $this->process($query);
-				$data	= $result->rows();
-				$this->redis->set("pudl:$hash", $data, $this->cache);
-			}
-			$result = new pudlCacheResult($data, $this, $hash);
-			$this->cache = $this->cachekey = false;
 
+		//CACHE THE QUERY IN REDIS
+		} else if ($this->cache  &&  $this->redis) {
+			try {
+				$hash = $this->cachekey;
+				if (empty($hash)) $hash = md5($query);
+				$data = $this->redis->get("pudl:$hash");
+				if (empty($data)) {
+					$result	= $this->process($query);
+					$data	= $result->rows();
+					$this->redis->set("pudl:$hash", $data, $this->cache);
+				}
+				$result = new pudlCacheResult($data, $this, $hash);
+			} catch (Exception $e) {
+				if (empty($result)) $result = $this->process($query);
+			}
+
+
+		//PROCESS THE QUERY NORMALLY
 		} else {
 			$result = $this->process($query);
 		}
 
+
+		//RESET CACHE INFORMATION FOR NEXT QUERY
+		$this->cache = $this->cachekey = false;
+
+
+		//PERFORMANCE PROFILING DATA
 		if (!empty($this->bench)) {
 			$bench = $this->bench;
 			$diff = round(microtime(true)-$microtime, 6);
 			$bench($query, $diff, $this);
 		}
 
+
+		//ERROR REPORTING
 		if ($result->error()  &&  $this->debug !== false) {
 			$debug = $this->debug;
 			$debug($this, $result);
@@ -977,7 +1002,7 @@ abstract class pudl extends pudlQuery {
 
 	public function purge($key) {
 		if (!$this->redis) return;
-		$this->redis->delete("pudl:$key");
+		try { $this->redis->delete("pudl:$key"); } catch (Exception $e) {}
 	}
 
 
