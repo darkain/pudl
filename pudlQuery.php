@@ -330,6 +330,9 @@ abstract class pudlQuery {
 		} else if ($value instanceof pudlFunction) {
 			return $this->_function($value, $safe);
 
+		} else if ($value instanceof pudlStringResult) {
+			return '(' . $value->row() . ')';
+
 		} else if (is_array($value)  ||  is_object($value)) {
 			if (empty($value)) return 'NULL';
 			return 'COLUMN_CREATE(' . $this->_dynamic($value, $safe) . ')';

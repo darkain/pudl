@@ -6,8 +6,9 @@ require_once('pudlResult.php');
 
 class pudlStringResult extends pudlResult {
 
-	public function __construct($db) {
+	public function __construct($db, $type) {
 		parent::__construct(false, $db);
+		$this->type = $type;
 	}
 
 	public function __destruct() {}
@@ -28,7 +29,7 @@ class pudlStringResult extends pudlResult {
 
 
 	public function cell($row=0, $column=0) {
-		if ($rows  ||  $columns) return false;
+		if ($row  ||  $column) return false;
 		return $this->query;
 	}
 
@@ -47,5 +48,6 @@ class pudlStringResult extends pudlResult {
 	}
 
 
-	private $returned = false;
+	private	$returned = false;
+	public	$type = false;
 }

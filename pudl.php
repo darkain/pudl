@@ -70,14 +70,14 @@ abstract class pudl extends pudlQuery {
 		//RETURN A STRING
 		$string = end($this->string);
 		if ($string === true) {
-			$result = new pudlStringResult($this);
+			$result = new pudlStringResult($this, $string);
 			array_pop($this->string);
 
 
 		//RETURN A SUBQUERY STRING
 		} else if ($string !== false) {
 			$this->query = $string . '(' . $this->query . ')';
-			$result = new pudlStringResult($this);
+			$result = new pudlStringResult($this, $string);
 			array_pop($this->string);
 
 
@@ -372,6 +372,7 @@ abstract class pudl extends pudlQuery {
 
 	public function selectRow($col, $table, $clause=false, $order=false, $limit=1, $offset=false, $lock=false) {
 		$result = $this->select($col, $table, $clause, $order, $limit, $offset, $lock);
+		if ($result instanceof pudlStringResult) return $result;
 		$return = $result->row();
 		$result->free();
 		return $return;
@@ -393,6 +394,7 @@ abstract class pudl extends pudlQuery {
 
 	public function selectRows($col, $table, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$result = $this->select($col, $table, $clause, $order, $limit, $offset, $lock);
+		if ($result instanceof pudlStringResult) return $result;
 		$return = $result->rows();
 		$result->free();
 		return $return;
@@ -438,6 +440,7 @@ abstract class pudl extends pudlQuery {
 	public function explain($query) {
 		$return = '';
 		$result = $this("EXPLAIN $query");
+		if ($result instanceof pudlStringResult) return $result;
 		while ($data = $result->row()) $return .= print_r($data, true);
 		$result->free();
 		return $return;
@@ -447,6 +450,7 @@ abstract class pudl extends pudlQuery {
 
 	public function cell($table, $col, $clause=false, $order=false) {
 		$result = $this->select($col, $table, $clause, $order, 1);
+		if ($result instanceof pudlStringResult) return $result;
 		$return = $result->cell();
 		$result->free();
 		return $return;
@@ -474,6 +478,7 @@ abstract class pudl extends pudlQuery {
 
 	public function count($table, $clause='1') {
 		$return = $this->cell($table, 'COUNT(*)', $clause);
+		if ($return instanceof pudlStringResult) return $return;
 		return $return === false ? $return : (int) $return;
 	}
 
@@ -499,6 +504,7 @@ abstract class pudl extends pudlQuery {
 		$query .= ') groupbycount';
 
 		$result = $this($query);
+		if ($result instanceof pudlStringResult) return $result;
 		$return = $result->cell();
 		$result->free();
 
@@ -509,6 +515,7 @@ abstract class pudl extends pudlQuery {
 
 	public function found() {
 		$result = $this('SELECT FOUND_ROWS()');
+		if ($result instanceof pudlStringResult) return $result;
 		$return = $result->cell();
 		$result->free();
 		return $return === false ? $return : (int) $return;
@@ -731,6 +738,15 @@ abstract class pudl extends pudlQuery {
 
 	public function updateId($table, $data, $column, $id, $safe=false) {
 		return $this->update($table, $data, $this->_clauseId($column,$id), $safe);
+	}
+
+
+
+	public function updateCount($table_update, $field, $clause_update, $table_select, $clause_select=true) {
+		if ($clause_select === true) $clause_select = $clause_update;
+		return $this->update($table_update, [
+			$field => $this->string()->count($table_select, $clause_select)
+		], $clause_update);
 	}
 
 
@@ -1029,6 +1045,7 @@ abstract class pudl extends pudlQuery {
 		$this->string[] = ($column===false ? '' :  $this->_columnValue(false,$column)) . ' NOT IN ';
 		return $this;
 	}
+
 
 
 	private $locked;
