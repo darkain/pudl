@@ -139,13 +139,14 @@ abstract class pudlQuery {
 
 
 
-	protected function _clause($clause) {
+	protected function _clause($clause, $type='WHERE') {
 		if ($clause instanceof pudlStringResult) $clause = $clause->query();
 		if ($clause === false)	return '';
-		if (!is_array($clause))	return " WHERE $clause";
+		if (!is_array($clause))	return ' ' . $type . ' ' . $clause;
 		if (!count($clause))	return '';
-		return ' WHERE ' . self::_clause_recurse($clause);
+		return ' ' . $type . ' ' . self::_clause_recurse($clause);
 	}
+
 
 
 	private function _clause_recurse($clause, $or=false) {
