@@ -908,6 +908,7 @@ abstract class pudl extends pudlQuery {
 		if (!$this->inTransaction()) return;
 		$this('COMMIT');
 		$this->transaction = false;
+		if ($sleep === true) $sleep = 250000;
 		if (!empty($sleep)) usleep($sleep);
 	}
 
