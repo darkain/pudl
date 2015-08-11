@@ -33,7 +33,7 @@ abstract class pudlQuery {
 		$query		= '';
 		$first		= true;
 		foreach ($column as $key => $value) {
-			if (!empty($query)) $query .= ', ';
+			if (strlen($query)) $query .= ', ';
 			$query .= $this->_columnValue($key, $value);
 		}
 
@@ -159,7 +159,11 @@ abstract class pudlQuery {
 
 		$query = '';
 		foreach ($clause as $key => &$value) {
-			if (!empty($query)) $query .= ($or ? ' OR ' : ' AND ');
+			if (strlen($query)) $query .= ($or ? ' OR ' : ' AND ');
+
+			if (is_string($key)) {
+				$query .= $this->escstart . $key . $this->escend . '=';
+			}
 
 			if (is_array($value)) {
 				$query .= '(' . self::_clause_recurse($value, !$or) . ')';
@@ -353,7 +357,7 @@ abstract class pudlQuery {
 		foreach ($data as $property => $value) {
 			$query	= '';
 			foreach ($value as $item) {
-				if (!empty($query)) $query .= ',';
+				if (strlen($query)) $query .= ',';
 				$query .= $this->_columnData($item, $safe);
 			}
 			return ltrim($property, '_') . '(' . $query . ')';
@@ -374,7 +378,7 @@ abstract class pudlQuery {
 
 		$query = '';
 		foreach ($data as $property => $value) {
-			if (!empty($query)) $query .= ',';
+			if (strlen($query)) $query .= ',';
 
 			if ($safe !== false) $property = $this->safe($property);
 
