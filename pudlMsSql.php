@@ -64,6 +64,7 @@ class pudlMsSql extends pudl {
 		);
 		foreach ($encode as $regex) $value = preg_replace($regex, '', $value);
 
+		//TODO: MERGE THIS ALL INTO DEFAULT SAFE FUNCTION
 		return str_replace("'", "''", $value);
 	}
 

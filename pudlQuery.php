@@ -3,7 +3,19 @@
 abstract class pudlQuery {
 
 
-	abstract public function safe($value);
+	public function safe($value) {
+		if (is_int($value)  ||  is_float($value)) return $value;
+
+		return str_replace([
+			'\\',   "\0", "'",  '"',  chr(8), "\n", "\r", "\t", "\Z", '%',
+			'_',  '(',  ')',  '[',  ']',  '{',  '}',  '-',  '+',  '&',  '.',
+			',',  '!',  '$',  '^',  ';',
+		], [
+			'\\\\', '\0', "\'", '\"', '\b',   '\n', '\r', '\t', '\Z', '\%',
+			'\_', '\(', '\)', '\[', '\]', '\{', '\}', '\-', '\+', '\&', '\.',
+			'\,', '\!', '\$', '\^', '\;',
+		], (string)$value);
+	}
 
 
 

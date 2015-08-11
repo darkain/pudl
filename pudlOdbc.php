@@ -43,12 +43,6 @@ class pudlOdbc extends pudl {
 	}
 
 
-	public function safe($value) {
-		//TODO: IMPLEMENT THIS BIG TIEMZ!
-		return $value;
-	}
-
-
 
 	public function insertId() {
 		//TODO: Insert ID
