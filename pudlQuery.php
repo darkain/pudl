@@ -140,16 +140,16 @@ abstract class pudlQuery {
 
 
 	protected function _clause($clause, $type='WHERE') {
-		if ($clause instanceof pudlStringResult) $clause = $clause->query();
 		if ($clause === false)	return '';
-		if (!is_array($clause))	return ' ' . $type . ' ' . $clause;
-		if (!count($clause))	return '';
-		return ' ' . $type . ' ' . self::_clause_recurse($clause);
+		if ($clause instanceof pudlStringResult) return (string) $clause;
+		if (is_array($clause))	return ' ' . $type . ' ' . self::_clause_recurse($clause);
+		if (is_object($clause))	return ' ' . $type . ' ' . self::_clause_recurse($clause);
+		return ' ' . $type . ' ' . $clause;
 	}
 
 
 
-	private function _clause_recurse($clause, $or=false) {
+	private function _clause_recurse($clause, $or=false, $safe=false) {
 		static $depth = 0;
 		if ($depth > 31) {
 			trigger_error('Recursion limit reached', E_USER_ERROR);
@@ -158,21 +158,32 @@ abstract class pudlQuery {
 		$depth++;
 
 		$query = '';
-		foreach ($clause as $key => &$value) {
+		foreach ($clause as $key => $value) {
 			if (strlen($query)) $query .= ($or ? ' OR ' : ' AND ');
 
 			if (is_string($key)) {
-				$query .= $this->escstart . $key . $this->escend . '=';
+				$key = explode('.', $key);
+				$query .= $this->escstart .
+					implode($this->escend.'.'.$this->escstart, $key) .
+					$this->escend . '=';
 			}
 
-			if (is_array($value)) {
-				$query .= '(' . self::_clause_recurse($value, !$or) . ')';
+			if (is_array($value)  ||  is_object($value)) {
+				$query .= '(' . self::_clause_recurse($value, !$or, $safe) . ')';
+
+			} else if (is_bool($value)) {
+				$query .= $value ? 'TRUE' : 'FALSE';
+
+			} else if ($value instanceof pudlFunction) {
+				$query .= $this->_function($value, $safe);
+
 			} else if ($value instanceof pudlStringResult) {
-				$query .= $value;
+				$query .= '(' . ((string)$value) . ')';
+
 			} else {
 				$query .= $value;
 			}
-		} unset($value);
+		}
 
 		$depth--;
 		return $query;
@@ -336,7 +347,7 @@ abstract class pudlQuery {
 			return $this->_function($value, $safe);
 
 		} else if ($value instanceof pudlStringResult) {
-			return '(' . $value->row() . ')';
+			return '(' . ((string)$value) . ')';
 
 		} else if (is_array($value)  ||  is_object($value)) {
 			if (empty($value)) return 'NULL';
