@@ -333,8 +333,8 @@ abstract class pudlQuery {
 		$first		= true;
 
 		foreach ($data as $column => $value) {
-			if ($value instanceof pudlFunction  &&  isset($value->_INCREMENT)) {
-				$good = "$escstart$column$escend+'" . reset($value->_INCREMENT) . "'";
+			if ($value instanceof pudlFunction  &&  isset($value->__INCREMENT)) {
+				$good = "$escstart$column$escend+'" . reset($value->__INCREMENT) . "'";
 			} else {
 				$good = $this->_columnData($value, $safe);
 			}

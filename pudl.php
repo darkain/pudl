@@ -1,11 +1,9 @@
 <?php
 
-require_once('pudlDefine.php');
+require_once('pudlHelpers.php');
 require_once('pudlStringResult.php');
 require_once('pudlCacheResult.php');
 require_once('pudlQuery.php');
-require_once('pudlFunction.php');
-require_once('pudlVoid.php');
 
 
 
@@ -123,6 +121,15 @@ abstract class pudl extends pudlQuery {
 		}
 
 		return $result;
+	}
+
+
+
+	public static function __callStatic($name, $arguments) {
+		$value = new pudlFunction();
+		$name = '_' . strtoupper($name);
+		$value->$name = $arguments;
+		return $value;
 	}
 
 
@@ -1061,6 +1068,16 @@ abstract class pudl extends pudlQuery {
 	public function notIn($column=false) {
 		$this->string[] = ($column===false ? '' :  $this->_columnValue(false,$column)) . ' NOT IN ';
 		return $this;
+	}
+
+
+
+	public static function jsonEncode($data) {
+		return @json_encode($data, JSON_HEX_APOS|JSON_HEX_QUOT);
+	}
+
+	public static function jsonDecode($data) {
+		return @json_decode($data, true, 512, JSON_BIGINT_AS_STRING);
 	}
 
 
