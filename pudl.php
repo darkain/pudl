@@ -355,6 +355,7 @@ abstract class pudl extends pudlQuery {
 
 
 
+	//TODO: merge this with $db() function - if array passed in, use this function instead
 	public function selectEx(&$params) {
 		$query = 'SELECT ';
 		$query .= $this->_cache();
