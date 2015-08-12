@@ -180,8 +180,11 @@ abstract class pudlQuery {
 					$this->escend . '=';
 			}
 
-			if (is_array($value)  ||  is_object($value)) {
-				$query .= '(' . self::_clause_recurse($value, !$or, $safe) . ')';
+			if (is_int($value)  ||  is_float($value)  ||  is_string($value)) {
+				$query .= $value;
+
+			} else if (is_null($value)) {
+				$query .= 'NULL';
 
 			} else if (is_bool($value)) {
 				$query .= $value ? 'TRUE' : 'FALSE';
@@ -192,8 +195,14 @@ abstract class pudlQuery {
 			} else if ($value instanceof pudlStringResult) {
 				$query .= '(' . ((string)$value) . ')';
 
+			} else if (is_array($value)  ||  is_object($value)) {
+				$query .= '(' . self::_clause_recurse($value, !$or, $safe) . ')';
+
 			} else {
-				$query .= $value;
+				trigger_error(
+					'Invalid data type for clause: ' . gettype($value),
+					E_USER_ERROR
+				);
 			}
 		}
 
