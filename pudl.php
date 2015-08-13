@@ -630,7 +630,8 @@ abstract class pudl extends pudlQuery {
 			}
 		}
 
-		$this($query);
+		$result = $this($query);
+		if ($result instanceof pudlStringResult) return $result;
 		return $this->insertId();
 	}
 
