@@ -447,7 +447,7 @@ abstract class pudl extends pudlQuery {
 	public function delete($table, $clause, $limit=false, $offset=false) {
 		$query  = 'DELETE ';
 		$query .= $this->_top($limit);
-		$query .= ' FROM ';
+		$query .= 'FROM ';
 		$query .= $this->_table($table);
 		$query .= $this->_clause($clause);
 		$query .= $this->_limit($limit, $offset);
