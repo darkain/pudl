@@ -174,13 +174,20 @@ abstract class pudlQuery {
 			if (strlen($query)) $query .= ($or ? ' OR ' : ' AND ');
 
 			if (is_string($key)) {
-				$key = explode('.', $key);
+				$parts = explode('.', $key);
+				array_walk($parts, function(&$item){$item=trim($item);});
 				$query .= $this->escstart .
-					implode($this->escend.'.'.$this->escstart, $key) .
+					implode($this->escend.'.'.$this->escstart, $parts) .
 					$this->escend . '=';
 			}
 
-			if (is_int($value)  ||  is_float($value)  ||  is_string($value)) {
+			if (is_int($value)  ||  is_float($value)) {
+				$query .= $value;
+
+			} else if (is_string($value)  &&  is_string($key)) {
+				$query .= "'$value'";
+
+			} else if (is_string($value)) {
 				$query .= $value;
 
 			} else if (is_null($value)) {

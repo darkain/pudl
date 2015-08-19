@@ -73,25 +73,22 @@ assert422($sql == 'SELECT * FROM `table` WHERE column=value');
 
 
 //SELECT statement with a single clause
-//TODO: THIS SQL IS CHANGING
 $sql = $db->string()->select('*', 'table', ['column'=>'value']);
-assert422($sql == 'SELECT * FROM `table` WHERE `column`=value');
+assert422($sql == "SELECT * FROM `table` WHERE `column`='value'");
 
 
 
 
 //SELECT statement with a single clause with table definition
-//TODO: THIS SQL IS CHANGING
 $sql = $db->string()->select('*', 'table', ['table.column'=>'value']);
-assert422($sql == 'SELECT * FROM `table` WHERE `table`.`column`=value');
+assert422($sql == "SELECT * FROM `table` WHERE `table`.`column`='value'");
 
 
 
 
 //SELECT statement with a single clause with table definition (spaced)
-//TODO: SUPPORT THIS
-//$sql = $db->string()->select('*', 'table', ['table . column'=>'value']);
-//assert422($sql == 'SELECT * FROM `table` WHERE `table`.`column`=value');
+$sql = $db->string()->select('*', 'table', ['table . column'=>'value']);
+assert422($sql == "SELECT * FROM `table` WHERE `table`.`column`='value'");
 
 
 
