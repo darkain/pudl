@@ -51,9 +51,7 @@ class pudlMsSql extends pudl {
 	}
 
 
-	public function safe($value) {
-		if (is_int($value)  ||  is_float($value)) return $value;
-
+	public function escape($value) {
 		$encode = array(
 			'/%0[0-8bcef]/',            // url encoded 00-08, 11, 12, 14, 15
 			'/%1[0-9a-f]/',             // url encoded 16-31

@@ -61,7 +61,7 @@ class pudlSqlite extends pudl {
 
 
 
-	public function safe($str) {
+	public function escape($str) {
 		return @$this->sqlite->escapeString($str);
 	}
 

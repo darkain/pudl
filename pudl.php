@@ -106,6 +106,10 @@ abstract class pudl extends pudlQuery {
 		$this->cache = $this->cachekey = false;
 
 
+		//RESET SAFE INFORMATION FOR NEXT QUERY
+		$this->safe = false;
+
+
 		//PERFORMANCE PROFILING DATA
 		if (!empty($this->bench)) {
 			$bench = $this->bench;

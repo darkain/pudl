@@ -3,17 +3,28 @@
 abstract class pudlQuery {
 
 
-	public function safe($value) {
+	public function safe($value=NULL) {
 		if (is_int($value)  ||  is_float($value)) return $value;
 
+		if (func_num_args() === 0) {
+			$this->safe = true;
+			return $this;
+		}
+
+		return $this->escape($value);
+	}
+
+
+
+	public function escape($value) {
 		return str_replace([
-			'\\',   "\0", "'",  '"',  chr(8), "\n", "\r", "\t", "\Z", '%',
-			'_',  '(',  ')',  '[',  ']',  '{',  '}',  '-',  '+',  '&',  '.',
-			',',  '!',  '$',  '^',  ';',
+			'\\',	"\0",	"'",	'"',	chr(8),	"\n",	"\r",	"\t",	"\Z",	'%',
+			'_',	'(',	')',	'[',	']',	'{',	'}',	'-',	'+',	'&',
+			'.',	',',	'!',	'$',	'^',	';',
 		], [
-			'\\\\', '\0', "\'", '\"', '\b',   '\n', '\r', '\t', '\Z', '\%',
-			'\_', '\(', '\)', '\[', '\]', '\{', '\}', '\-', '\+', '\&', '\.',
-			'\,', '\!', '\$', '\^', '\;',
+			'\\\\',	'\0',	"\'",	'\"',	'\b',	'\n',	'\r',	'\t',	'\Z',	'\%',
+			'\_',	'\(',	'\)',	'\[',	'\]',	'\{',	'\}',	'\-',	'\+',	'\&',
+			'\.',	'\,',	'\!',	'\$',	'\^',	'\;',
 		], (string)$value);
 	}
 
@@ -161,7 +172,7 @@ abstract class pudlQuery {
 
 
 
-	private function _clause_recurse($clause, $or=false, $safe=false) {
+	private function _clause_recurse($clause, $or=false) {
 		static $depth = 0;
 		if ($depth > 31) {
 			trigger_error('Recursion limit reached', E_USER_ERROR);
@@ -197,13 +208,13 @@ abstract class pudlQuery {
 				$query .= $value ? 'TRUE' : 'FALSE';
 
 			} else if ($value instanceof pudlFunction) {
-				$query .= $this->_function($value, $safe);
+				$query .= $this->_function($value, $this->safe);
 
 			} else if ($value instanceof pudlStringResult) {
 				$query .= '(' . ((string)$value) . ')';
 
 			} else if (is_array($value)  ||  is_object($value)) {
-				$query .= '(' . self::_clause_recurse($value, !$or, $safe) . ')';
+				$query .= '(' . self::_clause_recurse($value, !$or) . ')';
 
 			} else {
 				trigger_error(
@@ -500,4 +511,5 @@ abstract class pudlQuery {
 	protected $limit	= false;
 	protected $prefix	= false;
 	protected $union	= false;
+	protected $safe		= false;
 }
