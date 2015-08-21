@@ -17,15 +17,17 @@ abstract class pudlQuery {
 
 
 	public function escape($value) {
-		return str_replace([
-			'\\',	"\0",	"'",	'"',	chr(8),	"\n",	"\r",	"\t",	"\Z",	'%',
-			'_',	'(',	')',	'[',	']',	'{',	'}',	'-',	'+',	'&',
-			'.',	',',	'!',	'$',	'^',	';',
-		], [
-			'\\\\',	'\0',	"\'",	'\"',	'\b',	'\n',	'\r',	'\t',	'\Z',	'\%',
-			'\_',	'\(',	'\)',	'\[',	'\]',	'\{',	'\}',	'\-',	'\+',	'\&',
-			'\.',	'\,',	'\!',	'\$',	'\^',	'\;',
-		], (string)$value);
+		return str_replace(
+			['\\',		"\0",	"\x08",	"\x26",	"'",	'"',	"\n",	"\r",	"\t"],
+			['\\\\',	'\0',	'\b',	'\Z',	"\'",	'\"',	'\n',	'\r',	'\t'],
+			(string)$value
+		);
+	}
+
+
+
+	public function likeEscape($value) {
+		return str_replace(['%', '_'], ['\%', '\_'], $this->safe($value));
 	}
 
 
@@ -189,7 +191,9 @@ abstract class pudlQuery {
 				array_walk($parts, function(&$item){$item=trim($item);});
 				$query .= $this->escstart .
 					implode($this->escend.'.'.$this->escstart, $parts) .
-					$this->escend . '=';
+					$this->escend;
+
+				if (!($value instanceof pudlLike)) $query .= '=';
 			}
 
 			if (is_int($value)  ||  is_float($value)) {
@@ -212,6 +216,10 @@ abstract class pudlQuery {
 
 			} else if ($value instanceof pudlStringResult) {
 				$query .= '(' . ((string)$value) . ')';
+
+			} else if ($value instanceof pudlLike) {
+				$query .= $value->not . " LIKE '" . $value->left;
+				$query .= $this->safe($value) . $value->right . "'";
 
 			} else if (is_array($value)  ||  is_object($value)) {
 				$query .= '(' . self::_clause_recurse($value, !$or) . ')';

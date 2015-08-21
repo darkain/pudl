@@ -34,8 +34,24 @@ class pudlFunction {
 }
 
 
+
 class pudlVoid {
 	public function __call($name, $arguments) {
 		return false;
 	}
+}
+
+
+
+class pudlLike {
+	public function __construct($query) {
+		$this->query = $query;
+	}
+
+	public function __toString() { return $this->query; }
+
+	private	$query;
+	public	$left	= '';
+	public	$right	= '';
+	public	$not	= '';
 }

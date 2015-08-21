@@ -93,6 +93,48 @@ assert422($sql == "SELECT * FROM `table` WHERE `table`.`column`='value'", 'Line:
 
 
 
+//SELECT statement with a LIKE clause (left and right search)
+$sql = $db->string()->select('*', 'table', ['column'=>pudl::like('value')]);
+assert422($sql == "SELECT * FROM `table` WHERE `column` LIKE '%value%'", 'Line: ' . __LINE__ . ' ');
+
+
+
+
+//SELECT statement with a LIKE clause (left search)
+$sql = $db->string()->select('*', 'table', ['column'=>pudl::likeLeft('value')]);
+assert422($sql == "SELECT * FROM `table` WHERE `column` LIKE '%value'", 'Line: ' . __LINE__ . ' ');
+
+
+
+
+//SELECT statement with a LIKE clause (right search)
+$sql = $db->string()->select('*', 'table', ['column'=>pudl::likeRight('value')]);
+assert422($sql == "SELECT * FROM `table` WHERE `column` LIKE 'value%'", 'Line: ' . __LINE__ . ' ');
+
+
+
+
+//SELECT statement with a NOT LIKE clause (left and right search)
+$sql = $db->string()->select('*', 'table', ['column'=>pudl::notLike('value')]);
+assert422($sql == "SELECT * FROM `table` WHERE `column` NOT LIKE '%value%'", 'Line: ' . __LINE__ . ' ');
+
+
+
+
+//SELECT statement with a NOT LIKE clause (left search)
+$sql = $db->string()->select('*', 'table', ['column'=>pudl::notLikeLeft('value')]);
+assert422($sql == "SELECT * FROM `table` WHERE `column` NOT LIKE '%value'", 'Line: ' . __LINE__ . ' ');
+
+
+
+
+//SELECT statement with a NOT LIKE clause (right search)
+$sql = $db->string()->select('*', 'table', ['column'=>pudl::notLikeRight('value')]);
+assert422($sql == "SELECT * FROM `table` WHERE `column` NOT LIKE 'value%'", 'Line: ' . __LINE__ . ' ');
+
+
+
+
 //SELECT statement with an AND clause
 $sql = $db->string()->select('*', 'table', [
 	'column1=value',

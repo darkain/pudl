@@ -24,6 +24,7 @@ abstract class pudl extends pudlQuery {
 		$this->time		= time();
 		$this->microtime= microtime();
 		$this->transaction = false;
+		if (empty(self::$pudl)) self::$pudl = $this;
 	}
 
 
@@ -1078,6 +1079,48 @@ abstract class pudl extends pudlQuery {
 
 
 
+	public static function like($value) {
+		$like = new pudlLike( self::get()->likeEscape($value) );
+		$like->left = $like->right = '%';
+		return $like;
+	}
+
+
+	public static function likeLeft($value) {
+		$like = new pudlLike( self::get()->likeEscape($value) );
+		$like->left = '%';
+		return $like;
+	}
+
+
+	public static function likeRight($value) {
+		$like = new pudlLike( self::get()->likeEscape($value) );
+		$like->right = '%';
+		return $like;
+	}
+
+
+	public static function notLike($value) {
+		$like = self::like($value);
+		$like->not = ' NOT';
+		return $like;
+	}
+
+
+	public static function notLikeLeft($value) {
+		$like = self::likeLeft($value);
+		$like->not = ' NOT';
+		return $like;
+	}
+
+
+	public static function notLikeRight($value) {
+		$like = self::likeRight($value);
+		$like->not = ' NOT';
+		return $like;
+	}
+
+
 	public static function jsonEncode($data) {
 		return @json_encode($data, JSON_HEX_APOS|JSON_HEX_QUOT);
 	}
@@ -1085,6 +1128,10 @@ abstract class pudl extends pudlQuery {
 	public static function jsonDecode($data) {
 		return @json_decode($data, true, 512, JSON_BIGINT_AS_STRING);
 	}
+
+
+
+	public static function get() { return self::$pudl; }
 
 
 
@@ -1101,4 +1148,5 @@ abstract class pudl extends pudlQuery {
 	protected $shm;
 	protected $server;
 	protected $transaction;
+	private static $pudl;
 }
