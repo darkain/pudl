@@ -24,7 +24,6 @@ abstract class pudl extends pudlQuery {
 		$this->time		= time();
 		$this->microtime= microtime();
 		$this->transaction = false;
-		if (empty(self::$pudl)) self::$pudl = $this;
 	}
 
 
@@ -1080,21 +1079,21 @@ abstract class pudl extends pudlQuery {
 
 
 	public static function like($value) {
-		$like = new pudlLike( self::get()->likeEscape($value) );
+		$like = new pudlLike($value);
 		$like->left = $like->right = '%';
 		return $like;
 	}
 
 
 	public static function likeLeft($value) {
-		$like = new pudlLike( self::get()->likeEscape($value) );
+		$like = new pudlLike($value);
 		$like->left = '%';
 		return $like;
 	}
 
 
 	public static function likeRight($value) {
-		$like = new pudlLike( self::get()->likeEscape($value) );
+		$like = new pudlLike($value);
 		$like->right = '%';
 		return $like;
 	}
@@ -1131,10 +1130,6 @@ abstract class pudl extends pudlQuery {
 
 
 
-	public static function get() { return self::$pudl; }
-
-
-
 	private $locked;
 	private $debug;
 	private $bench;
@@ -1148,5 +1143,4 @@ abstract class pudl extends pudlQuery {
 	protected $shm;
 	protected $server;
 	protected $transaction;
-	private static $pudl;
 }

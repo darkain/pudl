@@ -219,7 +219,7 @@ abstract class pudlQuery {
 
 			} else if ($value instanceof pudlLike) {
 				$query .= $value->not . " LIKE '" . $value->left;
-				$query .= $this->safe($value) . $value->right . "'";
+				$query .= $this->likeEscape($value) . $value->right . "'";
 
 			} else if (is_array($value)  ||  is_object($value)) {
 				$query .= '(' . self::_clause_recurse($value, !$or) . ')';
