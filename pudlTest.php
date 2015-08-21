@@ -67,105 +67,105 @@ assert422($sql == 'SELECT column1, column2 FROM `table`', 'Line: ' . __LINE__ . 
 
 //SELECT statement with a single clause
 $sql = $db->string()->select('*', 'table', 'column=value');
-assert422($sql == 'SELECT * FROM `table` WHERE column=value', 'Line: ' . __LINE__ . ' ');
+assert422($sql == 'SELECT * FROM `table` WHERE (column=value)', 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //SELECT statement with a single clause with STRING value
 $sql = $db->string()->select('*', 'table', ['column'=>'value']);
-assert422($sql == "SELECT * FROM `table` WHERE `column`='value'", 'Line: ' . __LINE__ . ' ');
+assert422($sql == "SELECT * FROM `table` WHERE (`column`='value')", 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //SELECT statement with a single clause with NULL value
 $sql = $db->string()->select('*', 'table', ['column'=>NULL]);
-assert422($sql == 'SELECT * FROM `table` WHERE `column` IS NULL', 'Line: ' . __LINE__ . ' ');
+assert422($sql == 'SELECT * FROM `table` WHERE (`column` IS NULL)', 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //SELECT statement with a single clause with INTEGER value
 $sql = $db->string()->select('*', 'table', ['column'=>5]);
-assert422($sql == 'SELECT * FROM `table` WHERE `column`=5', 'Line: ' . __LINE__ . ' ');
+assert422($sql == 'SELECT * FROM `table` WHERE (`column`=5)', 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //SELECT statement with a single clause with FLOAT value
 $sql = $db->string()->select('*', 'table', ['column'=>2.3]);
-assert422($sql == 'SELECT * FROM `table` WHERE `column`=2.3', 'Line: ' . __LINE__ . ' ');
+assert422($sql == 'SELECT * FROM `table` WHERE (`column`=2.3)', 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //SELECT statement with a single clause with FLOAT value including exponent
 $sql = $db->string()->select('*', 'table', ['column'=>1.2e23]);
-assert422($sql == 'SELECT * FROM `table` WHERE `column`=1.2E+23', 'Line: ' . __LINE__ . ' ');
+assert422($sql == 'SELECT * FROM `table` WHERE (`column`=1.2E+23)', 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //SELECT statement with a single clause with BOOLEAN value including exponent
 $sql = $db->string()->select('*', 'table', ['column'=>true]);
-assert422($sql == 'SELECT * FROM `table` WHERE `column`=TRUE', 'Line: ' . __LINE__ . ' ');
+assert422($sql == 'SELECT * FROM `table` WHERE (`column`=TRUE)', 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //SELECT statement with a single clause with table definition
 $sql = $db->string()->select('*', 'table', ['table.column'=>'value']);
-assert422($sql == "SELECT * FROM `table` WHERE `table`.`column`='value'", 'Line: ' . __LINE__ . ' ');
+assert422($sql == "SELECT * FROM `table` WHERE (`table`.`column`='value')", 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //SELECT statement with a single clause with table definition (spaced)
 $sql = $db->string()->select('*', 'table', ['table . column'=>'value']);
-assert422($sql == "SELECT * FROM `table` WHERE `table`.`column`='value'", 'Line: ' . __LINE__ . ' ');
+assert422($sql == "SELECT * FROM `table` WHERE (`table`.`column`='value')", 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //SELECT statement with a LIKE clause (left and right search)
 $sql = $db->string()->select('*', 'table', ['column'=>pudl::like('value')]);
-assert422($sql == "SELECT * FROM `table` WHERE `column` LIKE '%value%'", 'Line: ' . __LINE__ . ' ');
+assert422($sql == "SELECT * FROM `table` WHERE (`column` LIKE '%value%')", 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //SELECT statement with a LIKE clause (left search)
 $sql = $db->string()->select('*', 'table', ['column'=>pudl::likeLeft('value')]);
-assert422($sql == "SELECT * FROM `table` WHERE `column` LIKE '%value'", 'Line: ' . __LINE__ . ' ');
+assert422($sql == "SELECT * FROM `table` WHERE (`column` LIKE '%value')", 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //SELECT statement with a LIKE clause (right search)
 $sql = $db->string()->select('*', 'table', ['column'=>pudl::likeRight('value')]);
-assert422($sql == "SELECT * FROM `table` WHERE `column` LIKE 'value%'", 'Line: ' . __LINE__ . ' ');
+assert422($sql == "SELECT * FROM `table` WHERE (`column` LIKE 'value%')", 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //SELECT statement with a NOT LIKE clause (left and right search)
 $sql = $db->string()->select('*', 'table', ['column'=>pudl::notLike('value')]);
-assert422($sql == "SELECT * FROM `table` WHERE `column` NOT LIKE '%value%'", 'Line: ' . __LINE__ . ' ');
+assert422($sql == "SELECT * FROM `table` WHERE (`column` NOT LIKE '%value%')", 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //SELECT statement with a NOT LIKE clause (left search)
 $sql = $db->string()->select('*', 'table', ['column'=>pudl::notLikeLeft('value')]);
-assert422($sql == "SELECT * FROM `table` WHERE `column` NOT LIKE '%value'", 'Line: ' . __LINE__ . ' ');
+assert422($sql == "SELECT * FROM `table` WHERE (`column` NOT LIKE '%value')", 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //SELECT statement with a NOT LIKE clause (right search)
 $sql = $db->string()->select('*', 'table', ['column'=>pudl::notLikeRight('value')]);
-assert422($sql == "SELECT * FROM `table` WHERE `column` NOT LIKE 'value%'", 'Line: ' . __LINE__ . ' ');
+assert422($sql == "SELECT * FROM `table` WHERE (`column` NOT LIKE 'value%')", 'Line: ' . __LINE__ . ' ');
 
 
 
@@ -175,7 +175,7 @@ $sql = $db->string()->select('*', 'table', [
 	'column1=value',
 	'column2=other',
 ]);
-assert422($sql == 'SELECT * FROM `table` WHERE column1=value AND column2=other', 'Line: ' . __LINE__ . ' ');
+assert422($sql == 'SELECT * FROM `table` WHERE (column1=value AND column2=other)', 'Line: ' . __LINE__ . ' ');
 
 
 
@@ -184,7 +184,7 @@ assert422($sql == 'SELECT * FROM `table` WHERE column1=value AND column2=other',
 $sql = $db->string()->select('*', 'table', [[
 	'column1=value', 'column2=other'
 ]]);
-assert422($sql == 'SELECT * FROM `table` WHERE (column1=value OR column2=other)', 'Line: ' . __LINE__ . ' ');
+assert422($sql == 'SELECT * FROM `table` WHERE ((column1=value OR column2=other))', 'Line: ' . __LINE__ . ' ');
 
 
 
@@ -194,7 +194,7 @@ $sql = $db->string()->select('*', 'table', [
 	'column1=value',
 	['column2=again', 'column3=other']
 ]);
-assert422($sql == 'SELECT * FROM `table` WHERE column1=value AND (column2=again OR column3=other)', 'Line: ' . __LINE__ . ' ');
+assert422($sql == 'SELECT * FROM `table` WHERE (column1=value AND (column2=again OR column3=other))', 'Line: ' . __LINE__ . ' ');
 
 
 
@@ -207,7 +207,7 @@ $sql = $db->string()->select('*', 'table', [
 	],
 	'z=3'
 ]);
-assert422($sql == 'SELECT * FROM `table` WHERE ((x=1 AND y=2) OR (x=2 AND y=1)) AND z=3', 'Line: ' . __LINE__ . ' ');
+assert422($sql == 'SELECT * FROM `table` WHERE (((x=1 AND y=2) OR (x=2 AND y=1)) AND z=3)', 'Line: ' . __LINE__ . ' ');
 
 
 
@@ -223,7 +223,7 @@ assert422($sql == 'SELECT * FROM `table` LIMIT 1', 'Line: ' . __LINE__ . ' ');
 //SELECT statement shortcut to get a single row using a clause
 //Returns associative array instead of a pudlResult object
 $sql = $db->string()->row('table', 'column=value');
-assert422($sql == 'SELECT * FROM `table` WHERE column=value LIMIT 1', 'Line: ' . __LINE__ . ' ');
+assert422($sql == 'SELECT * FROM `table` WHERE (column=value) LIMIT 1', 'Line: ' . __LINE__ . ' ');
 
 
 
@@ -239,7 +239,7 @@ assert422($sql == 'SELECT * FROM `table`', 'Line: ' . __LINE__ . ' ');
 //SELECT statement shortcut to get multiple rows using a clause
 //Returns array of associative array instead of a pudlResult object
 $sql = $db->string()->rows('table', 'column=value');
-assert422($sql == 'SELECT * FROM `table` WHERE column=value', 'Line: ' . __LINE__ . ' ');
+assert422($sql == 'SELECT * FROM `table` WHERE (column=value)', 'Line: ' . __LINE__ . ' ');
 
 
 
@@ -247,7 +247,7 @@ assert422($sql == 'SELECT * FROM `table` WHERE column=value', 'Line: ' . __LINE_
 //SELECT statement shortcut to get a single row based on column value
 //Returns associative array instead of a pudlResult object
 $sql = $db->string()->rowId('table', 'column', 'value');
-assert422($sql == "SELECT * FROM `table` WHERE `column`='value' LIMIT 1", 'Line: ' . __LINE__ . ' ');
+assert422($sql == "SELECT * FROM `table` WHERE (`column`='value') LIMIT 1", 'Line: ' . __LINE__ . ' ');
 
 
 
@@ -255,7 +255,7 @@ assert422($sql == "SELECT * FROM `table` WHERE `column`='value' LIMIT 1", 'Line:
 //SELECT statement shortcut to get multiple rows based on column value
 //Returns array of associative array instead of a pudlResult object
 $sql = $db->string()->rowsId('table', 'column', 'value');
-assert422($sql == "SELECT * FROM `table` WHERE `column`='value'", 'Line: ' . __LINE__ . ' ');
+assert422($sql == "SELECT * FROM `table` WHERE (`column`='value')", 'Line: ' . __LINE__ . ' ');
 
 
 
@@ -271,7 +271,7 @@ assert422($sql == 'SELECT column FROM `table` LIMIT 1', 'Line: ' . __LINE__ . ' 
 //SELECT statement shortcut to get a single cell value using a clause
 //Returns string of the cell's value (false if not found)
 $sql = $db->string()->cell('table', 'column', 'id=value');
-assert422($sql == 'SELECT column FROM `table` WHERE id=value LIMIT 1', 'Line: ' . __LINE__ . ' ');
+assert422($sql == 'SELECT column FROM `table` WHERE (id=value) LIMIT 1', 'Line: ' . __LINE__ . ' ');
 
 
 
@@ -279,7 +279,7 @@ assert422($sql == 'SELECT column FROM `table` WHERE id=value LIMIT 1', 'Line: ' 
 //SELECT statement shortcut to get a single cell value by another column's value
 //Returns string of the cell's value (false if not found)
 $sql = $db->string()->cellId('table', 'column', 'id', 'value');
-assert422($sql == "SELECT column FROM `table` WHERE `id`='value' LIMIT 1", 'Line: ' . __LINE__ . ' ');
+assert422($sql == "SELECT column FROM `table` WHERE (`id`='value') LIMIT 1", 'Line: ' . __LINE__ . ' ');
 
 
 
@@ -319,25 +319,32 @@ assert422($sql == "INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE 
 
 //UPDATE statement - using associative array and clause
 $sql = $db->string()->update('table', ['column'=>'value'], 'id=1');
-assert422($sql == "UPDATE `table` SET `column`='value' WHERE id=1", 'Line: ' . __LINE__ . ' ');
+assert422($sql == "UPDATE `table` SET `column`='value' WHERE (id=1)", 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //UPDATE statement - using associative array and ID
 $sql = $db->string()->updateId('table', ['column'=>'value'], 'id', 'value');
-assert422($sql == "UPDATE `table` SET `column`='value' WHERE `id`='value'", 'Line: ' . __LINE__ . ' ');
+assert422($sql == "UPDATE `table` SET `column`='value' WHERE (`id`='value')", 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //UPDATE statement - incrementing an INTEGER value
 $sql = $db->string()->update('table', ['column'=>pudlFunction::increment()], 'id=1');
-assert422($sql == "UPDATE `table` SET `column`=`column`+1 WHERE id=1", 'Line: ' . __LINE__ . ' ');
+assert422($sql == "UPDATE `table` SET `column`=`column`+1 WHERE (id=1)", 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //UPDATE statement - incrementing an INTEGER value
 $sql = $db->string()->update('table', ['column'=>pudlFunction::increment('5')], 'id=1');
-assert422($sql == "UPDATE `table` SET `column`=`column`+'5' WHERE id=1", 'Line: ' . __LINE__ . ' ');
+assert422($sql == "UPDATE `table` SET `column`=`column`+'5' WHERE (id=1)", 'Line: ' . __LINE__ . ' ');
+
+
+
+
+//UPDATE statement - incrementing an INTEGER value
+$sql = $db->string()->updateIn('table', ['column'=>'value'], 'id', [1,7,7,9]);
+assert422($sql == "UPDATE `table` SET `column`='value' WHERE (`id` IN (1,7,7,9))", 'Line: ' . __LINE__ . ' ');

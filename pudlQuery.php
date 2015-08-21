@@ -172,9 +172,9 @@ abstract class pudlQuery {
 	protected function _clause($clause, $type='WHERE') {
 		if ($clause === false)	return '';
 		if ($clause instanceof pudlStringResult) return (string) $clause;
-		if (is_array($clause))	return ' ' . $type . ' ' . self::_clauseRecurse($clause);
-		if (is_object($clause))	return ' ' . $type . ' ' . self::_clauseRecurse($clause);
-		return ' ' . $type . ' ' . $clause;
+		if (is_array($clause))	return ' ' . $type . ' (' . self::_clauseRecurse($clause) .')';
+		if (is_object($clause))	return ' ' . $type . ' (' . self::_clauseRecurse($clause) .')';
+		return ' ' . $type . ' (' . $clause . ')';
 	}
 
 

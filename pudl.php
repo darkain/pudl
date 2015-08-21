@@ -750,7 +750,10 @@ abstract class pudl extends pudlQuery {
 		$query .= $this->_table($table);
 		$query .= ' SET ';
 		$query .= $this->_update($data);
-		$query .= " WHERE {$this->escstart}$field{$this->escend} IN ($in)";
+		$query .= ' WHERE (';
+		$query .= $this->_table($field, false);
+		$query .= $this->_clause($in, 'IN');
+		$query .= ')';
 		$query .= $this->_limit($limit, $offset);
 		return $this($query);
 	}
