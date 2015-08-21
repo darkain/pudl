@@ -261,29 +261,22 @@ assert422($sql == "INSERT INTO `table` (`column`) VALUES ('value')", 'Line: ' . 
 
 
 
-//INSERT statement - using associative array, made safe
-$sql = $db->string()->insert('table', ['column'=>"va'l\"ue"], true);
-assert422($sql == 'INSERT INTO `table` (`column`) VALUES (\'va\\\'l\\"ue\')', 'Line: ' . __LINE__ . ' ');
-
-
-
-
 //INSERT statement - using associative array, duplicate key update
-$sql = $db->string()->insert('table', ['column'=>'value'], false, true);
+$sql = $db->string()->insert('table', ['column'=>'value'], true);
 assert422($sql == "INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE KEY UPDATE `column`='value'", 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //INSERT statement - using associative array, custom duplicate key update
-$sql = $db->string()->insert('table', ['column'=>'value'], false, 'x=x+1');
+$sql = $db->string()->insert('table', ['column'=>'value'], 'x=x+1');
 assert422($sql == "INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE KEY UPDATE x=x+1", 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //INSERT statement - using associative array, custom duplicate key update using UPDATE syntax
-$sql = $db->string()->insert('table', ['column'=>'value'], false, ['y'=>2]);
+$sql = $db->string()->insert('table', ['column'=>'value'], ['y'=>2]);
 assert422($sql == "INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE KEY UPDATE `y`=2", 'Line: ' . __LINE__ . ' ');
 
 
@@ -292,13 +285,6 @@ assert422($sql == "INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE 
 //UPDATE statement - using associative array and clause
 $sql = $db->string()->update('table', ['column1'=>'value'], 'column2=other');
 assert422($sql == "UPDATE `table` SET `column1`='value' WHERE column2=other", 'Line: ' . __LINE__ . ' ');
-
-
-
-
-//UPDATE statement - using associative array and clause, made safe
-$sql = $db->string()->update('table', ['column'=>"va'l\"ue"], 'column2=other', true);
-assert422($sql == 'UPDATE `table` SET `column`=\'va\\\'l\\"ue\' WHERE column2=other', 'Line: ' . __LINE__ . ' ');
 
 
 

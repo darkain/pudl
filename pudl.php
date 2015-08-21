@@ -106,10 +106,6 @@ abstract class pudl extends pudlQuery {
 		$this->cache = $this->cachekey = false;
 
 
-		//RESET SAFE INFORMATION FOR NEXT QUERY
-		$this->safe = false;
-
-
 		//PERFORMANCE PROFILING DATA
 		if (!empty($this->bench)) {
 			$bench = $this->bench;
@@ -145,18 +141,16 @@ abstract class pudl extends pudlQuery {
 
 
 
-	public function listFields($table, $safe=false) {
+	public function listFields($table) {
 		$return = array();
 		if (is_array($table)) {
 			foreach ($table as $t) {
-				if ($safe) $t = $this->safe($t);
 				$t = $this->_table($t);
 				$result = $this("SHOW COLUMNS FROM $t");
 				while ($data = $result->row()) $return[$data['Field']] = $data;
 				$result->free();
 			}
 		} else {
-			if ($safe) $table = $this->safe($table);
 			$table = $this->_table($table);
 			$result = $this("SHOW COLUMNS FROM $table");
 			while ($data = $result->row()) $return[$data['Field']] = $data;
@@ -593,13 +587,13 @@ abstract class pudl extends pudlQuery {
 
 
 
-	public function insertValues($table, $data, $safe=false, $update=false) {
-		return $this->insert($table, $data, $safe, $update, false);
+	public function insertValues($table, $data, $update=false) {
+		return $this->insert($table, $data, $update, false);
 	}
 
 
 
-	public function insert($table, $data, $safe=false, $update=false, $prefix=true) {
+	public function insert($table, $data, $update=false, $prefix=true) {
 		if (!is_array($data)  &&  !is_object($data)) {
 			trigger_error('Invalid data type for pudl::insert', E_USER_ERROR);
 			return false;
@@ -614,8 +608,8 @@ abstract class pudl extends pudlQuery {
 				$vals .= ', ';
 			} else $first = false;
 
-			$cols .= $this->escstart . $column . $this->escend;
-			$vals .= $this->_columnData($value, $safe);
+			$cols .= $this->_table($column, false);
+			$vals .= $this->_columnData($value);
 		}
 
 		if ($prefix) $cols .= ')'; else $cols = '';
@@ -630,7 +624,7 @@ abstract class pudl extends pudlQuery {
 			if ($update === true) $update = $data;
 			if ($update !== false) {
 				$query .= ' ON DUPLICATE KEY UPDATE ';
-				$query .= $this->_update($update, $safe);
+				$query .= $this->_update($update);
 			}
 		}
 
@@ -641,26 +635,26 @@ abstract class pudl extends pudlQuery {
 
 
 
-	public function replace($table, $data, $safe=false) {
-		return $this->insert($table, $data, $safe, "REPLACE");
+	public function replace($table, $data) {
+		return $this->insert($table, $data, "REPLACE");
 	}
 
 
 
-	public function insertIgnore($table, $data, $safe=false) {
-		return $this->insert($table, $data, $safe, "IGNORE");
+	public function insertIgnore($table, $data) {
+		return $this->insert($table, $data, "IGNORE");
 	}
 
 
 
-	public function insertUpdate($table, $data, $column, $safe=false) {
+	public function insertUpdate($table, $data, $column) {
 		$update = "{$this->escstart}$column{$this->escend}=LAST_INSERT_ID({$this->escstart}$column{$this->escend})";
-		return $this->insert($table, $data, $safe, $update);
+		return $this->insert($table, $data, $update);
 	}
 
 
 
-	public function insertEx($table, $cols, $data, $safe=false, $update=false) {
+	public function insertEx($table, $cols, $data, $update=false) {
 		if (!is_array($data)  &&  !is_object($data)) {
 			trigger_error('Invalid data type for pudl::insertEx', E_USER_ERROR);
 			return false;
@@ -670,18 +664,16 @@ abstract class pudl extends pudlQuery {
 
 		$query = '';
 
-		$first = true;
 		foreach ($cols as &$name) {
-			if (!first) $query .= ',';
-			$first = false;
-			$query .= "{$this->escstart}$name{$this->escend}";
+			if (strlen($query)) $query .= ',';
+			$query .= $this->_table($name, false);
 		} unst($name);
 
 		$query .= ') VALUES ';
 
 		$first = true;
 		foreach ($data as &$set) {
-			if (!first) $query .= ',';
+			if (!$first) $query .= ',';
 			$first = false;
 			$query .= '(';
 
@@ -703,7 +695,7 @@ abstract class pudl extends pudlQuery {
 			$query = "INSERT INTO $table (" . $query;
 			if ($update !== false) {
 				$query .= ' ON DUPLICATE KEY UPDATE ';
-				$query .= $this->_update($update, $safe);
+				$query .= $this->_update($update);
 			}
 		}
 
@@ -713,24 +705,24 @@ abstract class pudl extends pudlQuery {
 
 
 
-	public function replaceEx($table, $cols, $data, $safe=false) {
-		return $this->insertEx($table, $cols, $data, $safe, "REPLACE");
+	public function replaceEx($table, $cols, $data) {
+		return $this->insertEx($table, $cols, $data, "REPLACE");
 	}
 
 
 
-	public function insertIgnoreEx($table, $cols, $data, $safe=false) {
-		return $this->insertEx($table, $cols, $data, $safe, "IGNORE");
+	public function insertIgnoreEx($table, $cols, $data) {
+		return $this->insertEx($table, $cols, $data, "IGNORE");
 	}
 
 
 
-	public function update($table, $data, $clause, $safe=false, $limit=false, $offset=false) {
+	public function update($table, $data, $clause, $limit=false, $offset=false) {
 		$query  = 'UPDATE ';
 		$query .= $this->_top($limit);
 		$query .= $this->_table($table);
 		$query .= ' SET ';
-		$query .= $this->_update($data, $safe);
+		$query .= $this->_update($data);
 		$query .= $this->_clause($clause);
 		$query .= $this->_limit($limit, $offset);
 		return $this($query);
@@ -738,12 +730,12 @@ abstract class pudl extends pudlQuery {
 
 
 
-	public function updateIgnore($table, $data, $clause, $safe=false, $limit=false, $offset=false) {
+	public function updateIgnore($table, $data, $clause, $limit=false, $offset=false) {
 		$query  = 'UPDATE IGNORE ';
 		$query .= $this->_top($limit);
 		$query .= $this->_table($table);
 		$query .= ' SET ';
-		$query .= $this->_update($data, $safe);
+		$query .= $this->_update($data);
 		$query .= $this->_clause($clause);
 		$query .= $this->_limit($limit, $offset);
 		return $this($query);
@@ -751,13 +743,13 @@ abstract class pudl extends pudlQuery {
 
 
 
-	public function updateIn($table, $data, $field, $in, $safe=false, $limit=false, $offset=false) {
+	public function updateIn($table, $data, $field, $in, $limit=false, $offset=false) {
 		if (is_array($in)) $in = implode(',', $in);
 		$query  = 'UPDATE ';
 		$query .= $this->_top($limit);
 		$query .= $this->_table($table);
 		$query .= ' SET ';
-		$query .= $this->_update($data, $safe);
+		$query .= $this->_update($data);
 		$query .= " WHERE {$this->escstart}$field{$this->escend} IN ($in)";
 		$query .= $this->_limit($limit, $offset);
 		return $this($query);
@@ -765,8 +757,8 @@ abstract class pudl extends pudlQuery {
 
 
 
-	public function updateId($table, $data, $column, $id, $safe=false) {
-		return $this->update($table, $data, $this->_clauseId($column,$id), $safe);
+	public function updateId($table, $data, $column, $id) {
+		return $this->update($table, $data, $this->_clauseId($column,$id));
 	}
 
 
@@ -784,7 +776,9 @@ abstract class pudl extends pudlQuery {
 		$query = 'UPDATE ';
 		$query .= $this->_top($limit);
 		$query .= $this->_table($table);
-		$query .= " SET {$this->escstart}$col{$this->escend}={$this->escstart}$col{$this->escend}+($amount) ";
+		$query .= ' SET '	. $this->_table($col, false);
+		$query .= '='		. $this->_table($col, false);
+		$query .= '+'		. $this->_columnData($amount);
 		$query .= $this->_clause($clause);
 		$query .= $this->_limit($limit, $offset);
 		return $this($query);
@@ -825,11 +819,9 @@ abstract class pudl extends pudlQuery {
 
 
 	//NOTE: THIS IS CURRENTLY ONLY DESIGNED FOR MYSQL/MARIADB
-	public function fieldType($table, $column, $safe=false) {
-		if ($safe) {
-			$table  = $this->safe($table);
-			$column = $this->safe($column);
-		}
+	public function fieldType($table, $column) {
+		$table	= $this->escape($table);
+		$column	= $this->escape($column);
 
 		$return = $this->cell('INFORMATION_SCHEMA.COLUMNS', 'COLUMN_TYPE', [
 			"TABLE_NAME='$table'",

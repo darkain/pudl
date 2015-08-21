@@ -49,10 +49,7 @@ class pudlSession {
 
 	function read($id) {
 		$data = $this->db->cache(60*60, $this->cache($id))->cellId(
-			$this->table,
-			'data',
-			'id',
-			$this->db->safe($id)
+			$this->table, 'data', 'id', $id
 		);
 
 		if (!empty($data)) $this->hash = md5($data);
@@ -95,7 +92,7 @@ class pudlSession {
 	function destroy($id) {
 		//Delete the object
 		if ($this->hash !== false) {
-			$this->db->deleteId($this->table, 'id', $this->db->safe($id));
+			$this->db->deleteId($this->table, 'id', $this->db->escape($id));
 		}
 
 		//Purge the cache for this ID

@@ -51,21 +51,6 @@ class pudlMsSql extends pudl {
 	}
 
 
-	public function escape($value) {
-		$encode = array(
-			'/%0[0-8bcef]/',            // url encoded 00-08, 11, 12, 14, 15
-			'/%1[0-9a-f]/',             // url encoded 16-31
-			'/[\x00-\x08]/',            // 00-08
-			'/\x0b/',                   // 11
-			'/\x0c/',                   // 12
-			'/[\x0e-\x1f]/'             // 14-31
-		);
-		foreach ($encode as $regex) $value = preg_replace($regex, '', $value);
-
-		//TODO: MERGE THIS ALL INTO DEFAULT SAFE FUNCTION
-		return str_replace("'", "''", $value);
-	}
-
 
 	protected function process($query) {
 		$result = false;
