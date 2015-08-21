@@ -200,7 +200,7 @@ abstract class pudlQuery {
 				$query .= $value;
 
 			} else if (is_string($value)  &&  is_string($key)) {
-				$query .= "'$value'";
+				$query .= "'" . $this->escape($value) . "'";
 
 			} else if (is_string($value)) {
 				$query .= $value;
