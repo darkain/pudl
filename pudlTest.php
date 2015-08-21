@@ -72,9 +72,51 @@ assert422($sql == 'SELECT * FROM `table` WHERE column=value', 'Line: ' . __LINE_
 
 
 
-//SELECT statement with a single clause
+//SELECT statement with a single clause with STRING value
 $sql = $db->string()->select('*', 'table', ['column'=>'value']);
 assert422($sql == "SELECT * FROM `table` WHERE `column`='value'", 'Line: ' . __LINE__ . ' ');
+
+
+
+
+//SELECT statement with a single clause with NULL value
+$sql = $db->string()->select('*', 'table', ['column'=>NULL]);
+assert422($sql == 'SELECT * FROM `table` WHERE `column` IS NULL', 'Line: ' . __LINE__ . ' ');
+
+
+
+
+//SELECT statement with a single clause with INTEGER value
+$sql = $db->string()->select('*', 'table', ['column'=>5]);
+assert422($sql == 'SELECT * FROM `table` WHERE `column`=5', 'Line: ' . __LINE__ . ' ');
+
+
+
+
+//SELECT statement with a single clause with FLOAT value
+$sql = $db->string()->select('*', 'table', ['column'=>2.3]);
+assert422($sql == 'SELECT * FROM `table` WHERE `column`=2.3', 'Line: ' . __LINE__ . ' ');
+
+
+
+
+//SELECT statement with a single clause with FLOAT value including exponent
+$sql = $db->string()->select('*', 'table', ['column'=>1.2e23]);
+assert422($sql == 'SELECT * FROM `table` WHERE `column`=1.2E+23', 'Line: ' . __LINE__ . ' ');
+
+
+
+
+//SELECT statement with a single clause with BOOLEAN value including exponent
+$sql = $db->string()->select('*', 'table', ['column'=>true]);
+assert422($sql == 'SELECT * FROM `table` WHERE `column`=TRUE', 'Line: ' . __LINE__ . ' ');
+
+
+
+
+//SELECT statement with a single clause with LIKE comparison
+$sql = $db->string()->select('*', 'table', ['column'=>pudl::like('bob')]);
+assert422($sql == "SELECT * FROM `table` WHERE `column` LIKE '%bob%'", 'Line: ' . __LINE__ . ' ');
 
 
 

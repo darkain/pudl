@@ -193,20 +193,17 @@ abstract class pudlQuery {
 
 			if (is_string($key)) {
 				$query .= $this->_table($key, false);
-				if (!($value instanceof pudlLike)) $query .= '=';
+				if (!($value instanceof pudlLike)  &&  !is_null($value)) $query .= '=';
 			}
 
 			if (is_int($value)  ||  is_float($value)) {
 				$query .= $value;
 
-			} else if (is_string($value)  &&  is_string($key)) {
-				$query .= "'" . $this->escape($value) . "'";
-
 			} else if (is_string($value)) {
-				$query .= $value;
+				$query .= is_string($key) ? "'".$this->escape($value)."'" : $value;
 
 			} else if (is_null($value)) {
-				$query .= 'NULL';
+				$query .= is_string($key) ? ' IS NULL' : 'NULL';
 
 			} else if (is_bool($value)) {
 				$query .= $value ? 'TRUE' : 'FALSE';
