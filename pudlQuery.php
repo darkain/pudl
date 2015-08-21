@@ -154,9 +154,9 @@ abstract class pudlQuery {
 					}
 
 					if (!empty($join['clause'])) {
-						$query .= self::_joinClause($join['clause']);
+						$query .= self::_clause($join['clause'], 'ON');
 					} else if (!empty($join['on'])) {
-						$query .= self::_joinClause($join['on']);
+						$query .= self::_clause($join['on'], 'ON');
 					} else if (!empty($join['using'])) {
 						$query .= self::_joinUsing($join['using']);
 					}
@@ -282,38 +282,6 @@ abstract class pudlQuery {
 	protected function _union($type='') {
 		if ($type !== 'ALL'  &&  $type !== 'DISTINCT') $type = '';
 		return '(' . implode(") UNION $type (", $this->union) . ')';
-	}
-
-
-
-	protected function _joinClause($join_clause) {
-		if ($join_clause === false) return '';
-		if (!is_array($join_clause)) return " ON ($join_clause)";
-		if (!count($join_clause)) return '';
-
-		$query = ' ON (';
-		$first = true;
-
-		foreach ($join_clause as $key => &$val) {
-			if (!$first) $query .= ' AND '; else  $first = false;
-
-			if (is_array($val)) {
-				$query .= '(';
-				$val_first = true;
-				foreach ($val as $val_key => &$val_val) {
-					if (!$val_first) $query .= ' OR ';
-					$val_first = false;
-					$query .= $val_val;
-				} unset($val_val);
-				$query .= ')';
-
-			} else {
-				$query .= $val;
-			}
-		} unset($val);
-
-		$query .= ')';
-		return $query;
 	}
 
 

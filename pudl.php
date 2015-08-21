@@ -275,7 +275,7 @@ abstract class pudl extends pudlQuery {
 		$query .= $this->_column($col);
 		$query .= $this->_tables($table);
 		$query .= $this->_joinTable($join_table);
-		$query .= $this->_joinClause($join_clause);
+		$query .= $this->_clause($join_clause, 'ON');
 		$query .= $this->_clause($clause);
 		$query .= $this->_order($order);
 		$query .= $this->_limit($limit, $offset);
@@ -328,7 +328,7 @@ abstract class pudl extends pudlQuery {
 		$query .= $this->_column($col);
 		$query .= $this->_tables($table);
 		$query .= $this->_joinTable($join_table);
-		$query .= $this->_joinClause($join_clause);
+		$query .= $this->_clause($join_clause, 'ON');
 		$query .= $this->_clause($clause);
 		$query .= $this->_order($order);
 		$query .= $this->_limit($limit, $offset);
