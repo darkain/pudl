@@ -238,7 +238,8 @@ abstract class pudlQuery {
 	protected function _clauseId($column, $id) {
 		$list = explode('.', $column);
 		if (is_array($id)) $id = $id[end($list)];
-		return $this->_table($column, false) . (is_null($id) ? ' IS NULL' : "='$id'");
+		return $this->_table($column, false) .
+			(is_null($id) ? ' IS NULL' : '='.$this->_columnData($id));
 	}
 
 
