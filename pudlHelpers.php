@@ -28,7 +28,7 @@ class pudlFunction {
 		return pudl::unhex(bin2hex($data));
 	}
 
-	public static function increment($amount) {
+	public static function increment($amount=1) {
 		return pudl::_increment($amount);
 	}
 }
