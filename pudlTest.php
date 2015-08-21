@@ -114,13 +114,6 @@ assert422($sql == 'SELECT * FROM `table` WHERE `column`=TRUE', 'Line: ' . __LINE
 
 
 
-//SELECT statement with a single clause with LIKE comparison
-$sql = $db->string()->select('*', 'table', ['column'=>pudl::like('bob')]);
-assert422($sql == "SELECT * FROM `table` WHERE `column` LIKE '%bob%'", 'Line: ' . __LINE__ . ' ');
-
-
-
-
 //SELECT statement with a single clause with table definition
 $sql = $db->string()->select('*', 'table', ['table.column'=>'value']);
 assert422($sql == "SELECT * FROM `table` WHERE `table`.`column`='value'", 'Line: ' . __LINE__ . ' ');
