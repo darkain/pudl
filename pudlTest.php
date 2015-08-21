@@ -24,7 +24,7 @@ if (!isset($af)  ||  !is_object($af)  ||  !($af instanceof altaform)) {
 
 //RAW SQL using ->query('STATEMENT')
 $sql = $db->string()->query('SELECT * FROM table');
-assert422($sql == 'SELECT * FROM table');
+assert422($sql == 'SELECT * FROM table', 'Line: ' . __LINE__ . ' ');
 
 
 
@@ -32,63 +32,63 @@ assert422($sql == 'SELECT * FROM table');
 //RAW SQL using $db('STATEMENT')
 $db->string();
 $sql = $db('SELECT * FROM table');
-assert422($sql == 'SELECT * FROM table');
+assert422($sql == 'SELECT * FROM table', 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //SELECT statement
 $sql = $db->string()->select('*', 'table');
-assert422($sql == 'SELECT * FROM `table`');
+assert422($sql == 'SELECT * FROM `table`', 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //SELECT statement, joining two tables
 $sql = $db->string()->select('*', ['table1', 'table2']);
-assert422($sql == 'SELECT * FROM `table1`, `table2`');
+assert422($sql == 'SELECT * FROM `table1`, `table2`', 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //SELECT statement, joining two tables, both with aliases
 $sql = $db->string()->select('*', ['a'=>'table1', 'b'=>'table2']);
-assert422($sql == 'SELECT * FROM `table1` a, `table2` b');
+assert422($sql == 'SELECT * FROM `table1` a, `table2` b', 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //SELECT statement, choosing which columns to return
 $sql = $db->string()->select(['column1', 'column2'], 'table');
-assert422($sql == 'SELECT column1, column2 FROM `table`');
+assert422($sql == 'SELECT column1, column2 FROM `table`', 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //SELECT statement with a single clause
 $sql = $db->string()->select('*', 'table', 'column=value');
-assert422($sql == 'SELECT * FROM `table` WHERE column=value');
+assert422($sql == 'SELECT * FROM `table` WHERE column=value', 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //SELECT statement with a single clause
 $sql = $db->string()->select('*', 'table', ['column'=>'value']);
-assert422($sql == "SELECT * FROM `table` WHERE `column`='value'");
+assert422($sql == "SELECT * FROM `table` WHERE `column`='value'", 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //SELECT statement with a single clause with table definition
 $sql = $db->string()->select('*', 'table', ['table.column'=>'value']);
-assert422($sql == "SELECT * FROM `table` WHERE `table`.`column`='value'");
+assert422($sql == "SELECT * FROM `table` WHERE `table`.`column`='value'", 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //SELECT statement with a single clause with table definition (spaced)
 $sql = $db->string()->select('*', 'table', ['table . column'=>'value']);
-assert422($sql == "SELECT * FROM `table` WHERE `table`.`column`='value'");
+assert422($sql == "SELECT * FROM `table` WHERE `table`.`column`='value'", 'Line: ' . __LINE__ . ' ');
 
 
 
@@ -98,7 +98,7 @@ $sql = $db->string()->select('*', 'table', [
 	'column1=value',
 	'column2=other',
 ]);
-assert422($sql == 'SELECT * FROM `table` WHERE column1=value AND column2=other');
+assert422($sql == 'SELECT * FROM `table` WHERE column1=value AND column2=other', 'Line: ' . __LINE__ . ' ');
 
 
 
@@ -107,7 +107,7 @@ assert422($sql == 'SELECT * FROM `table` WHERE column1=value AND column2=other')
 $sql = $db->string()->select('*', 'table', [[
 	'column1=value', 'column2=other'
 ]]);
-assert422($sql == 'SELECT * FROM `table` WHERE (column1=value OR column2=other)');
+assert422($sql == 'SELECT * FROM `table` WHERE (column1=value OR column2=other)', 'Line: ' . __LINE__ . ' ');
 
 
 
@@ -117,7 +117,7 @@ $sql = $db->string()->select('*', 'table', [
 	'column1=value',
 	['column2=again', 'column3=other']
 ]);
-assert422($sql == 'SELECT * FROM `table` WHERE column1=value AND (column2=again OR column3=other)');
+assert422($sql == 'SELECT * FROM `table` WHERE column1=value AND (column2=again OR column3=other)', 'Line: ' . __LINE__ . ' ');
 
 
 
@@ -130,7 +130,7 @@ $sql = $db->string()->select('*', 'table', [
 	],
 	'z=3'
 ]);
-assert422($sql == 'SELECT * FROM `table` WHERE ((x=1 AND y=2) OR (x=2 AND y=1)) AND z=3');
+assert422($sql == 'SELECT * FROM `table` WHERE ((x=1 AND y=2) OR (x=2 AND y=1)) AND z=3', 'Line: ' . __LINE__ . ' ');
 
 
 
@@ -138,7 +138,7 @@ assert422($sql == 'SELECT * FROM `table` WHERE ((x=1 AND y=2) OR (x=2 AND y=1)) 
 //SELECT statement shortcut to get a single row
 //Returns associative array instead of a pudlResult object
 $sql = $db->string()->row('table');
-assert422($sql == 'SELECT * FROM `table` LIMIT 1');
+assert422($sql == 'SELECT * FROM `table` LIMIT 1', 'Line: ' . __LINE__ . ' ');
 
 
 
@@ -146,7 +146,7 @@ assert422($sql == 'SELECT * FROM `table` LIMIT 1');
 //SELECT statement shortcut to get a single row using a clause
 //Returns associative array instead of a pudlResult object
 $sql = $db->string()->row('table', 'column=value');
-assert422($sql == 'SELECT * FROM `table` WHERE column=value LIMIT 1');
+assert422($sql == 'SELECT * FROM `table` WHERE column=value LIMIT 1', 'Line: ' . __LINE__ . ' ');
 
 
 
@@ -154,7 +154,7 @@ assert422($sql == 'SELECT * FROM `table` WHERE column=value LIMIT 1');
 //SELECT statement shortcut to get multiple rows
 //Returns array of associative array instead of a pudlResult object
 $sql = $db->string()->rows('table');
-assert422($sql == 'SELECT * FROM `table`');
+assert422($sql == 'SELECT * FROM `table`', 'Line: ' . __LINE__ . ' ');
 
 
 
@@ -162,7 +162,7 @@ assert422($sql == 'SELECT * FROM `table`');
 //SELECT statement shortcut to get multiple rows using a clause
 //Returns array of associative array instead of a pudlResult object
 $sql = $db->string()->rows('table', 'column=value');
-assert422($sql == 'SELECT * FROM `table` WHERE column=value');
+assert422($sql == 'SELECT * FROM `table` WHERE column=value', 'Line: ' . __LINE__ . ' ');
 
 
 
@@ -170,7 +170,7 @@ assert422($sql == 'SELECT * FROM `table` WHERE column=value');
 //SELECT statement shortcut to get a single row based on column value
 //Returns associative array instead of a pudlResult object
 $sql = $db->string()->rowId('table', 'column', 'value');
-assert422($sql == "SELECT * FROM `table` WHERE `column`='value' LIMIT 1");
+assert422($sql == "SELECT * FROM `table` WHERE `column`='value' LIMIT 1", 'Line: ' . __LINE__ . ' ');
 
 
 
@@ -178,7 +178,7 @@ assert422($sql == "SELECT * FROM `table` WHERE `column`='value' LIMIT 1");
 //SELECT statement shortcut to get multiple rows based on column value
 //Returns array of associative array instead of a pudlResult object
 $sql = $db->string()->rowsId('table', 'column', 'value');
-assert422($sql == "SELECT * FROM `table` WHERE `column`='value'");
+assert422($sql == "SELECT * FROM `table` WHERE `column`='value'", 'Line: ' . __LINE__ . ' ');
 
 
 
@@ -186,7 +186,7 @@ assert422($sql == "SELECT * FROM `table` WHERE `column`='value'");
 //SELECT statement shortcut to get a single cell value
 //Returns string of the cell's value (false if not found)
 $sql = $db->string()->cell('table', 'column');
-assert422($sql == 'SELECT column FROM `table` LIMIT 1');
+assert422($sql == 'SELECT column FROM `table` LIMIT 1', 'Line: ' . __LINE__ . ' ');
 
 
 
@@ -194,7 +194,7 @@ assert422($sql == 'SELECT column FROM `table` LIMIT 1');
 //SELECT statement shortcut to get a single cell value using a clause
 //Returns string of the cell's value (false if not found)
 $sql = $db->string()->cell('table', 'column', 'id=value');
-assert422($sql == 'SELECT column FROM `table` WHERE id=value LIMIT 1');
+assert422($sql == 'SELECT column FROM `table` WHERE id=value LIMIT 1', 'Line: ' . __LINE__ . ' ');
 
 
 
@@ -202,7 +202,7 @@ assert422($sql == 'SELECT column FROM `table` WHERE id=value LIMIT 1');
 //SELECT statement shortcut to get a single cell value by another column's value
 //Returns string of the cell's value (false if not found)
 $sql = $db->string()->cellId('table', 'column', 'id', 'value');
-assert422($sql == "SELECT column FROM `table` WHERE `id`='value' LIMIT 1");
+assert422($sql == "SELECT column FROM `table` WHERE `id`='value' LIMIT 1", 'Line: ' . __LINE__ . ' ');
 
 
 
@@ -214,53 +214,53 @@ assert422($sql == "SELECT column FROM `table` WHERE `id`='value' LIMIT 1");
 
 //INSERT statement - using associative array
 $sql = $db->string()->insert('table', ['column'=>'value']);
-assert422($sql == "INSERT INTO `table` (`column`) VALUES ('value')");
+assert422($sql == "INSERT INTO `table` (`column`) VALUES ('value')", 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //INSERT statement - using associative array, made safe
 $sql = $db->string()->insert('table', ['column'=>"va'l\"ue"], true);
-assert422($sql == 'INSERT INTO `table` (`column`) VALUES (\'va\\\'l\\"ue\')');
+assert422($sql == 'INSERT INTO `table` (`column`) VALUES (\'va\\\'l\\"ue\')', 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //INSERT statement - using associative array, duplicate key update
 $sql = $db->string()->insert('table', ['column'=>'value'], false, true);
-assert422($sql == "INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE KEY UPDATE `column`='value'");
+assert422($sql == "INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE KEY UPDATE `column`='value'", 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //INSERT statement - using associative array, custom duplicate key update
 $sql = $db->string()->insert('table', ['column'=>'value'], false, 'x=x+1');
-assert422($sql == "INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE KEY UPDATE x=x+1");
+assert422($sql == "INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE KEY UPDATE x=x+1", 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //INSERT statement - using associative array, custom duplicate key update using UPDATE syntax
 $sql = $db->string()->insert('table', ['column'=>'value'], false, ['y'=>2]);
-assert422($sql == "INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE KEY UPDATE `y`=2");
+assert422($sql == "INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE KEY UPDATE `y`=2", 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //UPDATE statement - using associative array and clause
 $sql = $db->string()->update('table', ['column1'=>'value'], 'column2=other');
-assert422($sql == "UPDATE `table` SET `column1`='value' WHERE column2=other");
+assert422($sql == "UPDATE `table` SET `column1`='value' WHERE column2=other", 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //UPDATE statement - using associative array and clause, made safe
 $sql = $db->string()->update('table', ['column'=>"va'l\"ue"], 'column2=other', true);
-assert422($sql == 'UPDATE `table` SET `column`=\'va\\\'l\\"ue\' WHERE column2=other');
+assert422($sql == 'UPDATE `table` SET `column`=\'va\\\'l\\"ue\' WHERE column2=other', 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //UPDATE statement - using associative array and ID
 $sql = $db->string()->updateId('table', ['column1'=>'value'], 'id', 'value');
-assert422($sql == "UPDATE `table` SET `column1`='value' WHERE `id`='value'");
+assert422($sql == "UPDATE `table` SET `column1`='value' WHERE `id`='value'", 'Line: ' . __LINE__ . ' ');
