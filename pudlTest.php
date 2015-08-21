@@ -318,12 +318,26 @@ assert422($sql == "INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE 
 
 
 //UPDATE statement - using associative array and clause
-$sql = $db->string()->update('table', ['column1'=>'value'], 'column2=other');
-assert422($sql == "UPDATE `table` SET `column1`='value' WHERE column2=other", 'Line: ' . __LINE__ . ' ');
+$sql = $db->string()->update('table', ['column'=>'value'], 'id=1');
+assert422($sql == "UPDATE `table` SET `column`='value' WHERE id=1", 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //UPDATE statement - using associative array and ID
-$sql = $db->string()->updateId('table', ['column1'=>'value'], 'id', 'value');
-assert422($sql == "UPDATE `table` SET `column1`='value' WHERE `id`='value'", 'Line: ' . __LINE__ . ' ');
+$sql = $db->string()->updateId('table', ['column'=>'value'], 'id', 'value');
+assert422($sql == "UPDATE `table` SET `column`='value' WHERE `id`='value'", 'Line: ' . __LINE__ . ' ');
+
+
+
+
+//UPDATE statement - incrementing an INTEGER value
+$sql = $db->string()->update('table', ['column'=>pudlFunction::increment()], 'id=1');
+assert422($sql == "UPDATE `table` SET `column`=`column`+1 WHERE id=1", 'Line: ' . __LINE__ . ' ');
+
+
+
+
+//UPDATE statement - incrementing an INTEGER value
+$sql = $db->string()->update('table', ['column'=>pudlFunction::increment('5')], 'id=1');
+assert422($sql == "UPDATE `table` SET `column`=`column`+'5' WHERE id=1", 'Line: ' . __LINE__ . ' ');

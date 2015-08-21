@@ -320,7 +320,7 @@ abstract class pudlQuery {
 		foreach ($data as $column => $value) {
 			if ($value instanceof pudlFunction  &&  isset($value->__INCREMENT)) {
 				$good = $this->escstart . $column . $this->escend;
-				$good .= "+'" . reset($value->__INCREMENT) . "'";
+				$good .= "+" . $this->_columnData(reset($value->__INCREMENT));
 			} else {
 				$good = $this->_columnData($value);
 			}
