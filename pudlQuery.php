@@ -237,9 +237,20 @@ abstract class pudlQuery {
 
 	protected function _clauseId($column, $id) {
 		if (is_array($id)) {
-			$list = explode('.', $column);
-			$id = $id[end($list)];
+			$list	= explode('.', $column);
+			$id		= $id[end($list)];
+
+		} else if (is_object($id)) {
+			switch (true) {
+				case $id instanceof pudlFunction:		break;
+				case $id instanceof pudlStringResult:	break;
+				case $id instanceof pudlLike:			break;
+				default:
+					$list	= explode('.', $column);
+					$id		= $id->{end($list)};
+			}
 		}
+
 		return [$column => $id];
 	}
 
