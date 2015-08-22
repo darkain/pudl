@@ -244,10 +244,18 @@ assert422($sql == 'SELECT * FROM `table` WHERE (column=value)', 'Line: ' . __LIN
 
 
 
-//SELECT statement shortcut to get a single row based on column value
+//SELECT statement shortcut to get a single row based on column STRING value
 //Returns associative array instead of a pudlResult object
 $sql = $db->string()->rowId('table', 'column', 'value');
 assert422($sql == "SELECT * FROM `table` WHERE (`column`='value') LIMIT 1", 'Line: ' . __LINE__ . ' ');
+
+
+
+
+//SELECT statement shortcut to get a single row based on column FUNCTION value
+//Returns associative array instead of a pudlResult object
+$sql = $db->string()->rowId('table', 'column', pudl::unhex('0123DEADBEEF0123'));
+assert422($sql == "SELECT * FROM `table` WHERE (`column`=UNHEX('0123DEADBEEF0123')) LIMIT 1", 'Line: ' . __LINE__ . ' ');
 
 
 
