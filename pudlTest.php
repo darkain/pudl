@@ -260,6 +260,14 @@ assert422($sql == "SELECT * FROM `table` WHERE (`column`=UNHEX('0123DEADBEEF0123
 
 
 
+//SELECT statement shortcut to get a single row based on LIKE comparison
+//Returns associative array instead of a pudlResult object
+$sql = $db->string()->rowId('table', 'column', pudl::like('search'));
+assert422($sql == "SELECT * FROM `table` WHERE (`column` LIKE '%search%') LIMIT 1", 'Line: ' . __LINE__ . ' ');
+
+
+
+
 //SELECT statement shortcut to get multiple rows based on column value
 //Returns array of associative array instead of a pudlResult object
 $sql = $db->string()->rowsId('table', 'column', 'value');
