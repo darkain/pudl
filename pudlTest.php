@@ -268,6 +268,25 @@ assert422($sql == "SELECT * FROM `table` WHERE (`column` LIKE '%search%') LIMIT 
 
 
 
+//SELECT statement shortcut to get a single row based on a passed in associative array
+//Returns associative array instead of a pudlResult object
+$array = ['column' => 5];
+$sql = $db->string()->rowId('table', 'column', $array);
+assert422($sql == "SELECT * FROM `table` WHERE (`column`=5) LIMIT 1", 'Line: ' . __LINE__ . ' ');
+
+
+
+
+//SELECT statement shortcut to get a single row based on a passed in associative array
+//Returns associative array instead of a pudlResult object
+$object = new stdClass;
+$object->column = 'value';
+$sql = $db->string()->rowId('table', 'column', $object);
+assert422($sql == "SELECT * FROM `table` WHERE (`column`='value') LIMIT 1", 'Line: ' . __LINE__ . ' ');
+
+
+
+
 //SELECT statement shortcut to get multiple rows based on column value
 //Returns array of associative array instead of a pudlResult object
 $sql = $db->string()->rowsId('table', 'column', 'value');
