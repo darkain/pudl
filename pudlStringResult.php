@@ -2,18 +2,24 @@
 
 
 require_once('pudlResult.php');
+require_once('pudlHelpers.php');
 
 
 class pudlStringResult extends pudlResult {
+	use pudlHelper;
+
 
 	public function __construct($db, $type) {
 		parent::__construct(false, $db);
 		$this->type = $type;
 	}
 
+
 	public function __destruct() {}
 
+
 	public function __toString()		{ return $this->query; }
+
 
 	public function free()				{ return false; }
 	public function count()				{ return 1; }

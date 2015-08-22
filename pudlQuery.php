@@ -241,13 +241,10 @@ abstract class pudlQuery {
 			$id		= $id[end($list)];
 
 		} else if (is_object($id)) {
-			switch (true) {
-				case $id instanceof pudlFunction:		break;
-				case $id instanceof pudlStringResult:	break;
-				case $id instanceof pudlLike:			break;
-				default:
-					$list	= explode('.', $column);
-					$id		= $id->{end($list)};
+			$traits = class_uses($id, false);
+			if (empty($traits['pudlHelper'])) {
+				$list	= explode('.', $column);
+				$id		= $id->{end($list)};
 			}
 		}
 

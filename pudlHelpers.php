@@ -14,7 +14,12 @@ define('PUDL_END',		2);
 //define('PUDL_BOTH',	3);
 
 
+trait pudlHelper {}
+
+
 class pudlFunction {
+	use pudlHelper;
+
 	public static function __callStatic($name, $arguments) {
 		return forward_static_call_array(['pudl', $name], $arguments);
 	}
@@ -36,6 +41,8 @@ class pudlFunction {
 
 
 class pudlVoid {
+	use pudlHelper;
+
 	public function __call($name, $arguments) {
 		return false;
 	}
@@ -44,6 +51,8 @@ class pudlVoid {
 
 
 class pudlLike {
+	use pudlHelper;
+
 	public function __construct($query) {
 		$this->query = $query;
 	}
