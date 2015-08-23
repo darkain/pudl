@@ -67,7 +67,7 @@ class pudlEquals {
 
 
 
-class pudlLike extends pudlEquals{
+class pudlLike extends pudlEquals {
 	use pudlHelper;
 
 	public function __construct($value) {
@@ -79,3 +79,16 @@ class pudlLike extends pudlEquals{
 	public	$right	= '';
 }
 
+
+
+class pudlSet extends pudlEquals {
+	use pudlHelper;
+
+	public function __construct($value) {
+		parent::__construct($value);
+		$this->equals = ' IN ';
+	}
+
+	public	$left	= '';
+	public	$right	= '';
+}

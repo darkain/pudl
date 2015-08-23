@@ -95,6 +95,8 @@ abstract class pudlQuery {
 
 
 	protected function _table($table, $prefix=true) {
+		if ($table === false) return '';
+
 		$list = explode('.', $table);
 
 		foreach ($list as &$item) {
@@ -117,16 +119,16 @@ abstract class pudlQuery {
 
 
 	protected function _tables($table) {
-		$escstart = $this->escstart;
-		$escend = $this->escend;
+		if (is_string($table)) return ' FROM ' . $this->_table($table);
 
-		if (!is_array($table)) return ' FROM ' . $this->_table($table);
+		if (!is_array($table)) trigger_error(
+			'Invalid data type for table: ' . gettype($value),
+			E_USER_ERROR
+		);
 
-		$query = ' FROM ';
-		$first = true;
-
+		$query = '';
 		foreach ($table as $key => &$val) {
-			if (!$first) $query .= ', '; else $first = false;
+			if (strlen($query)) $query .= ', ';
 
 			if (!is_array($val)) {
 				$query .= $this->_table($val);
@@ -164,7 +166,7 @@ abstract class pudlQuery {
 			}
 		} unset($val);
 
-		return $query;
+		return ' FROM ' . $query;
 	}
 
 
@@ -241,6 +243,9 @@ abstract class pudlQuery {
 			} else if ($value instanceof pudlLike) {
 				$query .= "'" . $value->left . $this->likeEscape($value->value) . $value->right . "'";
 
+			} else if ($value instanceof pudlSet) {
+				$query .= "(" . $this->_inSet($value->value) . ")";
+
 			} else if ($value instanceof pudlEquals) {
 				$query .= "'" . $this->escape($value->value) . "'";
 
@@ -282,6 +287,17 @@ abstract class pudlQuery {
 
 
 
+	protected function _inSet($value) {
+		$query = '';
+		foreach ($value as $item) {
+			if (strlen($query)) $query .= ', ';
+			$query .= $this->escape($item);
+		}
+		return $query;
+	}
+
+
+
 	protected function _limit($limit, $offset=false) {
 		if (!$this->limit) return '';
 		if ($limit !== false  &&  $offset === false) return " LIMIT $limit";
@@ -319,8 +335,6 @@ abstract class pudlQuery {
 	protected function _joinTable($join, $type='LEFT') {
 		if (!is_array($join)) return " $type JOIN (" . $this->_table($join) . ')';
 
-		$escstart	= $this->escstart;
-		$escend		= $this->escend;
 		$query		= " $type JOIN ";
 
 		foreach ($join as $key => &$val) {

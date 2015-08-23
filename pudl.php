@@ -1061,16 +1061,28 @@ abstract class pudl extends pudlQuery {
 
 
 	public function in($column=false) {
-		$this->string[] = ($column===false ? '' :  $this->_columnValue(false,$column)) . ' IN ';
+		$this->string[] = $this->_table($column) . ' IN ';
 		return $this;
 	}
 
 
 	public function notIn($column=false) {
-		$this->string[] = ($column===false ? '' :  $this->_columnValue(false,$column)) . ' NOT IN ';
+		$this->string[] = $this->_table($column) . ' NOT IN ';
 		return $this;
 	}
 
+
+
+	public static function inSet($value) {
+		return new pudlSet($value);
+	}
+
+
+	public static function notInSet($value) {
+		$set = new pudlSet($value);
+		$set->equals = ' NOT' . $set->equals;
+		return $set;
+	}
 
 
 	public static function neq($value) {
