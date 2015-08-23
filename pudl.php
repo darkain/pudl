@@ -1073,6 +1073,41 @@ abstract class pudl extends pudlQuery {
 
 
 
+	public static function neq($value) {
+		$equals = new pudlEquals($value);
+		$equals->equals = '!=';
+		return $equals;
+	}
+
+
+	public static function lt($value) {
+		$equals = new pudlEquals($value);
+		$equals->equals = '<';
+		return $equals;
+	}
+
+
+	public static function lteq($value) {
+		$equals = new pudlEquals($value);
+		$equals->equals = '<=';
+		return $equals;
+	}
+
+
+	public static function gt($value) {
+		$equals = new pudlEquals($value);
+		$equals->equals = '>';
+		return $equals;
+	}
+
+
+	public static function gteq($value) {
+		$equals = new pudlEquals($value);
+		$equals->equals = '>=';
+		return $equals;
+	}
+
+
 	public static function like($value) {
 		$like = new pudlLike($value);
 		$like->left = $like->right = '%';
@@ -1096,21 +1131,21 @@ abstract class pudl extends pudlQuery {
 
 	public static function notLike($value) {
 		$like = self::like($value);
-		$like->not = ' NOT';
+		$like->equals = ' NOT' . $like->equals;
 		return $like;
 	}
 
 
 	public static function notLikeLeft($value) {
 		$like = self::likeLeft($value);
-		$like->not = ' NOT';
+		$like->equals = ' NOT' . $like->equals;
 		return $like;
 	}
 
 
 	public static function notLikeRight($value) {
 		$like = self::likeRight($value);
-		$like->not = ' NOT';
+		$like->equals = ' NOT' . $like->equals;
 		return $like;
 	}
 

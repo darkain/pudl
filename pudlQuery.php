@@ -182,8 +182,8 @@ abstract class pudlQuery {
 	protected function _order($order) {
 		if ($order === false)	return '';
 		if ($order instanceof pudlStringResult) return (string) $order;
-		if (is_array($order))	return ' ORDER BY ' . $this->_clauseRecurse($order,',');
-		if (is_object($order))	return ' ORDER BY ' . $this->_clauseRecurse($order,',');
+		if (is_array($order))	return ' ORDER BY ' . $this->_clauseRecurse($order,', ');
+		if (is_object($order))	return ' ORDER BY ' . $this->_clauseRecurse($order,', ');
 		return ' ORDER BY ' . $order;
 	}
 
@@ -192,8 +192,8 @@ abstract class pudlQuery {
 	protected function _group($group) {
 		if ($group === false)	return '';
 		if ($group instanceof pudlStringResult) return (string) $group;
-		if (is_array($group))	return ' GROUP BY ' . $this->_clauseRecurse($group,',');
-		if (is_object($group))	return ' GROUP BY ' . $this->_clauseRecurse($group,',');
+		if (is_array($group))	return ' GROUP BY ' . $this->_clauseRecurse($group,', ');
+		if (is_object($group))	return ' GROUP BY ' . $this->_clauseRecurse($group,', ');
 		return ' GROUP BY ' . $group;
 	}
 
@@ -213,7 +213,11 @@ abstract class pudlQuery {
 
 			if (is_string($key)) {
 				$query .= $this->_table($key, false);
-				if (!($value instanceof pudlLike)  &&  !is_null($value)) $query .= '=';
+				if ($value instanceof pudlEquals) {
+					$query .= $value->equals;
+				} else if (!is_null($value)) {
+					$query .= '=';
+				}
 			}
 
 			if (is_int($value)  ||  is_float($value)) {
@@ -235,8 +239,10 @@ abstract class pudlQuery {
 				$query .= '(' . ((string)$value) . ')';
 
 			} else if ($value instanceof pudlLike) {
-				$query .= $value->not . " LIKE '" . $value->left;
-				$query .= $this->likeEscape($value) . $value->right . "'";
+				$query .= "'" . $value->left . $this->likeEscape($value->value) . $value->right . "'";
+
+			} else if ($value instanceof pudlEquals) {
+				$query .= "'" . $this->escape($value->value) . "'";
 
 			} else if ((is_array($value)  ||  is_object($value))  &&  $joiner === ' AND ') {
 				$query .= '(' . $this->_clauseRecurse($value, ' OR ') . ')';

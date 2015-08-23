@@ -14,7 +14,9 @@ define('PUDL_END',		2);
 //define('PUDL_BOTH',	3);
 
 
+
 trait pudlHelper {}
+
 
 
 class pudlFunction {
@@ -50,17 +52,30 @@ class pudlVoid {
 
 
 
-class pudlLike {
+class pudlEquals {
 	use pudlHelper;
 
-	public function __construct($query) {
-		$this->query = $query;
+	public function __construct($value) {
+		$this->value = $value;
 	}
 
-	public function __toString() { return $this->query; }
+	public function __toString() { return (string) $this->value; }
 
-	private	$query;
+	public	$value;
+	public	$equals	= '=';
+}
+
+
+
+class pudlLike extends pudlEquals{
+	use pudlHelper;
+
+	public function __construct($value) {
+		parent::__construct($value);
+		$this->equals = ' LIKE ';
+	}
+
 	public	$left	= '';
 	public	$right	= '';
-	public	$not	= '';
 }
+
