@@ -278,7 +278,7 @@ abstract class pudlQuery {
 		$query = '';
 		foreach ($value as $item) {
 			if (strlen($query)) $query .= ', ';
-			$query .= $this->escape($item);
+			$query .= $this->_value($item);
 		}
 		return $query;
 	}
@@ -401,8 +401,8 @@ abstract class pudlQuery {
 
 		$query = '';
 		foreach ($data as $property => $value) {
-			if (strlen($query)) $query .= ',';
-			$query .= "'" . $this->escape($property) . "'," . $this->_columnData($value);
+			if (strlen($query)) $query .= ', ';
+			$query .= $this->_value($property) . ',' . $this->_columnData($value);
 		}
 
 		$depth--;

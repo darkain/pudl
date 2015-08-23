@@ -823,12 +823,9 @@ abstract class pudl extends pudlQuery {
 
 	//NOTE: THIS IS CURRENTLY ONLY DESIGNED FOR MYSQL/MARIADB
 	public function fieldType($table, $column) {
-		$table	= $this->escape($table);
-		$column	= $this->escape($column);
-
 		$return = $this->cell('INFORMATION_SCHEMA.COLUMNS', 'COLUMN_TYPE', [
-			"TABLE_NAME='$table'",
-			"COLUMN_NAME='$column'",
+			'TABLE_NAME'	=> $table,
+			'COLUMN_NAME'	=> $column,
 		]);
 
 		if (substr($return, 0, 5) === 'enum(') {
