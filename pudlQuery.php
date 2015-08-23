@@ -34,6 +34,47 @@ abstract class pudlQuery {
 
 
 
+	protected function _value($value, $quote=true, $isnull=false) {
+		if (is_int($value)  ||  is_float($value)) {
+			return $value;
+
+		} else if (is_string($value)) {
+			return $quote ? "'".$this->escape($value)."'" : $value;
+
+		} else if (is_null($value)) {
+			return $isnull ? ' IS NULL' : 'NULL';
+
+		} else if (is_bool($value)) {
+			return $value ? 'TRUE' : 'FALSE';
+
+		} else if ($value instanceof pudlFunction) {
+			return $this->_function($value);
+
+		} else if ($value instanceof pudlStringResult) {
+			return '(' . ((string)$value) . ')';
+
+		} else if ($value instanceof pudlLike) {
+			return "'" . $value->left . $this->likeEscape($value->value) . $value->right . "'";
+
+		} else if ($value instanceof pudlSet) {
+			return '(' . $this->_inSet($value->value) . ')';
+
+		} else if ($value instanceof pudlBetween) {
+			return $this->_value($value->value[0], $quote) .
+				' AND ' . $this->_value($value->value[1], $quote);
+
+		} else if ($value instanceof pudlColumn) {
+			return $this->_table($value->value, false);
+
+		} else if ($value instanceof pudlEquals) {
+			return $this->_value($value->value, $quote);
+		}
+
+		return false;
+	}
+
+
+
 	protected function _top($limit) {
 		if (!$this->top) return '';
 		if ($limit === false) return '';
@@ -48,48 +89,16 @@ abstract class pudlQuery {
 				$column === ''  ||
 				$column === null  ||
 				$column === '*') return '*';
-			return $this->_columnValue(false, $column);
+			return $this->_value($column, false);
 		}
 
-		$query		= '';
-		$first		= true;
+		$query = '';
 		foreach ($column as $key => $value) {
 			if (strlen($query)) $query .= ', ';
-			$query .= $this->_columnValue($key, $value);
+			$query .= $this->_value($value, is_string($key));
 		}
 
 		return $query;
-	}
-
-
-
-	protected function _columnValue($key, $value) {
-		if (is_null($value)) {
-			return 'NULL';
-
-		} else if (is_int($value)  ||  is_float($value)) {
-			return $value;
-
-		} else if (is_bool($value)) {
-			return $value ? 'TRUE' : 'FALSE';
-
-		} else if (is_int($key)) {
-			return $value;
-
-		} else if (!empty($key)) {
-			return $this->escstart . $this->escape($key) . $this->escend .
-				$this->escstart . $this->escape($value) . $this->escend;
-
-		} else if (is_string($value)) {
-			return $value;
-
-		} else {
-			trigger_error(
-				'Invalid data type for column: ' .
-				(gettype($value)==='object'?get_class($value):gettype($value)),
-				E_USER_ERROR
-			);
-		}
 	}
 
 
@@ -222,35 +231,10 @@ abstract class pudlQuery {
 				}
 			}
 
-			if (is_int($value)  ||  is_float($value)) {
-				$query .= $value;
+			$new = $this->_value($value, is_string($key), is_string($key));
 
-			} else if (is_string($value)) {
-				$query .= is_string($key) ? "'".$this->escape($value)."'" : $value;
-
-			} else if (is_null($value)) {
-				$query .= is_string($key) ? ' IS NULL' : 'NULL';
-
-			} else if (is_bool($value)) {
-				$query .= $value ? 'TRUE' : 'FALSE';
-
-			} else if ($value instanceof pudlFunction) {
-				$query .= $this->_function($value);
-
-			} else if ($value instanceof pudlStringResult) {
-				$query .= '(' . ((string)$value) . ')';
-
-			} else if ($value instanceof pudlLike) {
-				$query .= "'" . $value->left . $this->likeEscape($value->value) . $value->right . "'";
-
-			} else if ($value instanceof pudlSet) {
-				$query .= '(' . $this->_inSet($value->value) . ')';
-
-			} else if ($value instanceof pudlColumn) {
-				$query .= $this->_table($value->value, false);
-
-			} else if ($value instanceof pudlEquals) {
-				$query .= "'" . $this->escape($value->value) . "'";
+			if ($new !== false) {
+				$query .= $new;
 
 			} else if ((is_array($value)  ||  is_object($value))  &&  $joiner === ' AND ') {
 				$query .= '(' . $this->_clauseRecurse($value, ' OR ') . ')';
@@ -358,9 +342,9 @@ abstract class pudlQuery {
 		foreach ($data as $column => $value) {
 			if ($value instanceof pudlFunction  &&  isset($value->__INCREMENT)) {
 				$good = $this->escstart . $column . $this->escend;
-				$good .= "+" . $this->_columnData(reset($value->__INCREMENT));
+				$good .= '+' . $this->_value(reset($value->__INCREMENT));
 			} else {
-				$good = $this->_columnData($value);
+				$good = $this->_value($value);
 			}
 
 			if (strlen($query)) $query .= ', ';
@@ -373,23 +357,9 @@ abstract class pudlQuery {
 
 
 	protected function _columnData($value) {
-		if (is_null($value)) {
-			return 'NULL';
-
-		} else if (is_int($value)  ||  is_float($value)) {
-			return $value;
-
-		} else if (is_bool($value)) {
-			return $value ? 'TRUE' : 'FALSE';
-
-		} else if (is_string($value)) {
-			return "'" . $this->escape($value) . "'";
-
-		} else if ($value instanceof pudlFunction) {
-			return $this->_function($value);
-
-		} else if ($value instanceof pudlStringResult) {
-			return '(' . ((string)$value) . ')';
+		$new = $this->_value($value);
+		if ($new !== false) {
+			return $new;
 
 		} else if (is_array($value)  ||  is_object($value)) {
 			if (empty($value)) return 'NULL';
@@ -410,8 +380,8 @@ abstract class pudlQuery {
 		foreach ($data as $property => $value) {
 			$query	= '';
 			foreach ($value as $item) {
-				if (strlen($query)) $query .= ',';
-				$query .= $this->_columnData($item);
+				if (strlen($query)) $query .= ', ';
+				$query .= $this->_value($item);
 			}
 			return ltrim($property, '_') . '(' . $query . ')';
 		}

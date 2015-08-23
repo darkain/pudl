@@ -172,35 +172,35 @@ assert422($sql == "SELECT * FROM `table` WHERE (`column` NOT LIKE 'value%')", 'L
 
 //SELECT statement with a NOT LIKE clause (right search)
 $sql = $db->string()->select('*', 'table', ['column'=>pudl::neq(5)]);
-assert422($sql == "SELECT * FROM `table` WHERE (`column`!='5')", 'Line: ' . __LINE__ . ' ');
+assert422($sql == "SELECT * FROM `table` WHERE (`column`!=5)", 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //SELECT statement with a NOT LIKE clause (right search)
 $sql = $db->string()->select('*', 'table', ['column'=>pudl::lt(5)]);
-assert422($sql == "SELECT * FROM `table` WHERE (`column`<'5')", 'Line: ' . __LINE__ . ' ');
+assert422($sql == "SELECT * FROM `table` WHERE (`column`<5)", 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //SELECT statement with a NOT LIKE clause (right search)
 $sql = $db->string()->select('*', 'table', ['column'=>pudl::gt(5)]);
-assert422($sql == "SELECT * FROM `table` WHERE (`column`>'5')", 'Line: ' . __LINE__ . ' ');
+assert422($sql == "SELECT * FROM `table` WHERE (`column`>5)", 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //SELECT statement with a NOT LIKE clause (right search)
 $sql = $db->string()->select('*', 'table', ['column'=>pudl::lteq(5)]);
-assert422($sql == "SELECT * FROM `table` WHERE (`column`<='5')", 'Line: ' . __LINE__ . ' ');
+assert422($sql == "SELECT * FROM `table` WHERE (`column`<=5)", 'Line: ' . __LINE__ . ' ');
 
 
 
 
 //SELECT statement with a NOT LIKE clause (right search)
 $sql = $db->string()->select('*', 'table', ['column'=>pudl::gteq(5)]);
-assert422($sql == "SELECT * FROM `table` WHERE (`column`>='5')", 'Line: ' . __LINE__ . ' ');
+assert422($sql == "SELECT * FROM `table` WHERE (`column`>=5)", 'Line: ' . __LINE__ . ' ');
 
 
 

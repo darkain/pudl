@@ -73,6 +73,17 @@ class pudlColumn extends pudlEquals {
 
 
 
+class pudlBetween extends pudlEquals {
+	use pudlHelper;
+
+	public function __construct($low, $high) {
+		parent::__construct([$low, $high]);
+		$this->equals = ' BETWEEN ';
+	}
+}
+
+
+
 class pudlLike extends pudlEquals {
 	use pudlHelper;
 

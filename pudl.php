@@ -781,7 +781,7 @@ abstract class pudl extends pudlQuery {
 		$query .= $this->_table($table);
 		$query .= ' SET '	. $this->_table($col, false);
 		$query .= '='		. $this->_table($col, false);
-		$query .= '+'		. $this->_columnData($amount);
+		$query .= '+'		. $this->_value($amount);
 		$query .= $this->_clause($clause);
 		$query .= $this->_limit($limit, $offset);
 		return $this($query);
@@ -1087,6 +1087,11 @@ abstract class pudl extends pudlQuery {
 		$set = new pudlSet($value);
 		$set->equals = ' NOT' . $set->equals;
 		return $set;
+	}
+
+
+	public static function between($low, $high) {
+		return new pudlBetween($low, $high);
 	}
 
 
