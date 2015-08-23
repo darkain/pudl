@@ -67,6 +67,12 @@ class pudlEquals {
 
 
 
+class pudlColumn extends pudlEquals {
+	use pudlHelper;
+}
+
+
+
 class pudlLike extends pudlEquals {
 	use pudlHelper;
 

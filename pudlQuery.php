@@ -244,7 +244,10 @@ abstract class pudlQuery {
 				$query .= "'" . $value->left . $this->likeEscape($value->value) . $value->right . "'";
 
 			} else if ($value instanceof pudlSet) {
-				$query .= "(" . $this->_inSet($value->value) . ")";
+				$query .= '(' . $this->_inSet($value->value) . ')';
+
+			} else if ($value instanceof pudlColumn) {
+				$query .= $this->_table($value->value, false);
 
 			} else if ($value instanceof pudlEquals) {
 				$query .= "'" . $this->escape($value->value) . "'";
