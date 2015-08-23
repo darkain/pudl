@@ -120,7 +120,7 @@ abstract class pudlQuery {
 		$escstart = $this->escstart;
 		$escend = $this->escend;
 
-		if (!is_array($table)) return ' FROM ' . self::_table($table);
+		if (!is_array($table)) return ' FROM ' . $this->_table($table);
 
 		$query = ' FROM ';
 		$first = true;
@@ -129,36 +129,36 @@ abstract class pudlQuery {
 			if (!$first) $query .= ', '; else $first = false;
 
 			if (!is_array($val)) {
-				$query .= self::_table($val);
+				$query .= $this->_table($val);
 				if (!is_int($key)) $query .= ' ' . $key;
 			} else {
-				$query .= self::_table(reset($val));
+				$query .= $this->_table(reset($val));
 				if (!is_int($key)) $query .= ' ' . $key;
 				foreach ($val as $join) {
 					if (!empty($join['join'])) {
-						$query .= self::_joinTable($join['join'], '');
+						$query .= $this->_joinTable($join['join'], '');
 					} else if (!empty($join['cross'])) {
-						$query .= self::_joinTable($join['cross'], 'CROSS');
+						$query .= $this->_joinTable($join['cross'], 'CROSS');
 					} else if (!empty($join['left'])) {
-						$query .= self::_joinTable($join['left'], 'LEFT');
+						$query .= $this->_joinTable($join['left'], 'LEFT');
 					} else if (!empty($join['right'])) {
-						$query .= self::_joinTable($join['right'], 'RIGHT');
+						$query .= $this->_joinTable($join['right'], 'RIGHT');
 					} else if (!empty($join['natural'])) {
-						$query .= self::_joinTable($join['natural'], 'NATURAL');
+						$query .= $this->_joinTable($join['natural'], 'NATURAL');
 					} else if (!empty($join['inner'])) {
-						$query .= self::_joinTable($join['inner'], 'INNER');
+						$query .= $this->_joinTable($join['inner'], 'INNER');
 					} else if (!empty($join['outer'])) {
-						$query .= self::_joinTable($join['outer'], 'OUTER');
+						$query .= $this->_joinTable($join['outer'], 'OUTER');
 					} else if (!empty($join['hack'])) {
 						$query .= ' LEFT JOIN (' . $join['hack'] . ')';
 					}
 
 					if (!empty($join['clause'])) {
-						$query .= self::_clause($join['clause'], 'ON');
+						$query .= $this->_clause($join['clause'], 'ON');
 					} else if (!empty($join['on'])) {
-						$query .= self::_clause($join['on'], 'ON');
+						$query .= $this->_clause($join['on'], 'ON');
 					} else if (!empty($join['using'])) {
-						$query .= self::_joinUsing($join['using']);
+						$query .= $this->_joinUsing($join['using']);
 					}
 				}
 			}
@@ -172,14 +172,34 @@ abstract class pudlQuery {
 	protected function _clause($clause, $type='WHERE') {
 		if ($clause === false)	return '';
 		if ($clause instanceof pudlStringResult) return (string) $clause;
-		if (is_array($clause))	return ' ' . $type . ' (' . self::_clauseRecurse($clause) .')';
-		if (is_object($clause))	return ' ' . $type . ' (' . self::_clauseRecurse($clause) .')';
+		if (is_array($clause))	return ' ' . $type . ' (' . $this->_clauseRecurse($clause) .')';
+		if (is_object($clause))	return ' ' . $type . ' (' . $this->_clauseRecurse($clause) .')';
 		return ' ' . $type . ' (' . $clause . ')';
 	}
 
 
 
-	private function _clauseRecurse($clause, $or=false) {
+	protected function _order($order) {
+		if ($order === false)	return '';
+		if ($order instanceof pudlStringResult) return (string) $order;
+		if (is_array($order))	return ' ORDER BY ' . $this->_clauseRecurse($order,',');
+		if (is_object($order))	return ' ORDER BY ' . $this->_clauseRecurse($order,',');
+		return ' ORDER BY ' . $order;
+	}
+
+
+
+	protected function _group($group) {
+		if ($group === false)	return '';
+		if ($group instanceof pudlStringResult) return (string) $group;
+		if (is_array($group))	return ' GROUP BY ' . $this->_clauseRecurse($group,',');
+		if (is_object($group))	return ' GROUP BY ' . $this->_clauseRecurse($group,',');
+		return ' GROUP BY ' . $group;
+	}
+
+
+
+	private function _clauseRecurse($clause, $joiner=' AND ') {
 		static $depth = 0;
 		if ($depth > 31) {
 			trigger_error('Recursion limit reached', E_USER_ERROR);
@@ -189,7 +209,7 @@ abstract class pudlQuery {
 
 		$query = '';
 		foreach ($clause as $key => $value) {
-			if (strlen($query)) $query .= ($or ? ' OR ' : ' AND ');
+			if (strlen($query)) $query .= $joiner;
 
 			if (is_string($key)) {
 				$query .= $this->_table($key, false);
@@ -218,8 +238,11 @@ abstract class pudlQuery {
 				$query .= $value->not . " LIKE '" . $value->left;
 				$query .= $this->likeEscape($value) . $value->right . "'";
 
-			} else if (is_array($value)  ||  is_object($value)) {
-				$query .= '(' . self::_clauseRecurse($value, !$or) . ')';
+			} else if ((is_array($value)  ||  is_object($value))  &&  $joiner === ' AND ') {
+				$query .= '(' . $this->_clauseRecurse($value, ' OR ') . ')';
+
+			} else if ((is_array($value)  ||  is_object($value))  &&  $joiner === ' OR ') {
+				$query .= '(' . $this->_clauseRecurse($value, ' AND ') . ')';
 
 			} else {
 				trigger_error(
@@ -249,24 +272,6 @@ abstract class pudlQuery {
 		}
 
 		return [$column => $id];
-	}
-
-
-
-	protected function _order($order) {
-		if ($order === false)	return '';
-		if (!is_array($order))	return " ORDER BY $order";
-		if (!count($order))		return '';
-		return ' ORDER BY ' . implode(',', $order);
-	}
-
-
-
-	protected function _group($group) {
-		if ($group === false)	return '';
-		if (!is_array($group))	return " GROUP BY $group";
-		if (!count($group))		return '';
-		return ' GROUP BY ' . implode(',', $group);
 	}
 
 
@@ -306,14 +311,14 @@ abstract class pudlQuery {
 
 
 	protected function _joinTable($join, $type='LEFT') {
-		if (!is_array($join)) return " $type JOIN (" . self::_table($join) . ')';
+		if (!is_array($join)) return " $type JOIN (" . $this->_table($join) . ')';
 
 		$escstart	= $this->escstart;
 		$escend		= $this->escend;
 		$query		= " $type JOIN ";
 
 		foreach ($join as $key => &$val) {
-			$query .= self::_table($val) . ' ' . $key;
+			$query .= $this->_table($val) . ' ' . $key;
 			break;
 		} unset($val);
 
