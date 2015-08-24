@@ -35,40 +35,42 @@ abstract class pudlQuery {
 
 
 	protected function _value($value, $quote=true, $isnull=false) {
-		if (is_int($value)  ||  is_float($value)) {
+		if (is_int($value)  ||  is_float($value))
 			return $value;
 
-		} else if (is_string($value)) {
+		if (is_string($value))
 			return $quote ? "'".$this->escape($value)."'" : $value;
 
-		} else if (is_null($value)) {
+		if (is_null($value))
 			return $isnull ? ' IS NULL' : 'NULL';
 
-		} else if (is_bool($value)) {
+		if (is_bool($value))
 			return $value ? 'TRUE' : 'FALSE';
 
-		} else if ($value instanceof pudlFunction) {
+		if ($value instanceof pudlFunction)
 			return $this->_function($value);
 
-		} else if ($value instanceof pudlStringResult) {
+		if ($value instanceof pudlStringResult)
 			return '(' . ((string)$value) . ')';
 
-		} else if ($value instanceof pudlLike) {
+		if ($value instanceof pudlLike)
 			return "'" . $value->left . $this->likeEscape($value->value) . $value->right . "'";
 
-		} else if ($value instanceof pudlSet) {
+		if ($value instanceof pudlRegexp)
+			return "'" . str_replace('\\','\\\\', $this->escape($value->value)) . "'";
+
+		if ($value instanceof pudlSet)
 			return '(' . $this->_inSet($value->value) . ')';
 
-		} else if ($value instanceof pudlBetween) {
+		if ($value instanceof pudlBetween)
 			return $this->_value($value->value[0], $quote) .
 				' AND ' . $this->_value($value->value[1], $quote);
 
-		} else if ($value instanceof pudlColumn) {
+		if ($value instanceof pudlColumn)
 			return $this->_table($value->value, false);
 
-		} else if ($value instanceof pudlEquals) {
+		if ($value instanceof pudlEquals)
 			return $this->_value($value->value, $quote);
-		}
 
 		return false;
 	}

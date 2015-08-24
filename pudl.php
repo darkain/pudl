@@ -1086,95 +1086,31 @@ abstract class pudl extends pudlQuery {
 
 	public static function notInSet($value) {
 		if (is_array($value)  &&  func_num_args() === 1) {
-			$set = new pudlSet($value);
+			return (new pudlSet($value))->not();
 		} else {
-			$set = new pudlSet(func_get_args());
+			return (new pudlSet(func_get_args()))->not();
 		}
-		$set->equals = ' NOT' . $set->equals;
-		return $set;
 	}
 
 
-	public static function between($low, $high) {
-		return new pudlBetween($low, $high);
-	}
 
+	public static function between($low, $high)	{ return new pudlBetween($low, $high ); }
+	public static function eq($value)			{ return new pudlEquals($value, '='  ); }
+	public static function neq($value)			{ return new pudlEquals($value, '!=' ); }
+	public static function nulleq($value)		{ return new pudlEquals($value, '<=>'); }
+	public static function lt($value)			{ return new pudlEquals($value, '<'  ); }
+	public static function lteq($value)			{ return new pudlEquals($value, '<=' ); }
+	public static function gt($value)			{ return new pudlEquals($value, '>'  ); }
+	public static function gteq($value)			{ return new pudlEquals($value, '>=' ); }
+	public static function like($value)			{ return new pudlLike($value, PUDL_BOTH ); }
+	public static function likeLeft($value)		{ return new pudlLike($value, PUDL_START); }
+	public static function likeRight($value)	{ return new pudlLike($value, PUDL_END  ); }
+	public static function regexp($value)		{ return new pudlRegexp($value); }
+	public static function notLike($value)		{ return self::like($value)->not(); }
+	public static function notLikeLeft($value)	{ return self::likeLeft($value)->not(); }
+	public static function notLikeRight($value)	{ return self::likeRight($value)->not(); }
+	public static function notRegexp($value)	{ return self::pudlRegexp($value)->not(); }
 
-	public static function neq($value) {
-		$equals = new pudlEquals($value);
-		$equals->equals = '!=';
-		return $equals;
-	}
-
-
-	public static function lt($value) {
-		$equals = new pudlEquals($value);
-		$equals->equals = '<';
-		return $equals;
-	}
-
-
-	public static function lteq($value) {
-		$equals = new pudlEquals($value);
-		$equals->equals = '<=';
-		return $equals;
-	}
-
-
-	public static function gt($value) {
-		$equals = new pudlEquals($value);
-		$equals->equals = '>';
-		return $equals;
-	}
-
-
-	public static function gteq($value) {
-		$equals = new pudlEquals($value);
-		$equals->equals = '>=';
-		return $equals;
-	}
-
-
-	public static function like($value) {
-		$like = new pudlLike($value);
-		$like->left = $like->right = '%';
-		return $like;
-	}
-
-
-	public static function likeLeft($value) {
-		$like = new pudlLike($value);
-		$like->left = '%';
-		return $like;
-	}
-
-
-	public static function likeRight($value) {
-		$like = new pudlLike($value);
-		$like->right = '%';
-		return $like;
-	}
-
-
-	public static function notLike($value) {
-		$like = self::like($value);
-		$like->equals = ' NOT' . $like->equals;
-		return $like;
-	}
-
-
-	public static function notLikeLeft($value) {
-		$like = self::likeLeft($value);
-		$like->equals = ' NOT' . $like->equals;
-		return $like;
-	}
-
-
-	public static function notLikeRight($value) {
-		$like = self::likeRight($value);
-		$like->equals = ' NOT' . $like->equals;
-		return $like;
-	}
 
 
 	public static function jsonEncode($data) {

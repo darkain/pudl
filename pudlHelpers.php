@@ -55,14 +55,20 @@ class pudlVoid {
 class pudlEquals {
 	use pudlHelper;
 
-	public function __construct($value) {
-		$this->value = $value;
+	public function __construct($value, $equals='=') {
+		$this->value	= $value;
+		$this->equals	= $equals;
 	}
 
 	public function __toString() { return (string) $this->value; }
 
+	public function not() {
+		$this->equals = ' NOT' . $this->equals;
+		return $this;
+	}
+
 	public	$value;
-	public	$equals	= '=';
+	public	$equals;
 }
 
 
@@ -77,8 +83,7 @@ class pudlBetween extends pudlEquals {
 	use pudlHelper;
 
 	public function __construct($low, $high) {
-		parent::__construct([$low, $high]);
-		$this->equals = ' BETWEEN ';
+		parent::__construct([$low, $high], ' BETWEEN ');
 	}
 }
 
@@ -87,13 +92,24 @@ class pudlBetween extends pudlEquals {
 class pudlLike extends pudlEquals {
 	use pudlHelper;
 
-	public function __construct($value) {
-		parent::__construct($value);
-		$this->equals = ' LIKE ';
+	public function __construct($value, $side) {
+		parent::__construct($value, ' LIKE ');
+		$this->left		= ($side & PUDL_START)	? '%' : '';
+		$this->right	= ($side & PUDL_END)	? '%' : '';
 	}
 
-	public	$left	= '';
-	public	$right	= '';
+	public $left;
+	public $right;
+}
+
+
+
+class pudlRegexp extends pudlEquals {
+	use pudlHelper;
+
+	public function __construct($value) {
+		parent::__construct($value, ' REGEXP ');
+	}
 }
 
 
@@ -102,10 +118,6 @@ class pudlSet extends pudlEquals {
 	use pudlHelper;
 
 	public function __construct($value) {
-		parent::__construct($value);
-		$this->equals = ' IN ';
+		parent::__construct($value, ' IN ');
 	}
-
-	public	$left	= '';
-	public	$right	= '';
 }
