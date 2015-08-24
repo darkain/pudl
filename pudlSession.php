@@ -12,12 +12,12 @@ class pudlSession {
 		$this->domain	= $domain;
 
 		session_set_save_handler(
-			array($this, 'open'),
-			array($this, 'close'),
-			array($this, 'read'),
-			array($this, 'write'),
-			array($this, 'destroy'),
-			array($this, 'clean')
+			[$this, 'open'],
+			[$this, 'close'],
+			[$this, 'read'],
+			[$this, 'write'],
+			[$this, 'destroy'],
+			[$this, 'clean']
 		);
 
 		if (!empty($this->name))	session_name($this->name);
@@ -71,16 +71,12 @@ class pudlSession {
 		}
 
 		//Create new entity in database
-		$this->db->insert(
-			$this->table,
-			array(
-				'id'		=> $id,
-				'access'	=> $this->db->time(),
-				'address'	=> $address,
-				'data'		=> $data,
-			),
-			true, true
-		);
+		$this->db->insert($this->table, [
+			'id'		=> $id,
+			'access'	=> $this->db->time(),
+			'address'	=> $address,
+			'data'		=> $data,
+		], true);
 
 		//Purge the cache for this ID
 		$this->purge($id);
@@ -92,7 +88,7 @@ class pudlSession {
 	function destroy($id) {
 		//Delete the object
 		if ($this->hash !== false) {
-			$this->db->deleteId($this->table, 'id', $this->db->escape($id));
+			$this->db->deleteId($this->table, 'id', $id);
 		}
 
 		//Purge the cache for this ID
@@ -103,8 +99,8 @@ class pudlSession {
 
 
 	function clean($max) {
-		$expire = time() - (int) $max;
-		$this->db->delete($this->table, "access<'$expire'");
+		$expire = $this->db->time() - (int) $max;
+		$this->db->delete($this->table, ['access'=>pudl::lt($expire)]);
 		return true;
 	}
 
@@ -113,6 +109,6 @@ class pudlSession {
 	private $table;
 	private $name;
 	private $domain;
-	private $hasdata = false;
-	private $hash = false;
+	private $hasdata	= false;
+	private $hash		= false;
 }
