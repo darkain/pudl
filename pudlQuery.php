@@ -111,7 +111,11 @@ abstract class pudlQuery {
 		$list = explode('.', $table);
 
 		foreach ($list as &$item) {
-			$item = $this->escape(trim($item));
+			$item = trim($item);
+			$item = ltrim($item, $this->escstart);
+			$item = rtrim($item, $this->escend);
+			$item = trim($item);
+			$item = str_replace(['`',"\0"], ['``',''], $item);
 		};
 
 		if ($prefix  &&  $this->prefix !== false) {
