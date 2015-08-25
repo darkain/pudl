@@ -360,18 +360,18 @@ abstract class pudlQuery {
 	protected function _update($data) {
 		if (!is_array($data)  &&  !is_object($data)) return $data;
 
-		$query		= '';
+		$query = '';
 
 		foreach ($data as $column => $value) {
-			if ($value instanceof pudlFunction  &&  isset($value->__INCREMENT)) {
-				$good = $this->_table($column, false);
-				$good .= '+' . $this->_value(reset($value->__INCREMENT));
-			} else {
-				$good = $this->_value($value);
-			}
-
 			if (strlen($query)) $query .= ', ';
-			$query .= $this->_table($column, false) . '=' . $good;
+			$query .= $this->_table($column, false) . '=';
+
+			if ($value instanceof pudlFunction  &&  isset($value->__INCREMENT)) {
+				$query .= $this->_table($column, false);
+				$query .= '+' . $this->_value(reset($value->__INCREMENT));
+			} else {
+				$query .= $this->_value($value);
+			}
 		}
 
 		return $query;
