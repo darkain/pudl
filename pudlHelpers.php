@@ -58,6 +58,13 @@ class pudlEquals {
 	public function __construct($value, $equals='=') {
 		$this->value	= $value;
 		$this->equals	= $equals;
+		if (is_null($value)) {
+			if ($equals === '=') {
+				$this->equals = ' IS ';
+			} else if ($equals === '!=') {
+				$this->equals = ' IS NOT ';
+			}
+		}
 	}
 
 	public function __toString() { return (string) $this->value; }
