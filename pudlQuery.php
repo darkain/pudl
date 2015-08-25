@@ -370,7 +370,7 @@ abstract class pudlQuery {
 				$query .= $this->_table($column, false);
 				$query .= '+' . $this->_value(reset($value->__INCREMENT));
 			} else {
-				$query .= $this->_value($value);
+				$query .= $this->_columnData($value);
 			}
 		}
 
