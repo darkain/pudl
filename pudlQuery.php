@@ -147,10 +147,10 @@ abstract class pudlQuery {
 
 			if (!is_array($val)) {
 				$query .= $this->_table($val);
-				if (!is_int($key)) $query .= ' ' . $key;
+				if (is_string($key)) $query .= ' AS ' . $this->_table($key, false);
 			} else {
 				$query .= $this->_table(reset($val));
-				if (!is_int($key)) $query .= ' ' . $key;
+				if (is_string($key)) $query .= ' AS ' . $this->_table($key, false);
 				foreach ($val as $join) {
 					if (!empty($join['join'])) {
 						$query .= $this->_joinTable($join['join'], '');
@@ -346,10 +346,11 @@ abstract class pudlQuery {
 
 		$query		= " $type JOIN ";
 
-		foreach ($join as $key => &$val) {
-			$query .= $this->_table($val) . ' ' . $key;
+		foreach ($join as $key => $val) {
+			$query .= $this->_table($val);
+			if (is_string($key)) $query .= ' AS ' . $this->_table($key, false);
 			break;
-		} unset($val);
+		}
 
 		return $query;
 	}

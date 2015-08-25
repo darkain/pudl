@@ -53,7 +53,7 @@ assert422($sql == 'SELECT * FROM `table1`, `table2`', 'Line: ' . __LINE__ . ' ')
 
 //SELECT statement, joining two tables, both with aliases
 $sql = $db->string()->select('*', ['a'=>'table1', 'b'=>'table2']);
-assert422($sql == 'SELECT * FROM `table1` a, `table2` b', 'Line: ' . __LINE__ . ' ');
+assert422($sql == 'SELECT * FROM `table1` AS `a`, `table2` AS `b`', 'Line: ' . __LINE__ . ' ');
 
 
 
