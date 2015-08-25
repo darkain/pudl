@@ -305,6 +305,22 @@ abstract class pudlQuery {
 
 
 
+	protected function _lockTable($table, $lock) {
+		if (!is_array($table)) return $this->_table($table) . ' ' . $lock;
+
+		$query = '';
+		foreach ($table as $key => $value) {
+			if (is_array($value)) continue;
+			if (strlen($query)) $query .= ', ';
+			$query .= $this->_table($value, false);
+			if (is_string($key)) $query .= ' ' . $this->_table($key, false);
+			$query .= ' ' . $lock;
+		}
+		return $query;
+	}
+
+
+
 	protected function _union($type='') {
 		if ($type !== 'ALL'  &&  $type !== 'DISTINCT') $type = '';
 		return '(' . implode(") UNION $type (", $this->union) . ')';
@@ -343,7 +359,7 @@ abstract class pudlQuery {
 
 		foreach ($data as $column => $value) {
 			if ($value instanceof pudlFunction  &&  isset($value->__INCREMENT)) {
-				$good = $this->escstart . $column . $this->escend;
+				$good = $this->_table($column, false);
 				$good .= '+' . $this->_value(reset($value->__INCREMENT));
 			} else {
 				$good = $this->_value($value);

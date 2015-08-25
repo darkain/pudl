@@ -648,8 +648,11 @@ abstract class pudl extends pudlQuery {
 
 
 	public function insertUpdate($table, $data, $column) {
-		$update = "{$this->escstart}$column{$this->escend}=LAST_INSERT_ID({$this->escstart}$column{$this->escend})";
-		return $this->insert($table, $data, $update);
+		return $this->insert(
+			$table,
+			$data,
+			$this->_table($column,false).'=LAST_INSERT_ID('.$this->_table($column,false).')'
+		);
 	}
 
 
@@ -846,43 +849,24 @@ abstract class pudl extends pudlQuery {
 		$query = 'LOCK TABLES ';
 
 		if (is_array($table)) {
-			$first = true;
+			$set = [];
 
 			if (isset($table['read'])) {
-				foreach ($table['read'] as $key => &$val) {
-					if (!$first) $query .= ', ';
-					$first = false;
-					if (!is_numeric($key)) {
-						$query .= "{$this->escstart}$val{$this->escend} $key READ";
-					} else {
-						$query .= "{$this->escstart}$val{$this->escend} READ";
-					}
-				} unset($val);
+				$item = $this->_lockTable($table['read'], 'READ');
+				if (!empty($item)) $set[] = $item;
+				unset($table['read']);
 			}
 
 			if (isset($table['write'])) {
-				foreach ($table['write'] as $key => &$val) {
-					if (!$first) $query .= ', ';
-					$first = false;
-					if (!is_numeric($key)) {
-						$query .= "{$this->escstart}$val{$this->escend} $key WRITE";
-					} else {
-						$query .= "{$this->escstart}$val{$this->escend} WRITE";
-					}
-				} unset($val);
+				$item = $this->_lockTable($table['write'], 'WRITE');
+				if (!empty($item)) $set[] = $item;
+				unset($table['write']);
 			}
 
-			foreach ($table as $key => &$val) {
-				if (!is_array($val)) {
-					if (!$first) $query .= ', ';
-					$first = false;
-					if (!is_numeric($key)) {
-						$query .= "{$this->escstart}$val{$this->escend} $key WRITE";
-					} else {
-						$query .= "{$this->escstart}$val{$this->escend} WRITE";
-					}
-				}
-			} unset($val);
+			$item = $this->_lockTable($table, 'WRITE');
+			if (!empty($item)) $set[] = $item;
+
+			$query .= implode(', ', $set);
 		} else {
 			$query .= $table;
 		}
@@ -1003,9 +987,9 @@ abstract class pudl extends pudlQuery {
 		$key	= ftok(__FILE__, 't');
 		$shm	= shm_attach($key);
 		$list	= shm_has_var($shm, 1) ? shm_get_var($shm, 1) : [];
-		foreach ($list as $key => &$val) {
-			if ($val === $server) unset($list[$key]);
-		} unset($val);
+		foreach ($list as $key => $value) {
+			if ($value === $server) unset($list[$key]);
+		}
 		shm_put_var($shm, 1, $list);
 		shm_detach($shm);
 	}
