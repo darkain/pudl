@@ -57,7 +57,7 @@ class pudlMySqli extends pudl {
 			} else if (class_exists('Redis')) {
 				try {
 					$db->redis = new Redis();
-					if (@$db->redis->connect($data['pudl_redis'], -1, 1)) {
+					if ($db->redis->connect($data['pudl_redis'], -1, 1)) {
 						$db->redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
 					} else {
 						$db->redis = $redis;

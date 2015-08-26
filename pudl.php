@@ -91,7 +91,7 @@ abstract class pudl extends pudlQuery {
 					$this->redis->set("pudl:$hash", $data, $this->cache);
 				}
 				$result = new pudlCacheResult($data, $this, $hash);
-			} catch (Exception $e) {
+			} catch (RedisException $e) {
 				if (empty($result)) $result = $this->process($query);
 			}
 
