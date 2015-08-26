@@ -14,6 +14,7 @@ class pudlMySqli extends pudl {
 		$this->escstart	= '`';
 		$this->escend	= '`';
 		$this->prefix	= $prefix;
+		$this->wait		= false;
 
 		//store in secured area hidden from var_dump/var_export
 		$this->auth([
@@ -163,6 +164,18 @@ class pudlMySqli extends pudl {
 
 
 	protected function process($query) {
+		if ($this->wait) {
+			@$this->mysqli->query(
+				'SET @wsrep_sync_wait_orig = @@wsrep_sync_wait'
+			);
+
+			@$this->mysqli->query(
+				'SET SESSION wsrep_sync_wait = GREATEST(@wsrep_sync_wait_orig, '
+				. $this->wait . ')'
+			);
+		}
+
+
 		$result = @$this->mysqli->query($query);
 
 		switch ($this->errno()) {
@@ -201,6 +214,13 @@ class pudlMySqli extends pudl {
 					}
 				}
 			break;
+		}
+
+		if ($this->wait) {
+			$this->wait = false;
+			@$this->mysqli->query(
+				'SET SESSION wsrep_sync_wait = @wsrep_sync_wait_orig'
+			);
 		}
 
 		return new pudlMySqliResult($result, $this);
@@ -278,7 +298,15 @@ class pudlMySqli extends pudl {
 
 
 
+	public function wait($wait=4) {
+		$this->wait = (int) $wait;
+		return $this;
+	}
+
+
+
 	private $mysqli;
 	private $pool;
+	private $wait;
 	private static $die=true;
 }
