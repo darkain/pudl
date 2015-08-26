@@ -1024,7 +1024,7 @@ abstract class pudl extends pudlQuery {
 
 	public function purge($key) {
 		if (!$this->redis) return;
-		try { $this->redis->delete("pudl:$key"); } catch (Exception $e) {}
+		try { $this->redis->delete("pudl:$key"); } catch (RedisException $e) {}
 	}
 
 
