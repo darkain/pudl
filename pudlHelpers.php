@@ -31,8 +31,8 @@ class pudlFunction {
 		return self::from_unixtime($db->time());
 	}
 
-	public static function binary($data) {
-		return pudl::unhex(bin2hex($data));
+	public static function binary($data, $pad=0) {
+		return pudl::unhex(str_pad(bin2hex($data), $pad, '0'));
 	}
 
 	public static function increment($amount=1) {
