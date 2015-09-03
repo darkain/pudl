@@ -21,7 +21,7 @@ class pudlSession {
 		);
 
 		if (!empty($this->name))	session_name($this->name);
-		if (!empty($this->domain))	session_set_cookie_params(0, '/', $this->domain);
+		if (!empty($this->domain))	session_set_cookie_params(60*60*24*30, '/', $this->domain);
 		session_start();
 	}
 
