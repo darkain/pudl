@@ -792,6 +792,12 @@ abstract class pudl extends pudlQuery {
 
 
 
+	public function incrementId($table, $col, $column, $id, $amount=1) {
+		return $this->increment($table, $col, $this->_clauseId($column,$id), $amount);
+	}
+
+
+
 	public function listItems($type, $like=false) {
 		$query = 'SHOW ' . $type;
 		if (!empty($like)) $query .= ' LIKE "' . $like . '"';

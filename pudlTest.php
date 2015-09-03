@@ -418,3 +418,17 @@ assert422($sql == "UPDATE `table` SET `column`=`column`+'5' WHERE (id=1)", 'Line
 //UPDATE statement - incrementing an INTEGER value
 $sql = $db->string()->updateIn('table', ['column'=>'value'], 'id', [1,7,7,9]);
 assert422($sql == "UPDATE `table` SET `column`='value' WHERE (`id` IN (1,7,7,9))", 'Line: ' . __LINE__ . ' ');
+
+
+
+
+//UPDATE statement - incrementing an INTEGER value
+$sql = $db->string()->increment('table', 'item', ['column'=>'value']);
+assert422($sql == "UPDATE `table` SET `item`=`item`+1 WHERE (`column`='value')", 'Line: ' . __LINE__ . ' ');
+
+
+
+
+//UPDATE statement - incrementing an INTEGER value
+$sql = $db->string()->incrementId('table', 'item', 'column', 'value');
+assert422($sql == "UPDATE `table` SET `item`=`item`+1 WHERE (`column`='value')", 'Line: ' . __LINE__ . ' ');
