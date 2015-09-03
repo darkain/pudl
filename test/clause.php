@@ -1,5 +1,36 @@
 <?php
 
+//SELECT statement with a simple clause
+$db->string()->select('*', 'table', true);
+pudlTest('SELECT * FROM `table` WHERE (1)');
+
+
+
+
+//SELECT statement with a simple clause
+//NOTE: 'false' is internally ignored for a clause
+$db->string()->select('*', 'table', false);
+pudlTest('SELECT * FROM `table`');
+
+
+
+
+//SELECT statement with a simple clause
+//NOTE: pass 'true' in an array to have it unmodified
+$db->string()->select('*', 'table', [true]);
+pudlTest('SELECT * FROM `table` WHERE (TRUE)');
+
+
+
+
+//SELECT statement with a simple clause
+//NOTE: pass 'false' in an array to have it unmodified
+$db->string()->select('*', 'table', [false]);
+pudlTest('SELECT * FROM `table` WHERE (FALSE)');
+
+
+
+
 //SELECT statement with a single clause
 $db->string()->select('*', 'table', 'column=value');
 pudlTest('SELECT * FROM `table` WHERE (column=value)');
@@ -106,6 +137,13 @@ pudlTest("SELECT * FROM `table` WHERE (`column` NOT LIKE 'value%')");
 
 
 //SELECT statement with a NOT LIKE clause (right search)
+$db->string()->select('*', 'table', ['column'=>pudl::neq(NULL)]);
+pudlTest("SELECT * FROM `table` WHERE (`column` IS NOT NULL)");
+
+
+
+
+//SELECT statement with a NOT LIKE clause (right search)
 $db->string()->select('*', 'table', ['column'=>pudl::neq(5)]);
 pudlTest("SELECT * FROM `table` WHERE (`column`!=5)");
 
@@ -136,6 +174,13 @@ pudlTest("SELECT * FROM `table` WHERE (`column`<=5)");
 //SELECT statement with a NOT LIKE clause (right search)
 $db->string()->select('*', 'table', ['column'=>pudl::gteq(5)]);
 pudlTest("SELECT * FROM `table` WHERE (`column`>=5)");
+
+
+
+
+//SELECT statement with a NOT LIKE clause (right search)
+$db->string()->select('*', 'table', ['column'=>pudl::between(5,10)]);
+pudlTest("SELECT * FROM `table` WHERE (`column` BETWEEN 5 AND 10)");
 
 
 
