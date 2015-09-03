@@ -332,11 +332,17 @@ abstract class pudlQuery {
 
 
 
-	protected function _joinUsing($join_using) {
-		if ($join_using === false)	return '';
-		if (!is_array($join_using))	return " USING ($join_using)";
-		if (!count($join_using))	return '';
-		return ' USING (' . implode(',', $join_using) . ')';
+	protected function _joinUsing($using) {
+		if ($using === false)	return '';
+		if (!is_array($using))	return ' USING (' . $this->_table($using, false) . ')';
+		if (!count($using))	return '';
+
+		$query = '';
+		foreach ($using as $item) {
+			if (strlen($query)) $query .= ', ';
+			$query .= $this->_table($item, false);
+		}
+		return ' USING (' . $query . ')';
 	}
 
 
