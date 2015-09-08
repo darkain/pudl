@@ -57,7 +57,7 @@ abstract class pudlQuery {
 			return "'" . $value->left . $this->likeEscape($value->value) . $value->right . "'";
 
 		if ($value instanceof pudlRegexp)
-			return "'" . str_replace('\\','\\\\', $this->escape($value->value)) . "'";
+			return "'" . str_replace('\\','\\\\\\', $this->escape($value->value)) . "'";
 
 		if ($value instanceof pudlSet)
 			return '(' . $this->_inSet($value->value) . ')';
