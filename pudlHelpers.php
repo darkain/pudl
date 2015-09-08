@@ -128,3 +128,15 @@ class pudlSet extends pudlEquals {
 		parent::__construct($value, ' IN ');
 	}
 }
+
+
+
+class pudlAppendSet extends pudlEquals {
+	use pudlHelper;
+}
+
+
+
+class pudlRemoveSet extends pudlEquals {
+	use pudlHelper;
+}

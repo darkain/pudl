@@ -43,3 +43,17 @@ pudlTest("UPDATE `table` SET column=value WHERE (id=1)");
 
 $db->string()->update('table', ['column=value'], 'id=1');
 pudlTest("UPDATE `table` SET column=value WHERE (id=1)");
+
+
+
+
+//UPDATE statement - add a value to a SET column
+$db->string()->update('table', ['column'=>pudl::appendSet('item')], 'id=1');
+pudlTest("UPDATE `table` SET `column`=CONCAT_WS(',', `column`, 'item') WHERE (id=1)");
+
+
+
+
+//UPDATE statement - remove a value from a SET column
+$db->string()->update('table', ['column'=>pudl::removeSet('item')], 'id=1');
+pudlTest("UPDATE `table` SET `column`=REPLACE(CONCAT(',', `column`, ','), ',item,', ',') WHERE (id=1)");

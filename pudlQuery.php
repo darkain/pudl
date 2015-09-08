@@ -28,6 +28,12 @@ abstract class pudlQuery {
 
 
 
+	public function setEscape($value) {
+		return str_replace(',', '', $value);
+	}
+
+
+
 	protected function _cache() {
 		return '';
 	}
@@ -57,10 +63,16 @@ abstract class pudlQuery {
 			return "'" . $value->left . $this->likeEscape($value->value) . $value->right . "'";
 
 		if ($value instanceof pudlRegexp)
-			return "'" . str_replace('\\','\\\\\\', $this->escape($value->value)) . "'";
+			return "'" . str_replace('\\', '\\\\\\', $this->escape($value->value)) . "'";
 
 		if ($value instanceof pudlSet)
 			return '(' . $this->_inSet($value->value) . ')';
+
+		if ($value instanceof pudlAppendSet)
+			return false;
+
+		if ($value instanceof pudlRemoveSet)
+			return false;
 
 		if ($value instanceof pudlBetween)
 			return $this->_value($value->value[0], $quote) .
@@ -381,6 +393,17 @@ abstract class pudlQuery {
 			if ($value instanceof pudlFunction  &&  isset($value->__INCREMENT)) {
 				$query .= $this->_table($column, false);
 				$query .= '+' . $this->_value(reset($value->__INCREMENT));
+
+			} else if ($value instanceof pudlAppendSet) {
+				$query .= 'CONCAT_WS(\',\', ' .
+					$this->_table($column, false) . ', ' .
+					$this->setEscape($this->_value($value->value)) . ')';
+
+			} else if ($value instanceof pudlRemoveSet) {
+				$query .= 'REPLACE(CONCAT(\',\', ' .
+					$this->_table($column, false) . ', \',\'), \',' .
+					$this->setEscape($this->_value($value->value, false)) . ',\', \',\')';
+
 			} else {
 				$query .= $this->_columnData($value);
 			}

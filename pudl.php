@@ -1092,6 +1092,8 @@ abstract class pudl extends pudlQuery {
 	public static function lteq($value)			{ return new pudlEquals($value, '<=' ); }
 	public static function gt($value)			{ return new pudlEquals($value, '>'  ); }
 	public static function gteq($value)			{ return new pudlEquals($value, '>=' ); }
+	public static function appendSet($value)	{ return new pudlappendSet($value); }
+	public static function removeSet($value)	{ return new pudlRemoveSet($value); }
 	public static function like($value)			{ return new pudlLike($value, PUDL_BOTH ); }
 	public static function likeLeft($value)		{ return new pudlLike($value, PUDL_START); }
 	public static function likeRight($value)	{ return new pudlLike($value, PUDL_END  ); }
