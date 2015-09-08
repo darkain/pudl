@@ -370,6 +370,12 @@ abstract class pudlQuery {
 
 		foreach ($data as $column => $value) {
 			if (strlen($query)) $query .= ', ';
+
+			if (is_int($column)) {
+				$query .= $value;
+				continue;
+			}
+
 			$query .= $this->_table($column, false) . '=';
 
 			if ($value instanceof pudlFunction  &&  isset($value->__INCREMENT)) {
@@ -387,14 +393,12 @@ abstract class pudlQuery {
 
 	protected function _columnData($value) {
 		$new = $this->_value($value);
-		if ($new !== false) {
-			return $new;
+		if ($new !== false) return $new;
 
-		} else if (is_array($value)  ||  is_object($value)) {
+		if (is_array($value)  ||  is_object($value)) {
 			if (empty($value)) return 'NULL';
 			return 'COLUMN_CREATE(' . $this->_dynamic($value) . ')';
 		}
-
 
 		trigger_error(
 			'Invalid data type for column: ' .

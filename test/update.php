@@ -31,3 +31,15 @@ pudlTest("UPDATE `table` SET `column`=`column`+'5' WHERE (id=1)");
 //UPDATE statement - incrementing an INTEGER value
 $db->string()->updateIn('table', ['column'=>'value'], 'id', [1,7,7,9]);
 pudlTest("UPDATE `table` SET `column`='value' WHERE (`id` IN (1,7,7,9))");
+
+
+
+
+$db->string()->update('table', 'column=value', 'id=1');
+pudlTest("UPDATE `table` SET column=value WHERE (id=1)");
+
+
+
+
+$db->string()->update('table', ['column=value'], 'id=1');
+pudlTest("UPDATE `table` SET column=value WHERE (id=1)");
