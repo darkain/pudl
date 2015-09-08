@@ -41,6 +41,9 @@ require 'column.php';
 //FROM TABLES
 require 'table.php';
 
+//JOIN TABLES
+require 'join.php';
+
 //WHERE/HAVING CLAUSES
 require 'clause.php';
 
