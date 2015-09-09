@@ -174,7 +174,7 @@ abstract class pudlQuery {
 				if (is_string($key)) $query .= ' AS ' . $this->_table($key, false);
 				foreach ($val as $join) {
 					if (!empty($join['join'])) {
-						$query .= $this->_joinTable($join['join'], '');
+						$query .= $this->_joinTable($join['join'], false);
 					} else if (!empty($join['cross'])) {
 						$query .= $this->_joinTable($join['cross'], 'CROSS');
 					} else if (!empty($join['left'])) {
@@ -369,9 +369,8 @@ abstract class pudlQuery {
 
 
 	protected function _joinTable($join, $type='LEFT') {
-		if (!is_array($join)) return " $type JOIN (" . $this->_table($join) . ')';
-
-		$query		= " $type JOIN ";
+		$query = (empty($type) ? '' : ' '.$type) . ' JOIN ';
+		if (!is_array($join)) return $query . '(' . $this->_table($join) . ')';
 
 		foreach ($join as $key => $val) {
 			$query .= $this->_table($val);

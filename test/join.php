@@ -3,8 +3,7 @@
 $db->string()->select('*', ['x' => ['table1',
 	['join' => ['y'=>'table2']],
 ]]);
-//TODO: why is there an extra space character in this?
-pudlTest('SELECT * FROM `table1` AS `x`  JOIN `table2` AS `y`');
+pudlTest('SELECT * FROM `table1` AS `x` JOIN `table2` AS `y`');
 
 
 
