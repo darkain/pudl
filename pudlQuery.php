@@ -109,7 +109,16 @@ abstract class pudlQuery {
 		$query = '';
 		foreach ($column as $key => $value) {
 			if (strlen($query)) $query .= ', ';
-			$query .= $this->_value($value, is_string($key));
+			if (is_string($key)) {
+				if (is_string($value)) {
+					$query .= $this->_table($value, false);
+				} else {
+					$query .= $this->_value($value, true);
+				}
+				$query .= ' AS ' . $this->_table($key, false);
+			} else {
+				$query .= $this->_value($value, is_string($key));
+			}
 		}
 
 		return $query;

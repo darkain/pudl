@@ -29,6 +29,5 @@ pudlTest("SELECT column1, UNHEX('01fa') FROM `table`");
 
 
 //SELECT statement, choosing which columns to return
-//TODO: THIS IS CURRENTLY UNSUPPORTED
-//$db->string()->select(['x'=>'column1', 'y'=>'column2'], 'table');
-//pudlTest('SELECT `column1`, `column2` FROM `table`');
+$db->string()->select(['x'=>'column1', 'y'=>'column2'], 'table');
+pudlTest('SELECT `column1` AS `x`, `column2` AS `y` FROM `table`');
