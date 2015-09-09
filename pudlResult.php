@@ -65,6 +65,12 @@ abstract class pudlResult {
 
 
 
+	public function json() {
+		return pudl::jsonEncode( $this->rows() );
+	}
+
+
+
 	public function get() {
 		$data = $this->row(PUDL_NUMBER);
 		if (!$data) return false;
