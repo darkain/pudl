@@ -22,7 +22,7 @@ abstract class pudl extends pudlQuery {
 		$this->cachekey	= false;
 		$this->redis	= new pudlVoid;
 		$this->time		= time();
-		$this->microtime= microtime();
+		$this->microtime= microtime(true);
 		$this->transaction = false;
 	}
 
