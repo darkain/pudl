@@ -15,6 +15,7 @@ abstract class pudl extends pudlQuery {
 		$this->debug	= false;
 		$this->locked	= false;
 		$this->query	= false;
+		$this->queries	= 0;
 		$this->string	= [];
 		$this->shm		= false;
 		$this->server	= false;
@@ -54,6 +55,7 @@ abstract class pudl extends pudlQuery {
 
 
 		//PERFORMANCE PROFILING DATA
+		$this->queries++;
 		if (!empty($this->bench)) $microtime = microtime(true);
 
 
@@ -137,6 +139,12 @@ abstract class pudl extends pudlQuery {
 	public function query($query=false) {
 		if ($query === false) return $this->query;
 		return $this($query);
+	}
+
+
+
+	public function queries() {
+		return $this->queries;
 	}
 
 
@@ -1119,6 +1127,7 @@ abstract class pudl extends pudlQuery {
 	private $debug;
 	private $bench;
 	private $query;
+	private $queries;
 	private $time;
 	private $microtime;
 	private $string;
