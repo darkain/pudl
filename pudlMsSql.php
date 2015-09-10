@@ -57,19 +57,19 @@ class pudlMsSql extends pudl {
 
 
 	public function insertId() {
-		$result = @mssql_query('SELECT @@identity', $this->mssql);
+		$result = @mssql_query('SELECT @@IDENTITY', $this->mssql);
 		if ($result === false) return false;
-		$return = mssql_result($result, 0, 0);
-		mssql_free_result($result);
+		$return = @mssql_result($result, 0, 0);
+		@mssql_free_result($result);
 		return $return;
 	}
 
 
 	public function updated() {
-		$result = @mssql_query('SELECT @@rowcount', $this->mssql);
+		$result = @mssql_query('SELECT @@ROWCOUNT', $this->mssql);
 		if ($result === false) return false;
-		$return = mssql_result($result, 0, 0);
-		mssql_free_result($result);
+		$return = @mssql_result($result, 0, 0);
+		@mssql_free_result($result);
 		return $return;
 	}
 
