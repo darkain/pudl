@@ -12,7 +12,6 @@ class pudlShell extends pudl {
 		$this->escstart	= '"';
 		$this->escend	= '"';
 		$this->top		= true;
-		$this->error	= false;
 		$this->path		= escapeshellarg($path);
 		$this->prefix	= $prefix;
 	}
@@ -29,27 +28,33 @@ class pudlShell extends pudl {
 	protected function process($query) {
 		$result = false;
 		exec('php5 ' . $this->path . ' ' . escapeshellarg($query), $result);
-		$item = new pudlShellResult($result[0], $this);
-		$this->error = $item->error();
+		return $this->_process($result[0]);
+	}
+
+
+
+	protected function _process($json) {
+		$item = new pudlShellResult($json, $this);
+		$this->insertId	= $item->insertId();
+		$this->updated	= $item->updated();
+		$this->error	= $item->error();
 		return $item;
 	}
 
 
 
 	public function insertId() {
-		//TODO: Insert ID
-		return 0;
+		return $this->insertId;
 	}
 
 
 	public function updated() {
-		//TODO: Number of Rows Updated
-		return 0;
+		return $this->updated;
 	}
 
 
 	public function errno() {
-		return (int) $this->error;
+		return $this->error;
 	}
 
 
@@ -62,10 +67,12 @@ class pudlShell extends pudl {
 			case JSON_ERROR_SYNTAX:			return 'Syntax error, malformed JSON';
 			case JSON_ERROR_UTF8:			return 'Malformed UTF-8 characters';
 		}
-        return 'Unknown error';
+		return 'Unknown error';
 	}
 
 
-	private $path;
-	private $error;
+	protected $path;
+	protected $error	= false;
+	protected $insertId	= 0;
+	protected $updated	= 0;
 }

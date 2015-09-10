@@ -1,20 +1,13 @@
 <?php
 
 
-require_once('pudl.php');
+require_once('pudlShell.php');
 require_once('pudlShellResult.php');
 
 
-class pudlWeb extends pudl {
+class pudlWeb extends pudlShell {
 	public function __construct($path, $prefix=false) {
-		parent::__construct();
-
-		$this->escstart	= '"';
-		$this->escend	= '"';
-		$this->top		= true;
-		$this->error	= false;
-		$this->path		= $path;
-		$this->prefix	= $prefix;
+		parent::__construct($path, $prefix);
 	}
 
 
@@ -34,44 +27,6 @@ class pudlWeb extends pudl {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		$result = curl_exec($ch);
 		curl_close($ch);
-
-		$item = new pudlShellResult($result, $this);
-		$this->error = $item->error();
-		return $item;
+		return $this->_process($result[0]);
 	}
-
-
-
-	public function insertId() {
-		//TODO: Insert ID
-		return 0;
-	}
-
-
-	public function updated() {
-		//TODO: Number of Rows Updated
-		return 0;
-	}
-
-
-	public function errno() {
-		return (int) $this->error;
-	}
-
-
-	public function error() {
-		switch ($this->errno()) {
-			case JSON_ERROR_NONE:			return 'No errors';
-			case JSON_ERROR_DEPTH:			return 'Maximum stack depth exceeded';
-			case JSON_ERROR_STATE_MISMATCH:	return 'Underflow or the modes mismatch';
-			case JSON_ERROR_CTRL_CHAR:		return 'Unexpected control character found';
-			case JSON_ERROR_SYNTAX:			return 'Syntax error, malformed JSON';
-			case JSON_ERROR_UTF8:			return 'Malformed UTF-8 characters';
-		}
-		return 'Unknown error';
-	}
-
-
-	private $path;
-	private $error;
 }

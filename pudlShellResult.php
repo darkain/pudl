@@ -11,7 +11,7 @@ class pudlShellResult extends pudlResult {
 
 		$this->row		= 0;
 		$this->error	= false;
-		$this->json		= json_decode($result, true);
+		$this->json		= $db->jsonDecode($result);
 
 		if ($this->json === NULL) {
 			$this->result = false;
@@ -60,6 +60,11 @@ class pudlShellResult extends pudlResult {
 	}
 
 
+	public function seek($row) {
+		$this->row = (int) $row;
+	}
+
+
 	public function row($type=PUDL_ARRAY, $trim=true) {
 		if (!$this->result) return false;
 		if (!isset($this->json['data'][$this->row])) return false;
@@ -98,9 +103,23 @@ class pudlShellResult extends pudlResult {
 	}
 
 
+	public function insertId() {
+		if ($this->json === NULL) return 0;
+		if (!isset($this->json['insertid'])) return 0;
+		return (int) $this->json['insertid'];
+	}
+
+
+	public function updated() {
+		if ($this->json === NULL) return 0;
+		if (!isset($this->json['updated'])) return 0;
+		return (int) $this->json['updated'];
+	}
+
+
 	public function error() {
-		if ($this->json === NULL) return $this->error;
-		return $this->json['error'][0];
+		if ($this->json === NULL) return (int) $this->error;
+		return (int) $this->json['error'][0];
 	}
 
 
