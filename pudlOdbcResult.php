@@ -26,8 +26,8 @@ class pudlOdbcResult extends pudlResult {
 
 
 	public function cell($row=0, $column=0) {
-		//TODO: support jumping to specific row number!
 		if (!$this->result) return false;
+		@odbc_fetch_row($this->result, $this->row);
 		return @odbc_result($this->result, $column);
 	}
 
@@ -52,9 +52,22 @@ class pudlOdbcResult extends pudlResult {
 	}
 
 
+	public function seek($row) {
+		if (!$this->result) return false;
+		$this->row = $row;
+		return true;
+	}
+
+
 	public function row($type=PUDL_ARRAY) {
 		if (!$this->result) return false;
-		$fetch = @odbc_fetch_row($this->result);
+
+		if ($this->row) {
+			$fetch = @odbc_fetch_row($this->result, $this->row);
+			$this->row = false;
+		} else {
+			$fetch = @odbc_fetch_row($this->result);
+		}
 		if ($fetch === false) return false;
 
 		$fields = $this->fields();
@@ -79,4 +92,7 @@ class pudlOdbcResult extends pudlResult {
 		return $data;
 	}
 
+
+
+	private $row = false;
 }
