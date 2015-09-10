@@ -51,6 +51,12 @@ class pudlMsSqlResult extends pudlResult {
 	}
 
 
+	public function seek($row) {
+		if ($this->result) return @mssql_data_seek($this->result, $row);
+		return false;
+	}
+
+
 	public function row($type=PUDL_ARRAY) {
 		if (!$this->result) return false;
 		$data = false;

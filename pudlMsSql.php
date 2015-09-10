@@ -25,16 +25,14 @@ class pudlMsSql extends pudl {
 			$error  = "<br />\n";
 			$error .= 'Unable to connect to database server: "' . $server;
 			$error .= '" with the username: "' . $username;
-			$error .= "\"<br />\nError " . mssql_errno() . ': ' . mssql_error();
+			$error .= "\"<br />\nError " . $this->errno() . ': ' . $this->error();
 			die($error);
 		}
 
-		$selected = false;
-		$selected = @mssql_select_db($database, $this->mssql);
-		if (!$selected) {
+		if (!@mssql_select_db($database, $this->mssql)) {
 			$error  = "<br />\n";
 			$error .= 'Unable to select database : "' . $database;
-			$error .= "\"<br />\nError " . mssql_errno() . ': ' . mssql_error();
+			$error .= "\"<br />\nError " . $this->errno() . ': ' . $this->error();
 			die($error);
 		}
 	}
@@ -53,7 +51,6 @@ class pudlMsSql extends pudl {
 
 
 	protected function process($query) {
-		$result = false;
 		$result = @mssql_query($query, $this->mssql);
 		return new pudlMsSqlResult($result, $this);
 	}
@@ -69,7 +66,7 @@ class pudlMsSql extends pudl {
 
 
 	public function updated() {
-		$result = mssql_query('SELECT @@rowcount', $this->mssql);
+		$result = @mssql_query('SELECT @@rowcount', $this->mssql);
 		if ($result === false) return false;
 		$return = mssql_result($result, 0, 0);
 		mssql_free_result($result);
@@ -78,14 +75,12 @@ class pudlMsSql extends pudl {
 
 
 	public function errno() {
-		return 0;	//TODO: find a solution for this!
+		return (int) !empty($this->error());
 	}
 
 
 	public function error() {
-		$return = false;
-		$return = @mssql_get_last_message();
-		return $return;
+		return @mssql_get_last_message();
 	}
 
 
