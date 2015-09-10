@@ -20,7 +20,6 @@ class pudlOdbc extends pudl {
 		if ($this->odbc === false) {
 			die('ERROR CONNECTING TO ODBC: ' . odbc_error() . ' - ' . odbc_errormsg());
 		}
-		//TODO: error out if connection fails
 	}
 
 
