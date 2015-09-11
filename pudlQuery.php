@@ -372,15 +372,27 @@ abstract class pudlQuery {
 
 	protected function _joinTable($join, $type='LEFT') {
 		$query = (empty($type) ? '' : ' '.$type) . ' JOIN ';
-		if (!is_array($join)) return $query . '(' . $this->_table($join) . ')';
 
-		foreach ($join as $key => $val) {
-			$query .= $this->_table($val);
-			if (is_string($key)) $query .= ' AS ' . $this->_table($key, false);
-			break;
+		if (is_string($join)) {
+			return $query . '(' . $this->_table($join) . ')';
+
+		} else if (is_array($join)) {
+			foreach ($join as $key => $val) {
+				if ($val instanceof pudlStringResult) {
+					$query .= (string)$val;
+				} else {
+					$query .= $this->_table($val);
+				}
+				if (is_string($key)) $query .= ' AS ' . $this->_table($key, false);
+				return $query;
+			}
 		}
 
-		return $query;
+		trigger_error(
+			'Invalid data type for join: ' .
+			(gettype($join)==='object'?get_class($join):gettype($join)),
+			E_USER_ERROR
+		);
 	}
 
 
