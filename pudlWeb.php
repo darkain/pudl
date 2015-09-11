@@ -8,6 +8,8 @@ require_once('pudlShellResult.php');
 class pudlWeb extends pudlShell {
 	public function __construct($path, $prefix=false) {
 		parent::__construct($path, $prefix);
+
+		$this->path = $path;
 	}
 
 
@@ -27,6 +29,6 @@ class pudlWeb extends pudlShell {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		$result = curl_exec($ch);
 		curl_close($ch);
-		return $this->_process($result[0]);
+		return $this->_process($result);
 	}
 }
