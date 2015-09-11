@@ -3,9 +3,14 @@
 
 require_once('pudl.php');
 require_once('pudlMySqlResult.php');
+require_once('pudlMySqlHelper.php');
+
 
 
 class pudlMySql extends pudl {
+	use pudlMySqlHelper;
+
+
 	public function __construct($username, $password, $database, $server='localhost', $prefix=false) {
 		parent::__construct();
 

@@ -57,7 +57,7 @@ abstract class pudlQuery {
 			return $this->_function($value);
 
 		if ($value instanceof pudlStringResult)
-			return '(' . ((string)$value) . ')';
+			return (string)$value;
 
 		if ($value instanceof pudlLike)
 			return "'" . $value->left . $this->likeEscape($value->value) . $value->right . "'";
@@ -253,6 +253,8 @@ abstract class pudlQuery {
 				$query .= $this->_table($key, false);
 				if ($value instanceof pudlEquals) {
 					$query .= $value->equals;
+				} else if ($value instanceof pudlStringResult) {
+					$query .= $value->type;
 				} else if (!is_null($value)) {
 					$query .= '=';
 				}

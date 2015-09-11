@@ -76,9 +76,10 @@ abstract class pudl extends pudlQuery {
 
 		//RETURN A SUBQUERY STRING
 		} else if ($string !== false) {
-			$this->query = $string . '(' . $this->query . ')';
+			$this->query = '(' . $this->query . ')';
 			$result = new pudlStringResult($this, $string);
 			array_pop($this->string);
+			return $result;
 
 
 		//CACHE THE QUERY IN REDIS
@@ -1055,14 +1056,14 @@ abstract class pudl extends pudlQuery {
 	}
 
 
-	public function in($column=false) {
-		$this->string[] = $this->_table($column,false) . ' IN ';
+	public function in() {
+		$this->string[] = ' IN ';
 		return $this;
 	}
 
 
-	public function notIn($column=false) {
-		$this->string[] = $this->_table($column,false) . ' NOT IN ';
+	public function notIn() {
+		$this->string[] = ' NOT IN ';
 		return $this;
 	}
 
@@ -1130,7 +1131,7 @@ abstract class pudl extends pudlQuery {
 	private $queries;
 	private $time;
 	private $microtime;
-	private $string;
+	protected $string;
 	protected $cache;
 	protected $cachekey;
 	protected $redis;
