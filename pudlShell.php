@@ -37,7 +37,8 @@ class pudlShell extends pudl {
 		$item = new pudlShellResult($json, $this);
 		$this->insertId	= $item->insertId();
 		$this->updated	= $item->updated();
-		$this->error	= $item->error();
+		$this->errno	= $item->error();
+		$this->error	= $this->errno ? $item->errormsg() : '';
 		return $item;
 	}
 
@@ -54,13 +55,14 @@ class pudlShell extends pudl {
 
 
 	public function errno() {
-		return $this->error;
+		return $this->errno;
 	}
 
 
 	public function error() {
+		if (!empty($this->error)) return $this->error;
 		switch ($this->errno()) {
-			case JSON_ERROR_NONE:			return 'No errors';
+			case JSON_ERROR_NONE:			return '';
 			case JSON_ERROR_DEPTH:			return 'Maximum stack depth exceeded';
 			case JSON_ERROR_STATE_MISMATCH:	return 'Underflow or the modes mismatch';
 			case JSON_ERROR_CTRL_CHAR:		return 'Unexpected control character found';
@@ -72,6 +74,7 @@ class pudlShell extends pudl {
 
 
 	protected $path;
+	protected $errno	= false;
 	protected $error	= false;
 	protected $insertId	= 0;
 	protected $updated	= 0;

@@ -118,14 +118,20 @@ class pudlShellResult extends pudlResult {
 
 
 	public function error() {
-		if ($this->json === NULL) return (int) $this->error;
-		return (int) $this->json['error'][0];
+		if (isset($this->json['error'][0])) {
+			return $this->json['error'][0];
+		} else if ($this->error) {
+			return $this->error;
+		}
+		return $this->db->errno();
 	}
 
 
 	public function errormsg() {
-		if ($this->json === NULL) return $this->error;
-		return $this->json['error'][1];
+		if (isset($this->json['error'][1])) {
+			return $this->json['error'][1];
+		}
+		return $this->db->error();
 	}
 
 
