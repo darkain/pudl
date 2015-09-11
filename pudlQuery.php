@@ -377,15 +377,16 @@ abstract class pudlQuery {
 			return $query . '(' . $this->_table($join) . ')';
 
 		} else if (is_array($join)) {
-			foreach ($join as $key => $val) {
-				if ($val instanceof pudlStringResult) {
-					$query .= (string)$val;
-				} else {
-					$query .= $this->_table($val);
-				}
-				if (is_string($key)) $query .= ' AS ' . $this->_table($key, false);
-				return $query;
+			$value = reset($join);
+			if ($value instanceof pudlStringResult) {
+				$query .= (string)$value;
+			} else {
+				$query .= $this->_table($value);
 			}
+
+			$alias = key($join);
+			if (is_string($alias)) $query .= ' AS ' . $this->_table($alias, false);
+			return $query;
 		}
 
 		trigger_error(
