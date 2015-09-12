@@ -89,11 +89,15 @@ abstract class pudl extends pudlQuery {
 				if (empty($hash)) $hash = md5($query);
 				$data = $this->redis->get("pudl:$hash");
 				if (empty($data)) {
-					$result	= $this->process($query);
-					$data	= $result->rows();
-					$this->redis->set("pudl:$hash", $data, $this->cache);
+					$result = $this->process($query);
+					if (!$result->error()) {
+						$data = $result->rows();
+						$this->redis->set("pudl:$hash", $data, $this->cache);
+						$result = new pudlCacheResult($data, $this, $hash);
+					}
+				} else {
+					$result = new pudlCacheResult($data, $this, $hash);
 				}
-				$result = new pudlCacheResult($data, $this, $hash);
 			} catch (RedisException $e) {
 				if (empty($result)) $result = $this->process($query);
 			}
@@ -117,7 +121,7 @@ abstract class pudl extends pudlQuery {
 		}
 
 
-		//ERROR REPORTING
+		//ERROR REPORTING'
 		if ($result->error()  &&  $this->debug !== false) {
 			$debug = $this->debug;
 			$debug($this, $result);
