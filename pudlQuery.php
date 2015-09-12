@@ -163,16 +163,21 @@ abstract class pudlQuery {
 		);
 
 		$query = '';
-		foreach ($table as $key => &$val) {
+		foreach ($table as $key => $value) {
 			if (strlen($query)) $query .= ', ';
 
-			if (!is_array($val)) {
-				$query .= $this->_table($val);
+			if (!is_array($value)) {
+				if ($value instanceof pudlStringResult) {
+					$query .= (string) $value;
+				} else {
+					$query .= $this->_table($value);
+				}
 				if (is_string($key)) $query .= ' AS ' . $this->_table($key, false);
+
 			} else {
-				$query .= $this->_table(reset($val));
+				$query .= $this->_table(reset($value));
 				if (is_string($key)) $query .= ' AS ' . $this->_table($key, false);
-				foreach ($val as $join) {
+				foreach ($value as $join) {
 					if (!empty($join['join'])) {
 						$query .= $this->_joinTable($join['join'], false);
 					} else if (!empty($join['cross'])) {
@@ -200,7 +205,7 @@ abstract class pudlQuery {
 					}
 				}
 			}
-		} unset($val);
+		}
 
 		return ' FROM ' . $query;
 	}
