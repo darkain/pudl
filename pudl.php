@@ -11,20 +11,10 @@ abstract class pudl extends pudlQuery {
 
 
 	public function __construct() {
-		$this->bench	= false;
-		$this->debug	= false;
-		$this->locked	= false;
-		$this->query	= false;
-		$this->queries	= 0;
-		$this->string	= [];
-		$this->shm		= false;
-		$this->server	= false;
-		$this->cache	= false;
-		$this->cachekey	= false;
-		$this->redis	= new pudlVoid;
-		$this->time		= time();
-		$this->microtime= microtime(true);
-		$this->transaction = false;
+		$this->redis		= new pudlVoid;
+		$this->time			= time();
+		$this->microtime	= microtime(true);
+		$this->transaction	= false;
 	}
 
 
@@ -55,7 +45,6 @@ abstract class pudl extends pudlQuery {
 
 
 		//PERFORMANCE PROFILING DATA
-		$this->queries++;
 		if (!empty($this->bench)) $microtime = microtime(true);
 
 
@@ -83,12 +72,15 @@ abstract class pudl extends pudlQuery {
 
 
 		//CACHE THE QUERY IN REDIS
-		} else if ($this->cache  &&  $this->redis) {
+		} else if ($this->cache  &&  is_object($this->redis)  &&  !($this->redis instanceof pudlVoid)) {
+			$this->stats['total']++;
 			try {
 				$hash = $this->cachekey;
 				if (empty($hash)) $hash = md5($query);
 				$data = $this->redis->get("pudl:$hash");
 				if (empty($data)) {
+					$this->stats['queries']++;
+					$this->stats['misses']++;
 					$result = $this->process($query);
 					if (!$result->error()) {
 						$data = $result->rows();
@@ -96,15 +88,22 @@ abstract class pudl extends pudlQuery {
 						$result = new pudlCacheResult($data, $this, $hash);
 					}
 				} else {
+					$this->stats['hits']++;
 					$result = new pudlCacheResult($data, $this, $hash);
 				}
 			} catch (RedisException $e) {
-				if (empty($result)) $result = $this->process($query);
+				if (empty($result)) {
+					$this->stats['queries']++;
+					$this->stats['misses']++;
+					$result = $this->process($query);
+				}
 			}
 
 
 		//PROCESS THE QUERY NORMALLY
 		} else {
+			$this->stats['total']++;
+			$this->stats['queries']++;
 			$result = $this->process($query);
 		}
 
@@ -148,8 +147,8 @@ abstract class pudl extends pudlQuery {
 
 
 
-	public function queries() {
-		return $this->queries;
+	public function stats() {
+		return $this->stats;
 	}
 
 
@@ -1128,18 +1127,24 @@ abstract class pudl extends pudlQuery {
 
 
 
-	private $locked;
-	private $debug;
-	private $bench;
-	private $query;
-	private $queries;
-	private $time;
-	private $microtime;
-	protected $string;
-	protected $cache;
-	protected $cachekey;
-	protected $redis;
-	protected $shm;
-	protected $server;
-	protected $transaction;
+	private		$locked			= false;
+	private		$debug			= false;
+	private		$bench			= false;
+	private		$query			= false;
+	private		$time			= 0;
+	private		$microtime		= 0;
+	protected	$string			= [];
+	protected	$cache			= false;
+	protected	$cachekey		= false;
+	protected	$redis			= false;
+	protected	$shm			= false;
+	protected	$server			= false;
+	protected	$transaction	= false;
+
+	protected	$stats = [
+		'total'		=> 0,
+		'queries'	=> 0,
+		'hits'		=> 0,
+		'misses'	=> 0,
+	];
 }
