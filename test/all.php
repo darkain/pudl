@@ -64,3 +64,6 @@ require 'row.php';
 //SHOTHAND NOTATION FOR UPDATE STATEMENTS
 //INCREMENT A SINGLE COLUMN'S VALUE
 require 'increment.php';
+
+//SUBQUERIES
+require 'subquery.php';
