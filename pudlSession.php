@@ -52,15 +52,17 @@ class pudlSession {
 			$this->table, 'data', 'id', $id
 		);
 
-		if (!empty($data)) $this->hash = md5($data);
+		if ($data === false) $data = '';
+
+		$this->hash = is_string($data) ? md5($data) : false;
 
 		return $data;
 	}
 
 
 	function write($id, $data) {
+		if (is_string($data)  &&  $this->hash === md5($data)) return true;
 		if (empty($data)) return $this->destroy($id);
-		if ($this->hash === md5($data)) return true;
 
 		if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 			$address = $_SERVER['HTTP_X_FORWARDED_FOR'];

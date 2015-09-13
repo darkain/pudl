@@ -78,7 +78,7 @@ abstract class pudl extends pudlQuery {
 				$hash = $this->cachekey;
 				if (empty($hash)) $hash = md5($query);
 				$data = $this->redis->get("pudl:$hash");
-				if (empty($data)) {
+				if ($data === false) {
 					$this->stats['queries']++;
 					$this->stats['misses']++;
 					$result = $this->process($query);
