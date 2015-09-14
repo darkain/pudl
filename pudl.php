@@ -81,6 +81,7 @@ abstract class pudl extends pudlQuery {
 				if ($data === false) {
 					$this->stats['queries']++;
 					$this->stats['misses']++;
+					$this->stats['missed'][] = $query;
 					$result = $this->process($query);
 					if (!$result->error()) {
 						$data = $result->rows();
@@ -1146,5 +1147,6 @@ abstract class pudl extends pudlQuery {
 		'queries'	=> 0,
 		'hits'		=> 0,
 		'misses'	=> 0,
+		'missed'	=> [],
 	];
 }
