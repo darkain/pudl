@@ -2,6 +2,7 @@
 
 //Set the number of bits per character to max
 ini_set('session.hash_bits_per_character', 6);
+ini_set('session.gc_maxlifetime', 60*60*24*30);
 
 
 class pudlSession {
