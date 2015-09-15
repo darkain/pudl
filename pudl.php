@@ -892,40 +892,46 @@ abstract class pudl extends pudlQuery {
 
 		$this($query);
 		$this->locked = true;
+
+		return $this;
 	}
 
 
 
 	public function unlock() {
-		if (!$this->locked) return;
+		if (!$this->locked) return $this;
 		$this('UNLOCK TABLES');
 		$this->locked = false;
+		return $this;
 	}
 
 
 
 	public function begin() {
-		if ($this->inTransaction()) return;
+		if ($this->inTransaction()) return $this;
 		$this->transaction = [];
 		$this('START TRANSACTION');
+		return $this;
 	}
 
 
 
 	public function commit($sleep=0) {
-		if (!$this->inTransaction()) return;
+		if (!$this->inTransaction()) return $this;
 		$this('COMMIT');
 		$this->transaction = false;
 		if ($sleep === true) $sleep = 250000;
 		if (!empty($sleep)) usleep($sleep);
+		return $this;
 	}
 
 
 
 	public function rollback() {
-		if (!$this->inTransaction()) return;
+		if (!$this->inTransaction()) return $this;
 		$this->transaction = false;
 		$this('ROLLBACK');
+		return $this;
 	}
 
 
