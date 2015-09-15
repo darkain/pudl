@@ -427,6 +427,9 @@ abstract class pudlQuery {
 					$this->_table($column, false) . ', ' .
 					$this->setEscape($this->_value($value->value)) . ')';
 
+			} else if ($value instanceof pudlStringResult) {
+				$query .= '(' . (string)$value . ')';
+
 			} else if ($value instanceof pudlRemoveSet) {
 				$query .= 'REPLACE(CONCAT(\',\', ' .
 					$this->_table($column, false) . ', \',\'), \',' .

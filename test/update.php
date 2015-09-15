@@ -57,3 +57,12 @@ pudlTest("UPDATE `table` SET `column`=CONCAT_WS(',', `column`, 'item') WHERE (id
 //UPDATE statement - remove a value from a SET column
 $db->string()->update('table', ['column'=>pudl::removeSet('item')], 'id=1');
 pudlTest("UPDATE `table` SET `column`=REPLACE(CONCAT(',', `column`, ','), ',item,', ',') WHERE (id=1)");
+
+
+
+
+//UPDATE statement with counted rows from subquery
+$db->string()->updateCount('parent', 'column1', [
+	'column2' => 'value',
+], 'child');
+pudlTest("UPDATE `parent` SET `column1`=(SELECT COUNT(*) FROM `child` WHERE (`column2`='value') LIMIT 1) WHERE (`column2`='value')");
