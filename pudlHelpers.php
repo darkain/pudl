@@ -18,6 +18,9 @@ define('PUDL_END',		2);
 trait pudlHelper {}
 
 
+class pudlException extends Exception {}
+
+
 
 class pudlFunction {
 	use pudlHelper;
