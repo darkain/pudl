@@ -14,12 +14,23 @@ class pudlMySql extends pudl {
 	public function __construct($username, $password, $database, $server='localhost', $prefix=false) {
 		parent::__construct();
 
+		//SET INITIAL VALUES
 		$this->limit	= true;
 		$this->escstart	= '`';
 		$this->escend	= '`';
 		$this->prefix	= $prefix;
 
-		$this->mysql	= @mysql_pconnect($server, $username, $password);
+		//STORE IN SECURED AREA HIDDEN FROM VAR_DUMP/VAR_EXPORT
+		$this->auth([
+			'username'	=> $username,
+			'password'	=> $password,
+			'database'	=> $database,
+		]);
+
+		//CONNECT TO THE SERVER
+		$this->server = $server;
+		$this->connect();
+
 
 		if (!$this->mysql) {
 			$this->mysql = @mysql_connect($server, $username, $password);
@@ -47,6 +58,12 @@ class pudlMySql extends pudl {
 
 
 
+	function __destruct() {
+		parent::__destruct();
+		$this->disconnect();
+	}
+
+
 	public static function instance($data) {
 		$username	= empty($data['pudl_username']) ? '' : $data['pudl_username'];
 		$password	= empty($data['pudl_password']) ? '' : $data['pudl_password'];
@@ -57,9 +74,61 @@ class pudlMySql extends pudl {
 	}
 
 
+
+	public function connect() {
+		$auth = $this->auth();
+
+		ini_set('mysql.connect_timeout', 10);
+
+		//ATTEMPT TO CREATE A PERSISTANT CONNECTION
+		$this->mysql = @mysql_pconnect(
+			$this->server,
+			$auth['username'],
+			$auth['password']
+		);
+
+		//ATTEMPT TO CREATE A NON-PERSISTANT CONNECTION
+		if (empty($this->mysql)) {
+			$this->mysql = @mysql_connect(
+				$this->server,
+				$auth['username'],
+				$auth['password']
+			);
+		}
+
+		//ATTEMPT TO SELECT THE DATABASE AND SET UTF8 CHARACTER SET
+		if ($this->mysql) {
+			if (@mysql_select_db($auth['database'], $this->mysql)) {
+				$ok = @mysql_set_charset('utf8', $this->mysql);
+			}
+		}
+
+		//CANNOT CONNECT - ERROR OUT
+		if (empty($ok)) {
+			$error  = "<br />\n";
+			$error .= 'Unable to connect to database server "';
+			$error .= $this->server;
+			$error .= '" with the username: "' . $auth['username'];
+			$error .= "\"<br />\nError " . $this->errno() . ': ' . $this->error();
+			if (self::$die) die($error);
+		}
+	}
+
+
+
+	public function disconnect() {
+		parent::disconnect();
+		if (!$this->mysql) return;
+		@mysql_close($this->mysql);
+		$this->mysql = false;
+	}
+
+
+
 	public function escape($value) {
 		return @mysql_real_escape_string($value, $this->mysql);
 	}
+
 
 
 	protected function process($query) {
@@ -68,9 +137,11 @@ class pudlMySql extends pudl {
 	}
 
 
+
 	public function insertId() {
 		return @mysql_insert_id($this->mysql);
 	}
+
 
 
 	public function updated() {
@@ -78,9 +149,11 @@ class pudlMySql extends pudl {
 	}
 
 
+
 	public function errno() {
 		return @mysql_errno($this->mysql);
 	}
+
 
 
 	public function error() {
@@ -88,29 +161,6 @@ class pudlMySql extends pudl {
 	}
 
 
-	public static function aesKey($key) {
-		$aes = str_repeat(chr(0), 16);
-		$len = strlen($key);
-		for ($i=0; $i<$len; $i++) {
-			$aes[$i%16] = $aes[$i%16] ^ $key[$i];
-		}
-		return $aes;
-	}
 
-
-	public static function aesDecrypt($data, $key) {
-		return rtrim(
-			mcrypt_decrypt(
-				MCRYPT_RIJNDAEL_128,
-				self::aesKey($key),
-				pack('H*', $data),
-				MCRYPT_MODE_ECB,
-				''
-			),
-			"\0"
-		);
-	}
-
-
-	private $mysql;
+	private $mysql = NULL;
 }

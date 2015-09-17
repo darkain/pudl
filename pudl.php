@@ -986,59 +986,6 @@ abstract class pudl extends pudlQuery {
 	}
 
 
-	public function onlineServers($servers) {
-		return $servers;
-		if (count($servers) < 2) return $servers;
-
-		$key = ftok(__FILE__, 't');
-		$shm = shm_attach($key);
-
-		if (!shm_has_var($shm, 1)) {
-			shm_detach($shm);
-			return $servers;
-		}
-
-		$list = shm_get_var($shm, 1);
-		foreach ($servers as $index => &$item) {
-			if (in_array($item, $list)) unset($servers[$index]);
-		} unset($item);
-
-		shm_detach($shm);
-		return $servers;
-	}
-
-
-	public function onlineServer($server) {
-		$key	= ftok(__FILE__, 't');
-		$shm	= shm_attach($key);
-		$list	= shm_has_var($shm, 1) ? shm_get_var($shm, 1) : [];
-		foreach ($list as $key => $value) {
-			if ($value === $server) unset($list[$key]);
-		}
-		shm_put_var($shm, 1, $list);
-		shm_detach($shm);
-	}
-
-
-	public function offlineServer($server) {
-		$key	= ftok(__FILE__, 't');
-		$shm	= shm_attach($key);
-		$list	= shm_has_var($shm, 1) ? shm_get_var($shm, 1) : [];
-		if (!in_array($server, $list)) $list[] = $server;
-		shm_put_var($shm, 1, $list);
-		shm_detach($shm);
-	}
-
-
-	public function offlineServers() {
-		$key	= ftok(__FILE__, 't');
-		$shm	= shm_attach($key);
-		$list	= shm_has_var($shm, 1) ? shm_get_var($shm, 1) : [];
-		shm_detach($shm);
-		return $list;
-	}
-
-
 
 	public function cache($seconds=0, $key=false) {
 		$this->cache	= $seconds;
@@ -1130,6 +1077,15 @@ abstract class pudl extends pudlQuery {
 
 	public static function jsonDecode($data) {
 		return @json_decode($data, true, 512, JSON_BIGINT_AS_STRING);
+	}
+
+
+
+
+	protected function auth($data=false) {
+		static $auth = [];
+		if (empty($data)) return $auth;
+		return $auth = $data;
 	}
 
 
