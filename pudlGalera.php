@@ -59,14 +59,6 @@ class pudlGalera extends pudlMySqli {
 
 
 
-	protected function auth($data=false) {
-		static $auth = [];
-		if (empty($data)) return $auth;
-		return $auth = $data;
-	}
-
-
-
 	public function connect() {
 		$auth = $this->auth();
 

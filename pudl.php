@@ -11,6 +11,7 @@ abstract class pudl extends pudlQuery {
 
 
 	public function __construct() {
+		$this->instance		= ++$this->instances;
 		$this->redis		= new pudlVoid;
 		$this->time			= time();
 		$this->microtime	= microtime(true);
@@ -1082,10 +1083,16 @@ abstract class pudl extends pudlQuery {
 
 
 
-	protected function auth($data=false) {
+	private function _auth($instance, $data=false) {
 		static $auth = [];
-		if (empty($data)) return $auth;
-		return $auth = $data;
+		if (!empty($data)) return $auth[$instance] = $data;
+		if (empty($auth[$instance])) return [];
+		return $auth[$instance];
+	}
+
+
+	protected function auth($data=false) {
+		return $this->_auth($this->instance, $data);
 	}
 
 
@@ -1103,6 +1110,9 @@ abstract class pudl extends pudlQuery {
 	protected	$shm			= false;
 	protected	$server			= false;
 	protected	$transaction	= false;
+
+	private			$instance	= 0;
+	private static	$instances	= 0;
 
 	protected	$stats = [
 		'total'		=> 0,
