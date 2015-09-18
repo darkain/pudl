@@ -11,7 +11,7 @@ abstract class pudl extends pudlQuery {
 
 
 	public function __construct() {
-		$this->instance		= ++$this->instances;
+		$this->instance		= ++self::$instances;
 		$this->redis		= new pudlVoid;
 		$this->time			= time();
 		$this->microtime	= microtime(true);
