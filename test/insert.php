@@ -24,3 +24,56 @@ pudlTest("INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE KEY UPDAT
 //INSERT statement - using associative array, custom duplicate key update using UPDATE syntax
 $db->string()->insert('table', ['column'=>'value'], ['y'=>2]);
 pudlTest("INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE KEY UPDATE `y`=2");
+
+
+
+
+//INSERT statement - with ON DUPLICATE KEY returning row ID
+$db->string()->insertUpdate('table', [
+	'column1' => 1,
+	'column2' => 2,
+], 'column1');
+
+pudlTest('INSERT INTO `table` (`column1`, `column2`) VALUES (1, 2) ON DUPLICATE KEY UPDATE `column1`=LAST_INSERT_ID(`column1`)');
+
+
+
+//INSERT statement - with ON DUPLICATE KEY returning row ID, using custom UPDATE syntax
+$db->string()->insertUpdate(
+	'table',
+	['column1' => 1, 'column2' => 2],
+	'column1',
+	['column3' => 3]
+);
+
+pudlTest('INSERT INTO `table` (`column1`, `column2`) VALUES (1, 2) ON DUPLICATE KEY UPDATE `column3`=3, `column1`=LAST_INSERT_ID(`column1`)');
+
+
+
+
+$db->string()->insertIgnore('table', ['column'=>'value']);
+pudlTest("INSERT IGNORE INTO `table` (`column`) VALUES ('value')");
+
+
+
+
+$db->string()->replace('table', ['column'=>'value']);
+pudlTest("REPLACE INTO `table` (`column`) VALUES ('value')");
+
+
+
+
+$db->string()->insert('table', [
+	'column1' => 1,
+	'column2' => 2,
+], 'column1', false);
+pudlTest('INSERT INTO `table` VALUES (1, 2) ON DUPLICATE KEY UPDATE column1');
+
+
+
+
+$db->string()->insertValues('table', [
+	'column1'=>'value1',
+	'column2'=>'value2',
+]);
+pudlTest("INSERT INTO `table` VALUES ('value1', 'value2')");

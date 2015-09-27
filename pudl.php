@@ -613,7 +613,7 @@ abstract class pudl extends pudlQuery {
 			return false;
 		}
 
-		$cols	= '(';
+		$cols	= ' (';
 		$vals	= '';
 		$first	= true;
 		foreach ($data as $column => $value) {
@@ -630,11 +630,11 @@ abstract class pudl extends pudlQuery {
 
 		$table = $this->_table($table);
 		if ($update === 'IGNORE') {
-			$query = "INSERT IGNORE INTO $table $cols VALUES ($vals)";
+			$query = "INSERT IGNORE INTO $table$cols VALUES ($vals)";
 		} else if ($update === 'REPLACE') {
-			$query = "REPLACE INTO $table $cols VALUES ($vals)";
+			$query = "REPLACE INTO $table$cols VALUES ($vals)";
 		} else {
-			$query = "INSERT INTO $table $cols VALUES ($vals)";
+			$query = "INSERT INTO $table$cols VALUES ($vals)";
 			if ($update === true) $update = $data;
 			if ($update !== false) {
 				$query .= ' ON DUPLICATE KEY UPDATE ';
@@ -661,12 +661,18 @@ abstract class pudl extends pudlQuery {
 
 
 
-	public function insertUpdate($table, $data, $column) {
-		return $this->insert(
-			$table,
-			$data,
-			$this->_table($column,false).'=LAST_INSERT_ID('.$this->_table($column,false).')'
-		);
+	public function insertUpdate($table, $data, $column, $update=false, $prefix=true) {
+		if (empty($update)) {
+			$update = [];
+		} else if ($update === true  &&  is_array($data)) {
+			$update = $data;
+		} else if ($update === true) {
+			$update = [$data];
+		}
+
+		$update[] = $this->_table($column,false).'=LAST_INSERT_ID('.$this->_table($column,false).')';
+
+		return $this->insert($table, $data, $update, $prefix);
 	}
 
 
