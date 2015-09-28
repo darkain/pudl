@@ -467,8 +467,8 @@ abstract class pudl extends pudlQuery {
 	}
 
 
-	public function deleteId($table, $column, $id) {
-		return $this->delete($table, $this->_clauseId($column,$id));
+	public function deleteId($table, $column, $id, $limit=false, $offset=false) {
+		return $this->delete($table, $this->_clauseId($column,$id), $limit, $offset);
 	}
 
 
