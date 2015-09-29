@@ -1041,6 +1041,10 @@ abstract class pudl extends pudlQuery {
 	public static function inSet($value) {
 		if (is_array($value)  &&  func_num_args() === 1) {
 			return new pudlSet($value);
+		} else if ($value instanceof pudlResult) {
+			$set = [];
+			while ($data = $value->row()) $set[] = reset($data);
+			return new pudlSet($set);
 		} else {
 			return new pudlSet(func_get_args());
 		}
@@ -1050,6 +1054,10 @@ abstract class pudl extends pudlQuery {
 	public static function notInSet($value) {
 		if (is_array($value)  &&  func_num_args() === 1) {
 			return (new pudlSet($value))->not();
+		} else if ($value instanceof pudlResult) {
+			$set = [];
+			while ($data = $value->row()) $set[] = reset($data);
+			return (new pudlSet($set))->not();
 		} else {
 			return (new pudlSet(func_get_args()))->not();
 		}
