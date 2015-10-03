@@ -430,6 +430,7 @@ abstract class pudl extends pudlQuery {
 
 	public function selectRows($col, $table, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$result = $this->select($col, $table, $clause, $order, $limit, $offset, $lock);
+		if (is_array($this->union)) return true;
 		if ($result instanceof pudlStringResult) return $result;
 		$return = $result->rows();
 		$result->free();
