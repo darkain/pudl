@@ -29,9 +29,20 @@ class pudlFunction {
 		return forward_static_call_array(['pudl', $name], $arguments);
 	}
 
-	public static function timestamp() {
+
+	/*
+	If CONVERT_TZ returns NULL, make sure the timezone table of mysql is filled
+	Note that this might need to be ran on ALL MySQL instances in a cluster!
+		install mysql-community-server-tools
+		mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root -p mysql
+	*/
+	public static function timestamp($time=false) {
 		global $db;
-		return self::from_unixtime($db->time());
+		return pudl::convert_tz(
+			self::from_unixtime($time !== false ? $time : $db->time()),
+			new pudlGlobal('session.time_zone'),
+			'UTC'
+		);
 	}
 
 	public static function binary($data, $pad=0) {
@@ -142,4 +153,30 @@ class pudlAppendSet extends pudlEquals {
 
 class pudlRemoveSet extends pudlEquals {
 	use pudlHelper;
+}
+
+
+
+class pudlRaw {
+	public function __construct($value) {
+		$this->value = $value;
+	}
+
+	public $value;
+}
+
+
+
+class pudlVariable extends pudlRaw {
+	public function __construct($name) {
+		parent::__construct('@'.$name);
+	}
+}
+
+
+
+class pudlGlobal extends pudlRaw {
+	public function __construct($name) {
+		parent::__construct('@@'.$name);
+	}
 }

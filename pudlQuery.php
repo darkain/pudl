@@ -84,6 +84,9 @@ abstract class pudlQuery {
 		if ($value instanceof pudlEquals)
 			return $this->_value($value->value, $quote);
 
+		if ($value instanceof pudlRaw)
+			return $value->value;
+
 		return false;
 	}
 
@@ -155,6 +158,7 @@ abstract class pudlQuery {
 
 
 	protected function _tables($table) {
+		if ($table === false) return;
 		if (is_string($table)) return ' FROM ' . $this->_table($table);
 
 		if (!is_array($table)) trigger_error(

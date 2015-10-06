@@ -19,7 +19,8 @@
 
 function pudlTest($expected) {
 	global $db;
-	if ($db->query() === $expected) return;
+	if (is_string($expected)	&&	$expected === $db->query()) return;
+	if (is_bool($expected)		&&	$expected) return;
 	$trace = debug_backtrace()[0];
 	echo "ERROR: FAILED!!\n\n";
 	echo "FILE: $trace[file]\n";
@@ -67,3 +68,6 @@ require 'increment.php';
 
 //SUBQUERIES
 require 'subquery.php';
+
+//CUSTOM FUNCTIONS
+require 'function.php';
