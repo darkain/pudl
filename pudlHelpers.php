@@ -139,6 +139,7 @@ class pudlSet extends pudlEquals {
 	use pudlHelper;
 
 	public function __construct($value) {
+		if (empty($value)) $value = [''];
 		parent::__construct($value, ' IN ');
 	}
 }
