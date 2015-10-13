@@ -316,7 +316,7 @@ abstract class pudlQuery {
 		$query = '';
 		foreach ($value as $item) {
 			if (strlen($query)) $query .= ', ';
-			$query .= $this->_value($item);
+			$query .= $this->_value( is_array($item) ? reset($item) : $item );
 		}
 		return $query;
 	}
