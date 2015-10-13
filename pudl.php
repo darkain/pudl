@@ -38,6 +38,12 @@ abstract class pudl extends pudlQuery {
 
 
 	public function __invoke($query) {
+		//SELEX
+		if (is_array($query)) {
+			return $this->selex($query);
+		}
+
+
 		//UNIONS
 		if (is_array($this->union)) {
 			$this->union[] = $query;
@@ -367,8 +373,7 @@ abstract class pudl extends pudlQuery {
 
 
 
-	//TODO: merge this with $db() function - if array passed in, use this function instead
-	public function selectEx(&$params) {
+	public function selex($params) {
 		$query = 'SELECT ';
 		$query .= $this->_cache();
 
@@ -376,32 +381,28 @@ abstract class pudl extends pudlQuery {
 			$query .= ' *, COUNT(*) FROM (SELECT ';
 		}
 
-		if (isset($params['limit' ])) $query .= $this->_top(   $params['limit ']);
-		if (isset($params['column'])) $query .= $this->_column($params['column']);
-		if (isset($params['table' ])) $query .= $this->_tables($params['table' ]);
-		if (isset($params['clause'])) $query .= $this->_clause($params['clause']);
+		if (isset($params['limit']))	$query .= $this->_top(   $params['limit']);
+		if (isset($params['column']))	$query .= $this->_column($params['column']);
+		if (!isset($params['column']))	$query .= '*';
+		if (isset($params['table']))	$query .= $this->_tables($params['table']);
+		if (isset($params['clause']))	$query .= $this->_clause($params['clause']);
 
 		if (isset($params['group'])  &&  isset($params['order'])) {
 			$query .= $this->_order($params['order']);
 			$query .= ') groupbyorderby ';
 		}
 
-		if (isset($params['group'])) $query .= $this->_group($params['group']);
-		if (isset($params['order'])) $query .= $this->_order($params['order']);
+		if (isset($params['group']))	$query .= $this->_group($params['group']);
+		if (isset($params['having']))	$query .= $this->_clause($params['having'], 'HAVING');
+		if (isset($params['order']))	$query .= $this->_order($params['order']);
 
-		if (isset($params['limit'])) {
-			if (isset($params['offset'])) {
-				$query .= $this->_limit($params['limit'], $params['offset']);
-			} else {
-				$query .= $this->_limit($params['limit']);
-			}
-		}
+		$limit	= isset($params['limit'])	? $params['limit']	: false;
+		$offset	= isset($params['offset'])	? $params['offset']	: false;
+		$query .= $this->_limit($limit, $offset);
 
 		if (isset($params['lock'])) $query .= $this->_lock($params['lock']);
 
-		$result = $this($query);
-		$params['rows'] = $result->count();
-		return $result;
+		return $this($query);
 	}
 
 

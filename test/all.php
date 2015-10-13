@@ -48,6 +48,9 @@ require 'join.php';
 //WHERE/HAVING CLAUSES
 require 'clause.php';
 
+//SELEX - ALL OF THE ABOVE AT ONCE
+require 'selex.php';
+
 //INSERT STATEMENTS
 require 'insert.php';
 
