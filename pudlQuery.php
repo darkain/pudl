@@ -327,6 +327,7 @@ abstract class pudlQuery {
 		if (!$this->limit) return '';
 		if ($limit !== false  &&  $offset === false) return " LIMIT $limit";
 		if ($limit !== false  &&  $offset !== false) return " LIMIT $offset,$limit";
+		if ($limit === false  &&  $offset !== false) return " LIMIT $offset,18446744073709551615";
 		return '';
 	}
 
