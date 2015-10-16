@@ -16,7 +16,9 @@ class pudlWeb extends pudlShell {
 	public static function instance($data) {
 		$path	= empty($data['pudl_path'])		? '' : $data['pudl_path'];
 		$prefix	= empty($data['pudl_prefix'])	? false : $data['pudl_prefix'];
-		return new pudlWeb($path, $prefix);
+		$db = new pudlWeb($path, $prefix);
+		if (!empty($data['pudl_redis'])) $db->redis($data['pudl_redis']);
+		return $db;
 	}
 
 

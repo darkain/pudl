@@ -34,26 +34,7 @@ class pudlGalera extends pudlMySqli {
 		$prefix		= empty($data['pudl_prefix'])	? false	: $data['pudl_prefix'];
 
 		$db = new pudlGalera($username, $password, $database, $server, $prefix);
-
-		if (!empty($data['pudl_redis'])) {
-			$redis = $db->redis;
-
-			if (is_object($data['pudl_redis'])) {
-				$db->redis = $data['pudl_redis'];
-			} else if (class_exists('Redis')) {
-				try {
-					$db->redis = new Redis();
-					if ($db->redis->connect($data['pudl_redis'], -1, 1)) {
-						$db->redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
-					} else {
-						$db->redis = $redis;
-					}
-				} catch(RedisException $e) {
-					$db->redis = $redis;
-				}
-			}
-		}
-
+		if (!empty($data['pudl_redis'])) $db->redis($data['pudl_redis']);
 		return $db;
 	}
 

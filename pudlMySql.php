@@ -70,7 +70,10 @@ class pudlMySql extends pudl {
 		$database	= empty($data['pudl_database']) ? '' : $data['pudl_database'];
 		$server		= empty($data['pudl_server']) ? 'localhost' : $data['pudl_server'];
 		$prefix		= empty($data['pudl_prefix']) ? false : $data['pudl_prefix'];
-		return new pudlMySql($username, $password, $database, $server, $prefix);
+
+		$db = new pudlMySql($username, $password, $database, $server, $prefix);
+		if (!empty($data['pudl_redis'])) $db->redis($data['pudl_redis']);
+		return $db;
 	}
 
 

@@ -1009,7 +1009,28 @@ abstract class pudl extends pudlQuery {
 	}
 
 
-	public function redis() { return $this->redis; }
+	public function redis($server=false) {
+		if ($server === false) return $this->redis;
+
+		$saved = $this->redis;
+
+		if (is_object($server)) {
+			if (is_a($server, 'Redis')) {
+				$this->redis = $server;
+			}
+		} else if (class_exists('Redis')) {
+			try {
+				$this->redis = new Redis;
+				if ($this->redis->connect($server, -1, 1)) {
+					$this->redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
+				} else {
+					$this->redis = $saved;
+				}
+			} catch(RedisException $e) {
+				$this->redis = $saved;
+			}
+		}
+	}
 
 
 

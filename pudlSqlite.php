@@ -47,7 +47,9 @@ class pudlSqlite extends pudl {
 			else if (!empty($data[0])) $database = $data[0];
 		}
 
-		return new pudlSqlite($database, $prefix);
+		$db = new pudlSqlite($database, $prefix);
+		if (!empty($data['pudl_redis'])) $db->redis($data['pudl_redis']);
+		return $db;
 	}
 
 
