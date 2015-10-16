@@ -1130,24 +1130,24 @@ abstract class pudl extends pudlQuery {
 
 
 
-	private		$locked			= false;
-	private		$debug			= false;
-	private		$bench			= false;
-	private		$query			= false;
-	private		$time			= 0;
-	private		$microtime		= 0;
-	protected	$string			= [];
-	protected	$cache			= false;
-	protected	$cachekey		= false;
-	protected	$redis			= false;
-	protected	$shm			= false;
-	protected	$server			= false;
-	protected	$transaction	= false;
+	private			$locked			= false;
+	private			$debug			= false;
+	private			$bench			= false;
+	private			$query			= false;
+	private			$time			= 0;
+	private			$microtime		= 0;
+	protected		$string			= [];
+	protected		$cache			= false;
+	protected		$cachekey		= false;
+	protected		$redis			= false;
+	protected		$shm			= false;
+	protected		$server			= false;
+	protected		$transaction	= false;
 
-	private			$instance	= 0;
-	private static	$instances	= 0;
+	private			$instance		= 0;
+	private static	$instances		= 0;
 
-	protected	$stats = [
+	protected		$stats = [
 		'total'		=> 0,
 		'queries'	=> 0,
 		'hits'		=> 0,
