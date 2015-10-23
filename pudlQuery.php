@@ -254,6 +254,13 @@ abstract class pudlQuery {
 		}
 		$depth++;
 
+		if (is_object($clause)) {
+			$traits = class_uses($clause, false);
+			if (!empty($traits['pudlHelper'])) {
+				return $this->_value($clause);
+			}
+		}
+
 		$query = '';
 		foreach ($clause as $key => $value) {
 			if (strlen($query)) $query .= $joiner;
