@@ -48,6 +48,9 @@ require 'join.php';
 //WHERE/HAVING CLAUSES
 require 'clause.php';
 
+//ORDER BY
+require 'order.php';
+
 //SET OF DATA
 require 'inset.php';
 
