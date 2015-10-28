@@ -65,6 +65,14 @@ abstract class pudlResult {
 
 
 
+	public function complete($type=PUDL_ARRAY) {
+		$rows = $this->rows($type);
+		$this->free();
+		return $rows;
+	}
+
+
+
 	public function json() {
 		return pudl::jsonEncode( $this->rows() );
 	}

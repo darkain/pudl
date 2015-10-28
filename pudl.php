@@ -91,7 +91,7 @@ abstract class pudl extends pudlQuery {
 					$this->stats['missed'][] = $query;
 					$result = $this->process($query);
 					if (!$result->error()) {
-						$data = $result->rows();
+						$data = $result->complete();
 						$this->redis->set("pudl:$hash", $data, $this->cache);
 						$result = new pudlCacheResult($data, $this, $hash);
 					}
@@ -433,9 +433,7 @@ abstract class pudl extends pudlQuery {
 		$result = $this->select($col, $table, $clause, $order, $limit, $offset, $lock);
 		if (is_array($this->union)) return true;
 		if ($result instanceof pudlStringResult) return $result;
-		$return = $result->rows();
-		$result->free();
-		return $return;
+		return $result->complete();
 	}
 
 
