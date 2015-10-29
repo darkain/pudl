@@ -1113,6 +1113,9 @@ abstract class pudl extends pudlQuery {
 
 
 
+	public function wait($wait=true) { return $this; }
+
+
 
 	private function _auth($instance, $data=false) {
 		static $auth = [];
