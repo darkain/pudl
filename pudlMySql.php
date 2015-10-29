@@ -22,9 +22,9 @@ class pudlMySql extends pudl {
 
 		//STORE IN SECURED AREA HIDDEN FROM VAR_DUMP/VAR_EXPORT
 		$this->auth([
-			'username'	=> $username,
-			'password'	=> $password,
-			'database'	=> $database,
+			'pudl_username'	=> $username,
+			'pudl_password'	=> $password,
+			'pudl_database'	=> $database,
 		]);
 
 		//CONNECT TO THE SERVER
@@ -86,22 +86,22 @@ class pudlMySql extends pudl {
 		//ATTEMPT TO CREATE A PERSISTANT CONNECTION
 		$this->mysql = @mysql_pconnect(
 			$this->server,
-			$auth['username'],
-			$auth['password']
+			$auth['pudl_username'],
+			$auth['pudl_password']
 		);
 
 		//ATTEMPT TO CREATE A NON-PERSISTANT CONNECTION
 		if (empty($this->mysql)) {
 			$this->mysql = @mysql_connect(
 				$this->server,
-				$auth['username'],
-				$auth['password']
+				$auth['pudl_username'],
+				$auth['pudl_password']
 			);
 		}
 
 		//ATTEMPT TO SELECT THE DATABASE AND SET UTF8 CHARACTER SET
 		if ($this->mysql) {
-			if (@mysql_select_db($auth['database'], $this->mysql)) {
+			if (@mysql_select_db($auth['pudl_database'], $this->mysql)) {
 				$ok = @mysql_set_charset('utf8', $this->mysql);
 			}
 		}
@@ -111,7 +111,7 @@ class pudlMySql extends pudl {
 			$error  = "<br />\n";
 			$error .= 'Unable to connect to database server "';
 			$error .= $this->server;
-			$error .= '" with the username: "' . $auth['username'];
+			$error .= '" with the username: "' . $auth['pudl_username'];
 			$error .= "\"<br />\nError " . $this->errno() . ': ' . $this->error();
 			if (self::$die) die($error);
 		}

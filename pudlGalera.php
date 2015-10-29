@@ -52,18 +52,18 @@ class pudlGalera extends pudlMySqli {
 			//Attempt to create a persistant connection
 			$ok = @$this->mysqli->real_connect(
 				"p:$server",
-				$auth['username'],
-				$auth['password'],
-				$auth['database']
+				$auth['pudl_username'],
+				$auth['pudl_password'],
+				$auth['pudl_database']
 			);
 
 			//Attempt to create a non-persistant connection
 			if (empty($ok)) {
 				$ok = @$this->mysqli->real_connect(
 					$server,
-					$auth['username'],
-					$auth['password'],
-					$auth['database']
+					$auth['pudl_username'],
+					$auth['pudl_password'],
+					$auth['pudl_database']
 				);
 			}
 
@@ -83,7 +83,7 @@ class pudlGalera extends pudlMySqli {
 			$error  = "<br />\n";
 			$error .= 'Unable to connect to database server "';
 			$error .= implode(', ', $this->pool);
-			$error .= '" with the username: "' . $auth['username'];
+			$error .= '" with the username: "' . $auth['pudl_username'];
 			$error .= "\"<br />\nError " . $this->connectErrno() . ': ' . $this->connectError();
 			if (self::$die) die($error);
 		}
@@ -176,6 +176,16 @@ class pudlGalera extends pudlMySqli {
 		return $this;
 	}
 
+
+
+	public function sync() {
+		$auth = $this->auth();
+		foreach ($this->pool as $server) {
+			if ($server == $this->server()) continue;
+			$connect = pudlGalera::instance(['pudl_server'=>[$server]]+$auth);
+			$connect->wait()->query('SELECT * FROM information_schema.GLOBAL_VARIABLES LIMIT 1');
+		}
+	}
 
 
 	public function onlineServer($server) {

@@ -22,9 +22,9 @@ class pudlMySqli extends pudl {
 
 		//STORE IN SECURED AREA HIDDEN FROM VAR_DUMP/VAR_EXPORT
 		$this->auth([
-			'username'	=> $username,
-			'password'	=> $password,
-			'database'	=> $database,
+			'pudl_username'	=> $username,
+			'pudl_password'	=> $password,
+			'pudl_database'	=> $database,
 		]);
 
 		//CONNECT TO THE SERVER
@@ -65,18 +65,18 @@ class pudlMySqli extends pudl {
 		//ATTEMPT TO CREATE A PERSISTANT CONNECTION
 		$ok = @$this->mysqli->real_connect(
 			'p:'.$this->server,
-			$auth['username'],
-			$auth['password'],
-			$auth['database']
+			$auth['pudl_username'],
+			$auth['pudl_password'],
+			$auth['pudl_database']
 		);
 
 		//ATTEMPT TO CREATE A NON-PERSISTANT CONNECTION
 		if (empty($ok)) {
 			$ok = @$this->mysqli->real_connect(
 				$this->server,
-				$auth['username'],
-				$auth['password'],
-				$auth['database']
+				$auth['pudl_username'],
+				$auth['pudl_password'],
+				$auth['pudl_database']
 			);
 		}
 
@@ -89,7 +89,7 @@ class pudlMySqli extends pudl {
 			$error  = "<br />\n";
 			$error .= 'Unable to connect to database server "';
 			$error .= $this->server;
-			$error .= '" with the username: "' . $auth['username'];
+			$error .= '" with the username: "' . $auth['pudl_username'];
 			$error .= "\"<br />\nError " . $this->connectErrno() . ': ' . $this->connectError();
 			if (self::$die) die($error);
 		}
