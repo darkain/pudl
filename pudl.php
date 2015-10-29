@@ -926,12 +926,11 @@ abstract class pudl extends pudlQuery {
 
 
 
-	public function commit($sleep=0) {
+	public function commit($sync=false) {
 		if (!$this->inTransaction()) return $this;
 		$this('COMMIT');
 		$this->transaction = false;
-		if ($sleep === true) $sleep = 250000;
-		if (!empty($sleep)) usleep($sleep);
+		if ($sync) $this->sync();
 		return $this;
 	}
 
