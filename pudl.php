@@ -818,10 +818,13 @@ abstract class pudl extends pudlQuery {
 
 
 
-	public function listItems($type, $like=false) {
+	public function listItems($type, $like=false, $limit=false, $offset=false) {
 		$query = 'SHOW ' . $type;
 		if (!empty($like)) $query .= ' LIKE "' . $like . '"';
+		$query .= $this->_limit($limit, $offset);
 		$result = $this($query);
+
+		if ($result instanceof pudlStringResult) return $result;
 
 		$return = [];
 		while ($data = $result->row()) {
@@ -834,18 +837,18 @@ abstract class pudl extends pudlQuery {
 
 
 
-	public function globals($like=false) {
-		return $this->listItems('GLOBAL STATUS', $like);
+	public function globals($like=false, $limit=false, $offset=false) {
+		return $this->listItems('GLOBAL STATUS', $like, $limit, $offset);
 	}
 
 
-	public function variables($like=false) {
-		return $this->listItems('VARIABLES', $like);
+	public function variables($like=false, $limit=false, $offset=false) {
+		return $this->listItems('VARIABLES', $like, $limit, $offset);
 	}
 
 
-	public function status($like=false) {
-		return $this->listItems('STATUS', $like);
+	public function status($like=false, $limit=false, $offset=false) {
+		return $this->listItems('STATUS', $like, $limit, $offset);
 	}
 
 
@@ -1114,6 +1117,7 @@ abstract class pudl extends pudlQuery {
 
 
 	public function wait($wait=true) { return $this; }
+	public function sync() {}
 
 
 

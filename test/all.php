@@ -80,3 +80,6 @@ require 'subquery.php';
 
 //CUSTOM FUNCTIONS
 require 'function.php';
+
+//MYSQL GLOBALS, VARIABLES, STATUS
+require 'variables.php';
