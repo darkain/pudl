@@ -926,7 +926,7 @@ abstract class pudl extends pudlQuery {
 
 
 
-	public function commit($sync=false) {
+	public function commit($sync=true) {
 		if (!$this->inTransaction()) return $this;
 		$this('COMMIT');
 		$this->transaction = false;
