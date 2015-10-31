@@ -1019,6 +1019,8 @@ abstract class pudl extends pudlQuery {
 				$this->redis = $server;
 			}
 		} else if (class_exists('Redis')) {
+			//HHVM HACK BECAUSE THEY REFUSE TO FIX THEIR CODE
+			$level = error_reporting(0);
 			try {
 				$this->redis = new Redis;
 				if ($this->redis->connect($server, -1, 1)) {
@@ -1029,6 +1031,7 @@ abstract class pudl extends pudlQuery {
 			} catch(RedisException $e) {
 				$this->redis = $saved;
 			}
+			error_reporting($level);
 		}
 	}
 
