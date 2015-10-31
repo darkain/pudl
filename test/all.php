@@ -26,8 +26,8 @@ function pudlTest($expected) {
 	echo "FILE: $trace[file]\n";
 	echo "LINE: $trace[line]\n\n";
 	echo "EXPECTED:\n";
-	echo "'" . $expected . "'\n\n";
-	echo "GOT:\n";
+	echo "'" . (is_bool($expected) ? 'TRUE' : $expected) . "'\n\n";
+	echo "QUERY:\n";
 	echo "'" . $db->query() . "'\n\n";
 	exit;
 }
