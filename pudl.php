@@ -1023,7 +1023,7 @@ abstract class pudl extends pudlQuery {
 			$level = error_reporting(0);
 			try {
 				$this->redis = new Redis;
-				if ($this->redis->connect($server, -1, 1)) {
+				if ($this->redis->connect($server, -1, 0.025)) {
 					$this->redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
 				} else {
 					$this->redis = $saved;
