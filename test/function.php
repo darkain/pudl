@@ -8,5 +8,7 @@ pudlTest("SELECT * FROM `table` WHERE (`column`=CONVERT_TZ(FROM_UNIXTIME(1450000
 
 
 //Verify TIMESTAMP conversion is working properly! Check pudlFunction for notes if this fails
-$row = $db->selectRow(['time'=>pudlFunction::timestamp()], false);
-pudlTest( strtotime(reset($row)) === $db->time() );
+if (is_a($db, 'pudlGalera')) {
+	$row = $db->selectRow(['time'=>pudlFunction::timestamp()], false);
+	pudlTest( strtotime(reset($row)) === $db->time() );
+}

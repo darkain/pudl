@@ -10,12 +10,29 @@ require_once('pudlQuery.php');
 abstract class pudl extends pudlQuery {
 
 
-	public function __construct() {
+	public function __construct($data) {
+		//SANITIZE DATA
+		$data['username']	= empty($data['username'])	? ''			: $data['username'];
+		$data['password']	= empty($data['password'])	? ''			: $data['password'];
+		$data['database']	= empty($data['database'])	? ''			: $data['database'];
+		$data['server']		= empty($data['server'])	? 'localhost'	: $data['server'];
+		$data['prefix']		= empty($data['prefix'])	? false			: $data['prefix'];
+
+		//SET INITIAL DATA
 		$this->instance		= ++self::$instances;
-		$this->redis		= new pudlVoid;
-		$this->time			= time();
 		$this->microtime	= microtime(true);
-		$this->transaction	= false;
+		$this->time			= (int) $this->microtime;
+		$this->prefix		= $data['prefix'];
+
+		//STORE CREDENTIALS IN SECURED AREA HIDDEN FROM VAR_DUMP/VAR_EXPORT
+		$this->_auth($data);
+
+		//INITIALIZE REDIS CONNECTION
+		if (!empty($data['redis'])) {
+			$this->redis($data['redis']);
+		} else {
+			$this->redis	= new pudlVoid;
+		}
 	}
 
 
@@ -991,7 +1008,8 @@ abstract class pudl extends pudlQuery {
 
 
 	public function server() {
-		return $this->server;
+		$auth = $this->auth();
+		return $auth['server'];
 	}
 
 
@@ -1012,27 +1030,19 @@ abstract class pudl extends pudlQuery {
 	public function redis($server=false) {
 		if ($server === false) return $this->redis;
 
-		$saved = $this->redis;
-
-		if (is_object($server)) {
-			if (is_a($server, 'Redis')) {
-				$this->redis = $server;
-			}
+		if (is_object($server)  &&  is_a($server, 'Redis')) {
+			$this->redis = $server;
 		} else if (class_exists('Redis')) {
-			//HHVM HACK BECAUSE THEY REFUSE TO FIX THEIR CODE
-			$level = error_reporting(0);
-			try {
-				$this->redis = new Redis;
-				if ($this->redis->connect($server, -1, 0.025)) {
-					$this->redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
-				} else {
-					$this->redis = $saved;
-				}
-			} catch(RedisException $e) {
-				$this->redis = $saved;
+			$level = error_reporting(0); //HHVM HACK BECAUSE THEY HAVE YET TO FIX THEIR CODE
+			$this->redis = new Redis;
+			if ($this->redis->connect($server, -1, 0.025)) {
+				$this->redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
 			}
 			error_reporting($level);
 		}
+
+		if (!is_object($this->redis)) $this->redis = new pudlVoid;
+		return $this->redis;
 	}
 
 
@@ -1123,16 +1133,16 @@ abstract class pudl extends pudlQuery {
 
 
 
-	private function _auth($instance, $data=false) {
+	private function _auth($data=false) {
 		static $auth = [];
-		if (!empty($data)) return $auth[$instance] = $data;
-		if (empty($auth[$instance])) return [];
-		return $auth[$instance];
+		if ($data !== false) return $auth[$this->instance] = $data;
+		if (empty($auth[$this->instance])) return [];
+		return $auth[$this->instance];
 	}
 
 
-	protected function auth($data=false) {
-		return $this->_auth($this->instance, $data);
+	protected function auth() {
+		return $this->_auth();
 	}
 
 
@@ -1148,7 +1158,6 @@ abstract class pudl extends pudlQuery {
 	protected		$cachekey		= false;
 	protected		$redis			= false;
 	protected		$shm			= false;
-	protected		$server			= false;
 	protected		$transaction	= false;
 
 	private			$instance		= 0;

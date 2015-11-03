@@ -6,60 +6,69 @@ require_once('pudlMsSqlResult.php');
 
 
 class pudlMsSql extends pudl {
-	public function __construct($username, $password, $database, $server='localhost', $prefix=false) {
-		parent::__construct();
+	public function __construct($data, $autoconnect=true) {
+		parent::__construct($data);
 
 		$this->escstart	= '[';
 		$this->escend	= ']';
 		$this->top		= true;
-		$this->prefix	= $prefix;
 
-		$this->mssql = false;
-		$this->mssql = @mssql_pconnect($server, $username, $password);
-
-		if (!$this->mssql) {
-			$this->mssql = @mssql_connect($server, $username, $password);
-		}
-
-		if (!$this->mssql) {
-			$error  = "<br />\n";
-			$error .= 'Unable to connect to database server: "' . $server;
-			$error .= '" with the username: "' . $username;
-			$error .= "\"<br />\nError " . $this->errno() . ': ' . $this->error();
-			die($error);
-		}
-
-		if (!@mssql_select_db($database, $this->mssql)) {
-			$error  = "<br />\n";
-			$error .= 'Unable to select database : "' . $database;
-			$error .= "\"<br />\nError " . $this->errno() . ': ' . $this->error();
-			die($error);
-		}
+		//CONNECT TO THE SERVER
+		if ($autoconnect) $this->connect();
 	}
 
 
 
-	public static function instance($data) {
-		$username	= empty($data['pudl_username']) ? '' : $data['pudl_username'];
-		$password	= empty($data['pudl_password']) ? '' : $data['pudl_password'];
-		$database	= empty($data['pudl_database']) ? '' : $data['pudl_database'];
-		$server		= empty($data['pudl_server']) ? 'localhost' : $data['pudl_server'];
-		$prefix		= empty($data['pudl_prefix']) ? false : $data['pudl_prefix'];
+	public static function instance($data, $autoconnect=true) {
+		return new pudlMsSql($data, $autoconnect);
+	}
 
-		$db = new pudlMsSql($username, $password, $database, $server, $prefix);
-		if (!empty($data['pudl_redis'])) $db->redis($data['pudl_redis']);
-		return $db;
+
+
+	public function connect() {
+		$auth = $this->auth();
+
+		$this->mssql = @mssql_pconnect(
+			$auth['server'],
+			$auth['username'],
+			$auth['password']
+		);
+
+		if (!$this->mssql) {
+			$this->mssql = @mssql_connect(
+				$auth['server'],
+				$auth['username'],
+				$auth['password']
+			);
+		}
+
+		if (!$this->mssql) {
+			$error  = "<br />\n";
+			$error .= 'Unable to connect to database server: "' . $auth['server'];
+			$error .= '" with the username: "' . $auth['username'];
+			$error .= "\"<br />\nError " . $this->errno() . ': ' . $this->error();
+			die($error);
+		}
+
+		if (!@mssql_select_db($auth['database'], $this->mssql)) {
+			$error  = "<br />\n";
+			$error .= 'Unable to select database : "' . $auth['database'];
+			$error .= "\"<br />\nError " . $this->errno() . ': ' . $this->error();
+			die($error);
+		}
 	}
 
 
 
 	protected function process($query) {
+		if (!$this->mssql) return false;
 		$result = @mssql_query($query, $this->mssql);
 		return new pudlMsSqlResult($result, $this);
 	}
 
 
 	public function insertId() {
+		if (!$this->mssql) return 0;
 		$result = @mssql_query('SELECT @@IDENTITY', $this->mssql);
 		if ($result === false) return false;
 		$return = @mssql_result($result, 0, 0);
@@ -69,6 +78,7 @@ class pudlMsSql extends pudl {
 
 
 	public function updated() {
+		if (!$this->mssql) return 0;
 		$result = @mssql_query('SELECT @@ROWCOUNT', $this->mssql);
 		if ($result === false) return false;
 		$return = @mssql_result($result, 0, 0);
@@ -87,5 +97,5 @@ class pudlMsSql extends pudl {
 	}
 
 
-	private $mssql;
+	private $mssql	= false;
 }

@@ -6,19 +6,13 @@ require_once('pudlShellResult.php');
 
 
 class pudlWeb extends pudlShell {
-	public function __construct($path, $prefix=false) {
-		parent::__construct($path, $prefix);
-
-		$this->path = $path;
+	public function __construct($data) {
+		parent::__construct($data);
 	}
 
 
 	public static function instance($data) {
-		$path	= empty($data['pudl_path'])		? '' : $data['pudl_path'];
-		$prefix	= empty($data['pudl_prefix'])	? false : $data['pudl_prefix'];
-		$db = new pudlWeb($path, $prefix);
-		if (!empty($data['pudl_redis'])) $db->redis($data['pudl_redis']);
-		return $db;
+		return new pudlWeb($data);
 	}
 
 

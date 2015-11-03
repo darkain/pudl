@@ -6,30 +6,25 @@ require_once('pudlShellResult.php');
 
 
 class pudlShell extends pudl {
-	public function __construct($path, $prefix=false) {
-		parent::__construct();
+	public function __construct($data) {
+		parent::__construct($data);
 
 		$this->escstart	= '"';
 		$this->escend	= '"';
 		$this->top		= true;
-		$this->path		= escapeshellarg($path);
-		$this->prefix	= $prefix;
+		$this->path		= empty($data['path']) ? '' : $data['path'];
 	}
 
 
 	public static function instance($data) {
-		$path	= empty($data['pudl_path'])		? ''	: $data['pudl_path'];
-		$prefix	= empty($data['pudl_prefix'])	? false	: $data['pudl_prefix'];
-		$db = new pudlShell($path, $prefix);
-		if (!empty($data['pudl_redis'])) $db->redis($data['pudl_redis']);
-		return $db;
+		return new pudlShell($path, $prefix);
 	}
 
 
 
 	protected function process($query) {
 		$result = false;
-		exec('php5 ' . $this->path . ' ' . escapeshellarg($query), $result);
+		exec('php5 ' . escapeshellarg($this->path) . ' ' . escapeshellarg($query), $result);
 		return $this->_process($result[0]);
 	}
 
@@ -75,7 +70,7 @@ class pudlShell extends pudl {
 	}
 
 
-	protected $path;
+	protected $path		= '';
 	protected $errno	= false;
 	protected $error	= false;
 	protected $insertId	= 0;

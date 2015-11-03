@@ -11,25 +11,16 @@ class pudlMySqli extends pudl {
 	use pudlMySqlHelper;
 
 
-	public function __construct($username, $password, $database, $server='localhost', $prefix=false) {
-		parent::__construct();
+	public function __construct($data, $autoconnect=true) {
+		parent::__construct($data);
 
 		//SET INITIAL VALUES
 		$this->limit	= true;
 		$this->escstart	= '`';
 		$this->escend	= '`';
-		$this->prefix	= $prefix;
-
-		//STORE IN SECURED AREA HIDDEN FROM VAR_DUMP/VAR_EXPORT
-		$this->auth([
-			'pudl_username'	=> $username,
-			'pudl_password'	=> $password,
-			'pudl_database'	=> $database,
-		]);
 
 		//CONNECT TO THE SERVER
-		$this->server = $server;
-		if ($server) $this->connect();
+		if ($autoconnect) $this->connect();
 	}
 
 
@@ -41,16 +32,8 @@ class pudlMySqli extends pudl {
 
 
 
-	public static function instance($data) {
-		$username	= empty($data['pudl_username']) ? '' : $data['pudl_username'];
-		$password	= empty($data['pudl_password']) ? '' : $data['pudl_password'];
-		$database	= empty($data['pudl_database']) ? '' : $data['pudl_database'];
-		$server		= empty($data['pudl_server']) ? 'localhost' : $data['pudl_server'];
-		$prefix		= empty($data['pudl_prefix']) ? false : $data['pudl_prefix'];
-
-		$db = new pudlMySqli($username, $password, $database, $server, $prefix);
-		if (!empty($data['pudl_redis'])) $db->redis($data['pudl_redis']);
-		return $db;
+	public static function instance($data, $autoconnect=true) {
+		return new pudlMySqli($data, $autoconnect);
 	}
 
 
@@ -64,19 +47,19 @@ class pudlMySqli extends pudl {
 
 		//ATTEMPT TO CREATE A PERSISTANT CONNECTION
 		$ok = @$this->mysqli->real_connect(
-			'p:'.$this->server,
-			$auth['pudl_username'],
-			$auth['pudl_password'],
-			$auth['pudl_database']
+			'p:'.$auth['server'],
+			$auth['username'],
+			$auth['password'],
+			$auth['database']
 		);
 
 		//ATTEMPT TO CREATE A NON-PERSISTANT CONNECTION
 		if (empty($ok)) {
 			$ok = @$this->mysqli->real_connect(
-				$this->server,
-				$auth['pudl_username'],
-				$auth['pudl_password'],
-				$auth['pudl_database']
+				$auth['server'],
+				$auth['username'],
+				$auth['password'],
+				$auth['database']
 			);
 		}
 
@@ -87,9 +70,8 @@ class pudlMySqli extends pudl {
 		//CANNOT CONNECT - ERROR OUT
 		if (empty($ok)) {
 			$error  = "<br />\n";
-			$error .= 'Unable to connect to database server "';
-			$error .= $this->server;
-			$error .= '" with the username: "' . $auth['pudl_username'];
+			$error .= 'Unable to connect to database server "' . $auth['server'];
+			$error .= '" with the username: "' . $auth['username'];
 			$error .= "\"<br />\nError " . $this->connectErrno() . ': ' . $this->connectError();
 			if (self::$die) die($error);
 		}

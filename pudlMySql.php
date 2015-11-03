@@ -11,49 +11,16 @@ class pudlMySql extends pudl {
 	use pudlMySqlHelper;
 
 
-	public function __construct($username, $password, $database, $server='localhost', $prefix=false) {
-		parent::__construct();
+	public function __construct($data, $autoconnect=true) {
+		parent::__construct($data);
 
 		//SET INITIAL VALUES
 		$this->limit	= true;
 		$this->escstart	= '`';
 		$this->escend	= '`';
-		$this->prefix	= $prefix;
-
-		//STORE IN SECURED AREA HIDDEN FROM VAR_DUMP/VAR_EXPORT
-		$this->auth([
-			'pudl_username'	=> $username,
-			'pudl_password'	=> $password,
-			'pudl_database'	=> $database,
-		]);
 
 		//CONNECT TO THE SERVER
-		$this->server = $server;
-		$this->connect();
-
-
-		if (!$this->mysql) {
-			$this->mysql = @mysql_connect($server, $username, $password);
-		}
-
-		if (!$this->mysql) {
-			$error  = "<br />\n";
-			$error .= 'Unable to connect to database server: "' . $server;
-			$error .= '" with the username: "' . $username;
-			$error .= "\"<br />\nError " . mysql_errno() . ': ' . mysql_error();
-			die($error);
-		}
-
-		if (!@mysql_select_db($database, $this->mysql)) {
-			$error  = "<br />\n";
-			$error .= 'Unable to select database : "' . $database;
-			$error .= "\"<br />\nError " . mysql_errno() . ': ' . mysql_error();
-			die($error);
-		}
-
-		if (!@mysql_set_charset('utf8', $this->mysql)) {
-			die('Error loading character set utf8: ' . mysql_error());
-		}
+		if ($autoconnect) $this->connect();
 	}
 
 
@@ -64,16 +31,8 @@ class pudlMySql extends pudl {
 	}
 
 
-	public static function instance($data) {
-		$username	= empty($data['pudl_username']) ? '' : $data['pudl_username'];
-		$password	= empty($data['pudl_password']) ? '' : $data['pudl_password'];
-		$database	= empty($data['pudl_database']) ? '' : $data['pudl_database'];
-		$server		= empty($data['pudl_server']) ? 'localhost' : $data['pudl_server'];
-		$prefix		= empty($data['pudl_prefix']) ? false : $data['pudl_prefix'];
-
-		$db = new pudlMySql($username, $password, $database, $server, $prefix);
-		if (!empty($data['pudl_redis'])) $db->redis($data['pudl_redis']);
-		return $db;
+	public static function instance($data, $autoconnect=true) {
+		return new pudlMySql($data, $autoconnect);
 	}
 
 
@@ -85,23 +44,23 @@ class pudlMySql extends pudl {
 
 		//ATTEMPT TO CREATE A PERSISTANT CONNECTION
 		$this->mysql = @mysql_pconnect(
-			$this->server,
-			$auth['pudl_username'],
-			$auth['pudl_password']
+			$auth['server'],
+			$auth['username'],
+			$auth['password']
 		);
 
 		//ATTEMPT TO CREATE A NON-PERSISTANT CONNECTION
 		if (empty($this->mysql)) {
 			$this->mysql = @mysql_connect(
-				$this->server,
-				$auth['pudl_username'],
-				$auth['pudl_password']
+				$auth['server'],
+				$auth['username'],
+				$auth['password']
 			);
 		}
 
 		//ATTEMPT TO SELECT THE DATABASE AND SET UTF8 CHARACTER SET
 		if ($this->mysql) {
-			if (@mysql_select_db($auth['pudl_database'], $this->mysql)) {
+			if (@mysql_select_db($auth['database'], $this->mysql)) {
 				$ok = @mysql_set_charset('utf8', $this->mysql);
 			}
 		}
@@ -109,9 +68,8 @@ class pudlMySql extends pudl {
 		//CANNOT CONNECT - ERROR OUT
 		if (empty($ok)) {
 			$error  = "<br />\n";
-			$error .= 'Unable to connect to database server "';
-			$error .= $this->server;
-			$error .= '" with the username: "' . $auth['pudl_username'];
+			$error .= 'Unable to connect to database server "' . $auth['server'];
+			$error .= '" with the username: "' . $auth['username'];
 			$error .= "\"<br />\nError " . $this->errno() . ': ' . $this->error();
 			if (self::$die) die($error);
 		}
@@ -123,18 +81,20 @@ class pudlMySql extends pudl {
 		parent::disconnect();
 		if (!$this->mysql) return;
 		@mysql_close($this->mysql);
-		$this->mysql = false;
+		$this->mysql = NULL;
 	}
 
 
 
 	public function escape($value) {
+		if (!$this->mysql) return @mysql_real_escape_string($value);
 		return @mysql_real_escape_string($value, $this->mysql);
 	}
 
 
 
 	protected function process($query) {
+		if (!$this->mysql) return false;
 		$result = @mysql_query($query, $this->mysql);
 		return new pudlMySqlResult($result, $this);
 	}
@@ -142,12 +102,14 @@ class pudlMySql extends pudl {
 
 
 	public function insertId() {
+		if (!$this->mysql) return 0;
 		return @mysql_insert_id($this->mysql);
 	}
 
 
 
 	public function updated() {
+		if (!$this->mysql) return 0;
 		return @mysql_affected_rows($this->mysql);
 	}
 

@@ -9,33 +9,25 @@ class pudlGalera extends pudlMySqli {
 	use pudlMySqlHelper;
 
 
-	public function __construct($username, $password, $database, $servers, $prefix=false) {
-		parent::__construct($username, $password, $database, false, $prefix);
+	public function __construct($data, $autoconnect=true) {
+		parent::__construct($data, false);
 
-		if (!is_array($servers)) {
+		if (!is_array($data['server'])) {
 			throw new pudlException('Not a valid server pool, must be of type array');
 		}
 
 		//SET INITIAL VALUES
-		$this->pool = $this->onlineServers($servers);
+		$this->pool = $this->onlineServers($data['server']);
 		shuffle($this->pool);
 
-		//CONNECT
-		$this->connect();
+		//CONNECT TO THE SERVER CLUSTER
+		if ($autoconnect) $this->connect();
 	}
 
 
 
-	public static function instance($data) {
-		$username	= empty($data['pudl_username'])	? ''	: $data['pudl_username'];
-		$password	= empty($data['pudl_password'])	? ''	: $data['pudl_password'];
-		$database	= empty($data['pudl_database'])	? ''	: $data['pudl_database'];
-		$server		= empty($data['pudl_server'])	? []	: $data['pudl_server'];
-		$prefix		= empty($data['pudl_prefix'])	? false	: $data['pudl_prefix'];
-
-		$db = new pudlGalera($username, $password, $database, $server, $prefix);
-		if (!empty($data['pudl_redis'])) $db->redis($data['pudl_redis']);
-		return $db;
+	public static function instance($data, $autoconnect=true) {
+		return new pudlGalera($data, $autoconnect);
 	}
 
 
@@ -46,44 +38,45 @@ class pudlGalera extends pudlMySqli {
 		foreach ($this->pool as $server) {
 			$this->mysqli = mysqli_init();
 
-			//Set connection timeout to 1 second if we're in a clsuter, else 10 seconds
+			//SET CONNECTION TIMEOUT TO 1 SECOND IF WE'RE IN A CLSUTER, ELSE 10 SECONDS
 			$this->mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, count($this->pool)>1 ? 1 : 10);
 
-			//Attempt to create a persistant connection
+			//ATTEMPT TO CREATE A PERSISTANT CONNECTION
 			$ok = @$this->mysqli->real_connect(
 				"p:$server",
-				$auth['pudl_username'],
-				$auth['pudl_password'],
-				$auth['pudl_database']
+				$auth['username'],
+				$auth['password'],
+				$auth['database']
 			);
 
-			//Attempt to create a non-persistant connection
+			//ATTEMPT TO CREATE A NON-PERSISTANT CONNECTION
 			if (empty($ok)) {
 				$ok = @$this->mysqli->real_connect(
 					$server,
-					$auth['pudl_username'],
-					$auth['pudl_password'],
-					$auth['pudl_database']
+					$auth['username'],
+					$auth['password'],
+					$auth['database']
 				);
 			}
 
-			//Attempt to set UTF-8 character set
-			if ($ok  &&  $this->mysqli->set_charset('utf8')) {
-				$this->server = $server;
+			//ATTEMPT TO SET UTF-8 CHARACTER SET
+			if ($ok  &&  @$this->mysqli->set_charset('utf8')) {
+				$this->connected = $server;
 				break;
-			} else { $ok = false; }
+			}
 
-			//Okay, maybe we're not
+			//OKAY, MAYBE WE'RE NOT
+			$ok = false;
 			$this->offlineServer($server);
 		}
 
 
-		//Cannot connect - Error out
+		//CANNOT CONNECT - ERROR OUT
 		if (empty($ok)) {
 			$error  = "<br />\n";
-			$error .= 'Unable to connect to database server "';
+			$error .= 'Unable to connect to galera cluster "';
 			$error .= implode(', ', $this->pool);
-			$error .= '" with the username: "' . $auth['pudl_username'];
+			$error .= '" with the username: "' . $auth['username'];
 			$error .= "\"<br />\nError " . $this->connectErrno() . ': ' . $this->connectError();
 			if (self::$die) die($error);
 		}
@@ -124,11 +117,11 @@ class pudlGalera extends pudlMySqli {
 		switch ($this->errno()) {
 			case 0: break; //NO ERRORS!
 
-			//An error occurred with this node, so let's connect to a different node in the cluster
-			case 1047: //Unknown command
-			case 1053: //Server shutdown in progress
-			case 2006: //MySQL server has gone away
-			case 2062: //Read timeout is reached
+			//AN ERROR OCCURRED WITH THIS NODE, SO LET'S CONNECT TO A DIFFERENT NODE IN THE CLUSTER
+			case 1047: //UNKNOWN COMMAND
+			case 1053: //SERVER SHUTDOWN IN PROGRESS
+			case 2006: //MYSQL SERVER HAS GONE AWAY
+			case 2062: //READ TIMEOUT IS REACHED
 				$this->reconnect();
 				if ($this->inTransaction()) {
 					$result = $this->retryTransaction();
@@ -137,20 +130,20 @@ class pudlGalera extends pudlMySqli {
 				}
 			break;
 
-			//A deadlocking condition occurred, simple, let's retry!
-			case 1205: //Lock wait timeout exceeded; try restarting transaction
-			case 1213: //Deadlock found when trying to get lock; try restarting transaction
+			//A DEADLOCKING CONDITION OCCURRED, SIMPLE, LET'S RETRY!
+			case 1205: //LOCK WAIT TIMEOUT EXCEEDED; TRY RESTARTING TRANSACTION
+			case 1213: //DEADLOCK FOUND WHEN TRYING TO GET LOCK; TRY RESTARTING TRANSACTION
 				if ($this->inTransaction()) {
 					usleep(50000);
 					$result = $this->retryTransaction();
 
-				//It is possible to deadlock with a single query
-				//This condition is simple: just retry the query!
+				//IT IS POSSIBLE TO DEADLOCK WITH A SINGLE QUERY
+				//THIS CONDITION IS SIMPLE: JUST RETRY THE QUERY!
 				} else {
 					usleep(25000);
 					$result = @$this->mysqli->query($query);
 
-					//If we deadlock again, try once more but wait longer
+					//IF WE DEADLOCK AGAIN, TRY ONCE MORE BUT WAIT LONGER
 					if ($this->errno() == 1205  ||  $this->errno() == 1213) {
 						usleep(50000);
 						$result = @$this->mysqli->query($query);
@@ -181,9 +174,9 @@ class pudlGalera extends pudlMySqli {
 	public function sync() {
 		$auth = $this->auth();
 		foreach ($this->pool as $server) {
-			if ($server == $this->server()) continue;
-			$connect = pudlGalera::instance(['pudl_server'=>[$server]]+$auth);
-			$connect->wait()->query('SELECT * FROM information_schema.GLOBAL_VARIABLES LIMIT 1');
+			if ($server == $this->connected) continue;
+			$sync = pudlGalera::instance(['server'=>[$server]]+$auth);
+			$sync->wait()->query('SELECT * FROM information_schema.GLOBAL_VARIABLES LIMIT 1');
 		}
 	}
 
@@ -245,6 +238,7 @@ class pudlGalera extends pudlMySqli {
 
 
 
-	private $pool = [];
-	private $wait = false;
+	private $pool		= [];
+	private $wait		= false;
+	private $connected	= false;
 }

@@ -6,39 +6,41 @@ require_once('pudlOdbcResult.php');
 
 
 class pudlOdbc extends pudl {
-	public function __construct($username, $password, $database, $server='localhost', $prefix=false) {
-		parent::__construct();
+	public function __construct($data, $autoconnect=true) {
+		parent::__construct($data);
 
 		$this->escstart	= '"';
 		$this->escend	= '"';
-		$this->numrows	= 0;
 		$this->top		= true;
-		$this->prefix	= $prefix;
 
-		$this->odbc = false;
-		$this->odbc = @odbc_connect($database, $username, $password);
+		//CONNECT TO THE SERVER
+		if ($autoconnect) $this->connect();
+	}
+
+
+	public static function instance($data, $autoconnect=true) {
+		return new pudlOdbc($data, $autoconnect);
+	}
+
+
+
+	public function connect() {
+		$auth = $this->auth();
+
+		$this->odbc = @odbc_connect(
+			$auth['database'],
+			$auth['username'],
+			$auth['password']
+		);
+
 		if ($this->odbc === false) {
-			die('ERROR CONNECTING TO ODBC: ' . odbc_error() . ' - ' . odbc_errormsg());
+			die('ERROR CONNECTING TO ODBC: ' . $this->errno() . ' - ' . $this->error());
 		}
 	}
 
 
-	public static function instance($data) {
-		$username	= empty($data['pudl_username']) ? '' : $data['pudl_username'];
-		$password	= empty($data['pudl_password']) ? '' : $data['pudl_password'];
-		$database	= empty($data['pudl_database']) ? '' : $data['pudl_database'];
-		$server		= empty($data['pudl_server']) ? 'localhost' : $data['pudl_server'];
-		$prefix		= empty($data['pudl_prefix']) ? false : $data['pudl_prefix'];
-
-		$db = new pudlOdbc($username, $password, $database, $server, $prefix);
-		if (!empty($data['pudl_redis'])) $db->redis($data['pudl_redis']);
-		return $db;
-	}
-
-
-
 	protected function process($query) {
-		$result = false;
+		if (!$this->odbc) return false;
 		$result = @odbc_exec($this->odbc, $query);
 		$this->numrows = ($result !== false) ? @odbc_num_rows($result) : 0;
 		return new pudlOdbcResult($result, $this);
@@ -47,6 +49,7 @@ class pudlOdbc extends pudl {
 
 
 	public function insertId() {
+		if (!$this->odbc) return 0;
 		$result = @odbc_exec($this->odbc, 'SELECT @@IDENTITY');
 		if ($result === false) return false;
 		@odbc_fetch_row($result, 0);
@@ -62,15 +65,17 @@ class pudlOdbc extends pudl {
 
 
 	public function errno() {
+		if (!$this->odbc) return (int) odbc_error();
 		return (int) odbc_error($this->odbc);
 	}
 
 
 	public function error() {
+		if (!$this->odbc) return odbc_errormsg();
 		return odbc_errormsg($this->odbc);
 	}
 
 
-	private $odbc;
-	private $numrows;
+	private $odbc		= false;
+	private $numrows	= 0;
 }
