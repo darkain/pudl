@@ -15,9 +15,6 @@ class pudlStringResult extends pudlResult {
 	}
 
 
-	public function __destruct() {}
-
-
 	public function __toString()		{ return $this->query; }
 
 

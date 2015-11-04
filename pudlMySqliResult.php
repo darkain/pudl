@@ -11,6 +11,7 @@ class pudlMySqliResult extends pudlResult {
 
 
 	public function __destruct() {
+		parent::__destruct();
 		$this->free();
 	}
 
