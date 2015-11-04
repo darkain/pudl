@@ -10,6 +10,8 @@ abstract class pudlResult {
 		$this->fields	= false;
 	}
 
+	public function __destruct() {}
+
 
 	public function __invoke() { return $this->row(); }
 
