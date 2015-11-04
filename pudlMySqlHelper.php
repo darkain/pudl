@@ -44,6 +44,6 @@ trait pudlMySqlHelper {
 
 
 
-	private static $die=true;
+	private static $die = true;
 
 }
