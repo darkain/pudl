@@ -36,7 +36,9 @@ abstract class pudl extends pudlQuery {
 	}
 
 
-	function __destruct() {}
+	function __destruct() {
+		$this->_auth(NULL);
+	}
 
 
 
@@ -1135,9 +1137,15 @@ abstract class pudl extends pudlQuery {
 
 	private function _auth($data=false) {
 		static $auth = [];
-		if ($data !== false) return $auth[$this->instance] = $data;
-		if (empty($auth[$this->instance])) return [];
-		return $auth[$this->instance];
+
+		if ($data === NULL) {
+			unset($auth[$this->instance]);
+			return NULL;
+		} else if ($data !== false) {
+			return $auth[$this->instance] = $data;
+		}
+
+		return empty($auth[$this->instance]) ? [] : $auth[$this->instance];
 	}
 
 
