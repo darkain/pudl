@@ -1,5 +1,6 @@
 <?php
 
+chdir(__DIR__);
 require_once('../pudlSqlite.php');
 
 $db = new pudlSqlite('test.db');
