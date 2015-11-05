@@ -240,6 +240,9 @@ class pudlGalera extends pudlMySqli {
 	}
 
 
+	public function server()	{ return $this->connected; }
+	public function pool()		{ return $this->pool; }
+
 
 	private $pool		= [];
 	private $wait		= false;
