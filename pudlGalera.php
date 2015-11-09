@@ -13,12 +13,20 @@ class pudlGalera extends pudlMySqli {
 		parent::__construct($data, false);
 
 		if (!is_array($data['server'])) {
-			throw new pudlException('Not a valid server pool, must be of type array');
+			throw new pudlException('Not a valid server pool, $data[server] must be of array data type');
 		}
 
 		//SET INITIAL VALUES
 		$this->pool = $this->onlineServers($data['server']);
-		shuffle($this->pool);
+
+		//RANDOMIZE SERVER POOL ORDER
+		if (!empty($_SERVER['REMOTE_ADDR'])) {
+			srand( crc32($_SERVER['REMOTE_ADDR']) );
+			shuffle($this->pool);
+			srand();
+		} else {
+			shuffle($this->pool);
+		}
 
 		//CONNECT TO THE SERVER CLUSTER
 		if ($autoconnect) $this->connect();
