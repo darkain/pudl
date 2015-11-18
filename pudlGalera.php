@@ -20,6 +20,7 @@ class pudlGalera extends pudlMySqli {
 		$this->pool = $this->onlineServers($data['server']);
 
 		//RANDOMIZE SERVER POOL ORDER
+		//IF REMOTE_ADDR AVAILABLE, USE IT TO HASH ROUTE TO SAME NODE EACH TIME
 		if (!empty($_SERVER['REMOTE_ADDR'])) {
 			srand( crc32($_SERVER['REMOTE_ADDR']) );
 			shuffle($this->pool);
@@ -68,54 +69,55 @@ class pudlGalera extends pudlMySqli {
 			}
 
 			//ATTEMPT TO SET UTF-8 CHARACTER SET
+			//WE'RE GOOD, RETURN A GOOD RESULT!
 			if ($ok  &&  @$this->mysqli->set_charset('utf8')) {
 				$this->connected = $server;
-				break;
+				return true;
 			}
 
 			//OKAY, MAYBE WE'RE NOT
-			$ok = false;
 			$this->offlineServer($server);
 		}
 
-
 		//CANNOT CONNECT - ERROR OUT
-		if (empty($ok)) {
-			$error  = "<br />\n";
-			$error .= 'Unable to connect to galera cluster "';
-			$error .= implode(', ', $this->pool);
-			$error .= '" with the username: "' . $auth['username'];
-			$error .= "\"<br />\nError " . $this->connectErrno() . ': ' . $this->connectError();
-			if (self::$die) die($error);
-		}
+		$error  = "<br />\n";
+		$error .= 'Unable to connect to galera cluster "';
+		$error .= implode(', ', $this->pool);
+		$error .= '" with the username: "' . $auth['username'];
+		$error .= "\"<br />\nError " . $this->connectErrno() . ': ' . $this->connectError();
+		if (self::$die) die($error);
+		return false;
 	}
 
 
 
 	public function reconnect() {
-		if (empty($this->pool)) return;
+		if (empty($this->pool)) return false;
 
 		array_shift($this->pool);
 
 		if (empty($this->pool)) {
 			if (self::$die) die('No more servers available in server pool');
-			return;
+			return false;
 		}
 
-		$this->connect();
+		return $this->connect();
 	}
 
 
 
 	protected function process($query) {
-		if ($this->wait) {
+		//PROPERLY HANDLE RE-ENTRY TO THIS FUNCTION
+		$wait = $this->wait;
+		$this->wait = false;
+
+		if ($wait) {
 			@$this->mysqli->query(
 				'SET @wsrep_sync_wait_orig = @@wsrep_sync_wait'
 			);
 
 			@$this->mysqli->query(
-				'SET SESSION wsrep_sync_wait = GREATEST(@wsrep_sync_wait_orig, '
-				. $this->wait . ')'
+				'SET SESSION wsrep_sync_wait = GREATEST(@wsrep_sync_wait_orig,'.$wait.')'
 			);
 		}
 
@@ -126,21 +128,21 @@ class pudlGalera extends pudlMySqli {
 			case 0: break; //NO ERRORS!
 
 			//AN ERROR OCCURRED WITH THIS NODE, SO LET'S CONNECT TO A DIFFERENT NODE IN THE CLUSTER
-			case 1047: //UNKNOWN COMMAND
-			case 1053: //SERVER SHUTDOWN IN PROGRESS
-			case 2006: //MYSQL SERVER HAS GONE AWAY
-			case 2062: //READ TIMEOUT IS REACHED
-				$this->reconnect();
+			case 1047: // "WSREP HAS NOT YET PREPARED NODE FOR APPLICATION USE"
+			case 1053: // "SERVER SHUTDOWN IN PROGRESS"
+			case 2006: // "MYSQL SERVER HAS GONE AWAY"
+			case 2062: // "READ TIMEOUT IS REACHED"
+				if (!$this->reconnect()) return;
 				if ($this->inTransaction()) {
 					$result = $this->retryTransaction();
 				} else {
-					$result = @$this->mysqli->query($query);
+					$result = $this->process($query);
 				}
 			break;
 
 			//A DEADLOCKING CONDITION OCCURRED, SIMPLE, LET'S RETRY!
-			case 1205: //LOCK WAIT TIMEOUT EXCEEDED; TRY RESTARTING TRANSACTION
-			case 1213: //DEADLOCK FOUND WHEN TRYING TO GET LOCK; TRY RESTARTING TRANSACTION
+			case 1205: // "LOCK WAIT TIMEOUT EXCEEDED; TRY RESTARTING TRANSACTION"
+			case 1213: // "DEADLOCK FOUND WHEN TRYING TO GET LOCK; TRY RESTARTING TRANSACTION"
 				if ($this->inTransaction()) {
 					usleep(50000);
 					$result = $this->retryTransaction();
@@ -160,8 +162,7 @@ class pudlGalera extends pudlMySqli {
 			break;
 		}
 
-		if ($this->wait) {
-			$this->wait = false;
+		if ($wait) {
 			@$this->mysqli->query(
 				'SET SESSION wsrep_sync_wait = @wsrep_sync_wait_orig'
 			);
