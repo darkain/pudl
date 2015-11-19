@@ -227,11 +227,11 @@ abstract class pudlQuery {
 
 
 	protected function _order($order) {
-		if ($order === false)	return '';
+		if (is_string($order)) return ' ORDER BY ' . $order;
+		if (!is_array($order)  &&  !is_object($order)) return '';
 		if ($order instanceof pudlStringResult) return (string) $order;
-		if (is_array($order))	return ' ORDER BY ' . $this->_clauseRecurse($order,', ');
-		if (is_object($order))	return ' ORDER BY ' . $this->_clauseRecurse($order,', ');
-		return ' ORDER BY ' . $order;
+		if (empty($order)) return '';
+		return ' ORDER BY ' . $this->_clauseRecurse($order,', ');
 	}
 
 
