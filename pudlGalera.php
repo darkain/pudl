@@ -181,8 +181,8 @@ class pudlGalera extends pudlMySqli {
 
 
 	public function sync() {
-		$auth = $this->auth();
-		$die = self::$die;
+		$auth	= $this->auth();
+		$die	= self::$die;
 		self::$die = false;
 		foreach ($this->pool as $server) {
 			if ($server == $this->connected) continue;
@@ -200,7 +200,8 @@ class pudlGalera extends pudlMySqli {
 		foreach ($list as $key => $value) {
 			if ($value === $server) unset($list[$key]);
 		}
-		shm_put_var($shm, 1, $list);
+		shm_remove_var($shm, 1);
+		@shm_put_var($shm, 1, $list);
 		shm_detach($shm);
 	}
 
@@ -210,8 +211,8 @@ class pudlGalera extends pudlMySqli {
 		return $servers;
 		if (count($servers) < 2) return $servers;
 
-		$key = ftok(__FILE__, 't');
-		$shm = shm_attach($key);
+		$key	= ftok(__FILE__, 't');
+		$shm	= shm_attach($key);
 
 		if (!shm_has_var($shm, 1)) {
 			shm_detach($shm);
@@ -234,7 +235,8 @@ class pudlGalera extends pudlMySqli {
 		$shm	= shm_attach($key);
 		$list	= shm_has_var($shm, 1) ? shm_get_var($shm, 1) : [];
 		if (!in_array($server, $list)) $list[] = $server;
-		shm_put_var($shm, 1, $list);
+		shm_remove_var($shm, 1);
+		@shm_put_var($shm, 1, $list);
 		shm_detach($shm);
 	}
 
