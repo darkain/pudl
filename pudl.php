@@ -148,7 +148,7 @@ abstract class pudl extends pudlQuery {
 
 
 		//ERROR REPORTING
-		if (!empty($result->error())  &&  $this->debug !== false) {
+		if (!empty($this->errno())  &&  $this->debug !== false) {
 			$debug = $this->debug;
 			$debug($this, $result);
 		}

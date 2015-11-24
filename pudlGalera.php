@@ -163,6 +163,7 @@ class pudlGalera extends pudlMySqli {
 		}
 
 		if ($wait) {
+			//TODO: THE SYNC QUERIES BREAK ERROR HANDLING RIGHT NOW
 			@$this->mysqli->query(
 				'SET SESSION wsrep_sync_wait = @wsrep_sync_wait_orig'
 			);
