@@ -16,6 +16,14 @@ class pudlShell extends pudl {
 	}
 
 
+
+	function __destruct() {
+		$this->disconnect();
+		parent::__destruct();
+	}
+
+
+
 	public static function instance($data) {
 		return new pudlShell($path, $prefix);
 	}

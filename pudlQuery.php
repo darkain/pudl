@@ -1,6 +1,6 @@
 <?php
 
-abstract class pudlQuery {
+trait pudlQuery {
 
 
 

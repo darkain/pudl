@@ -19,6 +19,13 @@ class pudlMsSql extends pudl {
 
 
 
+	function __destruct() {
+		$this->disconnect();
+		parent::__destruct();
+	}
+
+
+
 	public static function instance($data, $autoconnect=true) {
 		return new pudlMsSql($data, $autoconnect);
 	}

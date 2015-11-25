@@ -1,16 +1,19 @@
 <?php
 
-//Set the number of bits per character to max
+//SET THE NUMBER OF BITS PER CHARACTER TO MAX
 ini_set('session.hash_bits_per_character', 6);
 ini_set('session.gc_maxlifetime', 60*60*24*30);
 
 
 class pudlSession {
+
 	public function __construct($database, $table, $name=false, $domain=false) {
 		$this->db		= $database;
 		$this->table	= $table;
 		$this->name		= $name;
 		$this->domain	= $domain;
+
+		$this->db->on('disconnect', [$this, 'disconnect']);
 
 		session_set_save_handler(
 			[$this, 'open'],
@@ -27,13 +30,21 @@ class pudlSession {
 	}
 
 
+
 	private function cache($id) {
 		return 'session-' . $this->name . '-' . $this->domain . '-' . $id;
 	}
 
 
+
 	private function purge($id) {
 		$this->db->purge( $this->cache($id) );
+	}
+
+
+
+	function disconnect() {
+		session_write_close();
 	}
 
 
@@ -43,9 +54,11 @@ class pudlSession {
 	}
 
 
+
 	function close() {
 		return true;
 	}
+
 
 
 	function read($id) {
@@ -59,6 +72,7 @@ class pudlSession {
 
 		return $data;
 	}
+
 
 
 	function write($id, $data) {
@@ -88,6 +102,7 @@ class pudlSession {
 	}
 
 
+
 	function destroy($id) {
 		//Delete the object
 		if ($this->hash !== false) {
@@ -101,11 +116,13 @@ class pudlSession {
 	}
 
 
+
 	function clean($max) {
 		$expire = $this->db->time() - (int) $max;
 		$this->db->delete($this->table, ['access'=>pudl::lt($expire)]);
 		return true;
 	}
+
 
 
 	private $db;

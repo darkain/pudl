@@ -38,6 +38,26 @@ trait pudlMySqlHelper {
 
 
 
+	public function fieldType($table, $column) {
+		$return = $this->cell('INFORMATION_SCHEMA.COLUMNS', 'COLUMN_TYPE', [
+			'TABLE_NAME'	=> $table,
+			'COLUMN_NAME'	=> $column,
+		]);
+
+		if (substr($return, 0, 5) === 'enum(') {
+			$return = substr($return, 5, strlen($return)-6);
+			$return = explode(',', $return);
+			foreach ($return as $key => &$val) {
+				if (substr($val, 0,  1) === "'") $val = substr($val, 1);
+				if (substr($val, -1, 1) === "'") $val = substr($val, 0, strlen($val)-1);
+			} unset($val);
+		}
+
+		return $return;
+	}
+
+
+
 	public static function dieOnError($die) {
 		self::$die = $die;
 	}

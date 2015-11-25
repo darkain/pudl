@@ -27,8 +27,8 @@ class pudlSqlite extends pudl {
 
 
 	function __destruct() {
-		parent::__destruct();
 		$this->disconnect();
+		parent::__destruct();
 	}
 
 

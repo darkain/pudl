@@ -75,6 +75,14 @@ abstract class pudlResult {
 
 
 
+	public function completeCell($row=0, $column=0) {
+		$cell = $this->cell($row, $column);
+		$this->free();
+		return $cell;
+	}
+
+
+
 	public function json() {
 		return pudl::jsonEncode( $this->rows() );
 	}
