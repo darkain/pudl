@@ -18,7 +18,7 @@ trait pudlSelect {
 
 
 
-	public function selectHaving($col, $table, $clause=false, $having=false, $order=false, $limit=false, $offset=false, $lock=false) {
+	public function having($col, $table, $clause=false, $having=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
 		$query .= $this->_top($limit);
@@ -34,7 +34,7 @@ trait pudlSelect {
 
 
 
-	public function selectGroup($col, $table, $clause=false, $group=false, $order=false, $limit=false, $offset=false, $lock=false) {
+	public function group($col, $table, $clause=false, $group=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
 		$query .= $this->_top($limit);
@@ -50,7 +50,7 @@ trait pudlSelect {
 
 
 
-	public function selectGroupHaving($col, $table, $clause=false, $group=false, $having=false, $order=false, $limit=false, $offset=false, $lock=false) {
+	public function groupHaving($col, $table, $clause=false, $group=false, $having=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
 		$query .= $this->_top($limit);
@@ -67,7 +67,7 @@ trait pudlSelect {
 
 
 
-	public function selectOrderGroup($col, $table, $clause=false, $group=false, $order=false, $limit=false, $offset=false, $lock=false) {
+	public function orderGroup($col, $table, $clause=false, $group=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
 		$query .= '*, COUNT(*) FROM (SELECT ';
@@ -77,7 +77,7 @@ trait pudlSelect {
 		$query .= $this->_clause($clause);
 		$query .= $this->_order($order);
 		if (is_array($limit)) $query .= $this->_limit($limit[0]);
-		$query .= ') groupbyorderby ';
+		$query .= ') groupbyorderby';
 		$query .= $this->_group($group);
 		$query .= $this->_order($order);
 		if (is_array($limit))  $query .= $this->_limit($limit[1], $offset);
@@ -88,7 +88,7 @@ trait pudlSelect {
 
 
 
-	public function selectOrderGroupEx($col, $table, $clause=false, $inner_group=false, $outer_group=false, $order=false, $limit=false, $offset=false, $lock=false) {
+	public function orderGroupEx($col, $table, $clause=false, $inner_group=false, $outer_group=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
 		$query .= '*, COUNT(*) FROM (SELECT ';
@@ -99,7 +99,7 @@ trait pudlSelect {
 		$query .= $this->_group($inner_group);
 		$query .= $this->_order($order);
 		if (is_array($limit)) $query .= $this->_limit($limit[0]);
-		$query .= ') groupbyorderby ';
+		$query .= ') groupbyorderby';
 		$query .= $this->_group($outer_group);
 		$query .= $this->_order($order);
 		if (is_array($limit))  $query .= $this->_limit($limit[1], $offset);
@@ -127,7 +127,7 @@ trait pudlSelect {
 
 
 
-	public function selectDistinct($col, $table, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
+	public function distinct($col, $table, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
 		$query .= 'DISTINCT ';
@@ -143,7 +143,7 @@ trait pudlSelect {
 
 
 
-	public function selectDistinctGroup($col, $table, $clause=false, $group=false, $order=false, $limit=false, $offset=false, $lock=false) {
+	public function distinctGroup($col, $table, $clause=false, $group=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
 		$query .= 'DISTINCT * FROM (SELECT ';
@@ -152,7 +152,7 @@ trait pudlSelect {
 		$query .= $this->_tables($table);
 		$query .= $this->_clause($clause);
 		$query .= $this->_order($order);
-		$query .= ') groupbyorderby ';
+		$query .= ') groupbyorderby';
 		$query .= $this->_group($group);
 		$query .= $this->_order($order);
 		$query .= $this->_limit($limit, $offset);
@@ -162,7 +162,7 @@ trait pudlSelect {
 
 
 
-	public function selectDistinctJoin($col, $table, $join_table, $join_clause, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
+	public function distinctJoin($col, $table, $join_table, $join_clause, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
 		$query .= 'DISTINCT ';
@@ -191,7 +191,6 @@ trait pudlSelect {
 		$query .= $this->_lock($lock);
 		return $this->explain($query);
 	}
-
 
 
 

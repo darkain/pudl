@@ -53,7 +53,7 @@ require 'table.php';
 //JOIN TABLES
 require 'join.php';
 
-//WHERE/HAVING CLAUSES
+//WHERE CLAUSES
 require 'clause.php';
 
 //ORDER BY
@@ -70,6 +70,10 @@ require 'insert.php';
 
 //UPDATE STATEMENTS
 require 'update.php';
+
+//SHORTHAND NOTATION FOR SELECT STATEMENTS
+//CUSTOM COMPLEX SELECTS
+require 'select.php';
 
 //SHORTHAND NOTATION FOR SELECT STATEMENTS
 //RETURN A SINGLE CELL
