@@ -73,9 +73,16 @@ pudlTest('SELECT * FROM `table` WHERE (`column`=1.2E+23)');
 
 
 
-//SELECT statement with a single clause with BOOLEAN value including exponent
+//SELECT statement with a single clause with BOOLEAN value
 $db->string()->select('*', 'table', ['column'=>true]);
 pudlTest('SELECT * FROM `table` WHERE (`column`=TRUE)');
+
+
+
+
+//SELECT statement with a single clause with ARRAY value
+$db->string()->select('*', 'table', ['column'=>[1,2,3]]);
+pudlTest('SELECT * FROM `table` WHERE (`column` IN (1, 2, 3))');
 
 
 

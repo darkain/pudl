@@ -269,8 +269,14 @@ trait pudlQuery {
 				$query .= $this->_table($key, false);
 				if ($value instanceof pudlEquals) {
 					$query .= $value->equals;
+
 				} else if ($value instanceof pudlStringResult) {
 					$query .= $value->type;
+
+				} else if (is_array($value)) {
+					$query .= ' IN (' . $this->_inSet($value) . ')';
+					continue;
+
 				} else if (!is_null($value)) {
 					$query .= '=';
 				}
