@@ -387,6 +387,12 @@ abstract class pudl {
 
 
 
+	public static function raw($value) {
+		return new pudlRaw($value);
+	}
+
+
+
 	public static function jsonEncode($data) {
 		return @json_encode($data, JSON_HEX_APOS|JSON_HEX_QUOT);
 	}
