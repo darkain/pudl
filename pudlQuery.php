@@ -59,8 +59,11 @@ trait pudlQuery {
 		if ($value instanceof pudlStringResult)
 			return (string)$value;
 
-		if ($value instanceof pudlLike)
+		if ($value instanceof pudlLike  &&  !is_object($value->value))
 			return "'" . $value->left . $this->likeEscape($value->value) . $value->right . "'";
+
+		if ($value instanceof pudlLike)
+			return "CONCAT('" . $value->left . "'," . $this->_value($value->value) . ",'" . $value->right . "')";
 
 		if ($value instanceof pudlRegexp)
 			return "'" . str_replace('\\', '\\\\\\', $this->escape($value->value)) . "'";

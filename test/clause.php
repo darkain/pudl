@@ -143,6 +143,41 @@ pudlTest("SELECT * FROM `table` WHERE (`column` NOT LIKE 'value%')");
 
 
 
+//SELECT statement with a LIKE clause, column instead of string
+$db->string()->select('*', 'table', ['column1'=>pudl::like( pudl::column('column2') )]);
+pudlTest("SELECT * FROM `table` WHERE (`column1` LIKE CONCAT('%',`column2`,'%'))");
+
+
+
+
+//SELECT statement with a LIKE clause, column instead of string (left)
+$db->string()->select('*', 'table', ['column1'=>pudl::likeLeft( pudl::column('column2') )]);
+pudlTest("SELECT * FROM `table` WHERE (`column1` LIKE CONCAT('%',`column2`,''))");
+
+
+
+
+//SELECT statement with a LIKE clause, column instead of string (right)
+$db->string()->select('*', 'table', ['column1'=>pudl::likeRight( pudl::column('column2') )]);
+pudlTest("SELECT * FROM `table` WHERE (`column1` LIKE CONCAT('',`column2`,'%'))");
+
+
+
+
+//SELECT statement with a LIKE clause, function instead of string
+$db->string()->select('*', 'table', ['column1'=>pudl::like( pudl::hex('value') )]);
+pudlTest("SELECT * FROM `table` WHERE (`column1` LIKE CONCAT('%',HEX('value'),'%'))");
+
+
+
+
+//SELECT statement with a LIKE clause, raw SQL instead of string
+$db->string()->select('*', 'table', ['column1'=>pudl::like( pudl::raw("X'65'") )]);
+pudlTest("SELECT * FROM `table` WHERE (`column1` LIKE CONCAT('%',X'65','%'))");
+
+
+
+
 //SELECT statement with a NOT LIKE clause (right search)
 $db->string()->select('*', 'table', ['column'=>pudl::neq(NULL)]);
 pudlTest("SELECT * FROM `table` WHERE (`column` IS NOT NULL)");
