@@ -84,6 +84,9 @@ trait pudlQuery {
 		if ($value instanceof pudlColumn)
 			return $this->_table($value->value, false);
 
+		if ($value instanceof pudlEquals  &&  is_array($value->value))
+			return '(' . $this->_inSet($value->value) . ')';
+
 		if ($value instanceof pudlEquals)
 			return $this->_value($value->value, $quote);
 
@@ -271,7 +274,13 @@ trait pudlQuery {
 			if (is_string($key)) {
 				$query .= $this->_table($key, false);
 				if ($value instanceof pudlEquals) {
-					$query .= $value->equals;
+					if (is_array($value->value)  &&  $value->equals == '=') {
+						$query .= ' IN ';
+					} else if (is_array($value->value)  &&  $value->equals == '!=') {
+						$query .= ' NOT IN ';
+					} else {
+						$query .= $value->equals;
+					}
 
 				} else if ($value instanceof pudlStringResult) {
 					$query .= $value->type;

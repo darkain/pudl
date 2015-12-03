@@ -178,49 +178,119 @@ pudlTest("SELECT * FROM `table` WHERE (`column1` LIKE CONCAT('%',X'65','%'))");
 
 
 
-//SELECT statement with a NOT LIKE clause (right search)
+//SELECT statement where column isnt equal to NULL
+$db->string()->select('*', 'table', ['column'=>pudl::eq(NULL)]);
+pudlTest("SELECT * FROM `table` WHERE (`column` IS NULL)");
+
+
+
+
+//SELECT statement where column isnt equal to integer
+$db->string()->select('*', 'table', ['column'=>pudl::eq(5)]);
+pudlTest("SELECT * FROM `table` WHERE (`column`=5)");
+
+
+
+
+//SELECT statement where column isnt equal to float
+$db->string()->select('*', 'table', ['column'=>pudl::eq(5.0E+90)]);
+pudlTest("SELECT * FROM `table` WHERE (`column`=5.0E+90)");
+
+
+
+
+//SELECT statement where column in an array
+$db->string()->select('*', 'table', ['column'=>pudl::eq([5,7,9])]);
+pudlTest("SELECT * FROM `table` WHERE (`column` IN (5, 7, 9))");
+
+
+
+
+//SELECT statement where column isnt equal to string
+$db->string()->select('*', 'table', ['column'=>pudl::eq('value')]);
+pudlTest("SELECT * FROM `table` WHERE (`column`='value')");
+
+
+
+
+//SELECT statement where column isnt equal to string
+$db->string()->select('*', 'table', ['column1'=>pudl::eq( pudl::column('column2') )]);
+pudlTest("SELECT * FROM `table` WHERE (`column1`=`column2`)");
+
+
+
+
+//SELECT statement where column isnt equal to NULL
 $db->string()->select('*', 'table', ['column'=>pudl::neq(NULL)]);
 pudlTest("SELECT * FROM `table` WHERE (`column` IS NOT NULL)");
 
 
 
 
-//SELECT statement with a NOT LIKE clause (right search)
+//SELECT statement where column isnt equal to integer
 $db->string()->select('*', 'table', ['column'=>pudl::neq(5)]);
 pudlTest("SELECT * FROM `table` WHERE (`column`!=5)");
 
 
 
 
-//SELECT statement with a NOT LIKE clause (right search)
+//SELECT statement where column isnt equal to float
+$db->string()->select('*', 'table', ['column'=>pudl::neq(5.0E+90)]);
+pudlTest("SELECT * FROM `table` WHERE (`column`!=5.0E+90)");
+
+
+
+
+//SELECT statement where column in an array
+$db->string()->select('*', 'table', ['column'=>pudl::neq([5,7,9])]);
+pudlTest("SELECT * FROM `table` WHERE (`column` NOT IN (5, 7, 9))");
+
+
+
+
+//SELECT statement where column isnt equal to string
+$db->string()->select('*', 'table', ['column'=>pudl::neq('value')]);
+pudlTest("SELECT * FROM `table` WHERE (`column`!='value')");
+
+
+
+
+//SELECT statement where column isnt equal to string
+$db->string()->select('*', 'table', ['column1'=>pudl::neq( pudl::column('column2') )]);
+pudlTest("SELECT * FROM `table` WHERE (`column1`!=`column2`)");
+
+
+
+
+//SELECT statement where column is less than integer
 $db->string()->select('*', 'table', ['column'=>pudl::lt(5)]);
 pudlTest("SELECT * FROM `table` WHERE (`column`<5)");
 
 
 
 
-//SELECT statement with a NOT LIKE clause (right search)
+//SELECT statement where column is greater than integer
 $db->string()->select('*', 'table', ['column'=>pudl::gt(5)]);
 pudlTest("SELECT * FROM `table` WHERE (`column`>5)");
 
 
 
 
-//SELECT statement with a NOT LIKE clause (right search)
+//SELECT statement where column is less than or equal to integer
 $db->string()->select('*', 'table', ['column'=>pudl::lteq(5)]);
 pudlTest("SELECT * FROM `table` WHERE (`column`<=5)");
 
 
 
 
-//SELECT statement with a NOT LIKE clause (right search)
+//SELECT statement where column is greater than or equal to integer
 $db->string()->select('*', 'table', ['column'=>pudl::gteq(5)]);
 pudlTest("SELECT * FROM `table` WHERE (`column`>=5)");
 
 
 
 
-//SELECT statement with a NOT LIKE clause (right search)
+//SELECT statement where column is between two integer values
 $db->string()->select('*', 'table', ['column'=>pudl::between(5,10)]);
 pudlTest("SELECT * FROM `table` WHERE (`column` BETWEEN 5 AND 10)");
 
