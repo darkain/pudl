@@ -87,6 +87,13 @@ pudlTest('SELECT * FROM `table` WHERE (`column` IN (1, 2, 3))');
 
 
 
+//SELECT statement with a single clause with complex ARRAY value
+$db->string()->select('*', 'table', ['column'=>[1.2e23,'2',3, NULL, [5]]]);
+pudlTest("SELECT * FROM `table` WHERE (`column` IN (1.2E+23, '2', 3, NULL, 5))");
+
+
+
+
 //SELECT statement with a single clause with table definition
 $db->string()->select('*', 'table', ['table.column'=>'value']);
 pudlTest("SELECT * FROM `table` WHERE (`table`.`column`='value')");
@@ -171,8 +178,22 @@ pudlTest("SELECT * FROM `table` WHERE (`column1` LIKE CONCAT('%',HEX('value'),'%
 
 
 
+//SELECT statement with a LIKE clause, function chain instead of string
+$db->string()->select('*', 'table', ['column1'=>pudl::like()->hex('value')]);
+pudlTest("SELECT * FROM `table` WHERE (`column1` LIKE CONCAT('%',HEX('value'),'%'))");
+
+
+
+
 //SELECT statement with a LIKE clause, raw SQL instead of string
 $db->string()->select('*', 'table', ['column1'=>pudl::like( pudl::raw("X'65'") )]);
+pudlTest("SELECT * FROM `table` WHERE (`column1` LIKE CONCAT('%',X'65','%'))");
+
+
+
+
+//SELECT statement with a LIKE clause, raw SQL chain instead of string
+$db->string()->select('*', 'table', ['column1'=>pudl::like()->raw("X'65'")]);
 pudlTest("SELECT * FROM `table` WHERE (`column1` LIKE CONCAT('%',X'65','%'))");
 
 
@@ -234,8 +255,15 @@ pudlTest("SELECT * FROM `table` WHERE (`column`='value')");
 
 
 
-//SELECT statement where column isnt equal to string
+//SELECT statement where column isnt equal to column
 $db->string()->select('*', 'table', ['column1'=>pudl::eq( pudl::column('column2') )]);
+pudlTest("SELECT * FROM `table` WHERE (`column1`=`column2`)");
+
+
+
+
+//SELECT statement where column isnt equal to column chain
+$db->string()->select('*', 'table', ['column1'=>pudl::eq()->column('column2')]);
 pudlTest("SELECT * FROM `table` WHERE (`column1`=`column2`)");
 
 
@@ -276,8 +304,15 @@ pudlTest("SELECT * FROM `table` WHERE (`column`!='value')");
 
 
 
-//SELECT statement where column isnt equal to string
+//SELECT statement where column isnt equal to column
 $db->string()->select('*', 'table', ['column1'=>pudl::neq( pudl::column('column2') )]);
+pudlTest("SELECT * FROM `table` WHERE (`column1`!=`column2`)");
+
+
+
+
+//SELECT statement where column isnt equal to column chain
+$db->string()->select('*', 'table', ['column1'=>pudl::neq()->column('column2')]);
 pudlTest("SELECT * FROM `table` WHERE (`column1`!=`column2`)");
 
 

@@ -69,7 +69,7 @@ class pudlVoid {
 class pudlEquals {
 	use pudlHelper;
 
-	public function __construct($value, $equals='=') {
+	public function __construct($value=false, $equals='=') {
 		$this->value	= $value;
 		$this->equals	= $equals;
 		if (is_null($value)) {
@@ -83,13 +83,18 @@ class pudlEquals {
 
 	public function __toString() { return (string) $this->value; }
 
+	public function __call($name, $arguments) {
+		$this->value = forward_static_call_array(['pudl',$name], $arguments);
+		return $this;
+	}
+
 	public function not() {
 		$this->equals = ' NOT' . $this->equals;
 		return $this;
 	}
 
-	public	$value;
-	public	$equals;
+	public			$value;
+	public			$equals;
 }
 
 
@@ -105,6 +110,10 @@ class pudlBetween extends pudlEquals {
 
 	public function __construct($low, $high) {
 		parent::__construct([$low, $high], ' BETWEEN ');
+	}
+
+	public function __toString() {
+		return (string) $this->value[0] . ', ' . $this->value[1];
 	}
 }
 
