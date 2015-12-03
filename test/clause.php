@@ -199,9 +199,30 @@ pudlTest("SELECT * FROM `table` WHERE (`column`=5.0E+90)");
 
 
 
-//SELECT statement where column in an array
+//SELECT statement where column in an array of integers
 $db->string()->select('*', 'table', ['column'=>pudl::eq([5,7,9])]);
 pudlTest("SELECT * FROM `table` WHERE (`column` IN (5, 7, 9))");
+
+
+
+
+//SELECT statement where column in an array of floats
+$db->string()->select('*', 'table', ['column'=>pudl::eq([5.0E+90,7.0E+80,5.0E+70])]);
+pudlTest("SELECT * FROM `table` WHERE (`column` IN (5.0E+90, 7.0E+80, 5.0E+70))");
+
+
+
+
+//SELECT statement where column in an array of string
+$db->string()->select('*', 'table', ['column'=>pudl::eq(['5','7','9'])]);
+pudlTest("SELECT * FROM `table` WHERE (`column` IN ('5', '7', '9'))");
+
+
+
+
+//SELECT statement where column in a mixed array
+$db->string()->select('*', 'table', ['column'=>pudl::eq([5.0E+90,7,'9'])]);
+pudlTest("SELECT * FROM `table` WHERE (`column` IN (5.0E+90, 7, '9'))");
 
 
 
