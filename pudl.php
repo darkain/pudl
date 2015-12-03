@@ -322,11 +322,6 @@ abstract class pudl {
 
 
 
-
-
-
-
-
 	public function debugger($debugger) {
 		if (!is_callable($debugger)) {
 			trigger_error('Function does not exist for pudl::debugger', E_USER_ERROR);
