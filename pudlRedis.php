@@ -24,13 +24,18 @@ trait pudlRedis {
 
 		if (is_object($server)  &&  is_a($server, 'Redis')) {
 			$this->redis = $server;
+
 		} else if (class_exists('Redis')) {
-			$level = error_reporting(0); //HHVM HACK BECAUSE THEY HAVE YET TO FIX THEIR CODE
-			$this->redis = new Redis;
-			if ($this->redis->connect($server, -1, 0.025)) {
-				$this->redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
+			try {
+				$level = error_reporting(0); //HHVM HACK BECAUSE THEY HAVE YET TO FIX THEIR CODE
+				$this->redis = new Redis;
+				if ($this->redis->connect($server, -1, 0.025)) {
+					$this->redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
+				}
+				error_reporting($level);
+			} catch (RedisException $e) {
+				$this->redis = false;
 			}
-			error_reporting($level);
 		}
 
 		if (!is_object($this->redis)) $this->redis = new pudlVoid;
@@ -45,16 +50,16 @@ trait pudlRedis {
 
 
 
-	protected		$cache			= false;
-	protected		$cachekey		= false;
-	protected		$redis			= false;
+	protected		$cache		= false;
+	protected		$cachekey	= false;
+	protected		$redis		= false;
 
-	protected		$stats = [
-		'total'		=> 0,
-		'queries'	=> 0,
-		'hits'		=> 0,
-		'misses'	=> 0,
-		'missed'	=> [],
+	protected		$stats		= [
+		'total'					=> 0,
+		'queries'				=> 0,
+		'hits'					=> 0,
+		'misses'				=> 0,
+		'missed'				=> [],
 	];
 
 }
