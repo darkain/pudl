@@ -60,9 +60,9 @@ abstract class pudlResult {
 
 	public function rows($type=PUDL_ARRAY) {
 		if (!$this->result) return false;
-		$return = array();
-		while ($data = $this->row($type)) { $return[] = $data; }
-		return $return;
+		$rows = [];
+		while ($data = $this->row($type)) { $rows[] = $data; }
+		return $rows;
 	}
 
 
@@ -85,6 +85,13 @@ abstract class pudlResult {
 
 	public function json() {
 		return pudl::jsonEncode( $this->rows() );
+	}
+
+
+	public function completeJson() {
+		$json = $this->json();
+		$this->free();
+		return $json;
 	}
 
 
