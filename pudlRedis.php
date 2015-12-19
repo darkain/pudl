@@ -50,6 +50,15 @@ trait pudlRedis {
 
 
 
+	private function missed($query) {
+		$this->stats['queries']++;
+		$this->stats['misses']++;
+		$this->stats['missed'][] = $query;
+		return $this->process($query);
+	}
+
+
+
 	protected		$cache		= false;
 	protected		$cachekey	= false;
 	protected		$redis		= false;
