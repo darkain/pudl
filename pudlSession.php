@@ -49,7 +49,7 @@ class pudlSession {
 
 
 
-	function open($path, $name) {
+	function open() {
 		return true;
 	}
 
@@ -129,6 +129,5 @@ class pudlSession {
 	private $table;
 	private $name;
 	private $domain;
-	private $hasdata	= false;
 	private $hash		= false;
 }

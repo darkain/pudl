@@ -47,7 +47,7 @@ trait pudlMySqlHelper {
 		if (substr($return, 0, 5) === 'enum(') {
 			$return = substr($return, 5, strlen($return)-6);
 			$return = explode(',', $return);
-			foreach ($return as $key => &$val) {
+			foreach ($return as &$val) {
 				if (substr($val, 0,  1) === "'") $val = substr($val, 1);
 				if (substr($val, -1, 1) === "'") $val = substr($val, 0, strlen($val)-1);
 			} unset($val);
