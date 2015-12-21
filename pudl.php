@@ -396,7 +396,6 @@ abstract class pudl {
 
 
 
-	private			$locked			= false;
 	private			$debug			= false;
 	private			$bench			= false;
 	private			$query			= false;

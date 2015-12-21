@@ -98,6 +98,7 @@ trait pudlTransaction {
 
 
 	protected	$transaction	= false;
+	private		$locked			= false;
 	private		$time			= 0;
 
 }
