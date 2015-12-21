@@ -25,7 +25,7 @@ class pudlShell extends pudl {
 
 
 	public static function instance($data) {
-		return new pudlShell($path, $prefix);
+		return new pudlShell($data);
 	}
 
 
