@@ -16,19 +16,19 @@ designed for beyond what is documented on this page.
 
 
 ## Supported Database Engines
-Engine | |Support
--------|-|-------
-MySQL | | *Officially Supported*
-PerconaDB | | *Officially Supported*
-MariaDB | | *Officially Supported*
-Galera Clustering | | *Officially Supported*
-Microsoft SQL | | *Experimental Support*
-SQLite | | *Experimental Support*
-ODBC | | *Experimental Support*
-Pervasive | | *Experimental Support*
-PostgreSQL | | *Unsupported (for now)*
-Shell | | *Experimental Hack*
-Web | | *Experimental Hack*
+Engine | Support
+-------|--------
+MySQL | *Officially Supported*
+PerconaDB | *Officially Supported*
+MariaDB | *Officially Supported*
+Galera Clustering | *Officially Supported*
+Microsoft SQL | *Experimental Support*
+SQLite | *Experimental Support*
+ODBC | *Experimental Support*
+Pervasive | *Experimental Support*
+PostgreSQL | *Unsupported (for now)*
+Shell | *Experimental Hack*
+Web | *Experimental Hack*
 
 
 ## License
