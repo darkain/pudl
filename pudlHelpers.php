@@ -89,18 +89,27 @@ class pudlEquals {
 	}
 
 	public function not() {
-		$this->equals = ' NOT' . $this->equals;
+		$this->equals = $this->equals === '=' ? '!=' : ' NOT' . $this->equals;
 		return $this;
 	}
 
-	public			$value;
-	public			$equals;
+	public	$value;
+	public	$equals;
 }
 
 
 
 class pudlColumn extends pudlEquals {
 	use pudlHelper;
+
+	public function __construct($column, $value=false) {
+		parent::__construct($value);
+		$this->column	= $column;
+		$this->args		= func_num_args() > 1;
+	}
+
+	public	$column;
+	public	$args;
 }
 
 

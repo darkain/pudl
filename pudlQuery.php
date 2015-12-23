@@ -82,7 +82,7 @@ trait pudlQuery {
 				' AND ' . $this->_value($value->value[1], $quote);
 
 		if ($value instanceof pudlColumn)
-			return $this->_table($value->value, false);
+			return $this->_table($value->column, false);
 
 		if ($value instanceof pudlEquals  &&  is_array($value->value))
 			return '(' . $this->_inSet($value->value) . ')';
@@ -273,25 +273,15 @@ trait pudlQuery {
 
 			if (is_string($key)) {
 				$query .= $this->_table($key, false);
-				if ($value instanceof pudlEquals) {
-					if (is_array($value->value)  &&  $value->equals == '=') {
-						$query .= ' IN ';
-					} else if (is_array($value->value)  &&  $value->equals == '!=') {
-						$query .= ' NOT IN ';
-					} else {
-						$query .= $value->equals;
-					}
+				$query .= $this->_clauseEquals($value);
+				if (is_array($value)) continue;
 
-				} else if ($value instanceof pudlStringResult) {
-					$query .= $value->type;
-
-				} else if (is_array($value)) {
-					$query .= ' IN (' . $this->_inSet($value) . ')';
-					continue;
-
-				} else if (!is_null($value)) {
-					$query .= '=';
-				}
+			} else if ($value instanceof pudlColumn  &&  $value->args) {
+				$key	 = '';
+				$query	.= $this->_table($value->column, false);
+				$value	 = $value->value;
+				$query	.= $this->_clauseEquals($value);
+				if (is_array($value)) continue;
 			}
 
 			$new = $this->_value($value, is_string($key), is_string($key));
@@ -315,6 +305,26 @@ trait pudlQuery {
 
 		$depth--;
 		return $query;
+	}
+
+
+
+	private function _clauseEquals($value) {
+		if ($value instanceof pudlEquals) {
+			if (is_array($value->value)) {
+				if ($value->equals == '=')	return ' IN ';
+				if ($value->equals == '!=')	return ' NOT IN ';
+			}
+			return $value->equals;
+		}
+
+		if ($value instanceof pudlStringResult) return $value->type;
+
+		if (is_array($value)) return ' IN (' . $this->_inSet($value) . ')';
+
+		if (!is_null($value)) return '=';
+
+		return '';
 	}
 
 
