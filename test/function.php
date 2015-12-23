@@ -86,17 +86,47 @@ pudlTest("SELECT * FROM `table` WHERE (`column` REGEXP 'expression') LIMIT 1");
 
 
 
-$db->string()->row('table', ['column' => pudl::regexp('part1', 'part2', 'part3')]);
+$db->string()->row('table', [
+	'column' => pudl::regexp(
+		'part1',
+		'part2',
+		'part3'
+	)
+]);
 pudlTest("SELECT * FROM `table` WHERE (`column` REGEXP 'part1part2part3') LIMIT 1");
 
 
 
 
-$db->string()->row('table', ['column' => pudl::regexp('[[:<:]]', 'value', '[[:>:]]')]);
+$db->string()->row('table', [
+	'column' => pudl::regexp(
+		'[[:<:]]',
+		'value',
+		'[[:>:]]'
+	)
+]);
 pudlTest("SELECT * FROM `table` WHERE (`column` REGEXP '\\\\[\\\\[\\\\:\\\\<\\\\:\\\\]\\\\]value\\\\[\\\\[\\\\:\\\\>\\\\:\\\\]\\\\]') LIMIT 1");
 
 
 
 
-$db->string()->row('table', ['column' => pudl::regexp(pudl::raw('[[:<:]]'), 'value', pudl::raw('[[:>:]]'))]);
+$db->string()->row('table', [
+	'column' => pudl::regexp(
+		pudl::raw('[[:<:]]'),
+		'value',
+		pudl::raw('[[:>:]]')
+	)
+]);
+pudlTest("SELECT * FROM `table` WHERE (`column` REGEXP '[[:<:]]value[[:>:]]') LIMIT 1");
+
+
+
+
+$db->string()->row('table', [
+	'column' => pudl::regexp([
+		pudl::raw('[[:<:]]'),
+		'value',
+		pudl::raw('[[:>:]]')
+	])
+]);
 pudlTest("SELECT * FROM `table` WHERE (`column` REGEXP '[[:<:]]value[[:>:]]') LIMIT 1");

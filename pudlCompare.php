@@ -24,7 +24,8 @@ trait pudlCompare {
 
 
 
-	public static function regexp() {
+	public static function regexp($value) {
+		if (func_num_args() === 1) return new pudlRegexp($value);
 		return (new ReflectionClass('pudlRegexp'))->newInstanceArgs(func_get_args());
 	}
 

@@ -146,8 +146,11 @@ class pudlLike extends pudlEquals {
 class pudlRegexp extends pudlEquals {
 	use pudlHelper;
 
-	public function __construct() {
-		parent::__construct(func_get_args(), ' REGEXP ');
+	public function __construct($value) {
+		parent::__construct(
+			func_num_args() === 1 ? $value : func_get_args(),
+			' REGEXP '
+		);
 	}
 }
 
