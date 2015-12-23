@@ -66,7 +66,7 @@ trait pudlQuery {
 			return "CONCAT('" . $value->left . "'," . $this->_value($value->value) . ",'" . $value->right . "')";
 
 		if ($value instanceof pudlRegexp)
-			return "'" . str_replace('\\', '\\\\\\', $this->escape($value->value)) . "'";
+			return $this->_regexp($value->value);
 
 		if ($value instanceof pudlSet)
 			return '(' . $this->_inSet($value->value) . ')';
@@ -94,6 +94,19 @@ trait pudlQuery {
 			return $value->value;
 
 		return false;
+	}
+
+
+
+	private function _regexp($value) {
+		$query = '';
+		if (!is_array($value)) $value = [$value];
+		foreach ($value as $item) {
+			$query .= is_string($item) ?
+				$this->escape(preg_quote($item)) :
+				$this->_value($item, false);
+		}
+		return "'".$query."'";
 	}
 
 

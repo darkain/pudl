@@ -17,34 +17,39 @@ trait pudlCompare {
 	public static function like($value=false)			{ return new pudlLike($value, PUDL_BOTH ); }
 	public static function likeLeft($value=false)		{ return new pudlLike($value, PUDL_START); }
 	public static function likeRight($value=false)		{ return new pudlLike($value, PUDL_END  ); }
-	public static function regexp($value=false)			{ return new pudlRegexp($value); }
 	public static function notLike($value=false)		{ return self::like($value)->not(); }
 	public static function notLikeLeft($value=false)	{ return self::likeLeft($value)->not(); }
 	public static function notLikeRight($value=false)	{ return self::likeRight($value)->not(); }
-	public static function notRegexp($value=false)		{ return self::pudlRegexp($value)->not(); }
+	public static function notRegexp()					{ return self::pudlRegexp($value)->not(); }
+
+
+
+	public static function regexp() {
+		return (new ReflectionClass('pudlRegexp'))->newInstanceArgs(func_get_args());
+	}
 
 
 
 	public static function inSet($value) {
-		if (is_array($value)  &&  func_num_args() === 1) {
+		if (is_array($value)  &&  func_num_args() === 1)
 			return new pudlSet($value);
-		} else if ($value instanceof pudlResult) {
+
+		if ($value instanceof pudlResult)
 			return new pudlSet($value->rows());
-		} else {
-			return new pudlSet(func_get_args());
-		}
+
+		return new pudlSet(func_get_args());
 	}
 
 
 
 	public static function notInSet($value) {
-		if (is_array($value)  &&  func_num_args() === 1) {
+		if (is_array($value)  &&  func_num_args() === 1)
 			return (new pudlSet($value))->not();
-		} else if ($value instanceof pudlResult) {
+
+		if ($value instanceof pudlResult)
 			return (new pudlSet($value->rows()))->not();
-		} else {
-			return (new pudlSet(func_get_args()))->not();
-		}
+
+		return (new pudlSet(func_get_args()))->not();
 	}
 
 }

@@ -77,3 +77,26 @@ $db->string()->row('table', [
 ]);
 pudlTest("SELECT * FROM `table` WHERE (REPLACE(`column`, 'old', 'new') LIKE '%value%') LIMIT 1");
 
+
+
+
+$db->string()->row('table', ['column' => pudl::regexp('expression')]);
+pudlTest("SELECT * FROM `table` WHERE (`column` REGEXP 'expression') LIMIT 1");
+
+
+
+
+$db->string()->row('table', ['column' => pudl::regexp('part1', 'part2', 'part3')]);
+pudlTest("SELECT * FROM `table` WHERE (`column` REGEXP 'part1part2part3') LIMIT 1");
+
+
+
+
+$db->string()->row('table', ['column' => pudl::regexp('[[:<:]]', 'value', '[[:>:]]')]);
+pudlTest("SELECT * FROM `table` WHERE (`column` REGEXP '\\\\[\\\\[\\\\:\\\\<\\\\:\\\\]\\\\]value\\\\[\\\\[\\\\:\\\\>\\\\:\\\\]\\\\]') LIMIT 1");
+
+
+
+
+$db->string()->row('table', ['column' => pudl::regexp(pudl::raw('[[:<:]]'), 'value', pudl::raw('[[:>:]]'))]);
+pudlTest("SELECT * FROM `table` WHERE (`column` REGEXP '[[:<:]]value[[:>:]]') LIMIT 1");
