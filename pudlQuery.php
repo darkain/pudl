@@ -278,7 +278,11 @@ trait pudlQuery {
 
 			} else if ($value instanceof pudlColumn  &&  $value->args) {
 				$key	 = '';
-				$query	.= $this->_table($value->column, false);
+				if (is_string($value->column)) {
+					$query	.= $this->_table($value->column, false);
+				} else {
+					$query	.= $this->_value($value->column);
+				}
 				$value	 = $value->value;
 				$query	.= $this->_clauseEquals($value);
 				if (is_array($value)) continue;

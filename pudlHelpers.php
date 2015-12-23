@@ -26,7 +26,7 @@ class pudlFunction {
 	use pudlHelper;
 
 	public static function __callStatic($name, $arguments) {
-		return forward_static_call_array(['pudl', $name], $arguments);
+		return forward_static_call_array(['pudl', '_'.$name], $arguments);
 	}
 
 

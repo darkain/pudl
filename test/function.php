@@ -55,3 +55,25 @@ pudlTest("SELECT * FROM `table` WHERE (`column`=FALSE) LIMIT 1");
 $db->string()->row('table', [pudl::column('column', true)]);
 pudlTest("SELECT * FROM `table` WHERE (`column`=TRUE) LIMIT 1");
 
+
+
+
+$db->string()->row('table', [
+	pudl::column(
+		pudlFunction::replace(pudl::column('column'), 'old', 'new'),
+		'value'
+	)
+]);
+pudlTest("SELECT * FROM `table` WHERE (REPLACE(`column`, 'old', 'new')='value') LIMIT 1");
+
+
+
+
+$db->string()->row('table', [
+	pudl::column(
+		pudl::_replace(pudl::column('column'), 'old', 'new'),
+		pudl::like('value')
+	)
+]);
+pudlTest("SELECT * FROM `table` WHERE (REPLACE(`column`, 'old', 'new') LIKE '%value%') LIMIT 1");
+
