@@ -179,8 +179,8 @@ abstract class pudl {
 	abstract public function error();
 
 
-	public function wait($wait=true) { return $this; }
-	public function sync() {}
+	public function wait($wait=true)	{ return $this; }
+	public function sync()				{ return $this; }
 
 
 	public function disconnect() {
