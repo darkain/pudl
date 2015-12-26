@@ -191,6 +191,7 @@ class pudlGalera extends pudlMySqli {
 			$sync->wait()->query('SELECT * FROM information_schema.GLOBAL_VARIABLES LIMIT 1');
 		}
 		self::$die = $die;
+		return $this;
 	}
 
 
