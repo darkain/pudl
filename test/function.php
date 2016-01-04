@@ -130,3 +130,22 @@ $db->string()->row('table', [
 	])
 ]);
 pudlTest("SELECT * FROM `table` WHERE (`column` REGEXP '[[:<:]]value[[:>:]]') LIMIT 1");
+
+
+
+
+$db->string()->select(pudl::now());
+pudlTest("SELECT NOW()");
+
+
+
+
+$db->string()->select([pudl::curdate(), pudl::curtime()]);
+pudlTest("SELECT CURDATE(), CURTIME()");
+
+
+
+
+$db->redis(true);
+$db->cache(1)->select(pudl::now());
+pudlTest("SELECT SQL_CACHE NOW()");

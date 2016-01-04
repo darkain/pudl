@@ -121,10 +121,13 @@ trait pudlQuery {
 
 	protected function _column($column) {
 		if (!is_array($column)) {
-			if ($column === false  ||
-				$column === ''  ||
-				$column === null  ||
-				$column === '*') return '*';
+			switch ($column) {
+				case '':
+				case '*':
+				case null:
+				case false:
+					return '*';
+			}
 			return $this->_value($column, false);
 		}
 
