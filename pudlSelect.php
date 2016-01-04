@@ -3,7 +3,7 @@
 trait pudlSelect {
 
 
-	public function select($col, $table, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
+	public function select($col, $table=false, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
 		$query .= $this->_top($limit);
