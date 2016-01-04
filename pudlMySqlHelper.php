@@ -3,9 +3,9 @@
 trait pudlMySqlHelper {
 
 	protected function _cache() {
-		if (is_array($this->union))				return '';
-		if (!empty($this->string))				return '';
 		if (!$this->cache)						return '';
+		if ($this->isString())					return '';
+		if ($this->inUnion())					return '';
 		if (!is_object($this->redis))			return 'SQL_CACHE ';
 		if ($this->redis instanceof pudlVoid)	return 'SQL_CACHE ';
 		return 'SQL_NO_CACHE ';

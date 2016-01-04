@@ -4,16 +4,22 @@
 trait pudlUnion {
 
 
+	public function inUnion() {
+		return is_array($this->union);
+	}
+
+
+
 	public function unionStart() {
-		if ($this->union !== false) return false;
-		$this->union = array();
+		if ($this->inUnion()) return false;
+		$this->union = [];
 		return true;
 	}
 
 
 
 	public function unionEnd($order=false, $limit=false, $offset=false, $type='') {
-		if (!is_array($this->union)) return false;
+		if (!$this->inUnion()) return false;
 
 		$query  = $this->_union($type);
 		$query .= $this->_order($order);
@@ -27,7 +33,7 @@ trait pudlUnion {
 
 
 	public function unionGroup($group=false, $order=false, $limit=false, $offset=false, $type='') {
-		if (!is_array($this->union)) return false;
+		if (!$this->inUnion()) return false;
 
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
