@@ -29,8 +29,9 @@ trait pudlRedis {
 			try {
 				$level = error_reporting(0); //HHVM HACK BECAUSE THEY HAVE YET TO FIX THEIR CODE
 				$this->redis = new Redis;
-				if ($this->redis->connect($server, -1, 0.025)) {
-					$this->redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
+				$this->redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
+				if (!$this->redis->connect($server, -1, 0.025)) {
+					$this->redis = false;
 				}
 				error_reporting($level);
 			} catch (RedisException $e) {
