@@ -26,7 +26,7 @@ Microsoft SQL | *Experimental Support*
 SQLite | *Experimental Support*
 ODBC | *Experimental Support*
 Pervasive | *Experimental Support*
-PostgreSQL | *Unsupported (for now)*
+PostgreSQL | *Experimental Support*
 Shell | *Experimental Hack*
 Web | *Experimental Hack*
 
