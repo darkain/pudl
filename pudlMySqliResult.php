@@ -60,7 +60,7 @@ class pudlMySqliResult extends pudlResult {
 
 	public function seek($row) {
 		if (!is_object($this->result)) return false;
-		@$this->result->data_seek($row);
+		return @$this->result->data_seek($row);
 	}
 
 
