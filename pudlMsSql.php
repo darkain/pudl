@@ -9,6 +9,7 @@ class pudlMsSql extends pudl {
 	public function __construct($data, $autoconnect=true) {
 		parent::__construct($data);
 
+		//SET INITIAL VALUES
 		$this->escstart	= '[';
 		$this->escend	= ']';
 		$this->top		= true;
