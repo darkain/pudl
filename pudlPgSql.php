@@ -51,6 +51,22 @@ class pudlPgSql extends pudl {
 
 
 
+	public function disconnect() {
+		parent::disconnect();
+		if (!$this->pgsql) return;
+		pg_close($this->pgsql);
+		$this->pgsql = false;
+	}
+
+
+
+	public function escape($value) {
+		if (!$this->pgsql) return false;
+		return pg_escape_string($this->pgsql, $value);
+	}
+
+
+
 	protected function process($query) {
 		if (!$this->pgsql) return false;
 		$result = @pg_query($this->pgsql, $query);
