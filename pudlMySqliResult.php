@@ -5,6 +5,7 @@ require_once('pudlResult.php');
 
 
 class pudlMySqliResult extends pudlResult {
+
 	public function __construct($result, $db) {
 		parent::__construct($result, $db);
 	}
@@ -25,11 +26,10 @@ class pudlMySqliResult extends pudlResult {
 
 
 	public function cell($row=0, $column=0) {
-		if (is_object($this->result)) {
-			@$this->result->data_seek($row);
-			$data = $this->row(PUDL_NUMBER);
-			if (isset($data[$column])) return $data[$column];
-		}
+		if (!is_object($this->result)) return false;
+		$this->seek($row);
+		$data = $this->row(PUDL_NUMBER);
+		if (isset($data[$column])) return $data[$column];
 		return false;
 	}
 
