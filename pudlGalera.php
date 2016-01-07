@@ -115,10 +115,12 @@ class pudlGalera extends pudlMySqli {
 			@$this->mysqli->query(
 				'SET @wsrep_sync_wait_orig = @@wsrep_sync_wait'
 			);
+			if ($this->errno()) return new pudlMySqliResult(false, $this);
 
 			@$this->mysqli->query(
 				'SET SESSION wsrep_sync_wait = GREATEST(@wsrep_sync_wait_orig,'.$wait.')'
 			);
+			if ($this->errno()) return new pudlMySqliResult(false, $this);
 		}
 
 
@@ -162,8 +164,7 @@ class pudlGalera extends pudlMySqli {
 			break;
 		}
 
-		if ($wait) {
-			//TODO: THE SYNC QUERIES BREAK ERROR HANDLING RIGHT NOW
+		if ($wait  &&  !$this->errno()) {
 			@$this->mysqli->query(
 				'SET SESSION wsrep_sync_wait = @wsrep_sync_wait_orig'
 			);
