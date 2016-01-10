@@ -40,18 +40,19 @@ trait pudlMySqlHelper {
 
 
 	public function fieldType($table, $column) {
+		if (substr($table, 0, 5) === 'pudl_') {
+			$table = $this->prefix . substr($table, 5);
+		}
+
 		$return = $this->cell('INFORMATION_SCHEMA.COLUMNS', 'COLUMN_TYPE', [
 			'TABLE_NAME'	=> $table,
 			'COLUMN_NAME'	=> $column,
 		]);
 
 		if (substr($return, 0, 5) === 'enum(') {
-			$return = substr($return, 5, strlen($return)-6);
-			$return = explode(',', $return);
-			foreach ($return as &$val) {
-				if (substr($val, 0,  1) === "'") $val = substr($val, 1);
-				if (substr($val, -1, 1) === "'") $val = substr($val, 0, strlen($val)-1);
-			} unset($val);
+			$return = str_getcsv(substr($return, 5, -1), ',', "'");
+		} else if (substr($return, 0, 4) === 'set(') {
+			$return = str_getcsv(substr($return, 4, -1), ',', "'");
 		}
 
 		return $return;
