@@ -10,7 +10,7 @@ and then converts these over to engine specific SQL queries automatically.
 
 The [test](https://github.com/darkain/pudl/tree/master/test) folder contains
 a series of examples of PUDL function calls and their resulting SQL query
-string. This is a good place to get an idea of what the PUDL library is
+strings. This is a good place to get an idea of what the PUDL library is
 designed for beyond what is documented on this page.
 
 
@@ -74,7 +74,7 @@ database.
 
 ### UPDATE
 ---
-Update queries you a similar syntax. Let's say we need to update the title
+**UPDATE** queries you a similar syntax. Let's say we need to update the title
 because we initially put it in wrong. You can use the following to do so.
 
 ```php
@@ -92,7 +92,7 @@ UPDATE `movies` SET `title`='Star Wars: Episode VII' WHERE (`id`=1)
 
 With this, we use the same *key* and *value* pair with **UPDATE** as we do with
 **INSERT**. Additionally, we also use the same *key* and *value* pair to
-generate out **WHERE** clause.
+generate our **WHERE** clause.
 
 
 
@@ -158,7 +158,7 @@ array (
 
 If we only want to get a single row from the database, we can use **row()**
 instead of **rows()**. This will return a single dimensional array instead
-of a two-dimensional array.
+of a two-dimensional array. This function also forces a **LIMIT** of **1**.
 
 **PHP**:
 ```php
