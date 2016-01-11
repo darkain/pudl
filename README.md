@@ -44,6 +44,23 @@ for more details.
 
 
 
+### Getting Started
+---
+First, create an instance of PUDL for your specific database type
+```php
+require_once('pudl/pudlMySqli.php');
+
+$db = new pudlMySqli([
+	'server'   => 'localhost',
+	'database' => 'DatabaseName',
+	'username' => 'AwesomeGuy9001',
+	'password' => 'SuperDuperSecretSauce',
+]);
+```
+
+
+
+
 ### INSERT
 ---
 Let's start by showing the most intuitive conversion from PHP to SQL.
@@ -115,14 +132,14 @@ SELECT * FROM `movies`
 **Output**:
 ```
 array (
-  0 =>
-  array (
-    'id' => 1,
-    'title' => 'Star Wars: Episode VII',
-    'subtitle' => 'The Force Awakens',
-    'director' => 'J.J. Abrams',
-    'runtime' => 136,
-  ),
+	0 =>
+	array (
+		'id' => 1,
+		'title' => 'Star Wars: Episode VII',
+		'subtitle' => 'The Force Awakens',
+		'director' => 'J.J. Abrams',
+		'runtime' => 136,
+	),
 )
 ```
 
@@ -144,14 +161,14 @@ SELECT * FROM `movies` WHERE (`director`='J.J. Abrams')
 **Output**:
 ```
 array (
-  0 =>
-  array (
-    'id' => 1,
-    'title' => 'Star Wars: Episode VII',
-    'subtitle' => 'The Force Awakens',
-    'director' => 'J.J. Abrams',
-    'runtime' => 136,
-  ),
+	0 =>
+	array (
+		'id' => 1,
+		'title' => 'Star Wars: Episode VII',
+		'subtitle' => 'The Force Awakens',
+		'director' => 'J.J. Abrams',
+		'runtime' => 136,
+	),
 )
 ```
 
@@ -172,11 +189,11 @@ SELECT * FROM `movies` WHERE (`director`='J.J. Abrams') LIMIT 1
 **Output**:
 ```
 array (
-  'id' => 1,
-  'title' => 'Star Wars: Episode VII',
-  'subtitle' => 'The Force Awakens',
-  'director' => 'J.J. Abrams',
-  'runtime' => 136,
+	'id' => 1,
+	'title' => 'Star Wars: Episode VII',
+	'subtitle' => 'The Force Awakens',
+	'director' => 'J.J. Abrams',
+	'runtime' => 136,
 )
 ```
 
