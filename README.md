@@ -4,7 +4,7 @@
 
 ## About
 The primary function of this library is to provide a common interface for
-interacting with several different database engines worrying about
+interacting with several different database engines without worrying about
 implementation specific syntax. PUDL takes basic PHP functions and data types,
 and then converts these over to engine specific SQL queries automatically.
 
