@@ -13,15 +13,7 @@ class pudlSqlite extends pudl {
 			$data['database'] = empty($data[0]) ? 'sqlite.db' : $data[0];
 		}
 
-		parent::__construct($data);
-
-		//Set initial values
-		$this->limit	= true;
-		$this->escstart	= '`';
-		$this->escend	= '`';
-
-		//CONNECT TO THE SERVER
-		if ($autoconnect) $this->connect();
+		parent::__construct($data, $autoconnect);
 	}
 
 

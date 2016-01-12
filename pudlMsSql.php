@@ -7,15 +7,12 @@ require_once('pudlMsSqlResult.php');
 
 class pudlMsSql extends pudl {
 	public function __construct($data, $autoconnect=true) {
-		parent::__construct($data);
-
 		//SET INITIAL VALUES
-		$this->escstart	= '[';
-		$this->escend	= ']';
-		$this->top		= true;
+		$this->top			= true;
+		$this->limit		= false;
+		$this->identifier	= ']';
 
-		//CONNECT TO THE SERVER
-		if ($autoconnect) $this->connect();
+		parent::__construct($data, $autoconnect);
 	}
 
 
@@ -73,6 +70,17 @@ class pudlMsSql extends pudl {
 		$result = @mssql_query($query, $this->mssql);
 		return new pudlMsSqlResult($result, $this);
 	}
+
+
+
+	public function identifier($identifier) {
+		return	'[' . str_replace(
+			$this->identifier,
+			$this->identifier.$this->identifier,
+			$identifier
+		) . ']';
+	}
+
 
 
 	public function insertId() {

@@ -10,10 +10,10 @@ class pudlGalera extends pudlMySqli {
 
 
 	public function __construct($data, $autoconnect=true) {
-		parent::__construct($data, false);
-
 		if (!is_array($data['server'])) {
-			throw new pudlException('Not a valid server pool, $data[server] must be of array data type');
+			throw new pudlException(
+				'Not a valid server pool, $data[server] must be ARRAY data type'
+			);
 		}
 
 		//SET INITIAL VALUES
@@ -30,7 +30,7 @@ class pudlGalera extends pudlMySqli {
 		}
 
 		//CONNECT TO THE SERVER CLUSTER
-		if ($autoconnect) $this->connect();
+		parent::__construct($data, $autoconnect);
 	}
 
 

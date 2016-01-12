@@ -6,11 +6,6 @@ require_once('pudlResult.php');
 
 class pudlMySqliResult extends pudlResult {
 
-	public function __construct($result, $db) {
-		parent::__construct($result, $db);
-	}
-
-
 	public function __destruct() {
 		parent::__destruct();
 		$this->free();
@@ -83,7 +78,7 @@ class pudlMySqliResult extends pudlResult {
 					$new = substr($key, 12, -1);
 					$pos = strrpos($new, '.');
 					if ($pos !== false) $new = substr($new, $pos+1);
-					$new = trim($new, " \t\n\r\0\x0B" . $this->db->_escape());
+					$new = trim($new, " \t\n\r\0\x0B`");
 					$this->json[$key] = $new;
 				}
 			} unset($val);

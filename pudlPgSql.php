@@ -7,20 +7,6 @@ require_once('pudlPgSqlResult.php');
 
 class pudlPgSql extends pudl {
 
-	public function __construct($data, $autoconnect=true) {
-		parent::__construct($data);
-
-		//SET INITIAL VALUES
-		$this->escstart	= '"';
-		$this->escend	= '"';
-		$this->top		= true;
-
-		//CONNECT TO THE SERVER
-		if ($autoconnect) $this->connect();
-	}
-
-
-
 	function __destruct() {
 		$this->disconnect();
 		parent::__destruct();

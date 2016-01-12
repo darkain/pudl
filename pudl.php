@@ -32,7 +32,7 @@ abstract class pudl {
 
 
 
-	public function __construct($data) {
+	public function __construct($data, $autoconnect=true) {
 		//SANITIZE DATA
 		$data['username']	= empty($data['username'])	? ''			: $data['username'];
 		$data['password']	= empty($data['password'])	? ''			: $data['password'];
@@ -52,8 +52,10 @@ abstract class pudl {
 		if (!empty($data['redis'])) {
 			$this->redis($data['redis']);
 		} else {
-			$this->redis	= new pudlVoid;
+			$this->redis = new pudlVoid;
 		}
+
+		if ($autoconnect) $this->connect();
 	}
 
 
@@ -179,8 +181,11 @@ abstract class pudl {
 	abstract public function error();
 
 
+
 	public function wait($wait=true)	{ return $this; }
 	public function sync()				{ return $this; }
+	public function connect()			{}
+
 
 
 	public function disconnect() {

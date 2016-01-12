@@ -7,15 +7,11 @@ require_once('pudlOdbcResult.php');
 
 class pudlOdbc extends pudl {
 	public function __construct($data, $autoconnect=true) {
-		parent::__construct($data);
-
 		//SET INITIAL VALUES
-		$this->escstart	= '"';
-		$this->escend	= '"';
 		$this->top		= true;
+		$this->limit	= false;
 
-		//CONNECT TO THE SERVER
-		if ($autoconnect) $this->connect();
+		parent::__construct($data, $autoconnect);
 	}
 
 

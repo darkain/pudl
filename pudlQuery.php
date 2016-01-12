@@ -23,7 +23,7 @@ trait pudlQuery {
 
 
 	public function likeEscape($value) {
-		return str_replace(['%', '_'], ['\%', '\_'], $this->escape($value));
+		return addcslashes($this->escape($value), '%_');
 	}
 
 
@@ -152,7 +152,11 @@ trait pudlQuery {
 
 
 	public function identifier($identifier) {
-		return $this->escstart . $identifier . $this->escend;
+		return $this->identifier . str_replace(
+			$this->identifier,
+			$this->identifier.$this->identifier,
+			$identifier
+		) . $this->identifier;
 	}
 
 
@@ -626,20 +630,9 @@ trait pudlQuery {
 
 
 
-	public function _escape($which=PUDL_BOTH) {
-		switch ($which) {
-			case PUDL_START:	return $this->escstart;
-			case PUDL_END:		return $this->escend;
-		}
-		return $this->escstart . $this->escend;
-	}
-
-
-
-	protected $escstart	= '`';
-	protected $escend	= '`';
-	protected $top		= false;
-	protected $limit	= false;
-	protected $prefix	= false;
-	protected $union	= false;
+	protected $identifier	= '"';
+	protected $limit		= true;
+	protected $top			= false;
+	protected $union		= false;
+	protected $prefix		= false;
 }

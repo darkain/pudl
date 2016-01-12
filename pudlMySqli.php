@@ -12,15 +12,10 @@ class pudlMySqli extends pudl {
 
 
 	public function __construct($data, $autoconnect=true) {
-		parent::__construct($data);
-
 		//SET INITIAL VALUES
-		$this->limit	= true;
-		$this->escstart	= '`';
-		$this->escend	= '`';
+		$this->identifier = '`';
 
-		//CONNECT TO THE SERVER
-		if ($autoconnect) $this->connect();
+		parent::__construct($data, $autoconnect);
 	}
 
 

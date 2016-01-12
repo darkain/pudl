@@ -6,10 +6,6 @@ require_once('pudlShellResult.php');
 
 
 class pudlWeb extends pudlShell {
-	public function __construct($data) {
-		parent::__construct($data);
-	}
-
 
 	public static function instance($data) {
 		return new pudlWeb($data);
@@ -36,10 +32,12 @@ class pudlWeb extends pudlShell {
 	}
 
 
+
 	public function errno() {
 		if ($this->curl_errno) return $this->curl_errno;
 		return parent::errno();
 	}
+
 
 
 	public function error() {

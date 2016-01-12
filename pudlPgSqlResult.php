@@ -6,12 +6,6 @@ require_once('pudlResult.php');
 
 class pudlPgSqlResult extends pudlResult {
 
-	public function __construct($result, $db) {
-		parent::__construct($result, $db);
-	}
-
-
-
 	public function __destruct() {
 		parent::__destruct();
 		$this->free();
