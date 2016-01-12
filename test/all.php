@@ -95,3 +95,6 @@ require 'function.php';
 
 //MYSQL GLOBALS, VARIABLES, STATUS
 require 'variables.php';
+
+//LOCK TABLES
+require 'lock.php';
