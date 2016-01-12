@@ -7,6 +7,7 @@ require_once('pudlAuth.php');
 require_once('pudlRedis.php');
 require_once('pudlQuery.php');
 require_once('pudlUnion.php');
+require_once('pudlTable.php');
 require_once('pudlSelect.php');
 require_once('pudlInsert.php');
 require_once('pudlUpdate.php');
@@ -22,6 +23,7 @@ abstract class pudl {
 	use pudlRedis;
 	use pudlQuery;
 	use pudlUnion;
+	use pudlTable;
 	use pudlSelect;
 	use pudlInsert;
 	use pudlUpdate;
