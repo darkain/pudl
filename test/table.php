@@ -56,3 +56,59 @@ $db->string()->rename([
 	'tmp'		=> 'table1',
 ]);
 pudlTest('RENAME TABLE `table1` TO `tmp`, `table2` TO `table1`, `tmp` TO `table1`');
+
+
+
+
+//DROP TABLE
+$db->string()->drop('table');
+pudlTest('DROP TEMPORARY TABLE IF EXISTS `table`');
+
+
+
+
+//DROP TABLE
+$db->string()->drop('table', false);
+pudlTest('DROP TABLE IF EXISTS `table`');
+
+
+
+
+//DROP TABLE
+$db->string()->drop('database.table', false);
+pudlTest('DROP TABLE IF EXISTS `database`.`table`');
+
+
+
+
+//DROP TABLE
+$db->string()->drop(['table']);
+pudlTest('DROP TEMPORARY TABLE IF EXISTS `table`');
+
+
+
+
+//DROP TABLE
+$db->string()->drop(['table'], false);
+pudlTest('DROP TABLE IF EXISTS `table`');
+
+
+
+
+//DROP TABLE
+$db->string()->drop(['database.table'], false);
+pudlTest('DROP TABLE IF EXISTS `database`.`table`');
+
+
+
+
+//DROP TABLE
+$db->string()->drop(['table1', 'table2', 'table3']);
+pudlTest('DROP TEMPORARY TABLE IF EXISTS `table1`, `table2`, `table3`');
+
+
+
+
+//DROP TABLE
+$db->string()->drop(['table1', 'table2', 'table3'], false);
+pudlTest('DROP TABLE IF EXISTS `table1`, `table2`, `table3`');

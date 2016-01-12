@@ -32,4 +32,20 @@ trait pudlTable {
 		]);
 	}
 
+
+
+	function drop($table, $temp=true) {
+		$query = 'DROP ' . ($temp?'TEMPORARY ':'') . 'TABLE IF EXISTS ';
+
+		if (!is_array($table)) return $this($query . $this->table($table));
+
+		$first = true;
+		foreach ($table as $item) {
+			if ($first) $first=false; else $query .= ', ';
+			$query .= $this->table($item);
+		}
+
+		return $this($query);
+	}
+
 }
