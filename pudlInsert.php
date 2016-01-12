@@ -29,7 +29,7 @@ trait pudlInsert {
 
 		if ($prefix) $cols .= ')'; else $cols = '';
 
-		$table = $this->table($table);
+		$table = $this->_table($table);
 		if ($update === 'IGNORE') {
 			$query = "INSERT IGNORE INTO $table$cols VALUES ($vals)";
 
@@ -118,13 +118,13 @@ trait pudlInsert {
 		}
 
 		if ($update === 'IGNORE') {
-			$query = 'INSERT IGNORE INTO ' . $this->table($table) . ' (' . $query;
+			$query = 'INSERT IGNORE INTO ' . $this->_table($table) . ' (' . $query;
 
 		} else if ($update === 'REPLACE') {
-			$query = 'REPLACE INTO ' . $this->table($table) . ' (' . $query;
+			$query = 'REPLACE INTO ' . $this->_table($table) . ' (' . $query;
 
 		} else {
-			$query = 'INSERT INTO ' . $this->table($table) . ' (' . $query;
+			$query = 'INSERT INTO ' . $this->_table($table) . ' (' . $query;
 			if ($update !== false) {
 				$query .= ' ON DUPLICATE KEY UPDATE ';
 				$query .= $this->_update($update);

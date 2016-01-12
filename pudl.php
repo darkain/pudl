@@ -208,7 +208,7 @@ abstract class pudl {
 		if (!is_array($table)) $table = [$table];
 		$return = [];
 		foreach ($table as $t) {
-			$result = $this('SHOW COLUMNS FROM ' . $this->table($t));
+			$result = $this('SHOW COLUMNS FROM ' . $this->_table($t));
 			while ($data = $result->row()) $return[$data['Field']] = $data;
 			$result->free();
 		}

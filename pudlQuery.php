@@ -175,7 +175,7 @@ trait pudlQuery {
 
 
 
-	public function table($table) {
+	public function _table($table) {
 		return $this->identifiers($table, true);
 	}
 
@@ -183,7 +183,7 @@ trait pudlQuery {
 
 	protected function _tables($table) {
 		if ($table === false) return;
-		if (is_string($table)) return ' FROM ' . $this->table($table);
+		if (is_string($table)) return ' FROM ' . $this->_table($table);
 
 		if (!is_array($table)) trigger_error(
 			'Invalid data type for table: ' . gettype($value),
@@ -198,12 +198,12 @@ trait pudlQuery {
 				if ($value instanceof pudlStringResult) {
 					$query .= (string) $value;
 				} else {
-					$query .= $this->table($value);
+					$query .= $this->_table($value);
 				}
 				if (is_string($key)) $query .= ' AS ' . $this->identifier($key);
 
 			} else {
-				$query .= $this->table(reset($value));
+				$query .= $this->_table(reset($value));
 				if (is_string($key)) $query .= ' AS ' . $this->identifier($key);
 				foreach ($value as $join) {
 					if (!empty($join['join'])) {
@@ -412,14 +412,14 @@ trait pudlQuery {
 
 
 	protected function _lockTable($table, $lock) {
-		if (!is_array($table)) return $this->table($table) . ' ' . $lock;
+		if (!is_array($table)) return $this->_table($table) . ' ' . $lock;
 
 		$query = '';
 		foreach ($table as $key => $value) {
 			if (is_array($value)) continue;
 			if (strlen($query)) $query .= ', ';
-			$query .= $this->table($value);
-			if (is_string($key)) $query .= ' ' . $this->table($key);
+			$query .= $this->_table($value);
+			if (is_string($key)) $query .= ' ' . $this->_table($key);
 			$query .= ' ' . $lock;
 		}
 		return $query;
@@ -446,14 +446,14 @@ trait pudlQuery {
 		$query = (empty($type) ? '' : ' '.$type) . ' JOIN ';
 
 		if (is_string($join)) {
-			return $query . '(' . $this->table($join) . ')';
+			return $query . '(' . $this->_table($join) . ')';
 
 		} else if (is_array($join)) {
 			$value = reset($join);
 			if ($value instanceof pudlStringResult) {
 				$query .= (string)$value;
 			} else {
-				$query .= $this->table($value);
+				$query .= $this->_table($value);
 			}
 
 			$alias = key($join);

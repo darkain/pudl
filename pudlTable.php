@@ -8,13 +8,13 @@ trait pudlTable {
 
 		if (!is_array($rename)) {
 			if ($to === false) return $this($query . $rename);
-			return $this($query . $this->table($rename) . ' TO ' . $this->table($to));
+			return $this($query . $this->_table($rename) . ' TO ' . $this->_table($to));
 		}
 
 		$first = true;
 		foreach ($rename as $old => $new) {
 			if ($first) $first=false; else $query .= ', ';
-			$query .= $this->table($old) . ' TO ' . $this->table($new);
+			$query .= $this->_table($old) . ' TO ' . $this->_table($new);
 		}
 
 		return $this($query);
@@ -37,12 +37,12 @@ trait pudlTable {
 	function drop($table, $temp=true) {
 		$query = 'DROP ' . ($temp?'TEMPORARY ':'') . 'TABLE IF EXISTS ';
 
-		if (!is_array($table)) return $this($query . $this->table($table));
+		if (!is_array($table)) return $this($query . $this->_table($table));
 
 		$first = true;
 		foreach ($table as $item) {
 			if ($first) $first=false; else $query .= ', ';
-			$query .= $this->table($item);
+			$query .= $this->_table($item);
 		}
 
 		return $this($query);

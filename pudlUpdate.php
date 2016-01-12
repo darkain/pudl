@@ -10,7 +10,7 @@ trait pudlUpdate {
 
 	public function update($table, $data, $clause, $limit=false, $offset=false) {
 		$query  = 'UPDATE ';
-		$query .= $this->table($table);
+		$query .= $this->_table($table);
 		$query .= ' SET ';
 		$query .= $this->_update($data);
 		$query .= $this->_clause($clause);
@@ -22,7 +22,7 @@ trait pudlUpdate {
 
 	public function updateIgnore($table, $data, $clause, $limit=false, $offset=false) {
 		$query  = 'UPDATE IGNORE ';
-		$query .= $this->table($table);
+		$query .= $this->_table($table);
 		$query .= ' SET ';
 		$query .= $this->_update($data);
 		$query .= $this->_clause($clause);
@@ -35,7 +35,7 @@ trait pudlUpdate {
 	public function updateIn($table, $data, $field, $in, $limit=false, $offset=false) {
 		if (is_array($in)) $in = implode(',', $in);
 		$query  = 'UPDATE ';
-		$query .= $this->table($table);
+		$query .= $this->_table($table);
 		$query .= ' SET ';
 		$query .= $this->_update($data);
 		$query .= ' WHERE (';
@@ -65,7 +65,7 @@ trait pudlUpdate {
 
 	public function increment($table, $col, $clause, $amount=1, $limit=false, $offset=false) {
 		$query = 'UPDATE ';
-		$query .= $this->table($table);
+		$query .= $this->_table($table);
 		$query .= ' SET '	. $this->identifiers($col);
 		$query .= '='		. $this->identifiers($col);
 		$query .= '+'		. $this->_value($amount);
