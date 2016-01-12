@@ -159,7 +159,7 @@ trait pudlQuery {
 		foreach ($list as &$item) $item = trim($item);
 		unset($item);
 
-		if ($prefix) {
+		if ($prefix !== false  &&  $this->prefix !== false) {
 			$table = array_pop($list);
 			if (substr($table, 0, 5) === 'pudl_') {
 				$table = $this->prefix . substr($table, 5);
@@ -177,12 +177,6 @@ trait pudlQuery {
 
 	public function table($table) {
 		return $this->identifiers($table, true);
-	}
-
-
-
-	protected function _table($table, $prefix=true) {
-		return $this->identifiers($table, $prefix);
 	}
 
 
