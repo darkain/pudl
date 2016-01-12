@@ -113,8 +113,9 @@ trait pudlQuery {
 
 	protected function _top($limit) {
 		if (!$this->top) return '';
+		if (is_array($limit)) $limit = reset($limit);
 		if ($limit === false) return '';
-		return 'TOP ' . (int) $limit . ' ';
+		return 'TOP ' . ((int) $limit) . ' ';
 	}
 
 
@@ -398,9 +399,21 @@ trait pudlQuery {
 
 	protected function _limit($limit, $offset=false) {
 		if (!$this->limit) return '';
-		if ($limit !== false  &&  $offset === false) return " LIMIT $limit";
-		if ($limit !== false  &&  $offset !== false) return " LIMIT $offset,$limit";
-		if ($limit === false  &&  $offset !== false) return " LIMIT $offset,18446744073709551615";
+
+		if (is_array($limit)) {
+			if (count($limit) > 1) $offset = $limit[1];
+			$limit = reset($limit);
+		}
+
+		if ($limit !== false  &&  $offset === false)
+			return ' LIMIT ' . ((int)$limit);
+
+		if ($limit !== false  &&  $offset !== false)
+			return ' LIMIT ' . ((int)$offset) . ',' . ((int)$limit);
+
+		if ($limit === false  &&  $offset !== false)
+			return ' LIMIT ' . ((int)$offset) . ',18446744073709551615';
+
 		return '';
 	}
 

@@ -168,8 +168,19 @@ pudlTest("SELECT * FROM `table` LIMIT 10,5");
 $db->string();
 $db([
 	'table'		=> 'table',
+	'limit'		=> [5, 10],
+]);
+pudlTest("SELECT * FROM `table` LIMIT 10,5");
+
+
+
+
+$db->string();
+$db([
+	'table'		=> 'table',
 	'having'	=> 'column=value',
 ]);
+pudlTest("SELECT * FROM `table` HAVING (column=value)");
 
 
 
