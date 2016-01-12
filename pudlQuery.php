@@ -409,10 +409,10 @@ trait pudlQuery {
 			return ' LIMIT ' . ((int)$limit);
 
 		if ($limit !== false  &&  $offset !== false)
-			return ' LIMIT ' . ((int)$offset) . ',' . ((int)$limit);
+			return ' LIMIT ' . ((int)$limit) . ' OFFSET ' . ((int)$offset);
 
 		if ($limit === false  &&  $offset !== false)
-			return ' LIMIT ' . ((int)$offset) . ',18446744073709551615';
+			return ' LIMIT 18446744073709551615 OFFSET ' . ((int)$offset);
 
 		return '';
 	}

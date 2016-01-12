@@ -46,12 +46,12 @@ pudlTest("SHOW STATUS LIKE 'test%' LIMIT 1");
 
 
 $db->string()->globals('test%', 1, 2);
-pudlTest("SHOW GLOBAL STATUS LIKE 'test%' LIMIT 2,1");
+pudlTest("SHOW GLOBAL STATUS LIKE 'test%' LIMIT 1 OFFSET 2");
 
 
 $db->string()->variables('test%', 1, 2);
-pudlTest("SHOW VARIABLES LIKE 'test%' LIMIT 2,1");
+pudlTest("SHOW VARIABLES LIKE 'test%' LIMIT 1 OFFSET 2");
 
 
 $db->string()->status('test%', 1, 2);
-pudlTest("SHOW STATUS LIKE 'test%' LIMIT 2,1");
+pudlTest("SHOW STATUS LIKE 'test%' LIMIT 1 OFFSET 2");
