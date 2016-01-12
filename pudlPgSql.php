@@ -60,6 +60,13 @@ class pudlPgSql extends pudl {
 
 
 
+	public function identifier($identifier) {
+		if (!$this->pgsql) return false;
+		return pg_escape_identifier($this->pgsql, $identifier);
+	}
+
+
+
 	public function escape($value) {
 		if (!$this->pgsql) return false;
 		return pg_escape_string($this->pgsql, $value);

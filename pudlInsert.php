@@ -23,17 +23,19 @@ trait pudlInsert {
 				$vals .= ', ';
 			} else $first = false;
 
-			$cols .= $this->_table($column, false);
+			$cols .= $this->identifier($column);
 			$vals .= $this->_columnData($value);
 		}
 
 		if ($prefix) $cols .= ')'; else $cols = '';
 
-		$table = $this->_table($table);
+		$table = $this->table($table);
 		if ($update === 'IGNORE') {
 			$query = "INSERT IGNORE INTO $table$cols VALUES ($vals)";
+
 		} else if ($update === 'REPLACE') {
 			$query = "REPLACE INTO $table$cols VALUES ($vals)";
+
 		} else {
 			$query = "INSERT INTO $table$cols VALUES ($vals)";
 			if ($update === true) $update = $data;
@@ -77,7 +79,7 @@ trait pudlInsert {
 			$update = [$data];
 		}
 
-		$update[] = $this->_table($column,false).'=LAST_INSERT_ID('.$this->_table($column,false).')';
+		$update[] = $this->identifiers($column).'=LAST_INSERT_ID('.$this->identifiers($column).')';
 
 		return $this->insert($table, $data, $update, $prefix);
 	}
@@ -90,39 +92,39 @@ trait pudlInsert {
 			return false;
 		}
 
-		$table = $this->_table($table);
-
 		$query = '';
 
 		foreach ($cols as &$name) {
 			if (strlen($query)) $query .= ',';
-			$query .= $this->_table($name, false);
+			$query .= $this->identifier($name);
 		} unst($name);
 
 		$query .= ') VALUES ';
 
 		$first = true;
-		foreach ($data as &$set) {
+		foreach ($data as $set) {
 			if (!$first) $query .= ',';
 			$first = false;
 			$query .= '(';
 
 			$firstitem = true;
-			foreach ($set as &$item) {
-				if (!firstitem) $query .= ',';
+			foreach ($set as $item) {
+				if (!$firstitem) $query .= ',';
 				$firstitem = false;
-				$query .= "'$item'";
-			} unset($item);
+				$query .= $this->_columnData($item);
+			}
 
 			$query .= ')';
-		} unset($set);
+		}
 
 		if ($update === 'IGNORE') {
-			$query = "INSERT IGNORE INTO $table (" . $query;
+			$query = 'INSERT IGNORE INTO ' . $this->table($table) . ' (' . $query;
+
 		} else if ($update === 'REPLACE') {
-			$query = "REPLACE INTO $table (" . $query;
+			$query = 'REPLACE INTO ' . $this->table($table) . ' (' . $query;
+
 		} else {
-			$query = "INSERT INTO $table (" . $query;
+			$query = 'INSERT INTO ' . $this->table($table) . ' (' . $query;
 			if ($update !== false) {
 				$query .= ' ON DUPLICATE KEY UPDATE ';
 				$query .= $this->_update($update);

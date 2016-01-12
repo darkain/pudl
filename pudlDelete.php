@@ -8,7 +8,7 @@ trait pudlDelete {
 		$query  = 'DELETE ';
 		$query .= $this->_top($limit);
 		$query .= 'FROM ';
-		$query .= $this->_table($table);
+		$query .= $this->table($table);
 		$query .= $this->_clause($clause);
 		$query .= $this->_limit($limit, $offset);
 		return $this($query);

@@ -197,17 +197,10 @@ abstract class pudl {
 
 
 	public function listFields($table) {
-		$return = array();
-		if (is_array($table)) {
-			foreach ($table as $t) {
-				$t = $this->_table($t);
-				$result = $this("SHOW COLUMNS FROM $t");
-				while ($data = $result->row()) $return[$data['Field']] = $data;
-				$result->free();
-			}
-		} else {
-			$table = $this->_table($table);
-			$result = $this("SHOW COLUMNS FROM $table");
+		if (!is_array($table)) $table = [$table];
+		$return = [];
+		foreach ($table as $t) {
+			$result = $this('SHOW COLUMNS FROM ' . $this->table($t));
 			while ($data = $result->row()) $return[$data['Field']] = $data;
 			$result->free();
 		}
@@ -218,7 +211,7 @@ abstract class pudl {
 
 	public function explain($query) {
 		$return = '';
-		$result = $this("EXPLAIN $query");
+		$result = $this('EXPLAIN ' . $query);
 		if ($result instanceof pudlStringResult) return $result;
 		while ($data = $result->row()) $return .= print_r($data, true);
 		$result->free();
@@ -228,13 +221,13 @@ abstract class pudl {
 
 
 	public function idExists($table, $col, $id) {
-		return ($this->cellId($table, $col, $col, $id) !== false);
+		return $this->cellId($table, $col, $col, $id) !== false;
 	}
 
 
 
 	public function clauseExists($table, $clause) {
-		return ($this->cell($table, true, $clause) !== false);
+		return $this->cell($table, true, $clause) !== false;
 	}
 
 

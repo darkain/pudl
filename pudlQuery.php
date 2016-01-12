@@ -82,7 +82,7 @@ trait pudlQuery {
 				' AND ' . $this->_value($value->value[1], $quote);
 
 		if ($value instanceof pudlColumn)
-			return $this->_table($value->column, false);
+			return $this->identifiers($value->column);
 
 		if ($value instanceof pudlEquals  &&  is_array($value->value))
 			return '(' . $this->_inSet($value->value) . ')';
@@ -136,11 +136,11 @@ trait pudlQuery {
 			if (strlen($query)) $query .= ', ';
 			if (is_string($key)) {
 				if (is_string($value)) {
-					$query .= $this->_table($value, false);
+					$query .= $this->identifiers($value);
 				} else {
 					$query .= $this->_value($value, true);
 				}
-				$query .= ' AS ' . $this->_table($key, false);
+				$query .= ' AS ' . $this->identifier($key);
 			} else {
 				$query .= $this->_value($value, is_string($key));
 			}
@@ -151,20 +151,21 @@ trait pudlQuery {
 
 
 
-	protected function _table($table, $prefix=true) {
-		if ($table === false) return '';
+	public function identifier($identifier) {
+		return $this->escstart . $identifier . $this->escend;
+	}
 
-		$list = explode('.', $table);
 
-		foreach ($list as &$item) {
-			$item = trim($item);
-			$item = ltrim($item, $this->escstart);
-			$item = rtrim($item, $this->escend);
-			$item = trim($item);
-			$item = str_replace(['`',"\0"], ['``',''], $item);
-		};
 
-		if ($prefix  &&  $this->prefix !== false) {
+	public function identifiers($identifiers, $prefix=false) {
+		if ($identifiers === false) return '';
+
+		$list = explode('.', $identifiers);
+
+		foreach ($list as &$item) $item = trim($item);
+		unset($item);
+
+		if ($prefix) {
 			$table = array_pop($list);
 			if (substr($table, 0, 5) === 'pudl_') {
 				$table = $this->prefix . substr($table, 5);
@@ -172,16 +173,29 @@ trait pudlQuery {
 			$list[] = $table;
 		}
 
-		return $this->escstart .
-			implode($this->escend.'.'.$this->escstart, $list) .
-			$this->escend;
+		foreach ($list as &$item) $item = $this->identifier($item);
+		unset($item);
+
+		return implode('.', $list);
+	}
+
+
+
+	public function table($table) {
+		return $this->identifiers($table, true);
+	}
+
+
+
+	protected function _table($table, $prefix=true) {
+		return $this->identifiers($table, $prefix);
 	}
 
 
 
 	protected function _tables($table) {
 		if ($table === false) return;
-		if (is_string($table)) return ' FROM ' . $this->_table($table);
+		if (is_string($table)) return ' FROM ' . $this->table($table);
 
 		if (!is_array($table)) trigger_error(
 			'Invalid data type for table: ' . gettype($value),
@@ -196,13 +210,13 @@ trait pudlQuery {
 				if ($value instanceof pudlStringResult) {
 					$query .= (string) $value;
 				} else {
-					$query .= $this->_table($value);
+					$query .= $this->table($value);
 				}
-				if (is_string($key)) $query .= ' AS ' . $this->_table($key, false);
+				if (is_string($key)) $query .= ' AS ' . $this->identifier($key);
 
 			} else {
-				$query .= $this->_table(reset($value));
-				if (is_string($key)) $query .= ' AS ' . $this->_table($key, false);
+				$query .= $this->table(reset($value));
+				if (is_string($key)) $query .= ' AS ' . $this->identifier($key);
 				foreach ($value as $join) {
 					if (!empty($join['join'])) {
 						$query .= $this->_joinTable($join['join'], false);
@@ -288,14 +302,14 @@ trait pudlQuery {
 			if (strlen($query)) $query .= $joiner;
 
 			if (is_string($key)) {
-				$query .= $this->_table($key, false);
+				$query .= $this->identifiers($key);
 				$query .= $this->_clauseEquals($value);
 				if (is_array($value)) continue;
 
 			} else if ($value instanceof pudlColumn  &&  $value->args) {
 				$key	 = '';
 				if (is_string($value->column)) {
-					$query	.= $this->_table($value->column, false);
+					$query	.= $this->identifiers($value->column);
 				} else {
 					$query	.= $this->_value($value->column);
 				}
@@ -398,14 +412,14 @@ trait pudlQuery {
 
 
 	protected function _lockTable($table, $lock) {
-		if (!is_array($table)) return $this->_table($table) . ' ' . $lock;
+		if (!is_array($table)) return $this->table($table) . ' ' . $lock;
 
 		$query = '';
 		foreach ($table as $key => $value) {
 			if (is_array($value)) continue;
 			if (strlen($query)) $query .= ', ';
-			$query .= $this->_table($value, false);
-			if (is_string($key)) $query .= ' ' . $this->_table($key, false);
+			$query .= $this->table($value);
+			if (is_string($key)) $query .= ' ' . $this->table($key);
 			$query .= ' ' . $lock;
 		}
 		return $query;
@@ -422,13 +436,13 @@ trait pudlQuery {
 
 	protected function _joinUsing($using) {
 		if ($using === false)	return '';
-		if (!is_array($using))	return ' USING (' . $this->_table($using, false) . ')';
+		if (!is_array($using))	return ' USING (' . $this->identifiers($using) . ')';
 		if (!count($using))	return '';
 
 		$query = '';
 		foreach ($using as $item) {
 			if (strlen($query)) $query .= ', ';
-			$query .= $this->_table($item, false);
+			$query .= $this->identifiers($item);
 		}
 		return ' USING (' . $query . ')';
 	}
@@ -439,18 +453,18 @@ trait pudlQuery {
 		$query = (empty($type) ? '' : ' '.$type) . ' JOIN ';
 
 		if (is_string($join)) {
-			return $query . '(' . $this->_table($join) . ')';
+			return $query . '(' . $this->table($join) . ')';
 
 		} else if (is_array($join)) {
 			$value = reset($join);
 			if ($value instanceof pudlStringResult) {
 				$query .= (string)$value;
 			} else {
-				$query .= $this->_table($value);
+				$query .= $this->table($value);
 			}
 
 			$alias = key($join);
-			if (is_string($alias)) $query .= ' AS ' . $this->_table($alias, false);
+			if (is_string($alias)) $query .= ' AS ' . $this->identifier($alias);
 			return $query;
 		}
 
@@ -476,15 +490,15 @@ trait pudlQuery {
 				continue;
 			}
 
-			$query .= $this->_table($column, false) . '=';
+			$query .= $this->identifier($column) . '=';
 
 			if ($value instanceof pudlFunction  &&  isset($value->__INCREMENT)) {
-				$query .= $this->_table($column, false);
+				$query .= $this->identifier($column);
 				$query .= '+' . $this->_value(reset($value->__INCREMENT));
 
 			} else if ($value instanceof pudlAppendSet) {
 				$query .= 'CONCAT_WS(\',\', ' .
-					$this->_table($column, false) . ', ' .
+					$this->identifier($column) . ', ' .
 					$this->setEscape($this->_value($value->value)) . ')';
 
 			} else if ($value instanceof pudlStringResult) {
@@ -492,7 +506,7 @@ trait pudlQuery {
 
 			} else if ($value instanceof pudlRemoveSet) {
 				$query .= 'REPLACE(CONCAT(\',\', ' .
-					$this->_table($column, false) . ', \',\'), \',' .
+					$this->identifier($column) . ', \',\'), \',' .
 					$this->setEscape($this->_value($value->value, false)) . ',\', \',\')';
 
 			} else {
