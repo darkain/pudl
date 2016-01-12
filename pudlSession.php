@@ -68,7 +68,9 @@ class pudlSession {
 
 		if ($data === false) $data = '';
 
-		$this->hash = is_string($data) ? md5($data) : false;
+		$this->hash = is_string($data)
+			? hash('sha512', $this->db->salt().$data)
+			: false;
 
 		return $data;
 	}
@@ -76,7 +78,7 @@ class pudlSession {
 
 
 	function write($id, $data) {
-		if (is_string($data)  &&  $this->hash === md5($data)) return true;
+		if (is_string($data)  &&  $this->hash === hash('sha512', $this->db->salt().$data)) return true;
 		if (empty($data)) return $this->destroy($id);
 
 		if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {

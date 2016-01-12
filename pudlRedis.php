@@ -60,6 +60,13 @@ trait pudlRedis {
 
 
 
+	public function salt() {
+		$auth = $this->auth();
+		return $auth['salt'];
+	}
+
+
+
 	protected		$cache		= false;
 	protected		$cachekey	= false;
 	protected		$redis		= false;

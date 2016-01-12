@@ -39,6 +39,7 @@ abstract class pudl {
 		$data['database']	= empty($data['database'])	? ''			: $data['database'];
 		$data['server']		= empty($data['server'])	? 'localhost'	: $data['server'];
 		$data['prefix']		= empty($data['prefix'])	? false			: $data['prefix'];
+		$data['salt']		= empty($data['salt'])		? ''			: $data['salt'];
 
 		//SET INITIAL DATA
 		$this->microtime	= microtime(true);
@@ -112,7 +113,7 @@ abstract class pudl {
 			$this->stats['total']++;
 			try {
 				$hash = $this->cachekey;
-				if (empty($hash)) $hash = md5($query);
+				if (empty($hash)) $hash = hash('sha512', $this->salt().$query, true);
 				$data = $this->redis->get("pudl:$hash");
 				if ($data === false) {
 					$result = $this->missed($query);
