@@ -283,7 +283,7 @@ abstract class pudl {
 
 	public function listItems($type, $like=false, $limit=false, $offset=false) {
 		$query = 'SHOW ' . $type;
-		if (!empty($like)) $query .= ' LIKE "' . $like . '"';
+		if (!empty($like)) $query .= ' LIKE ' . $this->_value($like);
 		$query .= $this->_limit($limit, $offset);
 		$result = $this($query);
 
