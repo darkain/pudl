@@ -6,10 +6,9 @@ require_once('pudlMsSqlResult.php');
 
 
 class pudlMsSql extends pudl {
+
 	public function __construct($data, $autoconnect=true) {
 		//SET INITIAL VALUES
-		$this->top			= true;
-		$this->limit		= false;
 		$this->identifier	= ']';
 
 		parent::__construct($data, $autoconnect);
@@ -93,6 +92,7 @@ class pudlMsSql extends pudl {
 	}
 
 
+
 	public function updated() {
 		if (!$this->mssql) return 0;
 		$result = @mssql_query('SELECT @@ROWCOUNT', $this->mssql);
@@ -103,9 +103,11 @@ class pudlMsSql extends pudl {
 	}
 
 
+
 	public function errno() {
 		return (int) !empty($this->error());
 	}
+
 
 
 	public function error() {
@@ -113,5 +115,26 @@ class pudlMsSql extends pudl {
 	}
 
 
-	private $mssql	= false;
+
+	protected function _limit($limit, $offset=false) {
+		if (is_array($limit)) {
+			$offset	= count($limit) > 1 ? end($limit) : false;
+			$limit	= reset($limit);
+		}
+
+		$query = '';
+
+		if ($offset !== false)
+			$query .= ' OFFSET ' . ((int)$offset) . ' ROWS';
+
+		if ($limit !== false)
+			$query .= ' FETCH NEXT ' . ((int)$limit) . ' ROWS ONLY';
+
+		return $query;
+	}
+
+
+
+	private $mssql = false;
+
 }

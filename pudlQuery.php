@@ -2,8 +2,6 @@
 
 trait pudlQuery {
 
-
-
 	public function escape($value) {
 		switch (true) {
 			case is_int($value):
@@ -107,15 +105,6 @@ trait pudlQuery {
 				$this->_value($item, false);
 		}
 		return "'".$query."'";
-	}
-
-
-
-	protected function _top($limit) {
-		if (!$this->top) return '';
-		if (is_array($limit)) $limit = reset($limit);
-		if ($limit === false) return '';
-		return 'TOP ' . ((int) $limit) . ' ';
 	}
 
 
@@ -398,23 +387,23 @@ trait pudlQuery {
 
 
 	protected function _limit($limit, $offset=false) {
-		if (!$this->limit) return '';
-
 		if (is_array($limit)) {
 			$offset	= count($limit) > 1 ? end($limit) : false;
 			$limit	= reset($limit);
 		}
 
-		if ($limit !== false  &&  $offset === false)
-			return ' LIMIT ' . ((int)$limit);
-
-		if ($limit !== false  &&  $offset !== false)
-			return ' LIMIT ' . ((int)$limit) . ' OFFSET ' . ((int)$offset);
+		$query = '';
 
 		if ($limit === false  &&  $offset !== false)
-			return ' LIMIT 18446744073709551615 OFFSET ' . ((int)$offset);
+			$query .= ' LIMIT 18446744073709551615';
 
-		return '';
+		else if ($limit !== false)
+			$query .= ' LIMIT ' . ((int)$limit);
+
+		if ($offset !== false)
+			$query .= ' OFFSET ' . ((int)$offset);
+
+		return $query;
 	}
 
 
@@ -440,13 +429,6 @@ trait pudlQuery {
 			$query .= ' ' . $lock;
 		}
 		return $query;
-	}
-
-
-
-	protected function _union($type='') {
-		if ($type !== 'ALL'  &&  $type !== 'DISTINCT') $type = '';
-		return '(' . implode(") UNION $type (", $this->union) . ')';
 	}
 
 
@@ -644,8 +626,6 @@ trait pudlQuery {
 
 
 	protected $identifier	= '"';
-	protected $limit		= true;
-	protected $top			= false;
-	protected $union		= false;
 	protected $prefix		= false;
+
 }

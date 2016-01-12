@@ -7,9 +7,7 @@ require_once('pudlShellResult.php');
 
 class pudlShell extends pudl {
 	public function __construct($data) {
-		$this->top		= true;
-		$this->limit	= false;
-		$this->path		= empty($data['path']) ? '' : $data['path'];
+		$this->path = empty($data['path']) ? '' : $data['path'];
 		parent::__construct($data);
 	}
 

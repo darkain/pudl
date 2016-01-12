@@ -6,15 +6,6 @@ require_once('pudlOdbcResult.php');
 
 
 class pudlOdbc extends pudl {
-	public function __construct($data, $autoconnect=true) {
-		//SET INITIAL VALUES
-		$this->top		= true;
-		$this->limit	= false;
-
-		parent::__construct($data, $autoconnect);
-	}
-
-
 
 	function __destruct() {
 		$this->disconnect();
@@ -44,6 +35,7 @@ class pudlOdbc extends pudl {
 	}
 
 
+
 	protected function process($query) {
 		if (!$this->odbc) return false;
 		$result = @odbc_exec($this->odbc, $query);
@@ -64,9 +56,11 @@ class pudlOdbc extends pudl {
 	}
 
 
+
 	public function updated() {
 		return $this->numrows;
 	}
+
 
 
 	public function errno() {
@@ -75,10 +69,12 @@ class pudlOdbc extends pudl {
 	}
 
 
+
 	public function error() {
 		if (!$this->odbc) return odbc_errormsg();
 		return odbc_errormsg($this->odbc);
 	}
+
 
 
 	private $odbc		= false;

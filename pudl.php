@@ -74,7 +74,7 @@ abstract class pudl {
 
 
 		//UNIONS
-		if (is_array($this->union)) {
+		if ($this->inUnion()) {
 			$this->union[] = $query;
 			return true;
 		}

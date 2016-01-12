@@ -6,7 +6,6 @@ trait pudlSelect {
 	public function select($col, $table=false, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
-		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
 		$query .= $this->_tables($table);
 		$query .= $this->_clause($clause);
@@ -21,7 +20,6 @@ trait pudlSelect {
 	public function having($col, $table, $clause=false, $having=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
-		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
 		$query .= $this->_tables($table);
 		$query .= $this->_clause($clause);
@@ -37,7 +35,6 @@ trait pudlSelect {
 	public function group($col, $table, $clause=false, $group=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
-		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
 		$query .= $this->_tables($table);
 		$query .= $this->_clause($clause);
@@ -53,7 +50,6 @@ trait pudlSelect {
 	public function groupHaving($col, $table, $clause=false, $group=false, $having=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
-		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
 		$query .= $this->_tables($table);
 		$query .= $this->_clause($clause);
@@ -71,7 +67,6 @@ trait pudlSelect {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
 		$query .= '*, COUNT(*) FROM (SELECT ';
-		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
 		$query .= $this->_tables($table);
 		$query .= $this->_clause($clause);
@@ -80,7 +75,7 @@ trait pudlSelect {
 		$query .= ') groupbyorderby';
 		$query .= $this->_group($group);
 		$query .= $this->_order($order);
-		if (is_array($limit))  $query .= $this->_limit($limit[1], $offset);
+		if (is_array($limit)) $query .= $this->_limit($limit[1], $offset);
 		else $query .= $this->_limit($limit, $offset);
 		$query .= $this->_lock($lock);
 		return $this($query);
@@ -92,7 +87,6 @@ trait pudlSelect {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
 		$query .= '*, COUNT(*) FROM (SELECT ';
-		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
 		$query .= $this->_tables($table);
 		$query .= $this->_clause($clause);
@@ -102,7 +96,7 @@ trait pudlSelect {
 		$query .= ') groupbyorderby';
 		$query .= $this->_group($outer_group);
 		$query .= $this->_order($order);
-		if (is_array($limit))  $query .= $this->_limit($limit[1], $offset);
+		if (is_array($limit)) $query .= $this->_limit($limit[1], $offset);
 		else $query .= $this->_limit($limit, $offset);
 		$query .= $this->_lock($lock);
 		return $this($query);
@@ -113,7 +107,6 @@ trait pudlSelect {
 	public function selectJoin($col, $table, $join_table, $join_clause, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
-		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
 		$query .= $this->_tables($table);
 		$query .= $this->_joinTable($join_table);
@@ -131,7 +124,6 @@ trait pudlSelect {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
 		$query .= 'DISTINCT ';
-		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
 		$query .= $this->_tables($table);
 		$query .= $this->_clause($clause);
@@ -147,7 +139,6 @@ trait pudlSelect {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
 		$query .= 'DISTINCT * FROM (SELECT ';
-		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
 		$query .= $this->_tables($table);
 		$query .= $this->_clause($clause);
@@ -166,7 +157,6 @@ trait pudlSelect {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
 		$query .= 'DISTINCT ';
-		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
 		$query .= $this->_tables($table);
 		$query .= $this->_joinTable($join_table);
@@ -182,7 +172,6 @@ trait pudlSelect {
 
 	public function selectExplain($col, $table, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$query  = 'SELECT ';
-		$query .= $this->_top($limit);
 		$query .= $this->_column($col);
 		$query .= $this->_tables($table);
 		$query .= $this->_clause($clause);
@@ -202,7 +191,6 @@ trait pudlSelect {
 			$query .= ' *, COUNT(*) FROM (SELECT ';
 		}
 
-		if (isset($params['limit']))	$query .= $this->_top(   $params['limit']);
 		if (isset($params['column']))	$query .= $this->_column($params['column']);
 		if (!isset($params['column']))	$query .= '*';
 		if (isset($params['table']))	$query .= $this->_tables($params['table']);
@@ -252,7 +240,7 @@ trait pudlSelect {
 
 	public function selectRows($col, $table, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
 		$result = $this->select($col, $table, $clause, $order, $limit, $offset, $lock);
-		if (is_array($this->union)) return true;
+		if ($this->inUnion()) return true;
 		if ($result instanceof pudlStringResult) return $result;
 		return $result->complete();
 	}

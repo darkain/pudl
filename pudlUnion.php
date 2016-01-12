@@ -3,7 +3,6 @@
 
 trait pudlUnion {
 
-
 	public function inUnion() {
 		return is_array($this->union);
 	}
@@ -21,12 +20,12 @@ trait pudlUnion {
 	public function unionEnd($order=false, $limit=false, $offset=false, $type='') {
 		if (!$this->inUnion()) return false;
 
-		$query  = $this->_union($type);
-		$query .= $this->_order($order);
-		$query .= $this->_limit($limit, $offset);
-		//TODO: figure out how to convert this over to 'TOP' syntax
+		$query =	$this->_union($type) .
+					$this->_order($order) .
+					$this->_limit($limit, $offset);
 
 		$this->union = false;
+
 		return $this($query);
 	}
 
@@ -35,18 +34,30 @@ trait pudlUnion {
 	public function unionGroup($group=false, $order=false, $limit=false, $offset=false, $type='') {
 		if (!$this->inUnion()) return false;
 
-		$query  = 'SELECT ';
-		$query .= $this->_cache();
-		$query .= '* FROM (';
-		$query .= $this->_union($type);
-		$query .= ') pudltablealias';
-		$query .= $this->_group($group);
-		$query .= $this->_order($order);
-		$query .= $this->_limit($limit, $offset);
-		//TODO: figure out how to convert this over to 'TOP' syntax
+		$query = 'SELECT ' .
+			$this->_cache() .
+			'* FROM (' .
+			$this->_union($type) .
+			') pudltablealias' .
+			$this->_group($group) .
+			$this->_order($order) .
+			$this->_limit($limit, $offset);
 
 		$this->union = false;
+
 		return $this($query);
 	}
+
+
+
+
+	protected function _union($type='') {
+		if ($type !== 'ALL'  &&  $type !== 'DISTINCT') $type = '';
+		return '(' . implode(") UNION $type (", $this->union) . ')';
+	}
+
+
+
+	protected $union = false;
 
 }
