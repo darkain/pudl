@@ -401,8 +401,8 @@ trait pudlQuery {
 		if (!$this->limit) return '';
 
 		if (is_array($limit)) {
-			if (count($limit) > 1) $offset = $limit[1];
-			$limit = reset($limit);
+			$offset	= count($limit) > 1 ? end($limit) : false;
+			$limit	= reset($limit);
 		}
 
 		if ($limit !== false  &&  $offset === false)
