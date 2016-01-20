@@ -387,6 +387,12 @@ abstract class pudl {
 
 
 
+	public static function text($text) {
+		return new pudlText($text);
+	}
+
+
+
 	public static function jsonEncode($data) {
 		return @json_encode($data, JSON_HEX_APOS|JSON_HEX_QUOT);
 	}

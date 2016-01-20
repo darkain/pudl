@@ -134,6 +134,18 @@ pudlTest("SELECT * FROM `table` WHERE (`column` REGEXP '[[:<:]]value[[:>:]]') LI
 
 
 
+$db->string()->select(pudl::text('value'));
+pudlTest("SELECT 'value'");
+
+
+
+
+$db->string()->select(['column' => pudl::text('value')]);
+pudlTest("SELECT 'value' AS `column`");
+
+
+
+
 $db->string()->select(pudl::now());
 pudlTest("SELECT NOW()");
 

@@ -88,6 +88,9 @@ trait pudlQuery {
 		if ($value instanceof pudlEquals)
 			return $this->_value($value->value, $quote);
 
+		if ($value instanceof pudlText)
+			return $this->_value($value->value);
+
 		if ($value instanceof pudlRaw)
 			return $value->value;
 

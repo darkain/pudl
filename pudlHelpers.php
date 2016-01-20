@@ -189,6 +189,10 @@ class pudlRaw {
 
 
 
+class pudlText extends pudlRaw {}
+
+
+
 class pudlVariable extends pudlRaw {
 	public function __construct($name) {
 		parent::__construct('@'.$name);
