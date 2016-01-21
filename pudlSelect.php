@@ -72,7 +72,8 @@ trait pudlSelect {
 		$query .= $this->_clause($clause);
 		$query .= $this->_order($order);
 		if (is_array($limit)) $query .= $this->_limit($limit[0]);
-		$query .= ') groupbyorderby';
+		$query .= ') ';
+		$query .= $this->_alias();
 		$query .= $this->_group($group);
 		$query .= $this->_order($order);
 		if (is_array($limit)) $query .= $this->_limit($limit[1], $offset);
@@ -93,7 +94,8 @@ trait pudlSelect {
 		$query .= $this->_group($inner_group);
 		$query .= $this->_order($order);
 		if (is_array($limit)) $query .= $this->_limit($limit[0]);
-		$query .= ') groupbyorderby';
+		$query .= ') ';
+		$query .= $this->_alias();
 		$query .= $this->_group($outer_group);
 		$query .= $this->_order($order);
 		if (is_array($limit)) $query .= $this->_limit($limit[1], $offset);
@@ -143,7 +145,8 @@ trait pudlSelect {
 		$query .= $this->_tables($table);
 		$query .= $this->_clause($clause);
 		$query .= $this->_order($order);
-		$query .= ') groupbyorderby';
+		$query .= ') ';
+		$query .= $this->_alias();
 		$query .= $this->_group($group);
 		$query .= $this->_order($order);
 		$query .= $this->_limit($limit, $offset);
@@ -198,7 +201,9 @@ trait pudlSelect {
 
 		if (isset($params['group'])  &&  isset($params['order'])) {
 			$query .= $this->_order($params['order']);
-			$query .= ') groupbyorderby ';
+			$query .= ') ';
+			$query .= $this->_alias();
+			$query .= ' ';
 		}
 
 		if (isset($params['group']))	$query .= $this->_group($params['group']);

@@ -4,6 +4,7 @@ require_once('pudlHelpers.php');
 require_once('pudlStringResult.php');
 require_once('pudlCacheResult.php');
 require_once('pudlAuth.php');
+require_once('pudlAlias.php');
 require_once('pudlRedis.php');
 require_once('pudlQuery.php');
 require_once('pudlUnion.php');
@@ -20,6 +21,7 @@ require_once('pudlTransaction.php');
 
 abstract class pudl {
 	use pudlAuth;
+	use pudlAlias;
 	use pudlRedis;
 	use pudlQuery;
 	use pudlUnion;
@@ -257,15 +259,16 @@ abstract class pudl {
 	public function countGroup($table, $clause, $group, $col=false) {
 		if ($col === false) $col = $group;
 
-		$query  = 'SELECT ';
-		$query .= $this->_cache();
-		$query .= 'COUNT(*) FROM (';
-		$query .= 'SELECT ';
-		$query .= $this->_column($col);
-		$query .= $this->_tables($table);
-		$query .= $this->_clause($clause);
-		$query .= $this->_group($group);
-		$query .= ') groupbycount';
+		$query =	'SELECT ' .
+					$this->_cache() .
+					'COUNT(*) FROM (' .
+					'SELECT ' .
+					$this->_column($col) .
+					$this->_tables($table) .
+					$this->_clause($clause) .
+					$this->_group($group) .
+					') ' .
+					$this->_alias();
 
 		$result = $this($query);
 		if ($result instanceof pudlStringResult) return $result;

@@ -34,14 +34,15 @@ trait pudlUnion {
 	public function unionGroup($group=false, $order=false, $limit=false, $offset=false, $type='') {
 		if (!$this->inUnion()) return false;
 
-		$query = 'SELECT ' .
-			$this->_cache() .
-			'* FROM (' .
-			$this->_union($type) .
-			') pudltablealias' .
-			$this->_group($group) .
-			$this->_order($order) .
-			$this->_limit($limit, $offset);
+		$query =	'SELECT ' .
+					$this->_cache() .
+					'* FROM (' .
+					$this->_union($type) .
+					') ' .
+					$this->_alias() .
+					$this->_group($group) .
+					$this->_order($order) .
+					$this->_limit($limit, $offset);
 
 		$this->union = false;
 
@@ -52,6 +53,7 @@ trait pudlUnion {
 
 
 	protected function _union($type='') {
+		$type = strtoupper($type);
 		if ($type !== 'ALL'  &&  $type !== 'DISTINCT') $type = '';
 		return '(' . implode(") UNION $type (", $this->union) . ')';
 	}
