@@ -141,6 +141,10 @@ class pudlSession {
 
 
 
+	public function table() { return $this->table; }
+
+
+
 	private $db;
 	private $table;
 	private $name;
