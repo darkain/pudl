@@ -13,8 +13,11 @@ trait pudlRedis {
 
 
 	public function purge($key) {
-		if (!$this->redis) return;
-		try { $this->redis->delete("pudl:$key"); } catch (RedisException $e) {}
+		if (!$this->redis) return false;
+		try {
+			return $this->redis->delete("pudl:$key");
+		} catch (RedisException $e) {}
+		return false;
 	}
 
 

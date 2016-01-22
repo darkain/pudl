@@ -38,7 +38,7 @@ class pudlSession {
 
 
 	private function purge($id) {
-		$this->db->purge( $this->cache($id) );
+		return $this->db->purge( $this->cache($id) );
 	}
 
 
@@ -62,23 +62,28 @@ class pudlSession {
 
 
 	function read($id) {
-		$data = $this->db->cache(60*60, $this->cache($id))->cellId(
-			$this->table, 'data', 'id', $id
+		$data = $this->db->cache(60*60, $this->cache($id))->selectRow(
+			['user', 'data'],
+			$this->table,
+			['id' => $id]
 		);
 
-		if ($data === false) $data = '';
+		if ($data === false) $data = ['data'=>false, 'user'=>0];
 
-		$this->hash = is_string($data)
-			? hash('sha512', $this->db->salt().$data)
+		$this->user = $data['user'];
+
+		$this->hash = is_string($data['data'])
+			? hash('sha512', $this->db->salt().$data['data'])
 			: false;
 
-		return $data;
+		return $data['data'];
 	}
 
 
 
 	function write($id, $data) {
 		if (is_string($data)  &&  $this->hash === hash('sha512', $this->db->salt().$data)) return true;
+
 		if (empty($data)) return $this->destroy($id);
 
 		if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
@@ -92,15 +97,14 @@ class pudlSession {
 		//Create new entity in database
 		$this->db->insert($this->table, [
 			'id'		=> $id,
+			'user'		=> $this->user,
 			'access'	=> $this->db->time(),
 			'address'	=> $address,
 			'data'		=> $data,
 		], true);
 
 		//Purge the cache for this ID
-		$this->purge($id);
-
-		return true;
+		return $this->purge($id);
 	}
 
 
@@ -112,9 +116,7 @@ class pudlSession {
 		}
 
 		//Purge the cache for this ID
-		$this->purge($id);
-
-		return true;
+		return $this->purge($id);
 	}
 
 
@@ -127,9 +129,22 @@ class pudlSession {
 
 
 
+	public function user($user=false, $name=false) {
+		if ($user === false) return $this->user;
+
+		$this->user = (int) $user;
+
+		if ($name !== false) {
+			$_SESSION[$name] = $this->user;
+		}
+	}
+
+
+
 	private $db;
 	private $table;
 	private $name;
 	private $domain;
 	private $hash		= false;
+	private $user		= 0;
 }
