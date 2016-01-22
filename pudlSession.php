@@ -135,7 +135,11 @@ class pudlSession {
 		$this->user = (int) $user;
 
 		if ($name !== false) {
-			$_SESSION[$name] = $this->user;
+			if ($this->user === 0) {
+				unset($_SESSION[$name]);
+			} else {
+				$_SESSION[$name] = $this->user;
+			}
 		}
 	}
 
