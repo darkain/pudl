@@ -38,7 +38,7 @@ class pudlSession {
 
 
 	private function purge($id) {
-		return $this->db->purge( $this->cache($id) );
+		return !!$this->db->purge( $this->cache($id) );
 	}
 
 
