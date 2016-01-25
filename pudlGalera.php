@@ -203,7 +203,7 @@ class pudlGalera extends pudlMySqli {
 		foreach ($list as $key => $value) {
 			if ($value === $server) unset($list[$key]);
 		}
-		shm_remove_var($shm, 1);
+		@shm_remove_var($shm, 1);
 		@shm_put_var($shm, 1, $list);
 		shm_detach($shm);
 	}
@@ -238,7 +238,7 @@ class pudlGalera extends pudlMySqli {
 		$shm	= shm_attach($key);
 		$list	= shm_has_var($shm, 1) ? shm_get_var($shm, 1) : [];
 		if (!in_array($server, $list)) $list[] = $server;
-		shm_remove_var($shm, 1);
+		@shm_remove_var($shm, 1);
 		@shm_put_var($shm, 1, $list);
 		shm_detach($shm);
 	}
