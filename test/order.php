@@ -69,9 +69,14 @@ pudlTest("SELECT * FROM `table` ORDER BY `a` IS NULL, `b` IS NOT NULL LIMIT 1");
 
 
 
-//TODO: SUPPORT THIS SYNTAX
-// $db->string()->row('table', false, [['a'=>'column1'], ['b'=>'column2']]);
-// pudlTest("SELECT * FROM `table` ORDER BY `a`='column1', `b`='column2' LIMIT 1");
+$db->string()->row('table', false, [['column1'], ['column2']]);
+pudlTest("SELECT * FROM `table` ORDER BY column1, column2 LIMIT 1");
+
+
+
+
+$db->string()->row('table', false, [['a'=>'column1'], ['b'=>'column2']]);
+pudlTest("SELECT * FROM `table` ORDER BY `a`='column1', `b`='column2' LIMIT 1");
 
 
 

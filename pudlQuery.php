@@ -320,6 +320,9 @@ trait pudlQuery {
 			} else if ((is_array($value)  ||  is_object($value))  &&  $joiner === ' OR ') {
 				$query .= '(' . $this->_clauseRecurse($value, ' AND ') . ')';
 
+			} else if ((is_array($value)  ||  is_object($value))  &&  $joiner === ', ') {
+				$query .= $this->_clauseRecurse($value, $joiner);
+
 			} else {
 				trigger_error(
 					'Invalid data type for clause: ' . gettype($value),
