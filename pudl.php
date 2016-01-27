@@ -396,6 +396,12 @@ abstract class pudl {
 
 
 
+	public static function json($column) {
+		return self::column_json( self::column($column) );
+	}
+
+
+
 	public static function jsonEncode($data) {
 		return @json_encode($data, JSON_HEX_APOS|JSON_HEX_QUOT);
 	}

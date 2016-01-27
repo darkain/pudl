@@ -161,3 +161,9 @@ pudlTest("SELECT CURDATE(), CURTIME()");
 $db->redis(true);
 $db->cache(1)->select(pudl::now());
 pudlTest("SELECT SQL_CACHE NOW()");
+
+
+
+
+$db->string()->select(pudl::json('column'));
+pudlTest("SELECT COLUMN_JSON(`column`)");
