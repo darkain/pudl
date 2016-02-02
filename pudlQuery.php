@@ -275,11 +275,11 @@ trait pudlQuery {
 
 	private function _clauseRecurse($clause, $joiner=' AND ') {
 		static $depth = 0;
+
 		if ($depth > 31) {
 			trigger_error('Recursion limit reached', E_USER_ERROR);
 			return '';
 		}
-		$depth++;
 
 		if (is_object($clause)) {
 			$traits = class_uses($clause, false);
@@ -288,6 +288,7 @@ trait pudlQuery {
 			}
 		}
 
+		$depth++;
 		$query = '';
 		foreach ($clause as $key => $value) {
 			if (strlen($query)) $query .= $joiner;
