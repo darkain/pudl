@@ -134,6 +134,18 @@ pudlTest("SELECT * FROM `table` WHERE (`column` REGEXP '[[:<:]]value[[:>:]]') LI
 
 
 
+$db->string()->row('table', pudl::reglike('column', '12345', '\\d'));
+pudlTest("SELECT * FROM `table` WHERE (REGEXP_REPLACE(`column`, '\\\\d', '') LIKE '%12345%') LIMIT 1");
+
+
+
+
+$db->string()->row('table', [pudl::reglike('column', '12345', '\\d')]);
+pudlTest("SELECT * FROM `table` WHERE (REGEXP_REPLACE(`column`, '\\\\d', '') LIKE '%12345%') LIMIT 1");
+
+
+
+
 $db->string()->select(pudl::text('value'));
 pudlTest("SELECT 'value'");
 
