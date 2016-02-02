@@ -275,6 +275,7 @@ trait pudlQuery {
 
 	private function _clauseRecurse($clause, $joiner=' AND ') {
 		static $depth = 0;
+		$query = '';
 
 		if ($depth > 31) {
 			trigger_error('Recursion limit reached', E_USER_ERROR);
@@ -284,29 +285,37 @@ trait pudlQuery {
 		if (is_object($clause)) {
 			$traits = class_uses($clause, false);
 			if (!empty($traits['pudlHelper'])) {
-				return $this->_value($clause);
+				if ($clause instanceof pudlColumn  &&  $clause->args) {
+					if (is_string($clause->column)) {
+						$query	.= $this->identifiers($clause->column);
+					} else {
+						$query	.= $this->_value($clause->column);
+					}
+					$clause		 = $clause->value;
+					$query		.= $this->_clauseEquals($clause);
+				}
+				return $query . $this->_value($clause);
 			}
 		}
 
 		$depth++;
-		$query = '';
 		foreach ($clause as $key => $value) {
 			if (strlen($query)) $query .= $joiner;
 
 			if (is_string($key)) {
-				$query .= $this->identifiers($key);
-				$query .= $this->_clauseEquals($value);
+				$query 			.= $this->identifiers($key);
+				$query 			.= $this->_clauseEquals($value);
 				if (is_array($value)) continue;
 
 			} else if ($value instanceof pudlColumn  &&  $value->args) {
 				$key	 = '';
 				if (is_string($value->column)) {
-					$query	.= $this->identifiers($value->column);
+					$query		.= $this->identifiers($value->column);
 				} else {
-					$query	.= $this->_value($value->column);
+					$query		.= $this->_value($value->column);
 				}
-				$value	 = $value->value;
-				$query	.= $this->_clauseEquals($value);
+				$value			 = $value->value;
+				$query			.= $this->_clauseEquals($value);
 				if (is_array($value)) continue;
 			}
 
