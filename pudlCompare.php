@@ -31,6 +31,16 @@ trait pudlCompare {
 
 
 
+	//NOTE: this function is experimental and will most likely change syntax!
+	public static function reglike($column, $like, $regexp, $replace='') {
+		return self::column(
+			self::regexp_replace(self::column($column), $regexp, $replace),
+			self::like($like)
+		);
+	}
+
+
+
 	public static function inSet($value) {
 		if (is_array($value)  &&  func_num_args() === 1)
 			return new pudlSet($value);
