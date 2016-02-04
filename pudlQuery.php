@@ -246,8 +246,10 @@ trait pudlQuery {
 	protected function _clause($clause, $type='WHERE') {
 		if ($clause === false)	return '';
 		if ($clause instanceof pudlStringResult) return (string) $clause;
-		if (is_array($clause))	return ' ' . $type . ' (' . $this->_clauseRecurse($clause) .')';
-		if (is_object($clause))	return ' ' . $type . ' (' . $this->_clauseRecurse($clause) .')';
+		if (is_array($clause)  ||  is_object($clause)) {
+			if (empty($clause))	return '';
+			return ' ' . $type . ' (' . $this->_clauseRecurse($clause) .')';
+		}
 		return ' ' . $type . ' (' . $clause . ')';
 	}
 
