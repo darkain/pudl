@@ -36,9 +36,12 @@ class pudlOdbcResult extends pudlResult {
 
 
 	public function fields() {
-		$fields = false;
-		if ($this->result) $fields = @odbc_num_fields($this->result);
-		return ($fields !== false  &&  $fields > 0) ? $fields : 0;
+		if ($this->fieldCount !== false) return $this->fieldCount;
+		if ($this->result) {
+			$this->fieldCount = @odbc_num_fields($this->result);
+			if ($this->fieldCount < 0) $this->fieldCount = false;
+		}
+		return ($fields !== false) ? $fields : 0;
 	}
 
 
@@ -58,30 +61,26 @@ class pudlOdbcResult extends pudlResult {
 	public function row($type=PUDL_ARRAY) {
 		if (!$this->result) return false;
 
-		if ($this->row) {
-			$fetch = @odbc_fetch_row($this->result, $this->row);
-			$this->row = false;
-		} else {
-			$fetch = @odbc_fetch_row($this->result);
-		}
+		$fetch					= $this->row
+								? @odbc_fetch_row($this->result, $this->row)
+								: @odbc_fetch_row($this->result);
+
+		$this->row				= false;
+		$fields					= $this->fields();
+		$data					= [];
+
 		if ($fetch === false) return false;
 
-		$fields = $this->fields();
-		$data = array();
+		for ($i=1; $i<=$fields; $i++) {
+			$item				= @odbc_result($this->result, $i);
 
-		//TODO: make trim() OPTIONAL!!! :-O
-		if ($type === PUDL_ARRAY) {
-			for ($i=1; $i<=$fields; $i++) {
-				$data[odbc_field_name($this->result, $i)] = trim(@odbc_result($this->result, $i));
+			if ($type & PUDL_ARRAY) {
+				$name			= @odbc_field_name($this->result, $i);
+				$data[$name]	= $item;
 			}
-		} else if ($type === PUDL_NUMBER) {
-			for ($i=1; $i<=$fields; $i++) {
-				$data[$i] = trim(@odbc_result($this->result, $i));
-			}
-		} else {
-			for ($i=1; $i<=$fields; $i++) {
-				$data[$i] = odbc_result($this->result, $i);
-				$data[odbc_field_name($this->result, $i)] = trim(@odbc_result($this->result, $i));
+
+			if ($type & PUDL_NUMBER) {
+				$data[$i]		= $item;
 			}
 		}
 
@@ -89,6 +88,7 @@ class pudlOdbcResult extends pudlResult {
 	}
 
 
-	private $row = false;
+	private $row				= false;
+	private $fieldCount			= false;
 
 }
