@@ -237,6 +237,12 @@ trait pudlSelect {
 
 
 
+	public function rowLock($table, $clause=false, $order=false) {
+		return $this->selectRow('*', $table, $clause, $order, 1, false, true);
+	}
+
+
+
 	public function rowEx($col, $table, $clause=false, $order=false, $lock=false) {
 		return $this->selectRow($col, $table, $clause, $order, 1, false, $lock);
 	}
@@ -258,8 +264,20 @@ trait pudlSelect {
 
 
 
+	public function rowsLock($table, $clause=false, $order=false) {
+		return $this->selectRows('*', $table, $clause, $order, false, false, true);
+	}
+
+
+
 	public function rowId($table, $column, $id, $lock=false) {
 		return $this->row($table, $this->_clauseId($column,$id), false, $lock);
+	}
+
+
+
+	public function rowLockId($table, $column, $id) {
+		return $this->row($table, $this->_clauseId($column,$id), false, true);
 	}
 
 
@@ -270,8 +288,14 @@ trait pudlSelect {
 
 
 
-	public function cell($table, $col, $clause=false, $order=false) {
-		$result = $this->select($col, $table, $clause, $order, 1);
+	public function rowsLockId($table, $column, $id) {
+		return $this->selectRows('*', $table, $this->_clauseId($column,$id), false, false, false, true);
+	}
+
+
+
+	public function cell($table, $col, $clause=false, $order=false, $lock=false) {
+		$result = $this->select($col, $table, $clause, $order, 1, false, $lock);
 		if ($result instanceof pudlStringResult) return $result;
 		$return = $result->cell();
 		$result->free();
@@ -280,7 +304,19 @@ trait pudlSelect {
 
 
 
-	public function cellId($table, $col, $column, $id) {
-		return $this->cell($table, $col, $this->_clauseId($column,$id));
+	public function cellLock($table, $col, $clause=false, $order=false) {
+		return $this->cell($table, $col, $clause, $order, true);
+	}
+
+
+
+	public function cellId($table, $col, $column, $id, $order=false, $lock=false) {
+		return $this->cell($table, $col, $this->_clauseId($column,$id), $order, $lock);
+	}
+
+
+
+	public function cellLockId($table, $col, $column, $id, $order=false) {
+		return $this->cell($table, $col, $this->_clauseId($column,$id), $order, true);
 	}
 }
