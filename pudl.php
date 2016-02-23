@@ -121,7 +121,7 @@ abstract class pudl {
 				$data = $this->redis->get("pudl:$hash");
 				if ($data === false) {
 					$result = $this->missed($query);
-					if (!$this->error()) {
+					if (!$this->error()  &&  !$result->error()) {
 						$data = $result->complete();
 						$this->redis->set("pudl:$hash", $data, $this->cache);
 						$result = new pudlCacheResult($data, $this, $hash);
