@@ -29,17 +29,17 @@ trait pudlRedis {
 			$this->redis = $server;
 
 		} else if (class_exists('Redis')) {
+			$level = error_reporting(0); //HHVM HACK BECAUSE THEY HAVE YET TO FIX THEIR CODE
 			try {
-				$level = error_reporting(0); //HHVM HACK BECAUSE THEY HAVE YET TO FIX THEIR CODE
 				$this->redis = new Redis;
 				$this->redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
-				if (!$this->redis->connect($server, -1, 0.025)) {
+				if (!$this->redis->connect($server, -1, 0.1)) {
 					$this->redis = false;
 				}
-				error_reporting($level);
 			} catch (RedisException $e) {
 				$this->redis = false;
 			}
+			error_reporting($level);
 		}
 
 		if (!is_object($this->redis)) $this->redis = new pudlVoid;
