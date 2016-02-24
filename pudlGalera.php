@@ -135,7 +135,7 @@ class pudlGalera extends pudlMySqli {
 			case 2006: // "MYSQL SERVER HAS GONE AWAY"
 			case 2013: // "LOST CONNECTION TO MYSQL SERVER DURING QUERY"
 			case 2062: // "READ TIMEOUT IS REACHED"
-				if (!$this->reconnect()) return new pudlMySqliResult(false, $this);;
+				if (!$this->reconnect()) return new pudlMySqliResult(false, $this);
 				if ($this->inTransaction()) {
 					$result = $this->retryTransaction();
 				} else {
