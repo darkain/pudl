@@ -119,6 +119,7 @@ abstract class pudl {
 				$hash = $this->cachekey;
 				if (empty($hash)) $hash = hash('sha512', $this->salt().$query, true);
 				$data = $this->redis->get("pudl:$hash");
+
 				if ($data === false) {
 					$result = $this->missed($query);
 					if (!$this->error()  &&  !$result->error()) {
@@ -126,16 +127,15 @@ abstract class pudl {
 						$this->redis->set("pudl:$hash", $data, $this->cache);
 						$result = new pudlCacheResult($data, $this, $hash);
 					}
-				} else if (is_array($data)) {
+
+				} else if (is_array($data)  &&  !empty($data)) {
 					$this->stats['hits']++;
 					$result = new pudlCacheResult($data, $this, $hash);
-				} else {
-					$result = $this->missed($query);
 				}
-			} catch (RedisException $e) {
-				if (empty($result)  ||  !($result instanceof pudlResult)) {
-					$result = $this->missed($query);
-				}
+			} catch (RedisException $e) {}
+
+			if (empty($result)  ||  !($result instanceof pudlResult)) {
+				$result = $this->missed($query);
 			}
 
 
