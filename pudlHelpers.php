@@ -195,6 +195,8 @@ class pudlRemoveSet extends pudlEquals {
 
 
 class pudlRaw {
+	use pudlHelper;
+
 	public function __construct($value) {
 		$this->value = $value;
 	}
@@ -204,7 +206,9 @@ class pudlRaw {
 
 
 
-class pudlText extends pudlRaw {}
+class pudlText extends pudlRaw {
+	use pudlHelper;
+}
 
 
 

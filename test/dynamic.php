@@ -43,7 +43,17 @@ pudlTest('SELECT COLUMN_GET(`table`.`column`, `dynamic` AS UNSIGNED) FROM `table
 
 
 
-
-
 $db->string()->select(pudl::dynamic_binary('table.column', 'dynamic', 10), 'table');
 pudlTest('SELECT COLUMN_GET(`table`.`column`, `dynamic` AS BINARY(10)) FROM `table`');
+
+
+
+
+$db->string()->select(
+	pudl::dynamic_integer(
+		pudl::dynamic_binary('column', 'name'),
+		'dynamic'
+	),
+	'table'
+);
+pudlTest('SELECT COLUMN_GET(COLUMN_GET(`column`, `name` AS BINARY), `dynamic` AS INTEGER) FROM `table`');

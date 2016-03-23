@@ -150,7 +150,12 @@ trait pudlQuery {
 
 
 	public function identifier($identifier) {
-		if ($identifier instanceof pudlRaw) return $identifier->value;
+		if (is_object($identifier)) {
+			$traits = class_uses($identifier, false);
+			if (!empty($traits['pudlHelper'])) {
+				return $this->_value($identifier);
+			}
+		}
 
 		return $this->identifier . str_replace(
 			$this->identifier,
@@ -163,7 +168,13 @@ trait pudlQuery {
 
 	public function identifiers($identifiers, $prefix=false) {
 		if ($identifiers === false) return '';
-		if ($identifiers instanceof pudlRaw) return $identifiers->value;
+
+		if (is_object($identifiers)) {
+			$traits = class_uses($identifiers, false);
+			if (!empty($traits['pudlHelper'])) {
+				return $this->_value($identifiers);
+			}
+		}
 
 		$list = explode('.', $identifiers);
 
