@@ -14,6 +14,7 @@ require_once('pudlInsert.php');
 require_once('pudlUpdate.php');
 require_once('pudlDelete.php');
 require_once('pudlCompare.php');
+require_once('pudlDynamic.php');
 require_once('pudlCallback.php');
 require_once('pudlTransaction.php');
 
@@ -31,6 +32,7 @@ abstract class pudl {
 	use pudlUpdate;
 	use pudlDelete;
 	use pudlCompare;
+	use pudlDynamic;
 	use pudlCallback;
 	use pudlTransaction;
 

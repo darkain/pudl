@@ -79,6 +79,11 @@ trait pudlQuery {
 			return $this->_value($value->value[0], $quote) .
 				' AND ' . $this->_value($value->value[1], $quote);
 
+		if ($value instanceof pudlAs)
+			return $this->identifiers($value->column) .
+				' AS ' . $this->identifier($value->alias) .
+				($value->length === false ? '' : ('('.$value->length.')'));
+
 		if ($value instanceof pudlColumn)
 			return $this->identifiers($value->column);
 
@@ -145,6 +150,8 @@ trait pudlQuery {
 
 
 	public function identifier($identifier) {
+		if ($identifier instanceof pudlRaw) return $identifier->value;
+
 		return $this->identifier . str_replace(
 			$this->identifier,
 			$this->identifier.$this->identifier,
@@ -156,6 +163,7 @@ trait pudlQuery {
 
 	public function identifiers($identifiers, $prefix=false) {
 		if ($identifiers === false) return '';
+		if ($identifiers instanceof pudlRaw) return $identifiers->value;
 
 		$list = explode('.', $identifiers);
 

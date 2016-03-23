@@ -84,12 +84,12 @@ class pudlEquals {
 	public function __toString() { return (string) $this->value; }
 
 	public function __call($name, $arguments) {
-		$this->value = forward_static_call_array(['pudl',$name], $arguments);
+		$this->value	= forward_static_call_array(['pudl',$name], $arguments);
 		return $this;
 	}
 
 	public function not() {
-		$this->equals = $this->equals === '=' ? '!=' : ' NOT' . $this->equals;
+		$this->equals	= $this->equals === '=' ? '!=' : ' NOT' . $this->equals;
 		return $this;
 	}
 
@@ -110,6 +110,21 @@ class pudlColumn extends pudlEquals {
 
 	public	$column;
 	public	$args;
+}
+
+
+
+class pudlAs extends pudlColumn {
+	use pudlHelper;
+
+	public function __construct($column, $alias, $length=false) {
+		parent::__construct($column);
+		$this->alias	= $alias;
+		$this->length	= $length;
+	}
+
+	public	$alias;
+	public	$length;
 }
 
 

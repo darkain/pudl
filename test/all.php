@@ -98,3 +98,6 @@ require 'variables.php';
 
 //LOCK TABLES
 require 'lock.php';
+
+//DYNAMIC COLUMNS
+require 'dynamic.php';
