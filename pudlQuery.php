@@ -80,7 +80,7 @@ trait pudlQuery {
 				' AND ' . $this->_value($value->value[1], $quote);
 
 		if ($value instanceof pudlAs)
-			return $this->identifiers($value->column) .
+			return $this->_value($value->column) .
 				' AS ' . $this->identifier($value->alias) .
 				($value->length === false ? '' : ('('.$value->length.')'));
 
