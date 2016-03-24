@@ -315,6 +315,11 @@ trait pudlQuery {
 					$clause		 = $clause->value;
 					$query		.= $this->_clauseEquals($clause);
 				}
+				if ($clause instanceof pudlEquals  &&  $clause->compare !== false) {
+					$query		.= $this->_value($clause->compare);
+					$query		.= $this->_clauseEquals($clause);
+					$clause		 = $clause->value;
+				}
 				return $query . $this->_value($clause);
 			}
 		}
@@ -338,6 +343,11 @@ trait pudlQuery {
 				$value			 = $value->value;
 				$query			.= $this->_clauseEquals($value);
 				if (is_array($value)) continue;
+
+			} else if ($value instanceof pudlEquals  &&  $value->compare !== false) {
+				$query			.= $this->_value($value->compare);
+				$query			.= $this->_clauseEquals($value);
+				$value			 = $value->value;
 			}
 
 			$new = $this->_value($value, is_string($key), is_string($key));

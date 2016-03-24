@@ -4,23 +4,23 @@
 trait pudlCompare {
 
 
-	public static function between($low, $high)			{ return new pudlBetween($low, $high ); }
-	public static function appendSet($value)			{ return new pudlAppendSet($value); }
-	public static function removeSet($value)			{ return new pudlRemoveSet($value); }
-	public static function eq($value=false)				{ return new pudlEquals($value, '='  ); }
-	public static function neq($value=false)			{ return new pudlEquals($value, '!=' ); }
-	public static function nulleq($value=false)			{ return new pudlEquals($value, '<=>'); }
-	public static function lt($value=false)				{ return new pudlEquals($value, '<'  ); }
-	public static function lteq($value=false)			{ return new pudlEquals($value, '<=' ); }
-	public static function gt($value=false)				{ return new pudlEquals($value, '>'  ); }
-	public static function gteq($value=false)			{ return new pudlEquals($value, '>=' ); }
-	public static function like($value=false)			{ return new pudlLike($value, PUDL_BOTH ); }
-	public static function likeLeft($value=false)		{ return new pudlLike($value, PUDL_START); }
-	public static function likeRight($value=false)		{ return new pudlLike($value, PUDL_END  ); }
-	public static function notLike($value=false)		{ return self::like($value)->not(); }
-	public static function notLikeLeft($value=false)	{ return self::likeLeft($value)->not(); }
-	public static function notLikeRight($value=false)	{ return self::likeRight($value)->not(); }
-	public static function notRegexp($value=false)		{ return self::pudlRegexp($value)->not(); }
+	public static function between(		$low, $high)			{ return new pudlBetween(	$low, $high ); }
+	public static function appendSet(	$value)					{ return new pudlAppendSet(	$value); }
+	public static function removeSet(	$value)					{ return new pudlRemoveSet(	$value); }
+	public static function eq(			$v1=false, $v2=false)	{ return new pudlEquals(	$v1, $v2, '='  ); }
+	public static function neq(			$v1=false, $v2=false)	{ return new pudlEquals(	$v1, $v2, '!=' ); }
+	public static function nulleq(		$v1=false, $v2=false)	{ return new pudlEquals(	$v1, $v2, '<=>'); }
+	public static function lt(			$v1=false, $v2=false)	{ return new pudlEquals(	$v1, $v2, '<'  ); }
+	public static function lteq(		$v1=false, $v2=false)	{ return new pudlEquals(	$v1, $v2, '<=' ); }
+	public static function gt(			$v1=false, $v2=false)	{ return new pudlEquals(	$v1, $v2, '>'  ); }
+	public static function gteq(		$v1=false, $v2=false)	{ return new pudlEquals(	$v1, $v2, '>=' ); }
+	public static function like(		$v1=false, $v2=false)	{ return new pudlLike(		$v1, $v2, PUDL_BOTH ); }
+	public static function likeLeft(	$v1=false, $v2=false)	{ return new pudlLike(		$v1, $v2, PUDL_START); }
+	public static function likeRight(	$v1=false, $v2=false)	{ return new pudlLike(		$v1, $v2, PUDL_END  ); }
+	public static function notLike(		$v1=false, $v2=false)	{ return self::like(		$v1, $v2)->not(); }
+	public static function notLikeLeft(	$v1=false, $v2=false)	{ return self::likeLeft(	$v1, $v2)->not(); }
+	public static function notLikeRight($v1=false, $v2=false)	{ return self::likeRight(	$v1, $v2)->not(); }
+	public static function notRegexp(	$v1=false, $v2=false)	{ return self::pudlRegexp(	$v1, $v2)->not(); }
 
 
 

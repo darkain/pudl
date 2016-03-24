@@ -346,6 +346,68 @@ pudlTest("SELECT * FROM `table` WHERE (`column`>=5)");
 
 
 
+//Custom equals
+$db->string()->select('*', 'table', pudl::eq(5,10));
+pudlTest("SELECT * FROM `table` WHERE (5=10)");
+
+
+
+
+//Custom equals
+$db->string()->select('*', 'table', [pudl::eq(5,10)]);
+pudlTest("SELECT * FROM `table` WHERE (5=10)");
+
+
+
+
+//Custom equals
+$db->string()->select('*', 'table', pudl::lteq(5,10));
+pudlTest("SELECT * FROM `table` WHERE (5<=10)");
+
+
+
+
+//Custom equals
+$db->string()->select('*', 'table', pudl::gteq(5,10));
+pudlTest("SELECT * FROM `table` WHERE (5>=10)");
+
+
+
+
+//Custom equals
+$db->string()->select('*', 'table', pudl::gteq('text',10));
+pudlTest("SELECT * FROM `table` WHERE ('text'>=10)");
+
+
+
+
+//Custom equals
+$db->string()->select('*', 'table', pudl::gteq(pudl::column('column'),10));
+pudlTest("SELECT * FROM `table` WHERE (`column`>=10)");
+
+
+
+
+//Custom equals
+$db->string()->select('*', 'table', pudl::gteq(
+	pudl::column('column1'),
+	pudl::column('column2')
+));
+pudlTest("SELECT * FROM `table` WHERE (`column1`>=`column2`)");
+
+
+
+
+//Custom equals
+$db->string()->select('*', 'table', [pudl::gteq(
+	pudl::column('column1'),
+	pudl::column('column2')
+)]);
+pudlTest("SELECT * FROM `table` WHERE (`column1`>=`column2`)");
+
+
+
+
 //SELECT statement where column is between two integer values
 $db->string()->select('*', 'table', ['column'=>pudl::between(5,10)]);
 pudlTest("SELECT * FROM `table` WHERE (`column` BETWEEN 5 AND 10)");

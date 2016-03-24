@@ -69,10 +69,12 @@ class pudlVoid {
 class pudlEquals {
 	use pudlHelper;
 
-	public function __construct($value=false, $equals='=') {
-		$this->value	= $value;
+	public function __construct($value=false, $compare=false, $equals='=') {
+		$this->value	= $compare === false ? $value : $compare;
+		$this->compare	= $compare === false ? $compare : $value;
 		$this->equals	= $equals;
-		if (is_null($value)) {
+
+		if (is_null($this->value)) {
 			if ($equals === '=') {
 				$this->equals = ' IS ';
 			} else if ($equals === '!=') {
@@ -94,6 +96,7 @@ class pudlEquals {
 	}
 
 	public	$value;
+	public	$compare;
 	public	$equals;
 }
 
@@ -133,7 +136,7 @@ class pudlBetween extends pudlEquals {
 	use pudlHelper;
 
 	public function __construct($low, $high) {
-		parent::__construct([$low, $high], ' BETWEEN ');
+		parent::__construct([$low, $high], false, ' BETWEEN ');
 	}
 
 	public function __toString() {
@@ -146,8 +149,8 @@ class pudlBetween extends pudlEquals {
 class pudlLike extends pudlEquals {
 	use pudlHelper;
 
-	public function __construct($value, $side) {
-		parent::__construct($value, ' LIKE ');
+	public function __construct($value, $compare, $side) {
+		parent::__construct($value, $compare, ' LIKE ');
 		$this->left		= ($side & PUDL_START)	? '%' : '';
 		$this->right	= ($side & PUDL_END)	? '%' : '';
 	}
@@ -164,7 +167,7 @@ class pudlRegexp extends pudlEquals {
 	public function __construct($value) {
 		parent::__construct(
 			func_num_args() === 1 ? $value : func_get_args(),
-			' REGEXP '
+			false, ' REGEXP '
 		);
 	}
 }
@@ -176,7 +179,7 @@ class pudlSet extends pudlEquals {
 
 	public function __construct($value) {
 		if (empty($value)) $value = [''];
-		parent::__construct($value, ' IN ');
+		parent::__construct($value, false, ' IN ');
 	}
 }
 
