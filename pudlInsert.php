@@ -59,13 +59,13 @@ trait pudlInsert {
 
 
 	public function insertIgnore($table, $data) {
-		return $this->insert($table, $data, "IGNORE");
+		return $this->insert($table, $data, 'IGNORE');
 	}
 
 
 
 	public function replace($table, $data) {
-		return $this->insert($table, $data, "REPLACE");
+		return $this->insert($table, $data, 'REPLACE');
 	}
 
 
@@ -138,13 +138,13 @@ trait pudlInsert {
 
 
 	public function replaceEx($table, $cols, $data) {
-		return $this->insertEx($table, $cols, $data, "REPLACE");
+		return $this->insertEx($table, $cols, $data, 'REPLACE');
 	}
 
 
 
 	public function insertIgnoreEx($table, $cols, $data) {
-		return $this->insertEx($table, $cols, $data, "IGNORE");
+		return $this->insertEx($table, $cols, $data, 'IGNORE');
 	}
 
 }
