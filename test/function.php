@@ -105,7 +105,11 @@ $db->string()->row('table', [
 		'[[:>:]]'
 	)
 ]);
-pudlTest("SELECT * FROM `table` WHERE (`column` REGEXP '\\\\[\\\\[\\\\:\\\\<\\\\:\\\\]\\\\]value\\\\[\\\\[\\\\:\\\\>\\\\:\\\\]\\\\]') LIMIT 1");
+if ($db instanceof pudlMySqli) {
+	pudlTest("SELECT * FROM `table` WHERE (`column` REGEXP '\\\\[\\\\[\\\\:\\\\<\\\\:\\\\]\\\\]value\\\\[\\\\[\\\\:\\\\>\\\\:\\\\]\\\\]') LIMIT 1");
+} else {
+	pudlTest("SELECT * FROM `table` WHERE (`column` REGEXP '\\[\\[\\:\\<\\:\\]\\]value\\[\\[\\:\\>\\:\\]\\]') LIMIT 1");
+}
 
 
 
@@ -135,13 +139,21 @@ pudlTest("SELECT * FROM `table` WHERE (`column` REGEXP '[[:<:]]value[[:>:]]') LI
 
 
 $db->string()->row('table', pudl::reglike('column', '12345', '\\d'));
-pudlTest("SELECT * FROM `table` WHERE (REGEXP_REPLACE(`column`, '\\\\d', '') LIKE '%12345%') LIMIT 1");
+if ($db instanceof pudlMySqli) {
+	pudlTest("SELECT * FROM `table` WHERE (REGEXP_REPLACE(`column`, '\\\\d', '') LIKE '%12345%') LIMIT 1");
+} else {
+	pudlTest("SELECT * FROM `table` WHERE (REGEXP_REPLACE(`column`, '\\d', '') LIKE '%12345%') LIMIT 1");
+}
 
 
 
 
 $db->string()->row('table', [pudl::reglike('column', '12345', '\\d')]);
-pudlTest("SELECT * FROM `table` WHERE (REGEXP_REPLACE(`column`, '\\\\d', '') LIKE '%12345%') LIMIT 1");
+if ($db instanceof pudlMySqli) {
+	pudlTest("SELECT * FROM `table` WHERE (REGEXP_REPLACE(`column`, '\\\\d', '') LIKE '%12345%') LIMIT 1");
+} else {
+	pudlTest("SELECT * FROM `table` WHERE (REGEXP_REPLACE(`column`, '\\d', '') LIKE '%12345%') LIMIT 1");
+}
 
 
 
@@ -171,8 +183,10 @@ pudlTest("SELECT CURDATE(), CURTIME()");
 
 
 $db->redis(true);
-$db->cache(1)->select(pudl::now());
-pudlTest("SELECT SQL_CACHE NOW()");
+if ($db instanceof pudlMySqli) {
+	$db->cache(1)->select(pudl::now());
+	pudlTest("SELECT SQL_CACHE NOW()");
+}
 
 
 

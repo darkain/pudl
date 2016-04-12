@@ -13,6 +13,10 @@ class pudlSqlite extends pudl {
 			$data['database'] = empty($data[0]) ? 'sqlite.db' : $data[0];
 		}
 
+		if (!empty($data['identifier'])) {
+			$this->identifier = $data['identifier'];
+		}
+
 		parent::__construct($data, $autoconnect);
 	}
 
