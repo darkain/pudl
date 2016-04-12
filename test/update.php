@@ -14,6 +14,41 @@ pudlTest("UPDATE `table` SET `column`='value' WHERE (`id`='value')");
 
 
 
+//UPDATE statement
+$db->string()->updateId('table', ['column'=>1], 'id', 'value');
+pudlTest("UPDATE `table` SET `column`=1 WHERE (`id`='value')");
+
+
+
+
+//UPDATE statement
+$db->string()->updateId('table', ['column'=>1.1], 'id', 'value');
+pudlTest("UPDATE `table` SET `column`=1.1 WHERE (`id`='value')");
+
+
+
+
+//UPDATE statement
+$db->string()->updateId('table', ['column'=>NAN], 'id', 'value');
+pudlTest("UPDATE `table` SET `column`=NULL WHERE (`id`='value')");
+
+
+
+
+//UPDATE statement
+$db->string()->updateId('table', ['column'=>INF], 'id', 'value');
+pudlTest("UPDATE `table` SET `column`=NULL WHERE (`id`='value')");
+
+
+
+
+//UPDATE statement
+$db->string()->updateId('table', ['column'=>-INF], 'id', 'value');
+pudlTest("UPDATE `table` SET `column`=NULL WHERE (`id`='value')");
+
+
+
+
 //UPDATE statement - incrementing an INTEGER value
 $db->string()->update('table', ['column'=>pudlFunction::increment()], 'id=1');
 pudlTest("UPDATE `table` SET `column`=`column`+1 WHERE (id=1)");

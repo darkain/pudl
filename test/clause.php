@@ -73,6 +73,27 @@ pudlTest('SELECT * FROM `table` WHERE (`column`=1.2E+23)');
 
 
 
+//SELECT statement with a single clause with NaN (Not a Number) value
+$db->string()->select('*', 'table', ['column'=>NAN]);
+pudlTest('SELECT * FROM `table` WHERE (`column` IS NULL)');
+
+
+
+
+//SELECT statement with a single clause with Infinite value
+$db->string()->select('*', 'table', ['column'=>INF]);
+pudlTest('SELECT * FROM `table` WHERE (`column` IS NULL)');
+
+
+
+
+//SELECT statement with a single clause with Negative Infinite value
+$db->string()->select('*', 'table', ['column'=>-INF]);
+pudlTest('SELECT * FROM `table` WHERE (`column` IS NULL)');
+
+
+
+
 //SELECT statement with a single clause with BOOLEAN value
 $db->string()->select('*', 'table', ['column'=>true]);
 pudlTest('SELECT * FROM `table` WHERE (`column`=TRUE)');

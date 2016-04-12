@@ -39,6 +39,9 @@ trait pudlQuery {
 
 
 	protected function _value($value, $quote=true, $isnull=false) {
+		if (is_float($value)  &&  (is_nan($value)  ||  is_infinite($value)))
+			return $isnull ? ' IS NULL' : 'NULL';
+
 		if (is_int($value)  ||  is_float($value))
 			return $value;
 
@@ -329,8 +332,8 @@ trait pudlQuery {
 			if (strlen($query)) $query .= $joiner;
 
 			if (is_string($key)) {
-				$query 			.= $this->identifiers($key);
-				$query 			.= $this->_clauseEquals($value);
+				$query			.= $this->identifiers($key);
+				$query			.= $this->_clauseEquals($value);
 				if (is_array($value)) continue;
 
 			} else if ($value instanceof pudlColumn  &&  $value->args) {
@@ -390,6 +393,8 @@ trait pudlQuery {
 		if ($value instanceof pudlStringResult) return $value->type;
 
 		if (is_array($value)) return ' IN (' . $this->_inSet($value) . ')';
+
+		if (is_float($value)  &&  (is_nan($value)  ||  is_infinite($value))) return '';
 
 		if (!is_null($value)) return '=';
 
