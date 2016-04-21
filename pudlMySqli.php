@@ -91,7 +91,7 @@ class pudlMySqli extends pudl {
 
 
 	protected function process($query) {
-		if (!$this->mysqli) return false;
+		if (!$this->mysqli) return new pudlMySqliResult(false, $this);
 		$result = @$this->mysqli->query($query);
 		return new pudlMySqliResult($result, $this);
 	}

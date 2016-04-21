@@ -129,6 +129,8 @@ class pudlGalera extends pudlMySqli {
 
 
 	protected function process($query) {
+		if (!$this->mysqli) return new pudlMySqliResult(false, $this);
+
 		//PROPERLY HANDLE RE-ENTRY TO THIS FUNCTION
 		$wait = $this->wait;
 		$this->wait = false;

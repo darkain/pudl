@@ -90,7 +90,7 @@ class pudlMySql extends pudl {
 
 
 	protected function process($query) {
-		if (!$this->mysql) return false;
+		if (!$this->mysql) return new pudlMySqlResult(false, $this);
 		$result = @mysql_query($query, $this->mysql);
 		return new pudlMySqlResult($result, $this);
 	}
