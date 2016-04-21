@@ -69,8 +69,20 @@ class pudlGalera extends pudlMySqli {
 			}
 
 			//ATTEMPT TO SET UTF-8 CHARACTER SET
-			//WE'RE GOOD, RETURN A GOOD RESULT!
-			if ($ok  &&  @$this->mysqli->set_charset('utf8')) {
+			if ($ok) $ok = @$this->mysqli->set_charset('utf8');
+
+			//ATTEMPT TO GET THE CLUSTER SYNC STATE OF THIS NODE
+			$status = $ok ? $this->globals('wsrep_local_state') : [];
+			if (empty($status['wsrep_local_state'])) $status['wsrep_local_state'] = 0;
+
+			/* NOTE: HERE ARE THE NUMERICAL STATE VALUES
+			1 - Joining (requesting/receiving State Transfer) - node is joining the cluster
+			2 - Donor/Desynced - node is the donor to the node joining the cluster
+			3 - Joined - node has joined the cluster
+			4 - Synced - node is synced with the cluster */
+
+			//ONLY CONNECT IF NODE IS IN A 'JOINED' OR 'SYNCED' STATE
+			if ( ((int)$status['wsrep_local_state']) > 2) {
 				$this->connected = $server;
 				return true;
 			}
