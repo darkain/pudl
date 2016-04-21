@@ -19,6 +19,7 @@ class pudlGalera extends pudlMySqli {
 		//SET INITIAL VALUES
 		$this->pool = $this->onlineServers($data['server']);
 
+
 		//RANDOMIZE SERVER POOL ORDER
 		//IF REMOTE_ADDR AVAILABLE, USE IT TO HASH ROUTE TO SAME NODE EACH TIME
 		if (!empty($_SERVER['REMOTE_ADDR'])) {
@@ -27,6 +28,11 @@ class pudlGalera extends pudlMySqli {
 			srand();
 		} else {
 			shuffle($this->pool);
+		}
+
+		//SET BACKUP SERVERS
+		if (!empty($data['backup'])  &&  is_array($data['backup'])) {
+			$this->pool = array_merge($this->pool, $data['backup']);
 		}
 
 		//CONNECT TO THE SERVER CLUSTER
