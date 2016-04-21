@@ -73,8 +73,8 @@ class pudlMySql extends pudl {
 
 
 
-	public function disconnect() {
-		parent::disconnect();
+	public function disconnect($trigger=true) {
+		parent::disconnect($trigger);
 		if (!$this->mysql) return;
 		@mysql_close($this->mysql);
 		$this->mysql = NULL;

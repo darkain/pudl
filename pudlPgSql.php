@@ -37,8 +37,8 @@ class pudlPgSql extends pudl {
 
 
 
-	public function disconnect() {
-		parent::disconnect();
+	public function disconnect($trigger=true) {
+		parent::disconnect($trigger);
 		if (!$this->pgsql) return;
 		pg_close($this->pgsql);
 		$this->pgsql = false;

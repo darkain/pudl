@@ -195,8 +195,8 @@ abstract class pudl {
 
 
 
-	public function disconnect() {
-		$this->trigger('disconnect');
+	public function disconnect($trigger=true) {
+		if ($trigger) $this->trigger('disconnect');
 	}
 
 

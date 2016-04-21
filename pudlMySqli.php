@@ -74,11 +74,11 @@ class pudlMySqli extends pudl {
 
 
 
-	public function disconnect() {
-		parent::disconnect();
+	public function disconnect($trigger=true) {
+		parent::disconnect($trigger);
 		if (!$this->mysqli) return;
 		@$this->mysqli->close();
-		$this->mysqli = false;
+		$this->mysqli = NULL;
 	}
 
 
@@ -97,36 +97,42 @@ class pudlMySqli extends pudl {
 
 
 	public function insertId() {
+		if (!$this->mysqli) return 0;
 		return $this->mysqli->insert_id;
 	}
 
 
 
 	public function updated() {
+		if (!$this->mysqli) return 0;
 		return $this->mysqli->affected_rows;
 	}
 
 
 
 	public function errno() {
+		if (!$this->mysqli) return @mysqli_errno(NULL);
 		return $this->mysqli->errno;
 	}
 
 
 
 	public function error() {
+		if (!$this->mysqli) return @mysqli_error(NULL);
 		return $this->mysqli->error;
 	}
 
 
 
 	public function connectErrno() {
+		if (!$this->mysqli) return @mysqli_connect_errno();
 		return $this->mysqli->connect_errno;
 	}
 
 
 
 	public function connectError() {
+		if (!$this->mysqli) return @mysqli_connect_error();
 		return $this->mysqli->connect_error;
 	}
 

@@ -50,8 +50,8 @@ class pudlSqlite extends pudl {
 	}
 
 
-	public function disconnect() {
-		parent::disconnect();
+	public function disconnect($trigger=true) {
+		parent::disconnect($trigger);
 		if (!$this->sqlite) return;
 		@$this->sqlite->close();
 		$this->sqlite = false;
