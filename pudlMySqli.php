@@ -84,12 +84,14 @@ class pudlMySqli extends pudl {
 
 
 	public function escape($value) {
+		if (!$this->mysqli) return false;
 		return @$this->mysqli->real_escape_string($value);
 	}
 
 
 
 	protected function process($query) {
+		if (!$this->mysqli) return false;
 		$result = @$this->mysqli->query($query);
 		return new pudlMySqliResult($result, $this);
 	}
