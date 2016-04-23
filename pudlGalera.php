@@ -260,8 +260,9 @@ class pudlGalera extends pudlMySqli {
 
 	public function offlineServer($server) {
 		$key	= ftok(__FILE__, 't');
-		$shm	= shm_attach($key);
-		$list	= shm_has_var($shm, 1) ? shm_get_var($shm, 1) : [];
+		$shm	= @shm_attach($key);
+		$list	= @shm_get_var($shm, 1);
+		if (empty($list)) $list = [];
 		if (!in_array($server, $list)) $list[] = $server;
 		@shm_remove_var($shm, 1);
 		@shm_put_var($shm, 1, $list);
