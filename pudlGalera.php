@@ -264,7 +264,6 @@ class pudlGalera extends pudlMySqli {
 		$list	= @shm_get_var($shm, 1);
 		if (empty($list)) $list = [];
 		if (!in_array($server, $list)) $list[] = $server;
-		@shm_remove_var($shm, 1);
 		@shm_put_var($shm, 1, $list);
 		shm_detach($shm);
 	}
