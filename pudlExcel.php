@@ -175,11 +175,11 @@ function pudlPHPExcel($list, $filename) {
 			$sheet->SetCellValue($cell, $val);
 			$style = $sheet->getStyle($cell);
 
-			if ($key === 'part_retail'  ||  $key === 'list'  ||  $key === 'cost'  ||  $key === 'part_cost') {
+			if (in_array($key, ['part_retail', 'list', 'cost', 'part_cost'])) {
 				$style->getNumberFormat()->setFormatCode('$ #,##0.00');
 			}
 
-			if ($key === 'part_number'  ||  $key === 'part_description'  ||  $key === 'part_information'  ||  $key === 'part_inactive_text') {
+			if (in_array($key, ['part_number', 'part_description', 'part_information', 'part_inactive_text'])) {
 				$style->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 			}
 
