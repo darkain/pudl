@@ -333,19 +333,33 @@ abstract class pudl {
 	}
 
 
+
 	public function benchmark($benchmark) {
 		$this->bench = $benchmark;
 	}
 
 
-	public function time() {
-		return $this->time;
+
+	public function time($source=false) {
+		if ($source === false) {
+			if (is_object($this->time)) return $this->time->time();
+			return $this->time;
+		}
+
+		$this->time = $source;
 	}
 
 
-	public function microtime() {
-		return $this->microtime;
+
+	public function microtime($source=false) {
+		if ($source === false) {
+			if (is_object($this->microtime)) return $this->microtime->microtime();
+			return $this->microtime;
+		}
+
+		$this->microtime = $source;
 	}
+
 
 
 	public function server() {
@@ -360,16 +374,19 @@ abstract class pudl {
 	}
 
 
+
 	public function string() {
 		$this->string[] = true;
 		return $this;
 	}
 
 
+
 	public function in() {
 		$this->string[] = ' IN ';
 		return $this;
 	}
+
 
 
 	public function notIn() {
@@ -402,6 +419,8 @@ abstract class pudl {
 		return @json_encode($data, JSON_HEX_APOS|JSON_HEX_QUOT);
 	}
 
+
+
 	public static function jsonDecode($data) {
 		return @json_decode($data, true, 512, JSON_BIGINT_AS_STRING);
 	}
@@ -412,7 +431,8 @@ abstract class pudl {
 	private			$debug			= false;
 	private			$bench			= false;
 	private			$query			= false;
-	private			$microtime		= 0;
+	private			$time			= 0;
+	private			$microtime		= 0.0;
 	protected		$string			= [];
 
 }
