@@ -44,7 +44,10 @@ trait pudlMySqlHelper {
 			$table = $this->prefix . substr($table, 5);
 		}
 
+		$auth = $this->auth();
+
 		$return = $this->cell('INFORMATION_SCHEMA.COLUMNS', 'COLUMN_TYPE', [
+			'TABLE_SCHEMA'	=> $auth['database'],
 			'TABLE_NAME'	=> $table,
 			'COLUMN_NAME'	=> $column,
 		]);
