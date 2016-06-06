@@ -41,6 +41,13 @@ trait pudlCompare {
 
 
 
+	//Compare floats
+	public static function fleq($value, $precision=10) {
+		return new pudlFloat($value, $precision);
+	}
+
+
+
 	public static function inSet($value) {
 		if (is_array($value)  &&  func_num_args() === 1)
 			return new pudlSet($value);

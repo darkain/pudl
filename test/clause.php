@@ -339,6 +339,41 @@ pudlTest("SELECT * FROM `table` WHERE (`column1`!=`column2`)");
 
 
 
+//SELECT statement where column is "equal" (roughly) to floating point value
+$db->string()->select('*', 'table', ['column'=>pudl::fleq(5)]);
+pudlTest("SELECT * FROM `table` WHERE (ABS(`column`-5)<0.0000000001)");
+
+
+
+
+//SELECT statement where column is "equal" (roughly) to floating point value
+$db->string()->select('*', 'table', ['column'=>pudl::fleq(5.7)]);
+pudlTest("SELECT * FROM `table` WHERE (ABS(`column`-5.7)<0.0000000001)");
+
+
+
+
+//SELECT statement where column is "equal" (roughly) to floating point value
+$db->string()->select('*', 'table', ['column'=>pudl::fleq('5')]);
+pudlTest("SELECT * FROM `table` WHERE (ABS(`column`-'5')<0.0000000001)");
+
+
+
+
+//SELECT statement where column is "equal" (roughly) to floating point value with lower precision
+$db->string()->select('*', 'table', ['column'=>pudl::fleq(8, 3)]);
+pudlTest("SELECT * FROM `table` WHERE (ABS(`column`-8)<0.001)");
+
+
+
+
+//SELECT statement where column is "equal" (roughly) to floating point column
+$db->string()->select('*', 'table', ['column1'=>pudl::fleq( pudl::column('column2') )]);
+pudlTest("SELECT * FROM `table` WHERE (ABS(`column1`-`column2`)<0.0000000001)");
+
+
+
+
 //SELECT statement where column is less than integer
 $db->string()->select('*', 'table', ['column'=>pudl::lt(5)]);
 pudlTest("SELECT * FROM `table` WHERE (`column`<5)");

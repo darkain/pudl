@@ -102,6 +102,24 @@ class pudlEquals {
 
 
 
+class pudlFloat extends pudlEquals {
+	use pudlHelper;
+
+	public function __construct($value, $precision=10) {
+		parent::__construct($value);
+		if ($precision < 1) {
+			$this->precision = '1';
+		} else {
+			$this->precision = '0.' . str_repeat('0', $precision-1) . '1';
+		}
+	}
+
+	public	$precision;
+	public	$column;
+}
+
+
+
 class pudlColumn extends pudlEquals {
 	use pudlHelper;
 

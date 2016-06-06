@@ -90,6 +90,11 @@ trait pudlQuery {
 		if ($value instanceof pudlColumn)
 			return $this->identifiers($value->column);
 
+		if ($value instanceof pudlFloat)
+			return 'ABS(' . $this->identifier($value->column)
+				. '-' . $this->_value($value->value, $quote)
+				. ')<' . $value->precision;
+
 		if ($value instanceof pudlEquals  &&  is_array($value->value))
 			return '(' . $this->_inSet($value->value) . ')';
 
@@ -331,7 +336,10 @@ trait pudlQuery {
 		foreach ($clause as $key => $value) {
 			if (strlen($query)) $query .= $joiner;
 
-			if (is_string($key)) {
+			if ($value instanceof pudlFloat) {
+				$value->column = $key;
+
+			} else if (is_string($key)) {
 				$query			.= $this->identifiers($key);
 				$query			.= $this->_clauseEquals($value);
 				if (is_array($value)) continue;
