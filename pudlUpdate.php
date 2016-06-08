@@ -54,6 +54,18 @@ trait pudlUpdate {
 
 
 
+	public function updateField($table, $field, $value, $clause) {
+		return $this->update($table, [$field=>$value], $clause);
+	}
+
+
+
+	public function updateFieldId($table, $field, $value, $column, $id) {
+		return $this->update($table, [$field=>$value], $this->_clauseId($column,$id));
+	}
+
+
+
 	public function updateCount($table_update, $field, $clause_update, $table_select, $clause_select=true) {
 		if ($clause_select === true) $clause_select = $clause_update;
 		return $this->update($table_update, [

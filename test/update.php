@@ -49,6 +49,20 @@ pudlTest("UPDATE `table` SET `column`=NULL WHERE (`id`='value')");
 
 
 
+//UPDATE statement
+$db->string()->updateField('table', 'column1', 'value', ['column2'=>3]);
+pudlTest("UPDATE `table` SET `column1`='value' WHERE (`column2`=3)");
+
+
+
+
+//UPDATE statement
+$db->string()->updateFieldId('table', 'column1', 'value', 'id', 5);
+pudlTest("UPDATE `table` SET `column1`='value' WHERE (`id`=5)");
+
+
+
+
 //UPDATE statement - incrementing an INTEGER value
 $db->string()->update('table', ['column'=>pudlFunction::increment()], 'id=1');
 pudlTest("UPDATE `table` SET `column`=`column`+1 WHERE (id=1)");
