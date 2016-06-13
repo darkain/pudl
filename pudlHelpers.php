@@ -153,8 +153,12 @@ class pudlAs extends pudlColumn {
 class pudlBetween extends pudlEquals {
 	use pudlHelper;
 
-	public function __construct($low, $high) {
-		parent::__construct([$low, $high], false, ' BETWEEN ');
+	public function __construct($v1, $v2, $v3=false) {
+		if ($v3 === false) {
+			parent::__construct([$v1,$v2], false, ' BETWEEN ');
+		} else {
+			parent::__construct($v1, [$v2,$v3], ' BETWEEN ');
+		}
 	}
 
 	public function __toString() {

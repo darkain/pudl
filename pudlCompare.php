@@ -4,7 +4,7 @@
 trait pudlCompare {
 
 
-	public static function between(		$low, $high)			{ return new pudlBetween(	$low, $high ); }
+	public static function between(		$v1, $v2, $v3=false)	{ return new pudlBetween(	$v1, $v2, $v3); }
 	public static function appendSet(	$value)					{ return new pudlAppendSet(	$value); }
 	public static function removeSet(	$value)					{ return new pudlRemoveSet(	$value); }
 	public static function eq(			$v1=false, $v2=false)	{ return new pudlEquals(	$v1, $v2, '='  ); }

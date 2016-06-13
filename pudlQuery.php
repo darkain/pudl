@@ -326,7 +326,7 @@ trait pudlQuery {
 				if ($clause instanceof pudlEquals  &&  $clause->compare !== false) {
 					$query		.= $this->_value($clause->compare);
 					$query		.= $this->_clauseEquals($clause);
-					$clause		 = $clause->value;
+					if (!($clause instanceof pudlBetween)) $clause = $clause->value;
 				}
 				return $query . $this->_value($clause);
 			}
@@ -358,7 +358,7 @@ trait pudlQuery {
 			} else if ($value instanceof pudlEquals  &&  $value->compare !== false) {
 				$query			.= $this->_value($value->compare);
 				$query			.= $this->_clauseEquals($value);
-				$value			 = $value->value;
+				if (!($value instanceof pudlBetween)) $value = $value->value;
 			}
 
 			$new = $this->_value($value, is_string($key), is_string($key));
