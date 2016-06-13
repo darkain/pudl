@@ -57,3 +57,30 @@ $db->string()->select(
 	'table'
 );
 pudlTest("SELECT COLUMN_GET(COLUMN_GET(`column`, 'name' AS BINARY), 'dynamic' AS INTEGER) FROM `table`");
+
+
+
+
+$db->string()->select(
+	pudl::dynamic('parent.child:i'),
+	'table'
+);
+pudlTest("SELECT COLUMN_GET(`parent`, 'child' AS INTEGER) FROM `table`");
+
+
+
+
+$db->string()->select(
+	pudl::dynamic('parent.child:f'),
+	'table'
+);
+pudlTest("SELECT COLUMN_GET(`parent`, 'child' AS DOUBLE) FROM `table`");
+
+
+
+
+$db->string()->select(
+	pudl::dynamic('parent.child.subchild:c'),
+	'table'
+);
+pudlTest("SELECT COLUMN_GET(COLUMN_GET(`parent`, 'child' AS BINARY), 'subchild' AS CHAR) FROM `table`");
