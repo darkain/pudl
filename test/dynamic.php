@@ -84,3 +84,38 @@ $db->string()->select(
 	'table'
 );
 pudlTest("SELECT COLUMN_GET(COLUMN_GET(`parent`, 'child' AS BINARY), 'subchild' AS CHAR) FROM `table`");
+
+
+
+
+//SELECT statement with a single clause with dynamic column definition
+$db->string()->select('*', 'table', ['column#dynamic:i'=>'value']);
+pudlTest("SELECT * FROM `table` WHERE (COLUMN_GET(`column`, 'dynamic' AS INTEGER)='value')");
+
+
+
+
+//SELECT statement with a single clause with sub-dynamic column definition
+$db->string()->select('*', 'table', ['column#dynamic.property:s'=>'value']);
+pudlTest("SELECT * FROM `table` WHERE (COLUMN_GET(COLUMN_GET(`column`, 'dynamic' AS BINARY), 'property' AS CHAR)='value')");
+
+
+
+
+//SELECT statement with a single clause with sub-sub-dynamic column definition
+$db->string()->select('*', 'table', ['column#dynamic.property.sub:s'=>'value']);
+pudlTest("SELECT * FROM `table` WHERE (COLUMN_GET(COLUMN_GET(COLUMN_GET(`column`, 'dynamic' AS BINARY), 'property' AS BINARY), 'sub' AS CHAR)='value')");
+
+
+
+
+//SELECT statement with a single clause with table and dynamic column definition
+$db->string()->select('*', 'table', ['table.column#dynamic:c'=>'value']);
+pudlTest("SELECT * FROM `table` WHERE (COLUMN_GET(`table`.`column`, 'dynamic' AS CHAR)='value')");
+
+
+
+
+//SELECT statement with a single clause with table and sub-dynamic column definition
+$db->string()->select('*', 'table', ['table.column#dynamic.property:f'=>'value']);
+pudlTest("SELECT * FROM `table` WHERE (COLUMN_GET(COLUMN_GET(`table`.`column`, 'dynamic' AS BINARY), 'property' AS DOUBLE)='value')");

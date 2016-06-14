@@ -177,6 +177,7 @@ trait pudlQuery {
 	public function identifiers($identifiers, $prefix=false) {
 		if ($identifiers === false) return '';
 
+		//PUDL HELPERS HAVE SPECIAL HANDLERS
 		if (is_object($identifiers)) {
 			$traits = class_uses($identifiers, false);
 			if (!empty($traits['pudlHelper'])) {
@@ -184,11 +185,24 @@ trait pudlQuery {
 			}
 		}
 
-		$list = explode('.', $identifiers);
+		//PARSE OUT STRING
+		$dynamic	= explode('#', $identifiers);
+		$list		= explode('.', $dynamic[0]);
 
-		foreach ($list as &$item) $item = trim($item);
-		unset($item);
+		//VERIFY TOTAL NUMBER OF PARTS
+		if (count($dynamic) > 2) trigger_error(
+			'Wrong column format for dynamic column', E_USER_ERROR
+		);
 
+		//CLEAN UP TABLE AND COLUMN NAMES
+		foreach ($list as &$item) {
+			$item = trim($item);
+			if (!strlen($item)) trigger_error(
+				'Wrong column name', E_USER_ERROR
+			);
+		} unset($item);
+
+		//PROCESS TABLE NAME
 		if ($prefix !== false  &&  $this->prefix !== false) {
 			$table = array_pop($list);
 			if (substr($table, 0, 5) === 'pudl_') {
@@ -197,10 +211,38 @@ trait pudlQuery {
 			$list[] = $table;
 		}
 
+		//CLEAN UP EACH PART OF THE IDENTIFIER
 		foreach ($list as &$item) $item = $this->identifier($item);
 		unset($item);
 
-		return implode('.', $list);
+		//EARLY OUT IF WE ARE NOT IN A DYNAMIC COLUMN
+		$return		= implode('.', $list);
+		if (count($dynamic) === 1) return $return;
+
+
+		//PARSE OUT DATA TYPE
+		$parts		= explode(':', $dynamic[1]);
+		if (count($parts) !== 2) trigger_error(
+			'Wrong column format for dynamic column', E_USER_ERROR
+		);
+
+		//SEPARATE AND VERIFY LENGTH OF EACH SECTION
+		$items		= explode('.', $parts[0]);
+		foreach ($items as &$item) {
+			$item = trim($item);
+			if (!strlen($item)) trigger_error(
+				'Wrong column name for dynamic column', E_USER_ERROR
+			);
+		} unset($item);
+
+		//RECURSIVELY GENERATE COLUMN_GET FUNCTIONS
+		while (count($items)) {
+			$return	= 'COLUMN_GET(' . $return . ', '
+					. $this->_value( array_shift($items) ) . ' AS '
+					. (count($items) ? 'BINARY' : $this->dynamic_type($parts[1])) . ')';
+		}
+
+		return $return;
 	}
 
 
