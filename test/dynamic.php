@@ -61,33 +61,6 @@ pudlTest("SELECT COLUMN_GET(COLUMN_GET(`column`, 'name' AS BINARY), 'dynamic' AS
 
 
 
-$db->string()->select(
-	pudl::dynamic('parent.child:i'),
-	'table'
-);
-pudlTest("SELECT COLUMN_GET(`parent`, 'child' AS INTEGER) FROM `table`");
-
-
-
-
-$db->string()->select(
-	pudl::dynamic('parent.child:f'),
-	'table'
-);
-pudlTest("SELECT COLUMN_GET(`parent`, 'child' AS DOUBLE) FROM `table`");
-
-
-
-
-$db->string()->select(
-	pudl::dynamic('parent.child.subchild:c'),
-	'table'
-);
-pudlTest("SELECT COLUMN_GET(COLUMN_GET(`parent`, 'child' AS BINARY), 'subchild' AS CHAR) FROM `table`");
-
-
-
-
 //SELECT statement with a single clause with dynamic column definition
 $db->string()->select('*', 'table', ['column#dynamic:i'=>'value']);
 pudlTest("SELECT * FROM `table` WHERE (COLUMN_GET(`column`, 'dynamic' AS INTEGER)='value')");

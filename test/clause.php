@@ -478,7 +478,6 @@ pudlTest("SELECT * FROM `table` WHERE (`column` BETWEEN 5 AND 10)");
 
 
 
-$haxdebug = true;
 //SELECT statement where column is between two integer values
 $db->string()->select('*', 'table', [pudl::between(pudl::column('column'), 5,10)]);
 pudlTest("SELECT * FROM `table` WHERE (`column` BETWEEN 5 AND 10)");
@@ -487,14 +486,14 @@ pudlTest("SELECT * FROM `table` WHERE (`column` BETWEEN 5 AND 10)");
 
 
 //SELECT statement where column is between two integer values
-$db->string()->select('*', 'table', [pudl::between(pudl::dynamic('column.field:i'), 5,10)]);
+$db->string()->select('*', 'table', ['column#field:i'=>pudl::between(pudl::dynamic(), 5,10)]);
 pudlTest("SELECT * FROM `table` WHERE (COLUMN_GET(`column`, 'field' AS INTEGER) BETWEEN 5 AND 10)");
 
 
 
 
 //SELECT statement where column is between two integer values
-$db->string()->select('*', 'table', pudl::between(pudl::dynamic('column.field:i'), 5,10));
+$db->string()->select('*', 'table', pudl::between(pudl::column('column#field:i'), 5,10));
 pudlTest("SELECT * FROM `table` WHERE (COLUMN_GET(`column`, 'field' AS INTEGER) BETWEEN 5 AND 10)");
 
 

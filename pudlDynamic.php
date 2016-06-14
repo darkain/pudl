@@ -10,44 +10,6 @@ trait pudlDynamic {
 
 
 
-	public static function dynamic($column, $length=false) {
-		$parts = explode(':', $column);
-
-		if (count($parts) !== 2) trigger_error(
-			'Wrong column format for pudl::dynamic', E_USER_ERROR
-		);
-
-		$type = self::dynamic_type($parts[1]);
-
-		$items = explode('.', $parts[0]);
-		if (count($items) < 2) trigger_error(
-			'Wrong column format for pudl::dynamic', E_USER_ERROR
-		);
-
-		foreach ($items as &$item) {
-			$item = trim($item);
-			if (!strlen($item)) trigger_error(
-				'Wrong column name for pudl::dynamic', E_USER_ERROR
-			);
-		} unset($item);
-
-		$return = self::column_get(
-			self::column( array_shift($items) ),
-			new pudlAs(array_shift($items), self::raw( count($items)?'BINARY':$type ), $length)
-		);
-
-		while (count($items)) {
-			$return = self::column_get(
-				self::column( $return ),
-				new pudlAs(array_shift($items), self::raw( count($items)?'BINARY':$type ), $length)
-			);
-		}
-
-		return $return;
-	}
-
-
-
 	public static function dynamic_binary($blob, $column, $length=false) {
 		return self::column_get(
 			self::column($blob),
@@ -163,7 +125,7 @@ trait pudlDynamic {
 		}
 
 		if ($die) trigger_error(
-			'Wrong column data type for pudl::dynamic', E_USER_ERROR
+			'Wrong dynamic column data type', E_USER_ERROR
 		);
 
 		return false;
