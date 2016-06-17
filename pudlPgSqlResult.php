@@ -25,7 +25,9 @@ class pudlPgSqlResult extends pudlResult {
 	public function cell($row=0, $column=0) {
 		if (!$this->result) return false;
 		$data = @pg_fetch_row($this->result, $this->row);
-		return isset($data[$column]) ? $data[$column] : false;
+
+		return (is_array($data)  &&  array_key_exists($column, $data))
+			? $data[$column] : false;
 	}
 
 

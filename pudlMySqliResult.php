@@ -24,8 +24,9 @@ class pudlMySqliResult extends pudlResult {
 		if (!is_object($this->result)) return false;
 		$this->seek($row);
 		$data = $this->row(PUDL_NUMBER);
-		if (isset($data[$column])) return $data[$column];
-		return false;
+
+		return (is_array($data)  &&  array_key_exists($column, $data))
+			? $data[$column] : false;
 	}
 
 
