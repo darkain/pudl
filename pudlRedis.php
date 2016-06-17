@@ -32,7 +32,7 @@ trait pudlRedis {
 			$level = error_reporting(0); //HHVM HACK BECAUSE THEY HAVE YET TO FIX THEIR CODE
 			try {
 				$this->redis = new Redis;
-				if ($this->redis->connect($server, -1, 0.1)) {
+				if ($this->redis->connect($server, -1, 0.25)) {
 					$this->redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
 				} else {
 					$this->redis = false;
