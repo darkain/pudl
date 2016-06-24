@@ -61,7 +61,13 @@ abstract class pudlResult {
 	public function rows($type=PUDL_ARRAY) {
 		if (!$this->result) return false;
 		$rows = [];
-		while ($data = $this->row($type)) { $rows[] = $data; }
+		while ($data = $this->row($type)) {
+			if ($type === PUDL_INDEX) {
+				$rows[ reset($data) ] = $data;
+			} else {
+				$rows[] = $data;
+			}
+		}
 		return $rows;
 	}
 

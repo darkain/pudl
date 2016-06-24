@@ -58,6 +58,7 @@ class pudlMsSqlResult extends pudlResult {
 		if (!$this->result) return false;
 		$data = false;
 		switch ($type) {
+			case PUDL_INDEX:	//fall through
 			case PUDL_ARRAY:	$data = @mssql_fetch_array($this->result, MSSQL_ASSOC);		break;
 			case PUDL_NUMBER:	$data = @mssql_fetch_array($this->result, MSSQL_NUM);		break;
 			case PUDL_BOTH:		$data = @mssql_fetch_array($this->result, MSSQL_BOTH);		break;

@@ -74,7 +74,7 @@ class pudlOdbcResult extends pudlResult {
 		for ($i=1; $i<=$fields; $i++) {
 			$item				= @odbc_result($this->result, $i);
 
-			if ($type & PUDL_ARRAY) {
+			if (($type & PUDL_ARRAY) ||  ($type & PUDL_INDEX)) {
 				$name			= @odbc_field_name($this->result, $i);
 				$data[$name]	= $item;
 			}

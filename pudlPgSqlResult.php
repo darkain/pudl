@@ -75,6 +75,7 @@ class pudlPgSqlResult extends pudlResult {
 
 		$data = false;
 		switch ($type) {
+			case PUDL_INDEX:	//fall through
 			case PUDL_ARRAY:	$data = pg_fetch_array($this->result, NULL, PGSQL_ASSOC);	break;
 			case PUDL_NUMBER:	$data = pg_fetch_array($this->result, NULL, PGSQL_NUM);		break;
 			case PUDL_BOTH:		$data = pg_fetch_array($this->result, NULL, PGSQL_BOTH);	break;

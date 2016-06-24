@@ -65,6 +65,7 @@ class pudlMySqliResult extends pudlResult {
 
 		$data = false;
 		switch ($type) {
+			case PUDL_INDEX:	//fall through
 			case PUDL_ARRAY:	$data = @$this->result->fetch_array(MYSQLI_ASSOC);	break;
 			case PUDL_NUMBER:	$data = @$this->result->fetch_array(MYSQLI_NUM);	break;
 			case PUDL_BOTH:		$data = @$this->result->fetch_array(MYSQLI_BOTH);	break;
