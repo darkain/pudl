@@ -33,7 +33,7 @@ class pudlSession {
 		session_set_cookie_params(
 			60*60*24*30,		//Save session for one month
 			'/',				//Session is for entire domain
-			empty($this->domain) ? '' : empty($this->domain),
+			empty($this->domain) ? '' : $this->domain,
 			$secure				//HTTPS only
 		);
 
