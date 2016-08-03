@@ -7,7 +7,7 @@ ini_set('session.gc_maxlifetime', 60*60*24*30);
 
 class pudlSession {
 
-	public function __construct($database, $table, $name=false, $domain=false) {
+	public function __construct($database, $table, $name=false, $domain=false, $secure=false) {
 		$this->db		= $database;
 		$this->table	= $table;
 		$this->name		= $name;
@@ -24,8 +24,19 @@ class pudlSession {
 			[$this, 'clean']
 		);
 
-		if (!empty($this->name))	session_name($this->name);
-		if (!empty($this->domain))	session_set_cookie_params(60*60*24*30, '/', $this->domain);
+		//Different session name for HTTPS connections
+		session_name(
+			(empty($this->name) ? 'PUDLSESSID' : $this->name) .
+			($secure ? '-SECURE' : '')
+		);
+
+		session_set_cookie_params(
+			60*60*24*30,		//Save session for one month
+			'/',				//Session is for entire domain
+			empty($this->domain) ? '' : empty($this->domain),
+			$secure				//HTTPS only
+		);
+
 		session_start();
 	}
 
@@ -156,4 +167,5 @@ class pudlSession {
 	private $domain;
 	private $hash		= false;
 	private $user		= 0;
+	private $secure		= false;
 }
