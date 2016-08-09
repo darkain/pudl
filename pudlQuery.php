@@ -454,9 +454,14 @@ trait pudlQuery {
 
 
 	protected function _clauseId($column, $id) {
+		global $get;
+
 		if (is_array($id)) {
-			$list	= explode('.', $column);
-			$id		= $id[end($list)];
+			$list		= explode('.', $column);
+			$id			= $id[end($list)];
+
+		} else if (is_a($id, 'getvar')) {
+			$id			= $get($column);
 
 		} else if (is_object($id)) {
 			$traits = class_uses($id, false);
