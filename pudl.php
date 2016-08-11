@@ -59,7 +59,7 @@ abstract class pudl {
 		if (!empty($data['redis'])) {
 			$this->redis($data['redis']);
 		} else {
-			$this->redis = new pudlVoid;
+			$this->redis	= new pudlVoid;
 		}
 
 		if ($autoconnect) $this->connect();
@@ -162,9 +162,8 @@ abstract class pudl {
 
 
 		//ERROR REPORTING
-		if (!empty($this->errno())  &&  $this->debug !== false) {
-			$debug = $this->debug;
-			$debug($this, $result);
+		if (!empty($this->errno())) {
+			$this->trigger('debug', $this, $result);
 		}
 
 		return $result;
@@ -324,16 +323,6 @@ abstract class pudl {
 
 
 
-
-	public function debugger($debugger) {
-		if (!is_callable($debugger)) {
-			trigger_error('Function does not exist for pudl::debugger', E_USER_ERROR);
-		}
-		$this->debug = $debugger;
-	}
-
-
-
 	public function benchmark($benchmark) {
 		$this->bench = $benchmark;
 	}
@@ -428,7 +417,6 @@ abstract class pudl {
 
 
 
-	private			$debug			= false;
 	private			$bench			= false;
 	private			$query			= false;
 	private			$time			= 0;
