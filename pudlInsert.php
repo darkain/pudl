@@ -73,7 +73,7 @@ trait pudlInsert {
 	public function insertUpdate($table, $data, $column, $update=false, $prefix=true) {
 		if (empty($update)) {
 			$update = [];
-		} else if ($update === true  &&  is_array($data)) {
+		} else if ($update === true  &&  pudl_array($data)) {
 			$update = $data;
 		} else if ($update === true) {
 			$update = [$data];

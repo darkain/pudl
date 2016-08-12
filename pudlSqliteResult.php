@@ -41,7 +41,7 @@ class pudlSqliteResult extends pudlResult {
 				$data = $this->row(PUDL_NUMBER);
 			}
 
-			if (is_array($data)  &&  array_key_exists($column, $data)) {
+			if (pudl_array($data)  &&  array_key_exists($column, $data)) {
 				$return = $data[$column];
 			}
 		}

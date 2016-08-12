@@ -8,7 +8,7 @@ require_once('pudlSqliteResult.php');
 class pudlSqlite extends pudl {
 	public function __construct($data=[], $autoconnect=true) {
 
-		if (!is_array($data)) $data = [$data];
+		if (!pudl_array($data)) $data = [$data];
 		if (empty($data['database'])) {
 			$data['database'] = empty($data[0]) ? 'sqlite.db' : $data[0];
 		}

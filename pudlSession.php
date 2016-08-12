@@ -144,7 +144,7 @@ class pudlSession {
 	public function user($user=false, $name=false) {
 		if ($user === false) return $this->user;
 
-		$this->user = (int) $user;
+		$this->user = (int) (pudl_array($user) ? $user['user_id'] : $user);
 
 		if ($name !== false) {
 			if ($this->user === 0) {

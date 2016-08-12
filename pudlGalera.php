@@ -10,7 +10,7 @@ class pudlGalera extends pudlMySqli {
 
 
 	public function __construct($data, $autoconnect=true) {
-		if (!is_array($data['server'])) {
+		if (!pudl_array($data['server'])) {
 			throw new pudlException(
 				'Not a valid server pool, $data[server] must be ARRAY data type'
 			);
@@ -31,7 +31,7 @@ class pudlGalera extends pudlMySqli {
 		}
 
 		//SET BACKUP SERVERS
-		if (!empty($data['backup'])  &&  is_array($data['backup'])) {
+		if (!empty($data['backup'])  &&  pudl_array($data['backup'])) {
 			$this->pool = array_merge($this->pool, $data['backup']);
 		}
 

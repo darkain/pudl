@@ -16,6 +16,13 @@ define('PUDL_END',		2);
 
 
 
+function pudl_array($item) {
+	if (is_array($item)) return true;
+	return ($item instanceof ArrayAccess);
+}
+
+
+
 trait pudlHelper {}
 
 

@@ -6,7 +6,7 @@ trait pudlTable {
 	function rename($rename, $to=false) {
 		$query = 'RENAME TABLE ';
 
-		if (!is_array($rename)) {
+		if (!pudl_array($rename)) {
 			if ($to === false) return $this($query . $rename);
 			return $this($query . $this->_table($rename) . ' TO ' . $this->_table($to));
 		}
@@ -37,7 +37,7 @@ trait pudlTable {
 	function drop($table, $temp=true) {
 		$query = 'DROP ' . ($temp?'TEMPORARY ':'') . 'TABLE IF EXISTS ';
 
-		if (!is_array($table)) return $this($query . $this->_table($table));
+		if (!pudl_array($table)) return $this($query . $this->_table($table));
 
 		$first = true;
 		foreach ($table as $item) {

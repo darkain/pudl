@@ -123,7 +123,7 @@ function pudlPHPExcel($list, $filename) {
 		$list = $list->rows();
 	}
 
-	if (!is_array($list)) {
+	if (!pudl_array($list)) {
 		return false;
 	}
 

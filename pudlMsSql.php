@@ -117,7 +117,7 @@ class pudlMsSql extends pudl {
 
 
 	protected function _limit($limit, $offset=false) {
-		if (is_array($limit)) {
+		if (pudl_array($limit)) {
 			$offset	= count($limit) > 1 ? end($limit) : false;
 			$limit	= reset($limit);
 		}

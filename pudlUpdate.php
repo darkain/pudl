@@ -33,7 +33,7 @@ trait pudlUpdate {
 
 
 	public function updateIn($table, $data, $field, $in, $limit=false, $offset=false) {
-		if (is_array($in)) $in = implode(',', $in);
+		if (pudl_array($in)) $in = implode(',', $in);
 		$query  = 'UPDATE ';
 		$query .= $this->_table($table);
 		$query .= ' SET ';

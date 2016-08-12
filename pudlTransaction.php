@@ -57,7 +57,7 @@ trait pudlTransaction {
 	public function lock($table) {
 		$query = 'LOCK TABLES ';
 
-		if (is_array($table)) {
+		if (pudl_array($table)) {
 			$set = [];
 
 			if (isset($table['read'])) {

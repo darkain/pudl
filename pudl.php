@@ -75,7 +75,7 @@ abstract class pudl {
 
 	public function __invoke($query) {
 		//SELEX
-		if (is_array($query)) {
+		if (pudl_array($query)) {
 			return $this->selex($query);
 		}
 
@@ -96,7 +96,7 @@ abstract class pudl {
 
 
 		//STORE TRANSACTION INFORMATION
-		if (is_array($this->transaction)) $this->transaction[] = $query;
+		if (pudl_array($this->transaction)) $this->transaction[] = $query;
 
 
 		//RETURN A STRING
@@ -130,7 +130,7 @@ abstract class pudl {
 						$result = new pudlCacheResult($data, $this, $hash);
 					}
 
-				} else if (is_array($data)  &&  !empty($data)) {
+				} else if (!empty($data)  &&  pudl_array($data)) {
 					$this->stats['hits']++;
 					$result = new pudlCacheResult($data, $this, $hash);
 				}
@@ -208,11 +208,11 @@ abstract class pudl {
 
 
 	public function listFields($table) {
-		if (!is_array($table)) $table = [$table];
+		if (!pudl_array($table)) $table = [$table];
 		$return = [];
 		foreach ($table as $t) {
 			$result = $this('SHOW COLUMNS FROM ' . $this->_table($t));
-			while ($data = $result->row()) $return[$data['Field']] = $data;
+			while ($data = $result()) $return[$data['Field']] = $data;
 			$result->free();
 		}
 		return $return;
@@ -224,7 +224,7 @@ abstract class pudl {
 		$return = '';
 		$result = $this('EXPLAIN ' . $query);
 		if ($result instanceof pudlStringResult) return $result;
-		while ($data = $result->row()) $return .= print_r($data, true);
+		while ($data = $result()) $return .= print_r($data, true);
 		$result->free();
 		return $return;
 	}

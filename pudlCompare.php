@@ -49,7 +49,7 @@ trait pudlCompare {
 
 
 	public static function inSet($value) {
-		if (is_array($value)  &&  func_num_args() === 1)
+		if (pudl_array($value)  &&  func_num_args() === 1)
 			return new pudlSet($value);
 
 		if ($value instanceof pudlResult)
@@ -61,7 +61,7 @@ trait pudlCompare {
 
 
 	public static function notInSet($value) {
-		if (is_array($value)  &&  func_num_args() === 1)
+		if (pudl_array($value)  &&  func_num_args() === 1)
 			return (new pudlSet($value))->not();
 
 		if ($value instanceof pudlResult)
