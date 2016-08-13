@@ -180,6 +180,19 @@ abstract class pudl {
 
 
 
+	public static function instance($data, $autoconnect=true) {
+		if (empty($data['type'])  &&  !empty($data['server'])) {
+			$data['type'] = pudl_array($data['server']) ? 'Galera' : 'MySqli';
+		}
+
+		if (empty($data['type'])) return false;
+
+		require_once('pudl'.$data['type'].'.php');
+
+		return call_user_func(['pudl'.$data['type'],'instance'], $data, $autoconnect);
+	}
+
+
 
 	abstract protected function process($query);
 
