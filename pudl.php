@@ -123,7 +123,8 @@ abstract class pudl {
 
 				if ($this->cache < 0) {
 					$this->stats['total']--;
-					return $this->purge($hash);
+					$this->purge($hash);
+					return new pudlCacheResult([], $this, '');
 				}
 
 				$data = $this->redis->get("pudl:$hash");

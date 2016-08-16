@@ -21,7 +21,7 @@ trait pudlRedis {
 
 
 	public function purge($key) {
-		if (!$this->redis) return false;
+		if (!$this->redis  ||  empty($key)) return false;
 		try {
 			return $this->redis->delete("pudl:$key");
 		} catch (RedisException $e) {}
