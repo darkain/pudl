@@ -73,29 +73,29 @@ class pudlShellResult extends pudlResult {
 		$data = $this->json['data'][$this->row];
 
 		if ($type === PUDL_ARRAY) {
-			$return = array();
+			$this->data = [];
 			foreach ($data as $key => &$val) {
-				$return[$this->json['header'][$key]] = $val;
+				$this->data[$this->json['header'][$key]] = $val;
 			} unset($val);
 
 		} else if ($type === PUDL_NUMBER) {
-			$return = &$data;
+			$this->data = &$data;
 
 		} else { //BOTH
-			$return = $data;
+			$this->data = $data;
 			foreach ($data as $key => &$val) {
-				$return[$this->json['header'][$key]] = $val;
+				$this->data[$this->json['header'][$key]] = $val;
 			} unset($val);
 		}
 
 		if ($trim) {
-			foreach ($return as $key => &$val) {
+			foreach ($this->data as $key => &$val) {
 				$val = trim($val);
 			} unset($val);
 		}
 
 		$this->row++;
-		return $return;
+		return $this->data;
 	}
 
 
@@ -139,7 +139,6 @@ class pudlShellResult extends pudlResult {
 	private $json;
 	private $error;
 	private $ermsg;
-	private $row;
 }
 
 

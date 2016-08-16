@@ -1,6 +1,6 @@
 <?php
 
-abstract class pudlResult {
+abstract class pudlResult implements Countable, SeekableIterator {
 
 	public function __construct($result, $db) {
 		$this->result	= $result;
@@ -21,13 +21,34 @@ abstract class pudlResult {
 
 	abstract public function cell($row=0, $column=0);
 
-	abstract public function count();
-
 	abstract public function fields();
 
 	abstract public function getField($column);
 
-	abstract public function seek($row);
+//	Provided by: Countable
+//	abstract public function count();
+
+//	Provided by: SeekableIterator
+//	abstract public function seek($row);
+
+
+	public function rewind() { $this->seek(0); }
+
+	public function current() {
+		if ($this->row === false) $this();
+		return $this->data;
+	}
+
+	public function key() {
+		return ($this->row === false) ? 0 : $this->row;
+	}
+
+	public function next() { $this(); }
+
+	public function valid() {
+		if ($this->row === false) $this();
+		return is_array($this->data);
+	}
 
 
 	public function isString() { return $this->string; }
@@ -141,4 +162,6 @@ abstract class pudlResult {
 	protected $result;
 	protected $query;
 	protected $string;
+	protected $row		= false;
+	protected $data		= false;
 }

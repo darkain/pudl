@@ -63,19 +63,19 @@ class pudlMySqliResult extends pudlResult {
 	public function row($type=PUDL_ARRAY) {
 		if (!is_object($this->result)) return false;
 
-		$data = false;
+		$this->data = false;
 		switch ($type) {
 			case PUDL_INDEX:	//fall through
-			case PUDL_ARRAY:	$data = @$this->result->fetch_array(MYSQLI_ASSOC);	break;
-			case PUDL_NUMBER:	$data = @$this->result->fetch_array(MYSQLI_NUM);	break;
-			case PUDL_BOTH:		$data = @$this->result->fetch_array(MYSQLI_BOTH);	break;
-			default:			$data = @$this->result->fetch_array();
+			case PUDL_ARRAY:	$this->data = @$this->result->fetch_array(MYSQLI_ASSOC);	break;
+			case PUDL_NUMBER:	$this->data = @$this->result->fetch_array(MYSQLI_NUM);		break;
+			case PUDL_BOTH:		$this->data = @$this->result->fetch_array(MYSQLI_BOTH);		break;
+			default:			$this->data = @$this->result->fetch_array();
 		}
-		if (!is_array($data)) return false;
+		if ($this->data === false) return false;
 
 		if ($this->first) {
 			$this->first = false;
-			foreach ($data as $key => &$val) {
+			foreach ($this->data as $key => $val) {
 				if (substr_compare($key, 'COLUMN_JSON', 0, 11) === 0) {
 					$new = substr($key, 12, -1);
 					$pos = strrpos($new, '.');
@@ -87,11 +87,12 @@ class pudlMySqliResult extends pudlResult {
 		}
 
 		foreach ($this->json as $key => $new) {
-			$data[$new] = @json_decode($data[$key], true);
-			if ($data[$new] === NULL) $data[$new] = [];
-		} unset($key);
+			$this->data[$new] = @json_decode($this->data[$key], true);
+			if ($this->data[$new] === NULL) $this->data[$new] = [];
+		} unset($new);
 
-		return $data;
+		$this->row = ($this->row === false) ? 0 : $this->row+1;
+		return $this->data;
 	}
 
 

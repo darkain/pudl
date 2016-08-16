@@ -51,6 +51,6 @@ class pudlStringResult extends pudlResult {
 	}
 
 
-	private	$returned = false;
-	public	$type = false;
+	private	$returned	= false;
+	public	$type		= false;
 }

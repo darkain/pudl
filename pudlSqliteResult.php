@@ -8,7 +8,7 @@ class pudlSqliteResult extends pudlResult {
 	public function __construct($result, $db) {
 		parent::__construct($result, $db);
 
-		$this->rownum = 0;
+		$this->row = 0;
 	}
 
 
@@ -32,12 +32,12 @@ class pudlSqliteResult extends pudlResult {
 		$return = false;
 
 		if (is_object($this->result)) {
-			if ($row > $this->rownum) {
-				$this->rownum = 0;
+			if ($row > $this->row) {
+				$this->row = 0;
 				$this->result->reset();
 			}
 
-			for ($i=$this->rownum; $i<=$row; $i++) {
+			for ($i=$this->row; $i<=$row; $i++) {
 				$data = $this->row(PUDL_NUMBER);
 			}
 
@@ -81,20 +81,18 @@ class pudlSqliteResult extends pudlResult {
 
 	public function row($type=PUDL_ARRAY) {
 		if (!is_object($this->result)) return false;
-
-		$this->rownum++;
-
-		$data = false;
+		$this->data = false;
 		switch ($type) {
-			case PUDL_ARRAY:	$data = $this->result->fetchArray(SQLITE3_ASSOC);	break;
-			case PUDL_NUMBER:	$data = $this->result->fetchArray(SQLITE3_NUM);		break;
-			case PUDL_BOTH:		$data = $this->result->fetchArray(SQLITE3_BOTH);	break;
-			default:			$data = $this->result->fetchArray();
+			case PUDL_ARRAY:	$this->data = $this->result->fetchArray(SQLITE3_ASSOC);	break;
+			case PUDL_NUMBER:	$this->data = $this->result->fetchArray(SQLITE3_NUM);	break;
+			case PUDL_BOTH:		$this->data = $this->result->fetchArray(SQLITE3_BOTH);	break;
+			default:			$this->data = $this->result->fetchArray();
 		}
-		return is_array($data) ? $data : false;
+		if ($this->data !== false) {
+			$this->row = ($this->row === false) ? 0 : $this->row+1;
+		}
+		return $this->data;
 	}
 
-
-	private $rownum;
 
 }

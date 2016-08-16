@@ -6,7 +6,7 @@ class pudlCacheResult extends pudlResult {
 		parent::__construct(count($data), $db);
 		$this->rows	= $data;
 		$this->key	= $key;
-		$this->cur	= 0;
+		$this->row	= 0;
 	}
 
 
@@ -24,20 +24,21 @@ class pudlCacheResult extends pudlResult {
 
 
 	public function cell($row=0, $column=0) {
-		if (!isset($this->rows[$row])) return false;
+		$this->seek($row);
+		if (!isset($this->rows[$this->row])) return false;
 
-		$row = &$this->rows[$row];
-		if (count($row) < $column) return false;
+		$this->data = &$this->rows[$row];
+		if (count($this->data) < $column) return false;
 
 		//Thanks to PHP's requirement of reset() needing
 		//the array to be passed by reference, we have
 		//to assign said array to a temporary variable
-		$slice = array_slice($row, $column, 1);
+		$slice = array_slice($this->data, $column, 1);
 		return reset($slice);
 	}
 
 
-	public function count() { return count($this->rows()); }
+	public function count() { return count($this->rows); }
 
 
 	public function fields() {
@@ -53,14 +54,14 @@ class pudlCacheResult extends pudlResult {
 	}
 
 
-	public function seek($row) { $this->cur = $row; }
+	public function seek($row) { $this->row = (int) $row; }
 
 
 	public function row($type=PUDL_ARRAY) {
-		if (isset($this->rows[$this->cur])) {
-			return $this->rows[$this->cur++];
+		if (isset($this->rows[$this->row])) {
+			return $this->data = $this->rows[$this->row++];
 		}
-		return false;
+		return $this->data = false;
 	}
 
 
@@ -73,5 +74,4 @@ class pudlCacheResult extends pudlResult {
 
 	protected $rows;
 	protected $key;
-	protected $cur;
 }

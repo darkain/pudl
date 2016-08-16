@@ -9,6 +9,7 @@ class pudlOdbcResult extends pudlResult {
 	public function __destruct() {
 		parent::__destruct();
 		$this->free();
+		$this->row = 0;
 	}
 
 
@@ -53,7 +54,7 @@ class pudlOdbcResult extends pudlResult {
 
 	public function seek($row) {
 		if (!$this->result) return false;
-		$this->row = $row;
+		$this->row = (int) $row;
 		return true;
 	}
 
@@ -61,34 +62,32 @@ class pudlOdbcResult extends pudlResult {
 	public function row($type=PUDL_ARRAY) {
 		if (!$this->result) return false;
 
-		$fetch					= $this->row
-								? @odbc_fetch_row($this->result, $this->row)
-								: @odbc_fetch_row($this->result);
-
-		$this->row				= false;
-		$fields					= $this->fields();
-		$data					= [];
+		$fetch						= @odbc_fetch_row($this->result, $this->row);
+		$fields						= $this->fields();
+		$this->data					= false;
 
 		if ($fetch === false) return false;
 
-		for ($i=1; $i<=$fields; $i++) {
-			$item				= @odbc_result($this->result, $i);
+		$this->row++;
+		$this->data					= [];
 
-			if (($type & PUDL_ARRAY) ||  ($type & PUDL_INDEX)) {
-				$name			= @odbc_field_name($this->result, $i);
-				$data[$name]	= $item;
+		for ($i=1; $i<=$fields; $i++) {
+			$item					= @odbc_result($this->result, $i);
+
+			if (($type & PUDL_ARRAY)  ||  ($type & PUDL_INDEX)) {
+				$name				= @odbc_field_name($this->result, $i);
+				$this->data[$name]	= $item;
 			}
 
 			if ($type & PUDL_NUMBER) {
-				$data[$i]		= $item;
+				$this->data[$i]		= $item;
 			}
 		}
 
-		return $data;
+		return $this->data;
 	}
 
 
-	private $row				= false;
-	private $fieldCount			= false;
+	private $fieldCount				= false;
 
 }
