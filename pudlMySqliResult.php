@@ -71,7 +71,7 @@ class pudlMySqliResult extends pudlResult {
 			case PUDL_BOTH:		$this->data = @$this->result->fetch_array(MYSQLI_BOTH);		break;
 			default:			$this->data = @$this->result->fetch_array();
 		}
-		if ($this->data === false) return false;
+		if ($this->data === NULL) return $this->data = false;
 
 		if ($this->first) {
 			$this->first = false;
