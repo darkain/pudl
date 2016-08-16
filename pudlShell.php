@@ -20,7 +20,7 @@ class pudlShell extends pudl {
 
 
 
-	public static function instance($data) {
+	public static function instance($data, $autoconnect=true) {
 		return new pudlShell($data);
 	}
 
