@@ -120,6 +120,12 @@ abstract class pudl {
 			try {
 				$hash = $this->cachekey;
 				if (empty($hash)) $hash = hash('sha512', $this->salt().$query, true);
+
+				if ($this->cache < 0) {
+					$this->stats['total']--;
+					return $this->purge($hash);
+				}
+
 				$data = $this->redis->get("pudl:$hash");
 
 				if ($data === false) {
