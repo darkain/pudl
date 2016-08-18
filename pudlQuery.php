@@ -728,6 +728,14 @@ trait pudlQuery {
 
 
 
+	public function extract($array, $keys) {
+		$return = [];
+		foreach ($keys as $item) $return[$item] = $array[$item];
+		return $return;
+	}
+
+
+
 	protected $identifier	= '"';
 	protected $prefix		= false;
 

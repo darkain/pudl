@@ -77,3 +77,10 @@ $db->string()->insertValues('table', [
 	'column2'=>'value2',
 ]);
 pudlTest("INSERT INTO `table` VALUES ('value1', 'value2')");
+
+
+
+
+$testdata = ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4];
+$db->string()->insert('table', pudl::extract($testdata, ['b','d']));
+pudlTest('INSERT INTO `table` (`b`, `d`) VALUES (2, 4)');
