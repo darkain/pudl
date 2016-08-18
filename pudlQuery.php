@@ -730,6 +730,10 @@ trait pudlQuery {
 
 	public function extract($array, $keys) {
 		$return = [];
+		if (!is_array($keys)) {
+			$keys = func_get_args();
+			array_shift($keys);
+		}
 		foreach ($keys as $item) $return[$item] = $array[$item];
 		return $return;
 	}
