@@ -454,27 +454,22 @@ trait pudlQuery {
 
 
 	protected function _clauseId($column, $id) {
-		global $afurl, $get;
+		if (is_a($id, 'pudlId')) {
+			$id				= $id->pudl_getId($column);
 
-		if (pudl_array($id)) {
-			$list		= explode('.', $column);
-			$id			= $id[end($list)];
-
-		} else if (is_a($id, 'getvar')) {
-			$id			= $get($column);
-
-		} else if (is_a($id, 'afurl')) {
-			if (isset($afurl->virtual[0])) {
-				$id		= $afurl->virtual[0];
-			} else {
-				$id		= $afurl->id;
-			}
+		} else if (pudl_array($id)) {
+			$list			= explode('.', $column);
+			$id				= $id[end($list)];
 
 		} else if (is_object($id)) {
 			$traits = class_uses($id, false);
 			if (empty($traits['pudlHelper'])) {
-				$list	= explode('.', $column);
-				$id		= $id->{end($list)};
+				if (method_exists($id, 'pudl_getId')) {
+					$id		= $id->pudl_getId($column);
+				} else {
+					$list	= explode('.', $column);
+					$id		= $id->{end($list)};
+				}
 			}
 		}
 

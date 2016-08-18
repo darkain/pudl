@@ -30,6 +30,12 @@ class pudlException extends Exception {}
 
 
 
+interface pudlId {
+	public function pudl_getId($column);
+}
+
+
+
 class pudlFunction {
 	use pudlHelper;
 
