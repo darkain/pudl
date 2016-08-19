@@ -124,9 +124,7 @@ trait pudlDynamic {
 				return 'BINARY';
 		}
 
-		if ($die) trigger_error(
-			'Wrong dynamic column data type', E_USER_ERROR
-		);
+		if ($die) throw pudlException('Wrong dynamic column data type');
 
 		return false;
 	}
