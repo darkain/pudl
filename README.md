@@ -49,9 +49,9 @@ for more details.
 First, create an instance of PUDL for your specific database type
 ```php
 require_once('pudl/pudl.php');
-require_once('pudl/mysql/pudlMySqli.php');
 
-$db = new pudlMySqli([
+$db = pudl::instance([
+	'type'     => 'MySqli',
 	'server'   => 'localhost',
 	'database' => 'DatabaseName',
 	'username' => 'AwesomeGuy9001',

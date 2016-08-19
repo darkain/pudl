@@ -209,7 +209,10 @@ abstract class pudl {
 			case 'MsSql':	require_once('mssql/pudlMsSql.php');	break;
 			case 'Sqlite':	require_once('sqlite/pudlSqlite.php');	break;
 			case 'Odbc':	require_once('sql/pudlOdbc.php');		break;
-			default:		throw pudlExceltion();					return false;
+
+			default:
+				throw pudlException('Unknown Database Server Type: ' . $data['type']);
+				return false;
 		}
 
 		return call_user_func(
