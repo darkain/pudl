@@ -3,6 +3,7 @@
 
 trait pudlUnion {
 
+
 	public function inUnion() {
 		return is_array($this->union);
 	}

@@ -1,9 +1,6 @@
 <?php
 
 
-require_once('pudlResult.php');
-
-
 class pudlMySqlResult extends pudlResult {
 
 	public function __destruct() {

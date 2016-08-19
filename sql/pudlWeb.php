@@ -1,7 +1,6 @@
 <?php
 
 
-require_once('pudlShell.php');
 require_once('pudlShellResult.php');
 
 

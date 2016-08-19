@@ -1,22 +1,30 @@
 <?php
 
+//CONSTANTS, INTERFACES, HELPER CLASSES AND FUNCTIONS
+require_once('pudlConstants.php');
+require_once('pudlInterfaces.php');
 require_once('pudlHelpers.php');
-require_once('pudlStringResult.php');
-require_once('pudlCacheResult.php');
-require_once('pudlAuth.php');
-require_once('pudlAlias.php');
-require_once('pudlRedis.php');
-require_once('pudlQuery.php');
-require_once('pudlUnion.php');
-require_once('pudlTable.php');
-require_once('pudlSelect.php');
-require_once('pudlInsert.php');
-require_once('pudlUpdate.php');
-require_once('pudlDelete.php');
-require_once('pudlCompare.php');
-require_once('pudlDynamic.php');
-require_once('pudlCallback.php');
-require_once('pudlTransaction.php');
+
+//INTERNAL USAGE RESULT SETS
+require_once('pudlResult.php');
+require_once('traits/pudlStringResult.php');
+require_once('traits/pudlCacheResult.php');
+
+//TRAITS
+require_once('traits/pudlAuth.php');
+require_once('traits/pudlAlias.php');
+require_once('traits/pudlRedis.php');
+require_once('traits/pudlQuery.php');
+require_once('traits/pudlUnion.php');
+require_once('traits/pudlTable.php');
+require_once('traits/pudlSelect.php');
+require_once('traits/pudlInsert.php');
+require_once('traits/pudlUpdate.php');
+require_once('traits/pudlDelete.php');
+require_once('traits/pudlCompare.php');
+require_once('traits/pudlDynamic.php');
+require_once('traits/pudlCallback.php');
+require_once('traits/pudlTransaction.php');
 
 
 
@@ -193,11 +201,22 @@ abstract class pudl {
 			$data['type'] = pudl_array($data['server']) ? 'Galera' : 'MySqli';
 		}
 
-		if (empty($data['type'])) return false;
+		switch ($data['type']) {
+			case 'MySql':	require_once('mysql/pudlMySql.php');	break;
+			case 'MySqli':	require_once('mysql/pudlMySqli.php');	break;
+			case 'Galera':	require_once('mysql/pudlGalera.php');	break;
+			case 'PgSql':	require_once('pgsql/pudlPgSql.php');	break;
+			case 'MsSql':	require_once('mssql/pudlMsSql.php');	break;
+			case 'Sqlite':	require_once('sqlite/pudlSqlite.php');	break;
+			case 'Odbc':	require_once('sql/pudlOdbc.php');		break;
+			default:		throw pudlExceltion();					return false;
+		}
 
-		require_once('pudl'.$data['type'].'.php');
-
-		return call_user_func(['pudl'.$data['type'],'instance'], $data, $autoconnect);
+		return call_user_func(
+			['pudl'.$data['type'], 'instance'],
+			$data,
+			$autoconnect
+		);
 	}
 
 

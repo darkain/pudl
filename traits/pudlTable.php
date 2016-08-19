@@ -3,6 +3,7 @@
 
 trait pudlTable {
 
+
 	function rename($rename, $to=false) {
 		$query = 'RENAME TABLE ';
 

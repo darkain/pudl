@@ -1,6 +1,8 @@
 <?php
 
+
 class pudlCacheResult extends pudlResult {
+
 
 	public function __construct($data, $db, $key) {
 		parent::__construct(count($data), $db);

@@ -1,9 +1,6 @@
 <?php
 
 
-require_once('pudlResult.php');
-
-
 class pudlSqliteResult extends pudlResult {
 	public function __construct($result, $db) {
 		parent::__construct($result, $db);

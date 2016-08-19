@@ -1,7 +1,6 @@
 <?php
 
 
-require_once('pudl.php');
 require_once('pudlMySqlResult.php');
 require_once('pudlMySqlHelper.php');
 

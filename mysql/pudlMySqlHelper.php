@@ -1,6 +1,8 @@
 <?php
 
+
 trait pudlMySqlHelper {
+
 
 	protected function _cache() {
 		if (!$this->cache)						return '';

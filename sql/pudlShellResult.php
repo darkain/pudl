@@ -1,9 +1,6 @@
 <?php
 
 
-require_once('pudlResult.php');
-
-
 class pudlShellResult extends pudlResult {
 
 	public function __construct($result, $db) {

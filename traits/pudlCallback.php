@@ -3,6 +3,7 @@
 
 trait pudlCallback {
 
+
 	public function on($action, $callback) {
 		if (!is_string($action)) {
 			throw pudlException('Not a valid callback action');

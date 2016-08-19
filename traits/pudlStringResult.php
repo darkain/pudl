@@ -1,10 +1,6 @@
 <?php
 
 
-require_once('pudlResult.php');
-require_once('pudlHelpers.php');
-
-
 class pudlStringResult extends pudlResult {
 	use pudlHelper;
 

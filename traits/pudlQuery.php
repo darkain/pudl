@@ -1,6 +1,8 @@
 <?php
 
+
 trait pudlQuery {
+
 
 	public function escape($value) {
 		switch (true) {
@@ -39,6 +41,10 @@ trait pudlQuery {
 
 
 	protected function _value($value, $quote=true, $isnull=false) {
+		//TODO: CHANGE THIS TO SWITCH/CASE/BREAK
+		//TODO: AFTER CHANGE, ADD RECURSION LIMIT CHECKER
+		//TODO: pudlValue TRAIT
+
 		if (is_float($value)  &&  (is_nan($value)  ||  is_infinite($value)))
 			return $isnull ? ' IS NULL' : 'NULL';
 
