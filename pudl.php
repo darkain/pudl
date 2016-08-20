@@ -211,7 +211,7 @@ abstract class pudl {
 			case 'Odbc':	require_once('sql/pudlOdbc.php');		break;
 
 			default:
-				throw pudlException('Unknown Database Server Type: ' . $data['type']);
+				throw new pudlException('Unknown Database Server Type: ' . $data['type']);
 				return false;
 		}
 

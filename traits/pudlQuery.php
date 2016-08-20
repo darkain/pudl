@@ -41,9 +41,6 @@ trait pudlQuery {
 
 
 	protected function _value($value, $quote=true, $isnull=false) {
-		//TODO: CHANGE THIS TO SWITCH/CASE/BREAK
-		//TODO: AFTER CHANGE, ADD RECURSION LIMIT CHECKER
-		//TODO: pudlValue TRAIT
 
 		if (is_float($value)  &&  (is_nan($value)  ||  is_infinite($value)))
 			return $isnull ? ' IS NULL' : 'NULL';
@@ -196,14 +193,14 @@ trait pudlQuery {
 		$list		= explode('.', $dynamic[0]);
 
 		//VERIFY TOTAL NUMBER OF PARTS
-		if (count($dynamic) > 2) throw pudlException(
+		if (count($dynamic) > 2) throw new pudlException(
 			'Wrong column format for dynamic column'
 		);
 
 		//CLEAN UP TABLE AND COLUMN NAMES
 		foreach ($list as &$item) {
 			$item = trim($item);
-			if (!strlen($item)) throw pudlException('Wrong column name');
+			if (!strlen($item)) throw new pudlException('Wrong column name');
 		} unset($item);
 
 		//PROCESS TABLE NAME
@@ -226,7 +223,7 @@ trait pudlQuery {
 
 		//PARSE OUT DATA TYPE
 		$parts		= explode(':', $dynamic[1]);
-		if (count($parts) !== 2) throw pudlException(
+		if (count($parts) !== 2) throw new pudlException(
 			'Wrong column format for dynamic column'
 		);
 
@@ -234,7 +231,7 @@ trait pudlQuery {
 		$items		= explode('.', $parts[0]);
 		foreach ($items as &$item) {
 			$item = trim($item);
-			if (!strlen($item)) throw pudlException(
+			if (!strlen($item)) throw new pudlException(
 				'Wrong column name for dynamic column'
 			);
 		} unset($item);
@@ -261,7 +258,7 @@ trait pudlQuery {
 		if ($table === false) return;
 		if (is_string($table)) return ' FROM ' . $this->_table($table);
 
-		if (!pudl_array($table)) throw pudlException(
+		if (!pudl_array($table)) throw new pudlException(
 			'Invalid data type for table: ' . gettype($value)
 		);
 
@@ -352,7 +349,7 @@ trait pudlQuery {
 		$query = '';
 
 		if ($depth > 31) {
-			throw pudlException('Recursion limit reached');
+			throw new pudlException('Recursion limit reached');
 			return '';
 		}
 
@@ -421,7 +418,7 @@ trait pudlQuery {
 				$query .= $this->_clauseRecurse($value, $joiner);
 
 			} else {
-				throw pudlException(
+				throw new pudlException(
 					'Invalid data type for clause: ' . gettype($value)
 				);
 			}
@@ -572,7 +569,7 @@ trait pudlQuery {
 			return $query;
 		}
 
-		throw pudlException(
+		throw new pudlException(
 			'Invalid data type for join: ' .
 			(gettype($join)==='object'?get_class($join):gettype($join))
 		);
@@ -631,7 +628,7 @@ trait pudlQuery {
 			return 'COLUMN_CREATE(' . $this->_dynamic($value) . ')';
 		}
 
-		throw pudlException(
+		throw new pudlException(
 			'Invalid data type for column: ' .
 			(gettype($value)==='object'?get_class($value):gettype($value))
 		);
@@ -649,7 +646,7 @@ trait pudlQuery {
 			return ltrim($property, '_') . '(' . $query . ')';
 		}
 
-		throw pudlException('Invalid pudlFunction');
+		throw new pudlException('Invalid pudlFunction');
 	}
 
 
@@ -657,7 +654,7 @@ trait pudlQuery {
 	protected function _dynamic($data) {
 		static $depth = 0;
 		if ($depth > 31) {
-			throw pudlException('Recursion limit reached');
+			throw new pudlException('Recursion limit reached');
 			return '';
 		}
 		$depth++;
