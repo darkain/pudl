@@ -48,12 +48,12 @@ abstract class pudl {
 
 	public function __construct($data, $autoconnect=true) {
 		//SANITIZE DATA
-		$data['username']	= empty($data['username'])	? ''			: $data['username'];
-		$data['password']	= empty($data['password'])	? ''			: $data['password'];
-		$data['database']	= empty($data['database'])	? ''			: $data['database'];
-		$data['server']		= empty($data['server'])	? 'localhost'	: $data['server'];
-		$data['prefix']		= empty($data['prefix'])	? false			: $data['prefix'];
-		$data['salt']		= empty($data['salt'])		? ''			: $data['salt'];
+		if (empty($data['username']))	$data['username']	= '';
+		if (empty($data['password']))	$data['password']	= '';
+		if (empty($data['database']))	$data['database']	= '';
+		if (empty($data['server']))		$data['server']		= 'localhost';
+		if (empty($data['prefix']))		$data['prefix']		= false;
+		if (empty($data['salt']))		$data['salt']		= '';
 
 		//SET INITIAL DATA
 		$this->microtime	= microtime(true);
