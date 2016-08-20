@@ -1,7 +1,7 @@
 <?php
 
 
-class pudlStringResult extends pudlResult {
+class pudlStringResult extends pudlResult implements pudlValue {
 	use pudlHelper;
 
 
@@ -13,6 +13,9 @@ class pudlStringResult extends pudlResult {
 
 	public function __toString()		{ return $this->query; }
 
+	public function pudlValue($db, $quote=true) {
+		return $this->query();
+	}
 
 	public function free()				{ return false; }
 	public function count()				{ return 1; }

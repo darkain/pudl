@@ -40,77 +40,66 @@ trait pudlQuery {
 
 
 
-	protected function _value($value, $quote=true, $isnull=false) {
+	public function _value($value, $quote=true, $isnull=false) {
+		static $depth = 0;
+		$query = false;
 
-		if (is_float($value)  &&  (is_nan($value)  ||  is_infinite($value)))
-			return $isnull ? ' IS NULL' : 'NULL';
+		if ($depth++ > 31) {
+			throw new pudlException('Recursion limit reached');
+			return $query;
+		}
 
-		if (is_int($value)  ||  is_float($value))
-			return $value;
+		switch (true) {
 
-		if (is_string($value))
-			return $quote ? "'".$this->escape($value)."'" : $value;
+			//THIS IS FOR AND/OR RECUSION, HANDLED ELSEWHERE
+			//IN THIS CASE, DO NOTHING!
+			case is_array($value): break;
 
-		if (is_null($value))
-			return $isnull ? ' IS NULL' : 'NULL';
 
-		if (is_bool($value))
-			return $value ? 'TRUE' : 'FALSE';
+			case is_int($value):
+			case is_float($value):
+				if (is_nan($value)  ||  is_infinite($value)) {
+					$query = $isnull ? ' IS NULL' : 'NULL';
+				} else {
+					$query = $value;
+				}
+			break;
 
-		if ($value instanceof pudlFunction)
-			return $this->_function($value);
 
-		if ($value instanceof pudlStringResult)
-			return (string)$value;
+			case is_string($value):
+				$query = $quote ? "'".$this->escape($value)."'" : $value;
+			break;
 
-		if ($value instanceof pudlLike  &&  !is_object($value->value))
-			return "'" . $value->left . $this->likeEscape($value->value) . $value->right . "'";
 
-		if ($value instanceof pudlLike)
-			return "CONCAT('" . $value->left . "'," . $this->_value($value->value) . ",'" . $value->right . "')";
+			case is_bool($value):
+				$query = $value ? 'TRUE' : 'FALSE';
+			break;
 
-		if ($value instanceof pudlRegexp)
-			return $this->_regexp($value->value);
 
-		if ($value instanceof pudlSet)
-			return '(' . $this->_inSet($value->value) . ')';
+			case is_null($value):
+				$query = $isnull ? ' IS NULL' : 'NULL';
+			break;
 
-		if ($value instanceof pudlAppendSet)
-			return false;
 
-		if ($value instanceof pudlRemoveSet)
-			return false;
+			case $value instanceof pudlValue:
+				$query = $value->pudlValue($this, $quote);
+			break;
 
-		if ($value instanceof pudlBetween)
-			return $this->_value($value->value[0], $quote) .
-				' AND ' . $this->_value($value->value[1], $quote);
 
-		if ($value instanceof pudlAs)
-			return $this->_value($value->column) .
-				' AS ' . $this->identifier($value->alias) .
-				($value->length === false ? '' : ('('.$value->length.')'));
+			case is_callable([$value, '__toString']):
+				$query = $quote
+					? "'" . $this->escape((string)$value) . "'"
+					: (string)$value;
+			break;
 
-		if ($value instanceof pudlColumn)
-			return $this->identifiers($value->column);
 
-		if ($value instanceof pudlFloat)
-			return 'ABS(' . $this->identifier($value->column)
-				. '-' . $this->_value($value->value, $quote)
-				. ')<' . $value->precision;
+			default:
+				throw new pudlException('Unknown data type for value');
+		}
 
-		if ($value instanceof pudlEquals  &&  pudl_array($value->value))
-			return '(' . $this->_inSet($value->value) . ')';
 
-		if ($value instanceof pudlEquals)
-			return $this->_value($value->value, $quote);
-
-		if ($value instanceof pudlText)
-			return $this->_value($value->value);
-
-		if ($value instanceof pudlRaw)
-			return $value->value;
-
-		return false;
+		$depth--;
+		return $query;
 	}
 
 
@@ -477,7 +466,7 @@ trait pudlQuery {
 
 
 
-	protected function _inSet($value) {
+	public function _inSet($value) {
 		$query = '';
 		foreach ($value as $item) {
 			if (strlen($query)) $query .= ', ';
@@ -636,28 +625,12 @@ trait pudlQuery {
 
 
 
-	protected function _function($data) {
-		foreach ($data as $property => $value) {
-			$query	= '';
-			foreach ($value as $item) {
-				if (strlen($query)) $query .= ', ';
-				$query .= $this->_value($item);
-			}
-			return ltrim($property, '_') . '(' . $query . ')';
-		}
-
-		throw new pudlException('Invalid pudlFunction');
-	}
-
-
-
 	protected function _dynamic($data) {
 		static $depth = 0;
-		if ($depth > 31) {
+		if ($depth++ > 31) {
 			throw new pudlException('Recursion limit reached');
 			return '';
 		}
-		$depth++;
 
 		$query = '';
 		foreach ($data as $property => $value) {

@@ -23,5 +23,5 @@ interface pudlId {
 
 
 interface pudlValue {
-	public function pudlValue();
+	public function pudlValue($db, $quote=true);
 }

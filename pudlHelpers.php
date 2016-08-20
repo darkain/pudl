@@ -1,7 +1,7 @@
 <?php
 
 
-class pudlFunction {
+class pudlFunction implements pudlValue {
 	use pudlHelper;
 
 	public static function __callStatic($name, $arguments) {
@@ -31,6 +31,20 @@ class pudlFunction {
 	public static function increment($amount=1) {
 		return pudl::_increment($amount);
 	}
+
+
+	public function pudlValue($db, $quote=true) {
+		foreach ($this as $property => $value) {
+			$query	= '';
+			foreach ($value as $item) {
+				if (strlen($query)) $query .= ', ';
+				$query .= $db->_value($item);
+			}
+			return ltrim($property, '_') . '(' . $query . ')';
+		}
+
+		throw new pudlException('Invalid pudlFunction');
+	}
 }
 
 
@@ -45,7 +59,7 @@ class pudlVoid {
 
 
 
-class pudlEquals {
+class pudlEquals implements pudlValue {
 	use pudlHelper;
 
 	public function __construct($value=false, $compare=false, $equals='=') {
@@ -74,6 +88,13 @@ class pudlEquals {
 		return $this;
 	}
 
+	public function pudlValue($db, $quote=true) {
+		if (pudl_array($this->value)) {
+			return '(' . $db->_inSet($this->value) . ')';
+		}
+		return $db->_value($this->value, $quote);
+	}
+
 	public	$value;
 	public	$compare;
 	public	$equals;
@@ -93,6 +114,12 @@ class pudlFloat extends pudlEquals {
 		}
 	}
 
+	public function pudlValue($db, $quote=true) {
+		return 'ABS(' . $db->identifier($this->column)
+			. '-' . $db->_value($this->value, $quote)
+			. ')<' . $this->precision;
+	}
+
 	public	$precision;
 	public	$column;
 }
@@ -108,6 +135,10 @@ class pudlColumn extends pudlEquals {
 		$this->args		= func_num_args() > 1;
 	}
 
+	public function pudlValue($db, $quote=true) {
+		return $db->identifiers($this->column);
+	}
+
 	public	$column;
 	public	$args;
 }
@@ -121,6 +152,12 @@ class pudlAs extends pudlColumn {
 		parent::__construct($column);
 		$this->alias	= $alias;
 		$this->length	= $length;
+	}
+
+	public function pudlValue($db, $quote=true) {
+		return $db->_value($this->column) .
+			' AS ' . $db->identifier($this->alias) .
+			($this->length === false ? '' : ('('.$this->length.')'));
 	}
 
 	public	$alias;
@@ -143,6 +180,12 @@ class pudlBetween extends pudlEquals {
 	public function __toString() {
 		return (string) $this->value[0] . ', ' . $this->value[1];
 	}
+
+	public function pudlValue($db, $quote=true) {
+		return $db->_value($this->value[0], $quote)
+			. ' AND '
+			. $db->_value($this->value[1], $quote);
+	}
 }
 
 
@@ -154,6 +197,18 @@ class pudlLike extends pudlEquals {
 		parent::__construct($value, $compare, ' LIKE ');
 		$this->left		= ($side & PUDL_START)	? '%' : '';
 		$this->right	= ($side & PUDL_END)	? '%' : '';
+	}
+
+	public function pudlValue($db, $quote=true) {
+		if (!is_object($this->value)) {
+			return "'" . $this->left
+				. $db->likeEscape($this->value)
+				. $this->right . "'";
+		}
+
+		return "CONCAT('" . $this->left . "',"
+			. $db->_value($this->value)
+			. ",'" . $this->right . "')";
 	}
 
 	public $left;
@@ -171,6 +226,17 @@ class pudlRegexp extends pudlEquals {
 			false, ' REGEXP '
 		);
 	}
+
+	public function pudlValue($db, $quote=true) {
+		$query = '';
+		if (!pudl_array($this->value)) $this->value = [$this->value];
+		foreach ($this->value as $item) {
+			$query .= is_string($item) ?
+				$db->escape(preg_quote($item)) :
+				$db->_value($item, false);
+		}
+		return "'" . $query . "'";
+	}
 }
 
 
@@ -181,6 +247,10 @@ class pudlSet extends pudlEquals {
 	public function __construct($value) {
 		if (empty($value)) $value = [''];
 		parent::__construct($value, false, ' IN ');
+	}
+
+	public function pudlValue($db, $quote=true) {
+		return '(' . $db->_inSet($this->value) . ')';
 	}
 }
 
@@ -198,11 +268,15 @@ class pudlRemoveSet extends pudlEquals {
 
 
 
-class pudlRaw {
+class pudlRaw implements pudlValue {
 	use pudlHelper;
 
 	public function __construct($value) {
 		$this->value = $value;
+	}
+
+	public function pudlValue($db, $quote=true) {
+		return $this->value;
 	}
 
 	public $value;
@@ -212,6 +286,10 @@ class pudlRaw {
 
 class pudlText extends pudlRaw {
 	use pudlHelper;
+
+	public function pudlValue($db, $quote=true) {
+		return $db->_value($this->value);
+	}
 }
 
 
