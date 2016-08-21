@@ -137,7 +137,7 @@ abstract class pudl {
 				} else {
 					$data = $this->redis->get("pudl:$hash");
 
-					if ($data === false) {
+					if ($data === false  ||  is_null($data)) {
 						$result = $this->missed($query);
 						if (!$this->error()  &&  !$result->error()) {
 							$data = $result->complete();

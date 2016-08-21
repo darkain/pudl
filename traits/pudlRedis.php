@@ -37,9 +37,8 @@ trait pudlRedis {
 			$this->redis = $server;
 
 		} else if (class_exists('Redis')) {
-			$level = error_reporting(0); //HHVM HACK BECAUSE THEY HAVE YET TO FIX THEIR CODE
 			try {
-				$this->redis = new Redis;
+				$this->redis = new pudlRedisHack;
 				if ($this->redis->connect($server, -1, 0.25)) {
 					$this->redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
 				} else {
@@ -48,7 +47,6 @@ trait pudlRedis {
 			} catch (RedisException $e) {
 				$this->redis = false;
 			}
-			error_reporting($level);
 		}
 
 		if (!is_object($this->redis)) $this->redis = new pudlVoid;
@@ -91,4 +89,25 @@ trait pudlRedis {
 		'missed'				=> [],
 	];
 
+}
+
+
+
+
+//HHVM HACK BECAUSE THEY HAVE YET TO FIX THEIR CODE
+if (class_exists('Redis')) {
+	class pudlRedisHack extends Redis {
+		protected function doConnect($host, $port, $timeout, $persistent_id,
+									 $retry_interval, $persistent=false) {
+
+			$level	= error_reporting(0);
+
+			$return	= parent::doConnect($host, $port, $timeout, $persistent_id,
+										$retry_interval, $persistent);
+
+			error_reporting($level);
+
+			return	$return;
+		}
+	}
 }
