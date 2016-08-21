@@ -48,7 +48,7 @@ trait pudlUpdate {
 
 
 
-	public function updateId($table, $data, $column, $id) {
+	public function updateId($table, $data, $column, $id=false) {
 		return $this->update($table, $data, $this->_clauseId($column,$id));
 	}
 
@@ -60,7 +60,7 @@ trait pudlUpdate {
 
 
 
-	public function updateFieldId($table, $field, $value, $column, $id) {
+	public function updateFieldId($table, $field, $value, $column, $id=false) {
 		return $this->update($table, [$field=>$value], $this->_clauseId($column,$id));
 	}
 
@@ -88,7 +88,7 @@ trait pudlUpdate {
 
 
 
-	public function incrementId($table, $col, $column, $id, $amount=1) {
+	public function incrementId($table, $col, $column, $id=false, $amount=1) {
 		return $this->increment($table, $col, $this->_clauseId($column,$id), $amount);
 	}
 

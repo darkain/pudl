@@ -294,7 +294,7 @@ abstract class pudl {
 
 
 
-	public function countId($table, $column, $id) {
+	public function countId($table, $column, $id=false) {
 		return $this->count($table, $this->_clauseId($column,$id));
 	}
 

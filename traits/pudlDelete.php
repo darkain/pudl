@@ -14,7 +14,7 @@ trait pudlDelete {
 	}
 
 
-	public function deleteId($table, $column, $id, $limit=false, $offset=false) {
+	public function deleteId($table, $column, $id=false, $limit=false, $offset=false) {
 		return $this->delete($table, $this->_clauseId($column,$id), $limit, $offset);
 	}
 

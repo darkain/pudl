@@ -286,25 +286,25 @@ trait pudlSelect {
 
 
 
-	public function rowId($table, $column, $id, $lock=false) {
+	public function rowId($table, $column, $id=false, $lock=false) {
 		return $this->row($table, $this->_clauseId($column,$id), false, $lock);
 	}
 
 
 
-	public function rowLockId($table, $column, $id) {
+	public function rowLockId($table, $column, $id=false) {
 		return $this->row($table, $this->_clauseId($column,$id), false, true);
 	}
 
 
 
-	public function rowsId($table, $column, $id, $lock=false) {
+	public function rowsId($table, $column, $id=false, $lock=false) {
 		return $this->selectRows('*', $table, $this->_clauseId($column,$id), false, false, false, $lock);
 	}
 
 
 
-	public function rowsLockId($table, $column, $id) {
+	public function rowsLockId($table, $column, $id=false) {
 		return $this->selectRows('*', $table, $this->_clauseId($column,$id), false, false, false, true);
 	}
 
@@ -326,13 +326,13 @@ trait pudlSelect {
 
 
 
-	public function cellId($table, $col, $column, $id, $order=false, $lock=false) {
+	public function cellId($table, $col, $column, $id=false, $order=false, $lock=false) {
 		return $this->cell($table, $col, $this->_clauseId($column,$id), $order, $lock);
 	}
 
 
 
-	public function cellLockId($table, $col, $column, $id, $order=false) {
+	public function cellLockId($table, $col, $column, $id=false, $order=false) {
 		return $this->cell($table, $col, $this->_clauseId($column,$id), $order, true);
 	}
 }
