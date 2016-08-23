@@ -359,7 +359,7 @@ trait pudlQuery {
 					$query		.= $this->_clauseEquals($clause);
 					if (!($clause instanceof pudlBetween)) $clause = $clause->value;
 				}
-				return $query . $this->_value($clause);
+				return $query	. $this->_value($clause);
 			}
 		}
 
@@ -376,7 +376,7 @@ trait pudlQuery {
 				if (pudl_array($value)) continue;
 
 			} else if ($value instanceof pudlColumn  &&  $value->args) {
-				$key	 = '';
+				$key			= '';
 				if (is_string($value->column)) {
 					$query		.= $this->identifiers($value->column);
 				} else {
