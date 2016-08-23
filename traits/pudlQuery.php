@@ -708,7 +708,7 @@ trait pudlQuery {
 
 
 
-	public function extract($array, $keys) {
+	public static function extract($array, $keys) {
 		$return = [];
 		if (!is_array($keys)) {
 			$keys = func_get_args();
