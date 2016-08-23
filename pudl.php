@@ -447,6 +447,17 @@ abstract class pudl {
 
 
 
+	public static function find($column, $values) {
+		if (!is_array($values)) $values = explode(',', $values);
+		$return = [];
+		foreach ($values as $item) {
+			$return[] = self::find_in_set($item, self::column($column));
+		}
+		return $return;
+	}
+
+
+
 	public static function jsonEncode($data) {
 		return @json_encode($data, JSON_HEX_APOS|JSON_HEX_QUOT);
 	}

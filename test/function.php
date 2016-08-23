@@ -80,6 +80,18 @@ pudlTest("SELECT * FROM `table` WHERE (REPLACE(`column`, 'old', 'new') LIKE '%va
 
 
 
+$db->string()->row('table', [pudl::find('column', ['a', 'b', 'c'])]);
+pudlTest("SELECT * FROM `table` WHERE ((FIND_IN_SET('a', `column`) OR FIND_IN_SET('b', `column`) OR FIND_IN_SET('c', `column`))) LIMIT 1");
+
+
+
+
+$db->string()->row('table', [pudl::find('column', 'a,b,c')]);
+pudlTest("SELECT * FROM `table` WHERE ((FIND_IN_SET('a', `column`) OR FIND_IN_SET('b', `column`) OR FIND_IN_SET('c', `column`))) LIMIT 1");
+
+
+
+
 $db->string()->row('table', ['column' => pudl::regexp('expression')]);
 pudlTest("SELECT * FROM `table` WHERE (`column` REGEXP 'expression') LIMIT 1");
 
