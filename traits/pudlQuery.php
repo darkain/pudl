@@ -442,14 +442,15 @@ trait pudlQuery {
 
 
 	protected function _clauseId($column, $id=false) {
-		if ($id === false  &&  is_object($column)) {
+		if ($id === false) {
 			if (!method_exists($column, 'pudl_getId')) {
 				throw new pudlException('Invalid ID');
 			}
 			$value = $column->pudl_getId();
-			if ($value !== false) return $value;
-			throw new pudlException('Unsupported object for ID');
-			return false;
+			if ($value === false) {
+				throw new pudlException('Unsupported object for ID');
+			}
+			return $value;
 		}
 
 		if (is_a($id, 'pudlId')) {
