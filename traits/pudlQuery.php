@@ -94,7 +94,7 @@ trait pudlQuery {
 
 
 			default:
-				throw new pudlException('Unknown data type for value');
+				return $this->_invalidType($value);
 		}
 
 
@@ -244,12 +244,9 @@ trait pudlQuery {
 
 
 	protected function _tables($table) {
-		if ($table === false) return;
-		if (is_string($table)) return ' FROM ' . $this->_table($table);
-
-		if (!pudl_array($table)) throw new pudlException(
-			'Invalid data type for table: ' . gettype($value)
-		);
+		if ($table === false)		return;
+		if (is_string($table))		return ' FROM ' . $this->_table($table);
+		if (!pudl_array($table))	return $this->_invalidType($value, 'table');
 
 		$query = '';
 		foreach ($table as $key => $value) {
@@ -407,9 +404,7 @@ trait pudlQuery {
 				$query .= $this->_clauseRecurse($value, $joiner);
 
 			} else {
-				throw new pudlException(
-					'Invalid data type for clause: ' . gettype($value)
-				);
+				return $this->_invalidType($value, 'clause');
 			}
 		}
 
@@ -443,13 +438,9 @@ trait pudlQuery {
 
 	protected function _clauseId($column, $id=false) {
 		if ($id === false) {
-			if (!method_exists($column, 'pudl_getId')) {
-				throw new pudlException('Invalid ID');
-			}
+			$this->_requireMethod($column, 'pudl_getId');
 			$value = $column->pudl_getId();
-			if ($value === false) {
-				throw new pudlException('Unsupported object for ID');
-			}
+			$this->_requireTrue($value, 'Object retuned invalid value from pudl_getId');
 			return $value;
 		}
 
@@ -467,6 +458,7 @@ trait pudlQuery {
 					$id		= $id->pudl_getId($column);
 				} else {
 					$list	= explode('.', $column);
+					$this->_requireProperty($id, end($list));
 					$id		= $id->{end($list)};
 				}
 			}
@@ -569,10 +561,7 @@ trait pudlQuery {
 			return $query;
 		}
 
-		throw new pudlException(
-			'Invalid data type for join: ' .
-			(gettype($join)==='object'?get_class($join):gettype($join))
-		);
+		return $this->_invalidType($join, 'join');
 	}
 
 
@@ -628,10 +617,7 @@ trait pudlQuery {
 			return 'COLUMN_CREATE(' . $this->_dynamic($value) . ')';
 		}
 
-		throw new pudlException(
-			'Invalid data type for column: ' .
-			(gettype($value)==='object'?get_class($value):gettype($value))
-		);
+		return $this->_invalidType($value, 'column');
 	}
 
 
@@ -717,6 +703,67 @@ trait pudlQuery {
 		}
 		foreach ($keys as $item) $return[$item] = $array[$item];
 		return $return;
+	}
+
+
+
+	protected function _requireMethod($object, $method) {
+		if (!is_object($object)) $this->_invalidType($object, 'object');
+		if (method_exists($object, $method)) return;
+		throw new pudlException(
+			'Undefined method: ' . get_class($object) . '::' . $method
+		);
+	}
+
+
+
+	protected function _requireProperty($object, $property) {
+		if (!is_object($object)) $this->_invalidType($object, 'object');
+		if (property_exists($object, $property)) return;
+		throw new pudlException(
+			'Undefined property: ' . get_class($object) . '::' . $property
+		);
+	}
+
+
+
+	protected function _requireKey($array, $key) {
+		if (!is_array($array)) $this->_invalidType($array, 'array');
+		if (array_key_exists($key, $array)) return;
+		throw new pudlException('Undefined key: ' . $key);
+	}
+
+
+
+	protected function _requireTrue($value, $error) {
+		if ($value) return;
+		throw new pudlException($error);
+	}
+
+
+
+	protected function _invalidType($item, $thing=false) {
+		$error = false;
+
+		switch (true) {
+			case ($thing !== false)  &&  is_object($item):
+				$error = 'Invalid object type for ' . $thing . ': ' . get_class($item);
+			break;
+
+			case ($thing !== false):
+				$error = 'Invalid data type for ' . $thing . ': ' . gettype($item);
+			break;
+
+			case is_object($item):
+				$error = 'Invalid object type: ' . get_class($item);
+			break;
+
+			default:
+				$error = 'Invalid data type: ' . gettype($item);
+			break;
+		}
+
+		if ($error) throw new pudlException($error);
 	}
 
 
