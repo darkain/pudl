@@ -75,7 +75,7 @@ abstract class pudl {
 
 
 
-	function __destruct() {
+	public function __destruct() {
 		$this->_auth(NULL);
 	}
 
