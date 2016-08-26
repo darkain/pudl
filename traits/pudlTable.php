@@ -4,7 +4,7 @@
 trait pudlTable {
 
 
-	function rename($rename, $to=false) {
+	public function rename($rename, $to=false) {
 		$query = 'RENAME TABLE ';
 
 		if (!pudl_array($rename)) {
@@ -23,7 +23,7 @@ trait pudlTable {
 
 
 
-	function swapTables($table1, $table2) {
+	public function swapTables($table1, $table2) {
 		$temp = 'TABLE_SWAP_' . md5(microtime());
 
 		return $this->rename([
@@ -35,7 +35,7 @@ trait pudlTable {
 
 
 
-	function drop($table, $temp=true) {
+	public function drop($table, $temp=true) {
 		$query = 'DROP ' . ($temp?'TEMPORARY ':'') . 'TABLE IF EXISTS ';
 
 		if (!pudl_array($table)) return $this($query . $this->_table($table));

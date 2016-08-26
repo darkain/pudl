@@ -55,25 +55,25 @@ class pudlSession {
 
 
 
-	function disconnect() {
+	public function disconnect() {
 		session_write_close();
 	}
 
 
 
-	function open() {
+	public function open() {
 		return true;
 	}
 
 
 
-	function close() {
+	public function close() {
 		return true;
 	}
 
 
 
-	function read($id) {
+	public function read($id) {
 		$data = $this->db->cache(60*60, $this->cache($id))->selectRow(
 			['user', 'data'],
 			$this->table,
@@ -93,7 +93,7 @@ class pudlSession {
 
 
 
-	function write($id, $data) {
+	public function write($id, $data) {
 		if (is_string($data)  &&  $this->hash === hash('sha512', $this->db->salt().$data)) return true;
 
 		if (empty($data)) return $this->destroy($id);
@@ -121,7 +121,7 @@ class pudlSession {
 
 
 
-	function destroy($id) {
+	public function destroy($id) {
 		//Delete the object
 		if ($this->hash !== false) {
 			$this->db->deleteId($this->table, 'id', $id);
@@ -133,7 +133,7 @@ class pudlSession {
 
 
 
-	function clean($max) {
+	public function clean($max) {
 		$expire = $this->db->time() - (int) $max;
 		$this->db->delete($this->table, ['access'=>pudl::lt($expire)]);
 		return true;

@@ -12,7 +12,7 @@ class pudlShell extends pudl {
 
 
 
-	function __destruct() {
+	public function __destruct() {
 		$this->disconnect();
 		parent::__destruct();
 	}
