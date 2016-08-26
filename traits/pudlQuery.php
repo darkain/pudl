@@ -599,43 +599,10 @@ trait pudlQuery {
 					$this->setEscape($this->_value($value->value, false)) . ',\', \',\')';
 
 			} else {
-				$query .= $this->_columnData($value);
+				$query .= $this->_dynamic_create($value);
 			}
 		}
 
-		return $query;
-	}
-
-
-
-	protected function _columnData($value) {
-		$new = $this->_value($value);
-		if ($new !== false) return $new;
-
-		if (is_array($value)  ||  is_object($value)) {
-			if (empty($value)) return 'NULL';
-			return 'COLUMN_CREATE(' . $this->_dynamic($value) . ')';
-		}
-
-		return $this->_invalidType($value, 'column');
-	}
-
-
-
-	protected function _dynamic($data) {
-		static $depth = 0;
-		if ($depth++ > 31) {
-			throw new pudlException('Recursion limit reached');
-			return '';
-		}
-
-		$query = '';
-		foreach ($data as $property => $value) {
-			if (strlen($query)) $query .= ', ';
-			$query .= $this->_value($property) . ',' . $this->_columnData($value);
-		}
-
-		$depth--;
 		return $query;
 	}
 

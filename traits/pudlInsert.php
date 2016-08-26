@@ -24,7 +24,7 @@ trait pudlInsert {
 			} else $first = false;
 
 			$cols .= $this->identifier($column);
-			$vals .= $this->_columnData($value);
+			$vals .= $this->_dynamic_create($value);
 		}
 
 		if ($prefix) $cols .= ')'; else $cols = '';
@@ -111,7 +111,7 @@ trait pudlInsert {
 			foreach ($set as $item) {
 				if (!$firstitem) $query .= ',';
 				$firstitem = false;
-				$query .= $this->_columnData($item);
+				$query .= $this->_dynamic_create($item);
 			}
 
 			$query .= ')';
