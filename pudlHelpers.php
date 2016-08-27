@@ -303,7 +303,11 @@ class pudlVariable extends pudlRaw {
 
 
 class pudlGlobal extends pudlRaw {
-	public function __construct($name) {
-		parent::__construct('@@'.$name);
+	public function __construct($name, $session=false) {
+		if ($session) {
+			parent::__construct('@@session.'.$name);
+		} else {
+			parent::__construct('@@'.$name);
+		}
 	}
 }
