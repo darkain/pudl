@@ -49,4 +49,10 @@ trait pudlTable {
 		return $this($query);
 	}
 
+
+
+	public function truncate($table) {
+		return $this('TRUNCATE TABLE ' . $this->_table($table));
+	}
+
 }
