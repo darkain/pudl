@@ -2,8 +2,7 @@
 
 //TIMESTAMP for December 13th, 2015 @ 9:46 AM (UTC)
 $db->string()->row('table', ['column'=>pudlFunction::timestamp(1450000000)]);
-pudlTest("SELECT * FROM `table` WHERE (`column`=CONVERT_TZ(FROM_UNIXTIME(1450000000), @@session.time_zone, 'UTC')) LIMIT 1");
-
+pudlTest("SELECT * FROM `table` WHERE (`column`=CONVERT_TZ(FROM_UNIXTIME(1450000000), @@SESSION.time_zone, 'UTC')) LIMIT 1");
 
 
 
