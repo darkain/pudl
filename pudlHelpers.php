@@ -19,7 +19,7 @@ class pudlFunction implements pudlValue {
 		global $db;
 		return pudl::convert_tz(
 			self::from_unixtime($time !== false ? $time : $db->time()),
-			new pudlGlobal('session.time_zone'),
+			new pudlGlobal('time_zone'),
 			'UTC'
 		);
 	}
@@ -303,7 +303,13 @@ class pudlVariable extends pudlRaw {
 
 
 class pudlGlobal extends pudlRaw {
-	public function __construct($name) {
-		parent::__construct('@@'.$name);
+	public function __construct($name, $global=false) {
+		if (is_string($global)) {
+			parent::__construct('@@'.$global.'.'.$name);
+		} else if ($global) {
+			parent::__construct('@@GLOBAL.'.$name);
+		} else {
+			parent::__construct('@@SESSION.'.$name);
+		}
 	}
 }

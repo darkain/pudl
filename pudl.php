@@ -429,6 +429,16 @@ abstract class pudl {
 
 
 
+	public function set($variable, $value, $global=false) {
+		$query  = 'SET ';
+		$query .= $this->_value(new pudlGlobal($variable, $global));
+		$query .= '=';
+		$query .= $this->_value($value);
+		return $this($query);
+	}
+
+
+
 	public static function column($column, $value=false) {
 		if (func_num_args() === 2) return new pudlColumn($column, $value);
 		return new pudlColumn($column);

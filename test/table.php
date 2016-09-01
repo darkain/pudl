@@ -112,3 +112,17 @@ pudlTest('DROP TEMPORARY TABLE IF EXISTS `table1`, `table2`, `table3`');
 //DROP TABLE
 $db->string()->drop(['table1', 'table2', 'table3'], false);
 pudlTest('DROP TABLE IF EXISTS `table1`, `table2`, `table3`');
+
+
+
+
+//TRUNCATE TABLE (ERASE ALL ROWS BY DELETING/RECREATING TABLE)
+$db->string()->truncate('table');
+pudlTest('TRUNCATE TABLE `table`');
+
+
+
+
+//TRUNCATE TABLE (ERASE ALL ROWS BY DELETING/RECREATING TABLE)
+$db->string()->truncate('database.table');
+pudlTest('TRUNCATE TABLE `database`.`table`');
