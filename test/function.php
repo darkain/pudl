@@ -117,7 +117,7 @@ $db->string()->row('table', [
 		'[[:>:]]'
 	)
 ]);
-if ($db instanceof pudlMySqli) {
+if ($db instanceof pudlMySqli  ||  $db instanceof pudlNull) {
 	pudlTest("SELECT * FROM `table` WHERE (`column` REGEXP '\\\\[\\\\[\\\\:\\\\<\\\\:\\\\]\\\\]value\\\\[\\\\[\\\\:\\\\>\\\\:\\\\]\\\\]') LIMIT 1");
 } else {
 	pudlTest("SELECT * FROM `table` WHERE (`column` REGEXP '\\[\\[\\:\\<\\:\\]\\]value\\[\\[\\:\\>\\:\\]\\]') LIMIT 1");
@@ -151,7 +151,7 @@ pudlTest("SELECT * FROM `table` WHERE (`column` REGEXP '[[:<:]]value[[:>:]]') LI
 
 
 $db->string()->row('table', pudl::reglike('column', '12345', '\\d'));
-if ($db instanceof pudlMySqli) {
+if ($db instanceof pudlMySqli  ||  $db instanceof pudlNull) {
 	pudlTest("SELECT * FROM `table` WHERE (REGEXP_REPLACE(`column`, '\\\\d', '') LIKE '%12345%') LIMIT 1");
 } else {
 	pudlTest("SELECT * FROM `table` WHERE (REGEXP_REPLACE(`column`, '\\d', '') LIKE '%12345%') LIMIT 1");
@@ -161,7 +161,7 @@ if ($db instanceof pudlMySqli) {
 
 
 $db->string()->row('table', [pudl::reglike('column', '12345', '\\d')]);
-if ($db instanceof pudlMySqli) {
+if ($db instanceof pudlMySqli  ||  $db instanceof pudlNull) {
 	pudlTest("SELECT * FROM `table` WHERE (REGEXP_REPLACE(`column`, '\\\\d', '') LIKE '%12345%') LIMIT 1");
 } else {
 	pudlTest("SELECT * FROM `table` WHERE (REGEXP_REPLACE(`column`, '\\d', '') LIKE '%12345%') LIMIT 1");

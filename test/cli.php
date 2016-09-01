@@ -15,13 +15,11 @@ require_once('../sqlite/pudlSqlite.php');
 require_once('../sql/pudlOdbc.php');
 require_once('../sql/pudlShell.php');
 require_once('../sql/pudlWeb.php');
+require_once('../null/pudlNull.php');
 
 
 
-$db = new pudlSqlite([
-	'database'		=> 'test.db',
-	'identifier'	=> '`',
-]);
+$db = new pudlNull(['identifier' => '`']);
 
 require('all.php');
 
