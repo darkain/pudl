@@ -47,6 +47,12 @@ abstract class pudl {
 
 
 	public function __construct($data, $autoconnect=true) {
+		if (!empty($data[0])  &&  $data[0] instanceof pudl) {
+			$pudl = $data[0];
+			unset($data[0]);
+			$data += $pudl->auth();
+		}
+
 		//SANITIZE DATA
 		if (empty($data['username']))	$data['username']	= '';
 		if (empty($data['password']))	$data['password']	= '';
