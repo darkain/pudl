@@ -36,27 +36,47 @@ pudlTest("SELECT * FROM `table` WHERE (`column` NOT IN (1, 2, 3))");
 
 
 
-$set = $db->select([pudl::hex('VALUE')], false);
+if (($db instanceof pudlNull)) {
+	$set = new pudlShellResult(json_encode(
+		['header'=>['column'], 'data'=>[[strtoupper(bin2hex('VALUE'))]]]
+	), $db);
+} else {
+	$set = $db->select([pudl::hex('VALUE')], false);
+}
 $db->string()->rows('table', ['column' => pudl::inSet($set)]);
 pudlTest("SELECT * FROM `table` WHERE (`column` IN ('56414C5545'))");
 
 
 
 
-$set = $db->select([pudl::hex('VALUE')], false);
+if (($db instanceof pudlNull)) {
+	$set = new pudlShellResult(json_encode(
+		['header'=>['column'], 'data'=>[[strtoupper(bin2hex('VALUE'))]]]
+	), $db);
+} else {
+	$set = $db->select([pudl::hex('VALUE')], false);
+}
 $db->string()->rows('table', ['column' => pudl::notInSet($set)]);
 pudlTest("SELECT * FROM `table` WHERE (`column` NOT IN ('56414C5545'))");
 
 
 
 
-$set = $db->selectRows([pudl::hex('VALUE')], false);
+if (($db instanceof pudlNull)) {
+	$set = [['column' => strtoupper(bin2hex('VALUE'))]];
+} else {
+	$set = $db->selectRows([pudl::hex('VALUE')], false);
+}
 $db->string()->rows('table', ['column' => pudl::inSet($set)]);
 pudlTest("SELECT * FROM `table` WHERE (`column` IN ('56414C5545'))");
 
 
 
 
-$set = $db->selectRows([pudl::hex('VALUE')], false);
+if (($db instanceof pudlNull)) {
+	$set = [['column' => strtoupper(bin2hex('VALUE'))]];
+} else {
+	$set = $db->selectRows([pudl::hex('VALUE')], false);
+}
 $db->string()->rows('table', ['column' => pudl::notInSet($set)]);
 pudlTest("SELECT * FROM `table` WHERE (`column` NOT IN ('56414C5545'))");
