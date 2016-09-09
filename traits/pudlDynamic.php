@@ -43,7 +43,8 @@ trait pudlDynamic {
 			$this->identifier($column)	. '=COLUMN_ADD(' .
 			$this->identifier($column)	. ', ' .
 			$this->_dynamic($data)		. ')',
-		$clause);
+			$clause
+		);
 	}
 
 
