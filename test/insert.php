@@ -1,8 +1,134 @@
 <?php
 
-//INSERT statement - using associative array
+//INSERT statement - using associative array - string
 $db->string()->insert('table', ['column'=>'value']);
 pudlTest("INSERT INTO `table` (`column`) VALUES ('value')");
+
+
+
+
+//INSERT statement - using associative array - null
+$db->string()->insert('table', ['column'=>NULL]);
+pudlTest("INSERT INTO `table` (`column`) VALUES (NULL)");
+
+
+
+
+//INSERT statement - using associative array - boolean
+$db->string()->insert('table', ['column'=>false]);
+pudlTest("INSERT INTO `table` (`column`) VALUES (FALSE)");
+
+
+
+
+//INSERT statement - using associative array - boolean
+$db->string()->insert('table', ['column'=>true]);
+pudlTest("INSERT INTO `table` (`column`) VALUES (TRUE)");
+
+
+
+
+//INSERT statement - using associative array - integer
+$db->string()->insert('table', ['column'=>2]);
+pudlTest("INSERT INTO `table` (`column`) VALUES (2)");
+
+
+
+
+//INSERT statement - using associative array - float
+$db->string()->insert('table', ['column'=>3.4]);
+pudlTest("INSERT INTO `table` (`column`) VALUES (3.4)");
+
+
+
+
+//INSERT statement - using associative array - float
+$db->string()->insert('table', ['column'=>-5.6]);
+pudlTest("INSERT INTO `table` (`column`) VALUES (-5.6)");
+
+
+
+
+//INSERT statement - using associative array - float (null)
+$db->string()->insert('table', ['column'=>NAN]);
+pudlTest("INSERT INTO `table` (`column`) VALUES (NULL)");
+
+
+
+
+//INSERT statement - using associative array - float (null)
+$db->string()->insert('table', ['column'=>INF]);
+pudlTest("INSERT INTO `table` (`column`) VALUES (NULL)");
+
+
+
+
+//INSERT statement - using associative array - float (null)
+$db->string()->insert('table', ['column'=>-INF]);
+pudlTest("INSERT INTO `table` (`column`) VALUES (NULL)");
+
+
+
+
+//INSERT statement - using associative array - float
+$db->string()->insert('table', ['column'=>1e56]);
+pudlTest("INSERT INTO `table` (`column`) VALUES (1.0E+56)");
+
+
+
+
+//INSERT statement - using associative array - float
+$db->string()->insert('table', ['column'=>-1e78]);
+pudlTest("INSERT INTO `table` (`column`) VALUES (-1.0E+78)");
+
+
+
+
+//INSERT statement - using associative array - integer
+$db->string()->insert('table', ['column'=>PHP_INT_MAX]);
+pudlTest("INSERT INTO `table` (`column`) VALUES (9223372036854775807)");
+
+
+
+
+//INSERT statement - using associative array - integer
+$db->string()->insert('table', ['column'=>PHP_INT_MIN]);
+pudlTest("INSERT INTO `table` (`column`) VALUES (-9223372036854775808)");
+
+
+
+
+//INSERT statement - using associative array - array (empty)
+$db->string()->insert('table', ['column'=>[]]);
+pudlTest("INSERT INTO `table` (`column`) VALUES (NULL)");
+
+
+
+
+//INSERT statement - using associative array - array
+$db->string()->insert('table', ['column'=>['item']]);
+pudlTest("INSERT INTO `table` (`column`) VALUES (COLUMN_CREATE(0,'item'))");
+
+
+
+
+//INSERT statement - using associative array - array
+$db->string()->insert('table', ['column'=>['dynamic'=>'item']]);
+pudlTest("INSERT INTO `table` (`column`) VALUES (COLUMN_CREATE('dynamic','item'))");
+
+
+
+
+//INSERT statement - using associative array - array
+$db->string()->insert('table', ['column'=>['item1','item2']]);
+pudlTest("INSERT INTO `table` (`column`) VALUES (COLUMN_CREATE(0,'item1', 1,'item2'))");
+
+
+
+
+//INSERT statement - using associative array - array
+$db->string()->insert('table', ['column'=>['dynamic1'=>'item1', 'dynamic2'=>'item2']]);
+pudlTest("INSERT INTO `table` (`column`) VALUES (COLUMN_CREATE('dynamic1','item1', 'dynamic2','item2'))");
 
 
 
