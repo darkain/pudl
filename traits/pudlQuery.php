@@ -118,6 +118,10 @@ trait pudlQuery {
 
 
 	protected function _column($column) {
+		if (is_object($column)  &&  method_exists($column, 'pudl_getId')) {
+			$column = key( $column->pudl_getId() );
+		}
+
 		if (!pudl_array($column)) {
 			switch ($column) {
 				case '':

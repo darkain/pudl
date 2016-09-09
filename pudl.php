@@ -281,7 +281,7 @@ abstract class pudl {
 
 
 
-	public function idExists($table, $col, $id) {
+	public function idExists($table, $col, $id=false) {
 		return $this->cellId($table, $col, $col, $id) !== false;
 	}
 
