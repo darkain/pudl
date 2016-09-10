@@ -471,6 +471,13 @@ pudlTest("SELECT * FROM `table` WHERE (`column` BETWEEN 5 AND 10)");
 
 
 
+//SELECT statement where column is NOT between two integer values
+$db->string()->select('*', 'table', ['column'=>pudl::notBetween(5,10)]);
+pudlTest("SELECT * FROM `table` WHERE (`column` NOT BETWEEN 5 AND 10)");
+
+
+
+
 //SELECT statement where column is between two integer values
 $db->string()->select('*', 'table', pudl::between(pudl::column('column'), 5,10));
 pudlTest("SELECT * FROM `table` WHERE (`column` BETWEEN 5 AND 10)");
