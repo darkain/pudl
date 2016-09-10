@@ -574,6 +574,10 @@ trait pudlQuery {
 
 
 	protected function _update($data) {
+		if (empty($data)) {
+			throw new pudlException('Update data cannot be empty');
+		}
+
 		if (!is_array($data)  &&  !is_object($data)) return $data;
 
 		$query = '';

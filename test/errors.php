@@ -121,3 +121,21 @@ try {
 }
 
 
+
+
+try {
+	$db->string()->update('table', '', 'column=1');
+	pudlTest('pudlException');
+} catch (pudlException $error) {
+	pudlError($error, 'Update data cannot be empty');
+}
+
+
+
+
+try {
+	$db->string()->update('table', [], 'column=1');
+	pudlTest('pudlException');
+} catch (pudlException $error) {
+	pudlError($error, 'Update data cannot be empty');
+}
