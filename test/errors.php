@@ -94,7 +94,7 @@ try {
 	$db->string()->rowId('table', new stdClass);
 	pudlTest('pudlException');
 } catch (pudlException $error) {
-	pudlError($error, 'Undefined method: stdClass::pudl_getId');
+	pudlError($error, 'Undefined method: stdClass::pudlId');
 }
 
 
@@ -102,12 +102,12 @@ try {
 
 try {
 	class test_pudlId_1 implements pudlId {
-		public function pudl_getId($column=true) { return false; }
+		public function pudlId($column=true) { return false; }
 	}
 	$db->string()->rowId('table', new test_pudlId_1);
 	pudlTest('pudlException');
 } catch (pudlException $error) {
-	pudlError($error, 'Object retuned invalid value from pudl_getId');
+	pudlError($error, 'Object retuned invalid value from pudlId');
 }
 
 

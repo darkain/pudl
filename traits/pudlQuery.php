@@ -118,8 +118,8 @@ trait pudlQuery {
 
 
 	protected function _column($column) {
-		if (is_object($column)  &&  method_exists($column, 'pudl_getId')) {
-			$column = key( $column->pudl_getId() );
+		if ($column instanceof pudlId) {
+			$column = key( $column->pudlId() );
 		}
 
 		if (!pudl_array($column)) {
@@ -307,8 +307,8 @@ trait pudlQuery {
 
 		if ($clause instanceof pudlStringResult) return (string) $clause;
 
-		if (is_object($clause)  &&  method_exists($clause, 'pudl_getId')) {
-			return ' ' . $type . ' (' . $this->_clauseRecurse($clause->pudl_getId()) .')';
+		if ($clause instanceof pudlId) {
+			return ' ' . $type . ' (' . $this->_clauseRecurse($clause->pudlId()) .')';
 		}
 
 		if (is_array($clause)  ||  is_object($clause)) {
@@ -449,29 +449,25 @@ trait pudlQuery {
 
 	protected function _clauseId($column, $id=false) {
 		if ($id === false) {
-			$this->_requireMethod($column, 'pudl_getId');
-			$value = $column->pudl_getId();
-			$this->_requireTrue($value, 'Object retuned invalid value from pudl_getId');
+			$this->_requireMethod($column, 'pudlId');
+			$value = $column->pudlId();
+			$this->_requireTrue($value, 'Object retuned invalid value from pudlId');
 			return $value;
 		}
 
-		if (is_a($id, 'pudlId')) {
-			$id				= $id->pudl_getId($column);
+		if ($id instanceof pudlId) {
+			$id			= $id->pudlId($column);
 
 		} else if (pudl_array($id)) {
-			$list			= explode('.', $column);
-			$id				= $id[end($list)];
+			$list		= explode('.', $column);
+			$id			= $id[end($list)];
 
 		} else if (is_object($id)) {
 			$traits = class_uses($id, false);
 			if (empty($traits['pudlHelper'])) {
-				if (method_exists($id, 'pudl_getId')) {
-					$id		= $id->pudl_getId($column);
-				} else {
-					$list	= explode('.', $column);
-					$this->_requireProperty($id, end($list));
-					$id		= $id->{end($list)};
-				}
+				$list	= explode('.', $column);
+				$this->_requireProperty($id, end($list));
+				$id		= $id->{end($list)};
 			}
 		}
 

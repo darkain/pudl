@@ -17,7 +17,7 @@ class pudlException extends Exception {}
 
 
 interface pudlId {
-	public function pudl_getId($column=true);
+	public function pudlId($column=true);
 }
 
 
