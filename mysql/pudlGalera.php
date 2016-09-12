@@ -9,6 +9,7 @@ class pudlGalera extends pudlMySqli {
 	use pudlMySqlHelper;
 
 
+
 	public function __construct($data, $autoconnect=true) {
 		if (!pudl_array($data['server'])) {
 			throw new pudlException(
@@ -84,8 +85,12 @@ class pudlGalera extends pudlMySqli {
 			if ($ok) $ok = @$this->mysqli->set_charset('utf8');
 
 			//ATTEMPT TO GET THE CLUSTER SYNC STATE OF THIS NODE
-			$status = $ok ? $this->globals('wsrep_local_state') : [];
-			if (empty($status['wsrep_local_state'])) $status['wsrep_local_state'] = 0;
+			$this->state = $ok ? $this->globals('wsrep_local_state') : [];
+
+			//SET THE LOCAL STATE TO INVALID IF WE COULD NOT PULL ONE
+			if (empty($this->state['wsrep_local_state'])) {
+				$this->state['wsrep_local_state'] = 0;
+			}
 
 			/* NOTE: HERE ARE THE NUMERICAL STATE VALUES
 			1 - Joining (requesting/receiving State Transfer) - node is joining the cluster
@@ -94,7 +99,7 @@ class pudlGalera extends pudlMySqli {
 			4 - Synced - node is synced with the cluster */
 
 			//ONLY CONNECT IF NODE IS IN A 'JOINED' OR 'SYNCED' STATE
-			if ( ((int)$status['wsrep_local_state']) > 2) {
+			if ( ((int)$this->state['wsrep_local_state']) > 2) {
 				$this->connected = $server;
 				return true;
 			}
@@ -104,14 +109,26 @@ class pudlGalera extends pudlMySqli {
 			$this->offlineServer($server);
 		}
 
+		//CANNOT CONNECT, BUT BAILING OUT OF SCRIPT IS DISABLED
+		if (!self::$die) return false;
+
 		//CANNOT CONNECT - ERROR OUT
 		$error  = "<br />\n";
 		$error .= 'Unable to connect to galera cluster "';
 		$error .= implode(', ', $this->pool);
-		$error .= '" with the username: "' . $auth['username'];
-		$error .= "\"<br />\nError " . $this->connectErrno() . ': ' . $this->connectError();
-		if (self::$die) die($error);
-		return false;
+		$error .= '" with the username: "' . $auth['username'] . "\"<br />\n";
+		if (!$this->connectErrno()  &&  isset($this->state['wsrep_local_state'])) {
+			if ($this->state['wsrep_local_state'] == 0) {
+				$error .= 'Invalid WSREP LOCAL STATE';
+			} else if ($this->state['wsrep_local_state'] == 1) {
+				$error .= 'This node is still joining the cluster and is currently unavailable';
+			} else if ($this->state['wsrep_local_state'] == 2) {
+				$error .= 'This node is currently acting as a donor for other nodes and is currently unavailable';
+			}
+		} else {
+			$error .= 'Error ' . $this->connectErrno() . ': ' . $this->connectError();
+		}
+		die($error);
 	}
 
 
@@ -224,6 +241,7 @@ class pudlGalera extends pudlMySqli {
 	}
 
 
+
 	public function onlineServer($server) {
 		$key	= ftok(__FILE__, 't');
 		$shm	= shm_attach($key);
@@ -282,11 +300,15 @@ class pudlGalera extends pudlMySqli {
 	}
 
 
+
 	public function server()	{ return $this->connected; }
+	public function state()		{ return $this->state; }
 	public function pool()		{ return $this->pool; }
+
 
 
 	private $pool		= [];
 	private $wait		= false;
 	private $connected	= false;
+	private $state		= [];
 }
