@@ -455,10 +455,7 @@ trait pudlQuery {
 			return $value;
 		}
 
-		if ($id instanceof pudlId) {
-			$id			= $id->pudlId($column);
-
-		} else if (pudl_array($id)) {
+		if (pudl_array($id)) {
 			$list		= explode('.', $column);
 			$id			= $id[end($list)];
 
