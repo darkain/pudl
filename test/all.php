@@ -55,6 +55,12 @@ function pudlError($exception, $expected) {
 }
 
 
+//PHP 5.x COMPATIBILITY
+if (!defined('PHP_INT_MIN')) {
+	define('PHP_INT_MIN', ~PHP_INT_MAX);
+}
+
+
 //BASIC QUERIES, NOT USING THE CUSTOM GENERATOR
 require 'basic.php';
 
