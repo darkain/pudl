@@ -8,11 +8,11 @@ function pudl_array($item) {
 
 
 
-interface pudlHelper {}
-
-
-
 class pudlException extends Exception {}
+
+
+
+interface pudlHelper {}
 
 
 
