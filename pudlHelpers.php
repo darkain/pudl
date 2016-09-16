@@ -1,9 +1,7 @@
 <?php
 
 
-class pudlFunction implements pudlValue {
-	use pudlHelper;
-
+class pudlFunction implements pudlValue, pudlHelper {
 	public static function __callStatic($name, $arguments) {
 		return forward_static_call_array(['pudl', '_'.$name], $arguments);
 	}
@@ -49,9 +47,7 @@ class pudlFunction implements pudlValue {
 
 
 
-class pudlVoid {
-	use pudlHelper;
-
+class pudlVoid implements pudlHelper {
 	public function __call($name, $arguments) {
 		return false;
 	}
@@ -59,9 +55,7 @@ class pudlVoid {
 
 
 
-class pudlEquals implements pudlValue {
-	use pudlHelper;
-
+class pudlEquals implements pudlValue, pudlHelper {
 	public function __construct($value=false, $compare=false, $equals='=') {
 		$this->value	= $compare === false ? $value : $compare;
 		$this->compare	= $compare === false ? $compare : $value;
@@ -103,8 +97,6 @@ class pudlEquals implements pudlValue {
 
 
 class pudlFloat extends pudlEquals {
-	use pudlHelper;
-
 	public function __construct($value, $precision=10) {
 		parent::__construct($value);
 		if ($precision < 1) {
@@ -127,8 +119,6 @@ class pudlFloat extends pudlEquals {
 
 
 class pudlColumn extends pudlEquals {
-	use pudlHelper;
-
 	public function __construct($column, $value=false) {
 		parent::__construct($value);
 		$this->column	= $column;
@@ -146,8 +136,6 @@ class pudlColumn extends pudlEquals {
 
 
 class pudlAs extends pudlColumn {
-	use pudlHelper;
-
 	public function __construct($column, $alias, $length=false) {
 		parent::__construct($column);
 		$this->alias	= $alias;
@@ -167,8 +155,6 @@ class pudlAs extends pudlColumn {
 
 
 class pudlBetween extends pudlEquals {
-	use pudlHelper;
-
 	public function __construct($v1, $v2, $v3=false) {
 		if ($v3 === false) {
 			parent::__construct([$v1,$v2], false, ' BETWEEN ');
@@ -191,8 +177,6 @@ class pudlBetween extends pudlEquals {
 
 
 class pudlLike extends pudlEquals {
-	use pudlHelper;
-
 	public function __construct($value, $compare, $side) {
 		parent::__construct($value, $compare, ' LIKE ');
 		$this->left		= ($side & PUDL_START)	? '%' : '';
@@ -218,8 +202,6 @@ class pudlLike extends pudlEquals {
 
 
 class pudlRegexp extends pudlEquals {
-	use pudlHelper;
-
 	public function __construct($value) {
 		parent::__construct(
 			func_num_args() === 1 ? $value : func_get_args(),
@@ -242,8 +224,6 @@ class pudlRegexp extends pudlEquals {
 
 
 class pudlSet extends pudlEquals {
-	use pudlHelper;
-
 	public function __construct($value) {
 		if (empty($value)) $value = [''];
 		parent::__construct($value, false, ' IN ');
@@ -256,21 +236,13 @@ class pudlSet extends pudlEquals {
 
 
 
-class pudlAppendSet extends pudlEquals {
-	use pudlHelper;
-}
+class pudlAppendSet extends pudlEquals {}
+class pudlRemoveSet extends pudlEquals {}
 
 
 
-class pudlRemoveSet extends pudlEquals {
-	use pudlHelper;
-}
 
-
-
-class pudlRaw implements pudlValue {
-	use pudlHelper;
-
+class pudlRaw implements pudlValue, pudlHelper {
 	public function __construct($value) {
 		$this->value = $value;
 	}
@@ -285,8 +257,6 @@ class pudlRaw implements pudlValue {
 
 
 class pudlText extends pudlRaw {
-	use pudlHelper;
-
 	public function pudlValue($db, $quote=true) {
 		return $db->_value($this->value);
 	}
@@ -311,5 +281,28 @@ class pudlGlobal extends pudlRaw {
 		} else {
 			parent::__construct('@@SESSION.'.$name);
 		}
+	}
+}
+
+
+
+class pudlAnd implements pudlHelper {
+	public function __construct($clause) {
+		$this->clause	= $clause;
+		$this->joiner	= ' AND ';
+	}
+
+	public $clause;
+	public $joiner;
+}
+
+
+
+class pudlOr extends pudlAnd {
+	//use pudlHelper;
+
+	public function __construct($clause) {
+		parent::__construct($clause);
+		$this->joiner	= ' OR ';
 	}
 }

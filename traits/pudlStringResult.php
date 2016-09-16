@@ -1,8 +1,7 @@
 <?php
 
 
-class pudlStringResult extends pudlResult implements pudlValue {
-	use pudlHelper;
+class pudlStringResult extends pudlResult implements pudlValue, pudlHelper {
 
 
 	public function __construct($db, $type) {

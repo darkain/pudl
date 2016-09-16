@@ -154,11 +154,8 @@ trait pudlQuery {
 
 
 	public function identifier($identifier) {
-		if (is_object($identifier)) {
-			$traits = class_uses($identifier, false);
-			if (!empty($traits['pudlHelper'])) {
+		if ($identifier instanceof pudlHelper) {
 				return $this->_value($identifier);
-			}
 		}
 
 		return $this->identifier . str_replace(
@@ -174,11 +171,8 @@ trait pudlQuery {
 		if ($identifiers === false) return '';
 
 		//PUDL HELPERS HAVE SPECIAL HANDLERS
-		if (is_object($identifiers)) {
-			$traits = class_uses($identifiers, false);
-			if (!empty($traits['pudlHelper'])) {
-				return $this->_value($identifiers);
-			}
+		if ($identifiers instanceof pudlHelper) {
+			return $this->_value($identifiers);
 		}
 
 		//PARSE OUT STRING
@@ -350,28 +344,30 @@ trait pudlQuery {
 			return '';
 		}
 
-		if (is_object($clause)) {
-			$traits = class_uses($clause, false);
-			if (!empty($traits['pudlHelper'])) {
-				if ($clause instanceof pudlAnd) {
-					return $this->_clauseRecurse($clause->clause, $clause->joiner);
-				}
-				if ($clause instanceof pudlColumn  &&  $clause->args) {
-					if (is_string($clause->column)) {
-						$query	.= $this->identifiers($clause->column);
-					} else {
-						$query	.= $this->_value($clause->column);
-					}
-					$clause		 = $clause->value;
-					$query		.= $this->_clauseEquals($clause);
-				}
-				if ($clause instanceof pudlEquals  &&  $clause->compare !== false) {
-					$query		.= $this->_value($clause->compare);
-					$query		.= $this->_clauseEquals($clause);
-					if (!($clause instanceof pudlBetween)) $clause = $clause->value;
-				}
-				return $query	. $this->_value($clause);
+		if ($clause instanceof pudlAnd) {
+			return $this->_clauseRecurse($clause->clause, $clause->joiner);
+		}
+
+		if ($clause instanceof pudlColumn  &&  $clause->args) {
+			if (is_string($clause->column)) {
+				$query		.=	$this->identifiers($clause->column);
+			} else {
+				$query		.=	$this->_value($clause->column);
 			}
+			$clause			 =	$clause->value;
+			$query			.=	$this->_clauseEquals($clause);
+			return $query	.	$this->_value($clause);
+		}
+
+		if ($clause instanceof pudlEquals  &&  $clause->compare !== false) {
+			$query			.=	$this->_value($clause->compare);
+			$query			.=	$this->_clauseEquals($clause);
+			if (!($clause instanceof pudlBetween)) $clause = $clause->value;
+			return $query	.	$this->_value($clause);
+		}
+
+		if ($clause instanceof pudlHelper) {
+			return $query	.	$this->_value($clause);
 		}
 
 		$depth++;
@@ -466,13 +462,10 @@ trait pudlQuery {
 			$list		= explode('.', $column);
 			$id			= $id[end($list)];
 
-		} else if (is_object($id)) {
-			$traits = class_uses($id, false);
-			if (empty($traits['pudlHelper'])) {
-				$list	= explode('.', $column);
-				$this->_requireProperty($id, end($list));
-				$id		= $id->{end($list)};
-			}
+		} else if (is_object($id)  &&  !($id instanceof pudlHelper)) {
+			$list	= explode('.', $column);
+			$this->_requireProperty($id, end($list));
+			$id		= $id->{end($list)};
 		}
 
 		return [$column => $id];

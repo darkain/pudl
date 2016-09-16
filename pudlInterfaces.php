@@ -8,7 +8,7 @@ function pudl_array($item) {
 
 
 
-trait pudlHelper {}
+interface pudlHelper {}
 
 
 
