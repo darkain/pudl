@@ -299,8 +299,6 @@ class pudlAnd implements pudlHelper {
 
 
 class pudlOr extends pudlAnd {
-	//use pudlHelper;
-
 	public function __construct($clause) {
 		parent::__construct($clause);
 		$this->joiner	= ' OR ';
