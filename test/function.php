@@ -204,3 +204,63 @@ if ($db instanceof pudlMySqli) {
 
 $db->string()->select(pudl::json('column'));
 pudlTest("SELECT COLUMN_JSON(`column`)");
+
+
+
+
+$db->string()->row('table', [
+	'z' => 0,
+	pudl::_and([
+		pudl::_and([
+			'a' => 1,
+			'b' => 2,
+		]),
+		pudl::_and([
+			'c=3',
+			'd=4',
+		]),
+	]),
+]);
+pudlTest("SELECT * FROM `table` WHERE (`z`=0 AND ((`a`=1 AND `b`=2) AND (c=3 AND d=4))) LIMIT 1");
+
+
+
+
+$db->string()->row('table', [
+	'z' => 0,
+	pudl::_or([
+		pudl::_or([
+			'a' => 1,
+			'b' => 2,
+		]),
+		pudl::_or([
+			'c=3',
+			'd=4',
+		]),
+	]),
+]);
+pudlTest("SELECT * FROM `table` WHERE (`z`=0 AND ((`a`=1 OR `b`=2) OR (c=3 OR d=4))) LIMIT 1");
+
+
+
+
+$db->string()->row('table', pudl::_or([
+	[
+		'a' => 1,
+		'b' => 2,
+	],
+	[
+		'c=3',
+		'd=4',
+	],
+]));
+pudlTest("SELECT * FROM `table` WHERE ((`a`=1 AND `b`=2) OR (c=3 AND d=4)) LIMIT 1");
+
+
+
+
+$db->string()->row('table', pudl::_or(pudl::_and([
+	'a' => 1,
+	'b' => 2,
+])));
+pudlTest("SELECT * FROM `table` WHERE (`a`=1 AND `b`=2) LIMIT 1");

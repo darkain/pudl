@@ -353,6 +353,9 @@ trait pudlQuery {
 		if (is_object($clause)) {
 			$traits = class_uses($clause, false);
 			if (!empty($traits['pudlHelper'])) {
+				if ($clause instanceof pudlAnd) {
+					return $this->_clauseRecurse($clause->clause, $clause->joiner);
+				}
 				if ($clause instanceof pudlColumn  &&  $clause->args) {
 					if (is_string($clause->column)) {
 						$query	.= $this->identifiers($clause->column);
@@ -393,6 +396,10 @@ trait pudlQuery {
 				$value			 = $value->value;
 				$query			.= $this->_clauseEquals($value);
 				if (pudl_array($value)) continue;
+
+			} else if ($value instanceof pudlAnd) {
+				$query .= '(' . $this->_clauseRecurse($value->clause, $value->joiner) . ')';
+				continue;
 
 			} else if ($value instanceof pudlEquals  &&  $value->compare !== false) {
 				$query			.= $this->_value($value->compare);

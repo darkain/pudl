@@ -71,4 +71,16 @@ trait pudlCompare {
 		return (new pudlSet(func_get_args()))->not();
 	}
 
+
+
+	public static function _and($clause) {
+		return new pudlAnd($clause);
+	}
+
+
+
+	public static function _or($clause) {
+		return new pudlOr($clause);
+	}
+
 }
