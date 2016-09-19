@@ -215,6 +215,7 @@ abstract class pudl {
 			case 'MsSql':	require_once('mssql/pudlMsSql.php');	break;
 			case 'Sqlite':	require_once('sqlite/pudlSqlite.php');	break;
 			case 'Odbc':	require_once('sql/pudlOdbc.php');		break;
+			case 'Pdo':		require_once('sql/pudlPdo.php');		break;
 			case 'Null':	require_once('null/pudlNull.php');		break;
 
 			default:

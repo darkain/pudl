@@ -155,7 +155,7 @@ trait pudlQuery {
 
 	public function identifier($identifier) {
 		if ($identifier instanceof pudlHelper) {
-				return $this->_value($identifier);
+			return $this->_value($identifier);
 		}
 
 		return $this->identifier . str_replace(

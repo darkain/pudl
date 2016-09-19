@@ -8,7 +8,7 @@ class pudlMsSql extends pudl {
 
 	public function __construct($data, $autoconnect=true) {
 		//SET INITIAL VALUES
-		$this->identifier	= ']';
+		$this->identifier = ']';
 
 		parent::__construct($data, $autoconnect);
 	}

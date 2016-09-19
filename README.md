@@ -22,11 +22,13 @@ MySQL | *Officially Supported*
 PerconaDB | *Officially Supported*
 MariaDB | *Officially Supported*
 Galera Clustering | *Officially Supported*
+NULL | *Officially Supported*
 Microsoft SQL | *Experimental Support*
 SQLite | *Experimental Support*
 ODBC | *Experimental Support*
 Pervasive | *Experimental Support*
 PostgreSQL | *Experimental Support*
+PDO | *Experimental Support*
 Shell | *Experimental Hack*
 Web | *Experimental Hack*
 
