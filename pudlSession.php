@@ -80,7 +80,7 @@ class pudlSession {
 			['id' => $id]
 		);
 
-		if (empty(false)  ||  !isset($data['data'])  ||  !isset($data['user'])) {
+		if (empty($data)  ||  !isset($data['data'])  ||  !isset($data['user'])) {
 			$data = ['data'=>false, 'user'=>0];
 		}
 
