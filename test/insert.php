@@ -217,3 +217,10 @@ pudlTest('INSERT INTO `table` (`b`, `d`) VALUES (2, 4)');
 $testdata = ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4];
 $db->string()->insert('table', pudl::extract($testdata, 'a','c'));
 pudlTest('INSERT INTO `table` (`a`, `c`) VALUES (1, 3)');
+
+
+
+
+$testdata = ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4];
+$db->string()->insert('table', pudl::merge($testdata, ['b'=>1,'c'=>1]));
+pudlTest('INSERT INTO `table` (`b`, `c`) VALUES (2, 3)');
