@@ -124,3 +124,6 @@ require 'dynamic.php';
 
 //ERROR HANDLING
 require 'errors.php';
+
+//QUERY LOGGING
+require 'log.php';

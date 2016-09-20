@@ -88,6 +88,14 @@ abstract class pudl {
 
 
 	public function __invoke($query) {
+		if (is_null($this->log)) {
+			$this->log = false;
+			throw new pudlException(
+				'Cannot run PUDL queries from within logging functions'
+			);
+		}
+
+
 		//SELEX
 		if (pudl_array($query)) {
 			return $this->selex($query);
@@ -168,6 +176,14 @@ abstract class pudl {
 			$this->stats['total']++;
 			$this->stats['queries']++;
 			$result = $this->process($query);
+		}
+
+
+		//LOG QUERY
+		if ($this->log) {
+			$this->log = NULL;
+			$this->trigger('log', $this, $result);
+			$this->log = false;
 		}
 
 
@@ -255,6 +271,18 @@ abstract class pudl {
 		return ($query === false) ? $this->query : $this($query);
 	}
 
+
+
+	public function log() {
+		if (is_null($this->log)) {
+			$this->log = false;
+			throw new pudlException(
+				'Cannot change logging status while in log callback'
+			);
+		}
+		$this->log = true;
+		return $this;
+	}
 
 
 
@@ -489,6 +517,7 @@ abstract class pudl {
 
 
 
+	private			$log			= false;
 	private			$bench			= false;
 	private			$query			= false;
 	private			$time			= 0;
