@@ -508,6 +508,20 @@ pudlTest("SELECT * FROM `table` WHERE (COLUMN_GET(`column`, 'field' AS INTEGER) 
 
 //SELECT statement with an AND clause
 $db->string()->select('*', 'table', [
+	'',
+	'',
+	'column1=something',
+	'',
+	'column2=else',
+	'',
+]);
+pudlTest('SELECT * FROM `table` WHERE (column1=something AND column2=else)');
+
+
+
+
+//SELECT statement with an AND clause
+$db->string()->select('*', 'table', [
 	'column1=value',
 	'column2=other',
 ]);

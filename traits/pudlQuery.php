@@ -372,6 +372,8 @@ trait pudlQuery {
 
 		$depth++;
 		foreach ($clause as $key => $value) {
+			if (is_int($key)  &&  $value==='') continue;
+
 			if (strlen($query)) $query .= $joiner;
 
 			if ($value instanceof pudlFloat) {
