@@ -219,6 +219,12 @@ abstract class pudl {
 
 
 	public static function instance($data, $autoconnect=true) {
+		if (!empty($data[0])  &&  $data[0] instanceof pudl) {
+			$pudl = $data[0];
+			unset($data[0]);
+			$data += $pudl->auth();
+		}
+
 		if (empty($data['type'])  &&  !empty($data['server'])) {
 			$data['type'] = pudl_array($data['server']) ? 'Galera' : 'MySqli';
 		}
