@@ -385,7 +385,7 @@ trait pudlQuery {
 				if (pudl_array($value)) continue;
 
 			} else if ($value instanceof pudlColumn  &&  $value->args) {
-				$key			= '';
+				$key			 = ''; //FORCE KEY TO STRING TYPE FOR _VALUE
 				if (is_string($value->column)) {
 					$query		.= $this->identifiers($value->column);
 				} else {
@@ -400,6 +400,7 @@ trait pudlQuery {
 				continue;
 
 			} else if ($value instanceof pudlEquals  &&  $value->compare !== false) {
+				$key			 = ''; //FORCE KEY TO STRING TYPE FOR _VALUE
 				$query			.= $this->_value($value->compare);
 				$query			.= $this->_clauseEquals($value);
 				if (!($value instanceof pudlBetween)) $value = $value->value;
