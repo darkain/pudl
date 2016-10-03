@@ -34,7 +34,8 @@ class pudlSession {
 			60*60*24*30,		//Save session for one month
 			'/',				//Session is for entire domain
 			empty($this->domain) ? '' : $this->domain,
-			$secure				//HTTPS only
+			$secure,			//HTTPS only
+			true				//HTTP(S) only - block JavaScript access
 		);
 
 		session_start();
