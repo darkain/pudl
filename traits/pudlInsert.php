@@ -79,7 +79,10 @@ trait pudlInsert {
 			$update = [$data];
 		}
 
-		$update[] = $this->identifiers($column).'=LAST_INSERT_ID('.$this->identifiers($column).')';
+		$update[]	= $this->identifiers($column)
+					. '=LAST_INSERT_ID('
+					. $this->identifiers($column)
+					. ')';
 
 		return $this->insert($table, $data, $update, $prefix);
 	}
