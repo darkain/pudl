@@ -9,6 +9,8 @@ trait pudlInsert {
 
 
 	public function insert($table, $data, $update=false, $prefix=true) {
+		if ($data === false) $data = [];
+
 		if (!is_array($data)  &&  !is_object($data)) {
 			throw new pudlException('Invalid data type for pudl::insert');
 			return false;
@@ -71,6 +73,8 @@ trait pudlInsert {
 
 
 	public function insertUpdate($table, $data, $column, $update=false, $prefix=true) {
+		if ($data === false) $data = [];
+
 		if (empty($update)) {
 			$update = [];
 		} else if ($update === true  &&  pudl_array($data)) {
@@ -90,6 +94,8 @@ trait pudlInsert {
 
 
 	public function insertEx($table, $cols, $data, $update=false) {
+		if ($data === false) $data = [];
+
 		if (!is_array($data)  &&  !is_object($data)) {
 			throw new pudlException('Invalid data type for pudl::insertEx');
 			return false;

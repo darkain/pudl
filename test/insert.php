@@ -1,5 +1,19 @@
 <?php
 
+//INSERT statement - all default values
+$db->string()->insert('table', false);
+pudlTest("INSERT INTO `table` () VALUES ()");
+
+
+
+
+//INSERT statement - all default values
+$db->string()->insert('table', []);
+pudlTest("INSERT INTO `table` () VALUES ()");
+
+
+
+
 //INSERT statement - using associative array - string
 $db->string()->insert('table', ['column'=>'value']);
 pudlTest("INSERT INTO `table` (`column`) VALUES ('value')");
