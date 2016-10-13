@@ -15,6 +15,20 @@ pudlTest("SELECT * FROM `table` WHERE (`column`=CONVERT_TZ(FROM_UNIXTIME(1450000
 
 
 
+//TIMESTAMP for right now
+$db->string()->select($db->date());
+pudlTest("SELECT FROM_UNIXTIME(" . $db->time() . ")");
+
+
+
+
+//TIMESTAMP for December 13th, 2015 @ 9:46 AM (UTC)
+$db->string()->select($db->date(1450000000));
+pudlTest("SELECT FROM_UNIXTIME(1450000000)");
+
+
+
+
 $db->string()->row('table', ['column'=>pudl::column('other')]);
 pudlTest("SELECT * FROM `table` WHERE (`column`=`other`) LIMIT 1");
 
