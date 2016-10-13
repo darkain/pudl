@@ -79,3 +79,13 @@ pudlTest("SELECT * FROM `table` WHERE (`column`='value') LIMIT 1");
 //Returns array of associative array instead of a pudlResult object
 $db->string()->rowsId('table', 'column', 'value');
 pudlTest("SELECT * FROM `table` WHERE (`column`='value')");
+
+
+
+
+//pudlId test
+class test_pudlId_3 implements pudlId {
+	public function pudlId() { return ['column' => 'value']; }
+}
+$db->string()->rowId('table', new test_pudlId_3);
+pudlTest("SELECT * FROM `table` WHERE (`column`='value') LIMIT 1");
