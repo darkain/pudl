@@ -102,7 +102,7 @@ try {
 
 try {
 	class test_pudlId_1 implements pudlId {
-		public function pudlId($column=true) { return false; }
+		public function pudlId() { return false; }
 	}
 	$db->string()->rowId('table', new test_pudlId_1);
 	pudlTest('pudlException');
