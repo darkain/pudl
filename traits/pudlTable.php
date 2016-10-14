@@ -25,6 +25,13 @@ trait pudlTable {
 
 
 
+	public function tableExists($table) {
+		$tables = $this->tables();
+		return in_array($table, $tables);
+	}
+
+
+
 	public function rename($rename, $to=false) {
 		$query = 'RENAME TABLE ';
 
@@ -74,6 +81,70 @@ trait pudlTable {
 
 	public function truncate($table) {
 		return $this('TRUNCATE TABLE ' . $this->_table($table));
+	}
+
+
+
+	public function create($table, $columns, $keys=false, $options=false) {
+		$query  = 'CREATE TABLE IF NOT EXISTS ';
+		$query .= $this->_table($table) . ' (';
+
+		if (is_string($columns)) {
+			$query .= rtrim($columns, " \t\n\r\0\x0B,");
+
+		} else if (pudl_array($columns)) {
+			$first = true;
+			foreach ($columns as $key => $item) {
+				if ($first) $first = false; else $query .= ', ';
+				if (is_string($key)) {
+					$query .= $this->identifier($key) . ' ';
+				}
+				$query .= rtrim($item, " \t\n\r\0\x0B,");
+			}
+
+		} else {
+			throw new pudlException('Invalid data type for $columns');
+		}
+
+
+		if ($keys === false) {
+			//DO NOTHING
+		} else if (is_string($keys)) {
+			$query .= ', ' . rtrim($keys, " \t\n\r\0\x0B,");
+
+		} else if (pudl_array($keys)) {
+			foreach ($keys as $item) {
+				$query .= ', ' . rtrim($item, " \t\n\r\0\x0B,");
+			}
+
+		} else {
+			throw new pudlException('Invalid data type for $keys');
+		}
+
+
+		$query .= ')';
+
+
+		if ($options === false) {
+			//DO NOTHING
+		} else if (is_string($options)) {
+			$query .= ' ' . $options;
+
+		} else if (pudl_array($options)) {
+			foreach ($options as $key => $item) {
+				if (is_string($key)) {
+					$query .= ' ' . $key . '=' . $item;
+				} else {
+					$query .= ' ' . $item;
+				}
+			}
+
+		} else {
+			throw new pudlException('Invalid data type for $options');
+		}
+
+
+		return $this($query);
 	}
 
 }
