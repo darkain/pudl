@@ -5,11 +5,20 @@ trait pudlTable {
 
 
 	public function tables() {
-		$tables = [];
-		$list = $this('SHOW TABLES')->complete();
+		$tables				= [];
+		$len				= $this->prefix !== false ? strlen($this->prefix) : 0;
+		$list				= $this('SHOW TABLES')->complete();
+
 		foreach ($list as $item) {
-			$table = reset($item);
-			$tables[] = $table;
+			$table			= reset($item);
+
+			if ($this->prefix !== false) {
+				if (substr($table, 0, $len) === $this->prefix) {
+					$table	= 'pudl_' . substr($table, $len);
+				}
+			}
+
+			$tables[]		= $table;
 		}
 		return $tables;
 	}
