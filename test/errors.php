@@ -114,7 +114,7 @@ try {
 
 
 try {
-	$db->string()->rowId('table', 'error', curl_init());
+	$db->string()->rowId('table', 'error', fopen(__FILE__, 'r'));
 	pudlTest('pudlException');
 } catch (pudlException $error) {
 	pudlError($error, 'Invalid data type: resource');
