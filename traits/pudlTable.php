@@ -4,6 +4,18 @@
 trait pudlTable {
 
 
+	public function tables() {
+		$tables = [];
+		$list = $this('SHOW TABLES')->complete();
+		foreach ($list as $item) {
+			$table = reset($item);
+			$tables[] = $table;
+		}
+		return $tables;
+	}
+
+
+
 	public function rename($rename, $to=false) {
 		$query = 'RENAME TABLE ';
 
