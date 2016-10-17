@@ -228,15 +228,19 @@ class pudlGalera extends pudlMySqli {
 
 
 	public function sync() {
-		$auth	= $this->auth();
-		$die	= self::$die;
-		self::$die = false;
+		$die		= self::$die;
+		self::$die	= false;
 		foreach ($this->pool as $server) {
 			if ($server == $this->connected) continue;
-			$sync = pudlGalera::instance(['server'=>[$server]]+$auth);
-			$sync->wait()->query('SELECT * FROM information_schema.GLOBAL_VARIABLES LIMIT 1');
+
+			$sync = new pudlGalera([$this, 'server'=>[$server]]);
+			if ($sync->server() === false) continue;
+
+			$sync->wait()->query(
+				'SELECT * FROM information_schema.GLOBAL_VARIABLES LIMIT 1'
+			);
 		}
-		self::$die = $die;
+		self::$die	= $die;
 		return $this;
 	}
 
