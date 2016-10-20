@@ -117,7 +117,7 @@ function pudlExcel($result, $filename, $headers=false) {
 
 
 function pudlPHPExcel($list, $filename) {
-	global $site;
+	global $og;
 
 	if (is_a($list, 'pudlResult')) {
 		$list = $list->rows();
@@ -136,7 +136,7 @@ function pudlPHPExcel($list, $filename) {
 
 	$excel = new PHPExcel();
 	$excel->setActiveSheetIndex(0);
-	$excel->getProperties()->setCreator($site['title']);
+	$excel->getProperties()->setCreator($og['title']);
 
 	$sheet = $excel->getActiveSheet();
 	$sheet->freezePane('A2');
