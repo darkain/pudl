@@ -72,7 +72,7 @@ trait pudlRedis {
 
 	public function salt() {
 		$auth = $this->auth();
-		return $auth['salt'];
+		return empty($auth['salt']) ? '' : $auth['salt'];
 	}
 
 
