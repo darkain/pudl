@@ -59,18 +59,24 @@ class pudlMySqli extends pudl {
 			);
 		}
 
+		//VERIFY WE CONNECTED OKAY!
+		if ($ok) $ok = ($this->connectErrno() === 0);
+
 		//ATTEMPT TO SET UTF8 CHARACTER SET
 		if ($ok) $ok = @$this->mysqli->set_charset('utf8');
 
+		//CONNECTION IS GOOD!
+		if (!empty($ok)) return true;
+
+		//CANNOT CONNECT, BUT BAILING OUT OF SCRIPT IS DISABLED
+		if (!self::$die) return false;
 
 		//CANNOT CONNECT - ERROR OUT
-		if (empty($ok)) {
-			$error  = "<br />\n";
-			$error .= 'Unable to connect to database server "' . $auth['server'];
-			$error .= '" with the username: "' . $auth['username'];
-			$error .= "\"<br />\nError " . $this->connectErrno() . ': ' . $this->connectError();
-			if (self::$die) die($error);
-		}
+		$error  = "<br />\n";
+		$error .= 'Unable to connect to database server "' . $auth['server'];
+		$error .= '" with the username: "' . $auth['username'];
+		$error .= "\"<br />\nError " . $this->connectErrno() . ': ' . $this->connectError();
+		die($error);
 	}
 
 
