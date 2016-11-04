@@ -61,7 +61,6 @@ class pudlGalera extends pudlMySqli {
 			);
 
 			//ATTEMPT TO CREATE A PERSISTANT CONNECTION
-			$this->persist = true;
 			$ok = @$this->mysqli->real_connect(
 				'p:'.$server,
 				$auth['username'],
@@ -71,7 +70,6 @@ class pudlGalera extends pudlMySqli {
 
 			//ATTEMPT TO CREATE A NON-PERSISTANT CONNECTION
 			if (empty($ok)) {
-				$this->persist = false;
 				$ok = @$this->mysqli->real_connect(
 					$server,
 					$auth['username'],
