@@ -81,7 +81,7 @@ class pudlGalera extends pudlMySqli {
 			}
 
 			//VERIFY WE CONNECTED OKAY!
-			if ($ok) $ok = (@$this->connectErrno() === 0);
+			if ($ok) $ok = ($this->connectErrno() === 0);
 
 			//ATTEMPT TO SET UTF-8 CHARACTER SET
 			if ($ok) $ok = @$this->mysqli->set_charset('utf8');
