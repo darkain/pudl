@@ -97,7 +97,7 @@ class pudlGalera extends pudlMySqli {
 			/* NOTE: HERE ARE THE NUMERICAL STATE VALUES
 			0 - No cluster state information available
 			1 - Joining (requesting/receiving State Transfer) - node is joining the cluster
-			2 - Donor/Desynced - node is the donor to the node joining the cluster
+			2 - Donor/Desynced - node is the donor to another node joining the cluster
 			3 - Joined - node has joined the cluster
 			4 - Synced - node is synced with the cluster */
 
