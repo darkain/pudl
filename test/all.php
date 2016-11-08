@@ -37,7 +37,7 @@ function pudlTest($expected) {
 	echo "'" . (is_bool($expected) ? 'TRUE' : $expected) . "'\n\n";
 	echo "QUERY:\n";
 	echo "'" . $db->query() . "'\n\n";
-	exit;
+	exit(1);
 }
 
 
@@ -51,7 +51,7 @@ function pudlError($exception, $expected) {
 	echo "'" . $expected . "'\n\n";
 	echo "ERROR:\n";
 	echo "'" . $exception->getMessage() . "'\n\n";
-	exit;
+	exit(1);
 }
 
 
