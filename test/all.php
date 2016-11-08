@@ -17,7 +17,7 @@
 
 	To execute this test from the command line, simply run the following:
 
-	php5 _pudl/test/cli.php
+	php _pudl/test/cli.php
 
 	For HHVM users, simply run the following instead:
 
