@@ -1,4 +1,5 @@
 # PHP Universal Database Library - PUDL
+[![Build Status](https://travis-ci.org/darkain/pudl.svg?branch=master)](https://travis-ci.org/darkain/pudl)
 
 
 
