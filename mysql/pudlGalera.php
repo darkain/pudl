@@ -60,23 +60,13 @@ class pudlGalera extends pudlMySqli {
 				(count($this->pool)>1) ? 1 : 10
 			);
 
-			//ATTEMPT TO CREATE A PERSISTANT CONNECTION
+			//ATTEMPT TO CREATE A CONNECTION
 			$ok = @$this->mysqli->real_connect(
-				'p:'.$server,
+				(empty($auth['persistent']) ? '' : 'p:') . $server,
 				$auth['username'],
 				$auth['password'],
 				$auth['database']
 			);
-
-			//ATTEMPT TO CREATE A NON-PERSISTANT CONNECTION
-			if (empty($ok)) {
-				$ok = @$this->mysqli->real_connect(
-					$server,
-					$auth['username'],
-					$auth['password'],
-					$auth['database']
-				);
-			}
 
 			//VERIFY WE CONNECTED OKAY!
 			if ($ok) $ok = ($this->connectErrno() === 0);

@@ -59,6 +59,7 @@ abstract class pudl {
 		if (empty($data['database']))	$data['database']	= '';
 		if (empty($data['server']))		$data['server']		= 'localhost';
 		if (empty($data['prefix']))		$data['prefix']		= false;
+		if (empty($data['persistent']))	$data['persistent']	= false;
 		if (empty($data['salt']))		$data['salt']		= '';
 
 		//SET INITIAL DATA

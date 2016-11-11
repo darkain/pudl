@@ -39,25 +39,13 @@ class pudlMySqli extends pudl {
 		$this->mysqli = mysqli_init();
 		$this->mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, 10);
 
-		//ATTEMPT TO CREATE A PERSISTANT CONNECTION
-		$this->persist = true;
+		//ATTEMPT TO CREATE A CONNECTION
 		$ok = @$this->mysqli->real_connect(
-			'p:'.$auth['server'],
+			(empty($auth['persistent']) ? '' : 'p:') . $server,
 			$auth['username'],
 			$auth['password'],
 			$auth['database']
 		);
-
-		//ATTEMPT TO CREATE A NON-PERSISTANT CONNECTION
-		if (empty($ok)) {
-			$this->persist = false;
-			$ok = @$this->mysqli->real_connect(
-				$auth['server'],
-				$auth['username'],
-				$auth['password'],
-				$auth['database']
-			);
-		}
 
 		//VERIFY WE CONNECTED OKAY!
 		if ($ok) $ok = ($this->connectErrno() === 0);
@@ -83,8 +71,8 @@ class pudlMySqli extends pudl {
 
 	public function disconnect($trigger=true) {
 		parent::disconnect($trigger);
-		if (!$this->mysqli)		return;
-		if (!$this->persist)	@$this->mysqli->close();
+		if (!$this->mysqli) return;
+		@$this->mysqli->close();
 		$this->mysqli = NULL;
 	}
 
@@ -148,5 +136,4 @@ class pudlMySqli extends pudl {
 
 
 	protected $mysqli	= NULL;
-	protected $persist	= true;
 }
