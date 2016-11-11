@@ -201,9 +201,8 @@ abstract class pudl {
 
 
 		//ERROR REPORTING
-		if (!empty($this->errno())) {
-			$this->trigger('debug', $this, $result);
-		}
+		$error = $this->errno();
+		if (!empty($error)) $this->trigger('debug', $this, $result);
 
 		return $result;
 	}

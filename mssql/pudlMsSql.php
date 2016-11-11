@@ -104,7 +104,8 @@ class pudlMsSql extends pudl {
 
 
 	public function errno() {
-		return (int) !empty($this->error());
+		$error = $this->error();
+		return (int) !empty($error);
 	}
 
 
