@@ -77,6 +77,7 @@ abstract class pudl {
 			$this->redis	= new pudlVoid;
 		}
 
+		//CONNECT TO SERVER
 		if ($autoconnect) $this->connect();
 	}
 

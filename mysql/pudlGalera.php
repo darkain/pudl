@@ -11,6 +11,9 @@ class pudlGalera extends pudlMySqli {
 
 
 	public function __construct($data, $autoconnect=true) {
+		//CONNECT TO THE SERVER CLUSTER
+		parent::__construct($data, false);
+
 		if (!pudl_array($data['server'])) {
 			throw new pudlException(
 				'Not a valid server pool, $data[server] must be ARRAY data type'
@@ -36,8 +39,8 @@ class pudlGalera extends pudlMySqli {
 			$this->pool = array_merge($this->pool, $data['backup']);
 		}
 
-		//CONNECT TO THE SERVER CLUSTER
-		parent::__construct($data, $autoconnect);
+		//CONNECT TO CLUSTER
+		if ($autoconnect) $this->connect();
 	}
 
 
@@ -239,36 +242,42 @@ class pudlGalera extends pudlMySqli {
 
 	public function onlineServer($server) {
 		$key	= ftok(__FILE__, 't');
-		$shm	= shm_attach($key);
-		$list	= shm_has_var($shm, 1) ? shm_get_var($shm, 1) : [];
-		foreach ($list as $key => $value) {
-			if ($value === $server) unset($list[$key]);
-		}
-		@shm_remove_var($shm, 1);
-		@shm_put_var($shm, 1, $list);
-		shm_detach($shm);
+		$shm	= @shm_attach($key);
+		$list	= @shm_get_var($shm, $this->shmkey);
+		if (empty($list)) $list = [];
+
+		unset($list[$server]);
+
+		@shm_put_var($shm, $this->shmkey, $list);
+		@shm_detach($shm);
 	}
 
 
 
 	public function onlineServers($servers) {
-		return $servers;
 		if (count($servers) < 2) return $servers;
 
 		$key	= ftok(__FILE__, 't');
-		$shm	= shm_attach($key);
+		$shm	= @shm_attach($key);
+		$list	= @shm_get_var($shm, $this->shmkey);
+		$change	= false;
 
-		if (!shm_has_var($shm, 1)) {
-			shm_detach($shm);
-			return $servers;
+		if (!empty($list)  &&  is_array($list)) {
+			foreach ($servers as $index => $item) {
+				if (empty($list[$item])) continue;
+				if (($this->time() - $list[$item]) < 10) {
+					unset($servers[$index]);
+				} else {
+					$change = true;
+					unset($list[$item]);
+				}
+			}
+		}
+		if ($change) {
+			@shm_put_var($shm, $this->shmkey, $list);
 		}
 
-		$list = shm_get_var($shm, 1);
-		foreach ($servers as $index => &$item) {
-			if (in_array($item, $list)) unset($servers[$index]);
-		} unset($item);
-
-		shm_detach($shm);
+		@shm_detach($shm);
 		return $servers;
 	}
 
@@ -277,21 +286,31 @@ class pudlGalera extends pudlMySqli {
 	public function offlineServer($server) {
 		$key	= ftok(__FILE__, 't');
 		$shm	= @shm_attach($key);
-		$list	= @shm_get_var($shm, 1);
+		$list	= @shm_get_var($shm, $this->shmkey);
+
 		if (empty($list)) $list = [];
-		if (!in_array($server, $list)) $list[] = $server;
-		@shm_put_var($shm, 1, $list);
-		shm_detach($shm);
+		if (empty($list[$server])) $list[$server] = $this->time();
+
+		@shm_put_var($shm, $this->shmkey, $list);
+		@shm_detach($shm);
 	}
 
 
 
 	public function offlineServers() {
 		$key	= ftok(__FILE__, 't');
-		$shm	= shm_attach($key);
-		$list	= shm_has_var($shm, 1) ? shm_get_var($shm, 1) : [];
-		shm_detach($shm);
-		return $list;
+		$shm	= @shm_attach($key);
+		$list	= @shm_get_var($shm, $this->shmkey);
+		@shm_detach($shm);
+		return (!empty($list) ? $list : []);
+	}
+
+
+
+	public function offlineReset() {
+		$key	= ftok(__FILE__, 't');
+		$shm	= @shm_attach($key);
+		@shm_remove_var($shm, $this->shmkey);
 	}
 
 
@@ -306,4 +325,5 @@ class pudlGalera extends pudlMySqli {
 	private $wait		= false;
 	private $connected	= false;
 	private $state		= [];
+	private $shmkey		= 1;
 }
