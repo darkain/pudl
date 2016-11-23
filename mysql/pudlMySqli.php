@@ -41,7 +41,7 @@ class pudlMySqli extends pudl {
 
 		//ATTEMPT TO CREATE A CONNECTION
 		$ok = @$this->mysqli->real_connect(
-			(empty($auth['persistent']) ? '' : 'p:') . $server,
+			(empty($auth['persistent']) ? '' : 'p:') . $auth['server'],
 			$auth['username'],
 			$auth['password'],
 			$auth['database']
