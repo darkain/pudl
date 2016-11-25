@@ -20,6 +20,11 @@ class pudlGalera extends pudlMySqli {
 			);
 		}
 
+
+		//ONLY SET SHMKEY IF EXTENSION EXISTS
+		$this->shmkey = extension_loaded('sysvshm') ? 1 : false;
+
+
 		//SET INITIAL VALUES
 		$this->pool = $this->onlineServers($data['server']);
 
@@ -241,6 +246,8 @@ class pudlGalera extends pudlMySqli {
 
 
 	public function onlineServer($server) {
+		if (!$this->shmkey) return;
+
 		$key	= ftok(__FILE__, 't');
 		$shm	= @shm_attach($key);
 		$list	= @shm_get_var($shm, $this->shmkey);
@@ -255,6 +262,7 @@ class pudlGalera extends pudlMySqli {
 
 
 	public function onlineServers($servers) {
+		if (!$this->shmkey) return $servers;
 		if (count($servers) < 2) return $servers;
 
 		$key	= ftok(__FILE__, 't');
@@ -284,6 +292,8 @@ class pudlGalera extends pudlMySqli {
 
 
 	public function offlineServer($server) {
+		if (!$this->shmkey) return;
+
 		$key	= ftok(__FILE__, 't');
 		$shm	= @shm_attach($key);
 		$list	= @shm_get_var($shm, $this->shmkey);
@@ -298,18 +308,25 @@ class pudlGalera extends pudlMySqli {
 
 
 	public function offlineServers() {
+		if (!$this->shmkey) return [];
+
 		$key	= ftok(__FILE__, 't');
 		$shm	= @shm_attach($key);
 		$list	= @shm_get_var($shm, $this->shmkey);
+
 		@shm_detach($shm);
+
 		return (!empty($list) ? $list : []);
 	}
 
 
 
 	public function offlineReset() {
+		if (!$this->shmkey) return;
+
 		$key	= ftok(__FILE__, 't');
 		$shm	= @shm_attach($key);
+
 		@shm_remove_var($shm, $this->shmkey);
 	}
 
@@ -325,5 +342,5 @@ class pudlGalera extends pudlMySqli {
 	private $wait		= false;
 	private $connected	= false;
 	private $state		= [];
-	private $shmkey		= 1;
+	private $shmkey		= false;
 }
