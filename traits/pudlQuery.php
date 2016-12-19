@@ -454,16 +454,23 @@ trait pudlQuery {
 
 
 	protected function _clauseId($column, $id=false) {
-		if ($id === false) {
-			$this->_requireMethod($column, 'pudlId');
-			$value = $column->pudlId();
+		if ($id === false  &&  $column instanceof pudlId) {
+			$value	= $column->pudlId();
 			$this->_requireTrue($value, 'Object retuned invalid value from pudlId');
 			return $value;
 		}
 
+		if ($id instanceof pudlId) {
+			$value	= $id->pudlId();
+			if (is_array($value)  &&  (count($value)  ===  1)  &&  (key($value)  === $column)) {
+				return $value;
+			}
+			$id		= $value;
+		}
+
 		if (pudl_array($id)) {
-			$list		= explode('.', $column);
-			$id			= $id[end($list)];
+			$list	= explode('.', $column);
+			$id		= $id[end($list)];
 
 		} else if (is_object($id)  &&  !($id instanceof pudlHelper)) {
 			$list	= explode('.', $column);
@@ -692,16 +699,6 @@ trait pudlQuery {
 			$return[$key] = $value;
 		}
 		return $return;
-	}
-
-
-
-	protected function _requireMethod($object, $method) {
-		if (!is_object($object)) $this->_invalidType($object, 'object');
-		if (method_exists($object, $method)) return;
-		throw new pudlException(
-			'Undefined method: ' . get_class($object) . '::' . $method
-		);
 	}
 
 
