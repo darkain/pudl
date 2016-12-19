@@ -465,7 +465,6 @@ trait pudlQuery {
 			if (is_array($value)  &&  (count($value)  ===  1)  &&  (key($value)  === $column)) {
 				return $value;
 			}
-			$id		= $value;
 		}
 
 		if (pudl_array($id)) {
