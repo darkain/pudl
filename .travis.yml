@@ -10,4 +10,8 @@ php:
   - 7.1
   - hhvm-3.15
   - nightly
+
+before_script:
+  - phpenv config-rm xdebug.ini || true
+
 script: "php test/cli.php"
