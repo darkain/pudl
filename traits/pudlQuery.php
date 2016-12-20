@@ -454,10 +454,17 @@ trait pudlQuery {
 
 
 	protected function _clauseId($column, $id=false) {
-		if ($id === false  &&  $column instanceof pudlId) {
-			$value	= $column->pudlId();
-			$this->_requireTrue($value, 'Object retuned invalid value from pudlId');
-			return $value;
+		if ($id === false) {
+			if ($column instanceof pudlId) {
+				$value	= $column->pudlId();
+				$this->_requireTrue($value, 'Object retuned invalid value from pudlId');
+				return $value;
+			}
+			throw new pudlException(is_object($column)
+				? 'Undefined method: ' . get_class($column) . '::pudlId'
+				: 'Invalid data type for object: ' . gettype($column)
+			);
+			return false;
 		}
 
 		if ($id instanceof pudlId) {
