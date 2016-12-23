@@ -437,13 +437,6 @@ abstract class pudl {
 
 
 
-	public function date($timestamp=false) {
-		if ($timestamp === false) $timestamp = $this->time();
-		return self::from_unixtime($timestamp);
-	}
-
-
-
 	public function server() {
 		$auth = $this->auth();
 		return $auth['server'];
@@ -503,6 +496,13 @@ abstract class pudl {
 
 	public static function text($text) {
 		return new pudlText($text);
+	}
+
+
+
+	public static function date($timestamp=false) {
+		if ($timestamp === false) $timestamp = $this->time();
+		return self::from_unixtime($timestamp);
 	}
 
 
