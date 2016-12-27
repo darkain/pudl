@@ -481,6 +481,13 @@ abstract class pudl {
 
 
 
+	public function datetime($timestamp=false) {
+		if ($timestamp === false) $timestamp = $this->time();
+		return self::from_unixtime($timestamp);
+	}
+
+
+
 	public static function column($column, $value=false) {
 		if (func_num_args() === 2) return new pudlColumn($column, $value);
 		return new pudlColumn($column);
@@ -501,8 +508,9 @@ abstract class pudl {
 
 
 	public static function date($timestamp=false) {
-		if ($timestamp === false) $timestamp = $this->time();
-		return self::from_unixtime($timestamp);
+		return ($timestamp === false)
+			? self::now()
+			: self::from_unixtime($timestamp);
 	}
 
 

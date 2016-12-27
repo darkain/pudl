@@ -16,14 +16,28 @@ pudlTest("SELECT * FROM `table` WHERE (`column`=CONVERT_TZ(FROM_UNIXTIME(1450000
 
 
 //TIMESTAMP for right now
-$db->string()->select($db->date());
+$db->string()->select(pudl::date());
+pudlTest("SELECT NOW()");
+
+
+
+
+//TIMESTAMP for December 13th, 2015 @ 9:46 AM (UTC)
+$db->string()->select(pudl::date(1450000000));
+pudlTest("SELECT FROM_UNIXTIME(1450000000)");
+
+
+
+
+//TIMESTAMP for right now
+$db->string()->select($db->datetime());
 pudlTest("SELECT FROM_UNIXTIME(" . $db->time() . ")");
 
 
 
 
 //TIMESTAMP for December 13th, 2015 @ 9:46 AM (UTC)
-$db->string()->select($db->date(1450000000));
+$db->string()->select($db->datetime(1450000000));
 pudlTest("SELECT FROM_UNIXTIME(1450000000)");
 
 
