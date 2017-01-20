@@ -95,7 +95,7 @@ database.
 
 ### UPDATE
 ---
-**UPDATE** queries you a similar syntax. Let's say we need to update the title
+**UPDATE** queries are a similar syntax. Let's say we need to update the title
 because we initially put it in wrong. You can use the following to do so.
 
 ```php
