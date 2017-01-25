@@ -98,6 +98,12 @@ abstract class pudl {
 		}
 
 
+		//CONVERT FROM A STRING RESULT TO JUST A STRING
+		if ($query instanceof pudlStringResult) {
+			$query = (string) $query;
+		}
+
+
 		//SELEX
 		if (pudl_array($query)) {
 			return $this->selex($query);
