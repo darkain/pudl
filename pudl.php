@@ -551,6 +551,6 @@ abstract class pudl {
 	private			$time			= 0;
 	private			$microtime		= 0.0;
 	protected		$string			= [];
-	public static	$version		= 'PUDL 2.6.0';
+	public static	$version		= 'PUDL 2.7.0';
 
 }
