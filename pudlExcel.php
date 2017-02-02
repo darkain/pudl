@@ -28,10 +28,10 @@ function pudlExcel($result, $filename, $headers=false) {
 	ob_start();
 	echo '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><dimension ref="A1:B6"/><sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/><selection pane="bottomLeft" activeCell="A1" sqref="A1"/></sheetView></sheetViews><sheetFormatPr defaultRowHeight="15"/><cols><col min="1" max="1" width="12" bestFit="1" customWidth="1"/></cols><sheetData>';
 
-	$x = 1;
-	$total = 0;
-	$strings = array();
-	$colcount = $result->fields();
+	$x			= 1;
+	$total		= 0;
+	$strings	= [];
+	$colcount	= $result->fields();
 
 
 	//EXPORT HEADERS
