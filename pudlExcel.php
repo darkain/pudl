@@ -98,7 +98,7 @@ function pudlExcel($result, $filename, $headers=false) {
 	echo '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" ';
 	echo 'count="' . $total . '" uniqueCount="' . count($strings) . '">';
 	foreach ($strings as $key => $val) {
-		echo '<si><t>' . htmlspecialchars($val) . '</t></si>';
+		echo '<si><t>' . htmlspecialchars($val, ENT_XML1|ENT_SUBSTITUTE, 'UTF-8') . '</t></si>';
 	}
 	echo '</sst>';
 	$zip->addFromString('xl/sharedStrings.xml', xmlheader() . ob_get_clean());
