@@ -335,4 +335,12 @@ trait pudlSelect {
 	public function cellLockId($table, $col, $column, $id=false, $order=false) {
 		return $this->cell($table, $col, $this->_clauseId($column,$id), $order, true);
 	}
+
+
+
+	public function collection($key_column, $value_column, $table, $clause=false, $order=false, $limit=false, $lock=false) {
+		$result = $this->select([$key_column, $value_column], $table, $clause, $order, $limit, $lock);
+		if ($result instanceof pudlStringResult) return $result;
+		return $result->collection();
+	}
 }

@@ -110,6 +110,17 @@ abstract class pudlResult implements Countable, SeekableIterator {
 
 
 
+	public function collection() {
+		$return = [];
+		while ($data = $this->row()) {
+			$return[reset($data)] = end($data);
+		}
+		$this->free();
+		return $return;
+	}
+
+
+
 	public function json() {
 		return pudl::jsonEncode( $this->rows() );
 	}
