@@ -1,6 +1,8 @@
 <?php
 
+
 abstract class pudlResult implements Countable, SeekableIterator {
+
 
 	public function __construct($result, $db) {
 		$this->result	= $result;
@@ -10,7 +12,10 @@ abstract class pudlResult implements Countable, SeekableIterator {
 		$this->fields	= false;
 	}
 
+
+
 	public function __destruct() {}
+
 
 
 	public function __invoke() { return $this->row(); }
@@ -34,16 +39,24 @@ abstract class pudlResult implements Countable, SeekableIterator {
 
 	public function rewind() { $this->seek(0); }
 
+
+
 	public function current() {
 		if ($this->row === false) $this();
 		return $this->data;
 	}
 
+
+
 	public function key() {
 		return ($this->row === false) ? 0 : $this->row;
 	}
 
+
+
 	public function next() { $this(); }
+
+
 
 	public function valid() {
 		if ($this->row === false) $this();
@@ -51,12 +64,15 @@ abstract class pudlResult implements Countable, SeekableIterator {
 	}
 
 
+
 	public function isString() { return $this->string; }
+
 
 
 	public function hasRows() {
 		return ($this->count() > 0);
 	}
+
 
 
 	public function listFields() {
@@ -126,6 +142,7 @@ abstract class pudlResult implements Countable, SeekableIterator {
 	}
 
 
+
 	public function completeJson() {
 		$json = $this->json();
 		$this->free();
@@ -166,6 +183,7 @@ abstract class pudlResult implements Countable, SeekableIterator {
 	public function error() {
 		return $this->result === false;
 	}
+
 
 
 	protected $db;
