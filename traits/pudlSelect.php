@@ -338,9 +338,15 @@ trait pudlSelect {
 
 
 
-	public function collection($key_column, $value_column, $table, $clause=false, $order=false, $limit=false, $lock=false) {
-		$result = $this->select([$key_column, $value_column], $table, $clause, $order, $limit, $lock);
-		if ($result instanceof pudlStringResult) return $result;
-		return $result->collection();
+	public function collection($table, $key_column=false, $value_column=false, $clause=false, $order=false, $limit=false, $lock=false) {
+
+		if ($key_column === false  &&  $value_column === false) {
+			$result = $this->select('*', $table, $clause, $order, $limit, $lock);
+		} else {
+			$result = $this->select([$key_column, $value_column], $table, $clause, $order, $limit, $lock);
+		}
+
+		return ($result instanceof pudlStringResult)
+			? $result : $result->collection();
 	}
 }
