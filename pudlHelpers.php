@@ -135,6 +135,18 @@ class pudlColumn extends pudlEquals {
 
 
 
+class pudlCount extends pudlColumn {
+	public function __construct($column) {
+		parent::__construct($column);
+	}
+
+	public function pudlValue($db, $quote=true) {
+		return 'COUNT(' . $db->identifiers($this->column) . ')';
+	}
+}
+
+
+
 class pudlAs extends pudlColumn {
 	public function __construct($column, $alias, $length=false) {
 		parent::__construct($column);

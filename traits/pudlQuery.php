@@ -200,8 +200,12 @@ trait pudlQuery {
 		}
 
 		//CLEAN UP EACH PART OF THE IDENTIFIER
-		foreach ($list as &$item) $item = $this->identifier($item);
-		unset($item);
+		end($list);
+		$last = key($list);
+		foreach ($list as $key => &$item) {
+			if ($key === $last  &&  $item === '*') continue;
+			$item = $this->identifier($item);
+		} unset($item);
 
 		//EARLY OUT IF WE ARE NOT IN A DYNAMIC COLUMN
 		$return		= implode('.', $list);

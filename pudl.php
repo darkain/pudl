@@ -217,8 +217,8 @@ abstract class pudl {
 
 
 	public static function __callStatic($name, $arguments) {
-		$value = new pudlFunction();
-		$name = '_' . strtoupper($name);
+		$value	= new pudlFunction();
+		$name	= '_' . strtoupper($name);
 		$value->$name = $arguments;
 		return $value;
 	}
@@ -497,6 +497,12 @@ abstract class pudl {
 	public static function column($column, $value=false) {
 		if (func_num_args() === 2) return new pudlColumn($column, $value);
 		return new pudlColumn($column);
+	}
+
+
+
+	public static function _count($column='*') {
+		return new pudlCount($column);
 	}
 
 
