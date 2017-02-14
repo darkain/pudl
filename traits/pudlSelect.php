@@ -338,6 +338,18 @@ trait pudlSelect {
 
 
 
+	public function id($table, $col, $column, $id=false, $order=false, $lock=false) {
+		return (int) $this->cell($table, $col, $this->_clauseId($column,$id), $order, $lock);
+	}
+
+
+
+	public function lockId($table, $col, $column, $id=false, $order=false) {
+		return (int) $this->cell($table, $col, $this->_clauseId($column,$id), $order, true);
+	}
+
+
+
 	public function collection($table, $key_column=false, $value_column=false, $clause=false, $order=false, $limit=false, $lock=false) {
 
 		if ($key_column === false  &&  $value_column === false) {
