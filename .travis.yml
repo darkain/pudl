@@ -11,7 +11,6 @@ php:
   - nightly
   - hhvm
   - hhvm-3.15
-  - hhvm-3.17
   - hhvm-nightly
 
 before_script:
