@@ -236,16 +236,16 @@ abstract class pudl {
 			$data['type'] = pudl_array($data['server']) ? 'Galera' : 'MySqli';
 		}
 
-		switch ($data['type']) {
-			case 'MySql':	require_once('mysql/pudlMySql.php');	break;
-			case 'MySqli':	require_once('mysql/pudlMySqli.php');	break;
-			case 'Galera':	require_once('mysql/pudlGalera.php');	break;
-			case 'PgSql':	require_once('pgsql/pudlPgSql.php');	break;
-			case 'MsSql':	require_once('mssql/pudlMsSql.php');	break;
-			case 'Sqlite':	require_once('sqlite/pudlSqlite.php');	break;
-			case 'Odbc':	require_once('sql/pudlOdbc.php');		break;
-			case 'Pdo':		require_once('sql/pudlPdo.php');		break;
-			case 'Null':	require_once('null/pudlNull.php');		break;
+		switch (strtoupper($data['type'])) {
+			case 'MYSQL':	require_once('mysql/pudlMySql.php');	break;
+			case 'MYSQLI':	require_once('mysql/pudlMySqli.php');	break;
+			case 'GALERA':	require_once('mysql/pudlGalera.php');	break;
+			case 'PGSQL':	require_once('pgsql/pudlPgSql.php');	break;
+			case 'MSSQL':	require_once('mssql/pudlMsSql.php');	break;
+			case 'SQLITE':	require_once('sqlite/pudlSqlite.php');	break;
+			case 'ODBC':	require_once('sql/pudlOdbc.php');		break;
+			case 'PDO':		require_once('sql/pudlPdo.php');		break;
+			case 'NULL':	require_once('null/pudlNull.php');		break;
 
 			default:
 				throw new pudlException('Unknown Database Server Type: ' . $data['type']);
