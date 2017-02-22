@@ -41,12 +41,16 @@ trait pudlRedis {
 
 		} else if (class_exists('Redis')) {
 			try {
-				$this->redis = new pudlRedisHack;
+				$this->redis = defined('HHVM_VERSION')
+					? new pudlRedisHHVM
+					: new pudlRedisPHP;
+
 				if ($this->redis->connect($server, -1, 0.25)) {
 					$this->redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
 				} else {
 					$this->redis = false;
 				}
+
 			} catch (RedisException $e) {
 				$this->redis = false;
 			}
@@ -97,20 +101,51 @@ trait pudlRedis {
 
 
 
-//HHVM HACK BECAUSE THEY HAVE YET TO FIX THEIR CODE
 if (class_exists('Redis')) {
-	class pudlRedisHack extends Redis {
-		protected function doConnect($host, $port, $timeout, $persistent_id,
-									 $retry_interval, $persistent=false) {
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//PHP7 HACK BECAUSE EVERYTHING IS BROKEN EVERYWHERE!
+	////////////////////////////////////////////////////////////////////////////
+	class pudlRedisPHP extends Redis {
+		public function connect(	$host, $port=-1, $timeout=0.0,
+									$persistent_id='', $retry_interval=0) {
 
 			$level	= error_reporting(0);
+			$return	= parent::connect($host, $port, $timeout,
+										$persistent_id, $retry_interval);
+			error_reporting($level);
+			return $return;
+		}
 
+
+		public function pconnect(	$host, $port=-1, $timeout=0.0,
+									$persistent_id='', $retry_interval=0) {
+
+			$level	= error_reporting(0);
+			$return	= parent::pconnect($host, $port, $timeout,
+										$persistent_id, $retry_interval);
+			error_reporting($level);
+			return $return;
+		}
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//HHVM HACK BECAUSE EVERYTHING IS BROKEN EVERYWHERE!
+	////////////////////////////////////////////////////////////////////////////
+	class pudlRedisHHVM extends Redis {
+		protected function doConnect(	$host, $port, $timeout, $persistent_id,
+										$retry_interval, $persistent=false) {
+
+			$level	= error_reporting(0);
 			$return	= parent::doConnect($host, $port, $timeout, $persistent_id,
 										$retry_interval, $persistent);
-
 			error_reporting($level);
-
 			return	$return;
 		}
 	}
+
 }
