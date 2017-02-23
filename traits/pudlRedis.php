@@ -41,9 +41,7 @@ trait pudlRedis {
 
 		} else if (class_exists('Redis')) {
 			try {
-				$this->redis = defined('HHVM_VERSION')
-					? new pudlRedisHHVM
-					: new pudlRedisPHP;
+				$this->redis = new pudlRedisHack;
 
 				if ($this->redis->connect($server, -1, 0.25)) {
 					$this->redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
@@ -101,21 +99,19 @@ trait pudlRedis {
 
 
 
-if (class_exists('Redis')) {
-
-
-	////////////////////////////////////////////////////////////////////////////
-	//PHP7 HACK BECAUSE EVERYTHING IS BROKEN EVERYWHERE!
-	////////////////////////////////////////////////////////////////////////////
-	class pudlRedisPHP extends Redis {
+////////////////////////////////////////////////////////////////////////////////
+//PHP7 HACK BECAUSE EVERYTHING IS BROKEN EVERYWHERE!
+////////////////////////////////////////////////////////////////////////////////
+if (!defined('HHVM_VERSION')  &&  class_exists('Redis')) {
+	class pudlRedisHack extends Redis {
 		public function connect(	$host, $port=-1, $timeout=0.0,
 									$persistent_id='', $retry_interval=0) {
 
 			$level	= error_reporting(0);
-			$return	= parent::connect($host, $port, $timeout,
+			$return	= parent::connect(	$host, $port, $timeout,
 										$persistent_id, $retry_interval);
 			error_reporting($level);
-			return $return;
+			return	$return;
 		}
 
 
@@ -123,20 +119,22 @@ if (class_exists('Redis')) {
 									$persistent_id='', $retry_interval=0) {
 
 			$level	= error_reporting(0);
-			$return	= parent::pconnect($host, $port, $timeout,
+			$return	= parent::pconnect(	$host, $port, $timeout,
 										$persistent_id, $retry_interval);
 			error_reporting($level);
-			return $return;
+			return	$return;
 		}
 	}
+}
 
 
 
 
-	////////////////////////////////////////////////////////////////////////////
-	//HHVM HACK BECAUSE EVERYTHING IS BROKEN EVERYWHERE!
-	////////////////////////////////////////////////////////////////////////////
-	class pudlRedisHHVM extends Redis {
+////////////////////////////////////////////////////////////////////////////////
+//HHVM HACK BECAUSE EVERYTHING IS BROKEN EVERYWHERE!
+////////////////////////////////////////////////////////////////////////////////
+if (defined('HHVM_VERSION')  &&  class_exists('Redis')) {
+	class pudlRedisHack extends Redis {
 		protected function doConnect(	$host, $port, $timeout, $persistent_id,
 										$retry_interval, $persistent=false) {
 
@@ -147,5 +145,4 @@ if (class_exists('Redis')) {
 			return	$return;
 		}
 	}
-
 }
