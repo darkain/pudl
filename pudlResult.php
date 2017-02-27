@@ -137,6 +137,18 @@ abstract class pudlResult implements Countable, SeekableIterator {
 
 
 
+	public function tree($separator='.') {
+		$return = [];
+		while ($data = $this->row()) {
+			$keys = explode($separator, reset($data));
+			$return[] = end($data);
+		}
+		$this->free();
+		return $return;
+	}
+
+
+
 	public function json() {
 		return pudl::jsonEncode( $this->rows() );
 	}
