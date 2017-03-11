@@ -358,7 +358,8 @@ trait pudlSelect {
 			$result = $this->select([$key_column, $value_column], $table, $clause, $order, $limit, $lock);
 		}
 
-		return ($result instanceof pudlStringResult)
-			? $result : $result->collection();
+		if ($result instanceof pudlStringResult) return $result;
+		if ($result instanceof pudlResult) return $result->collection();
+		return $result;
 	}
 }
