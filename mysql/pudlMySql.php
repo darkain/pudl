@@ -66,7 +66,7 @@ class pudlMySql extends pudl {
 			$error .= 'Unable to connect to database server "' . $auth['server'];
 			$error .= '" with the username: "' . $auth['username'];
 			$error .= "\"<br />\nError " . $this->errno() . ': ' . $this->error();
-			if (self::$die) die($error);
+			if (self::$die) throw new pudlException($error);
 		}
 	}
 

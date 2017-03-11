@@ -41,7 +41,9 @@ class pudlSqlite extends pudl {
 
 		//Cannot connect - Error out
 		if (empty($this->sqlite)) {
-			die('Unable to open Sqlite database file: ' . $auth['database']);
+			throw new pudlException(
+				'Unable to open Sqlite database file: ' . $auth['database']
+			);
 		}
 
 		//Set a busy timeout for Sqlite to 5 seconds

@@ -121,7 +121,7 @@ class pudlGalera extends pudlMySqli {
 		} else {
 			$error .= 'Error ' . $this->connectErrno() . ': ' . $this->connectError();
 		}
-		die($error);
+		throw new pudlException($error);
 	}
 
 
@@ -132,7 +132,9 @@ class pudlGalera extends pudlMySqli {
 		array_shift($this->pool);
 
 		if (empty($this->pool)) {
-			if (self::$die) die('No more servers available in server pool');
+			if (self::$die) {
+				throw new pudlException('No more servers available in server pool');
+			}
 			return false;
 		}
 

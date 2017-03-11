@@ -50,7 +50,9 @@ class pudlPdo extends pudl {
 			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
 
 		} catch (PDOException $e) {
-			die('ERROR CONNECTING THROUGH PDO: ' . $this->error());
+			throw new pudlException(
+				'ERROR CONNECTING THROUGH PDO: ' . $this->error()
+			);
 		}
 	}
 

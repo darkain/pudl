@@ -30,7 +30,9 @@ class pudlPgSql extends pudl {
 		);
 
 		if ($this->pgsql === false) {
-			die('ERROR CONNECTING TO POSTGRESQL: ' . $this->error());
+			throw new pudlException(
+				'ERROR CONNECTING TO POSTGRESQL: ' . $this->error()
+			);
 		}
 	}
 
