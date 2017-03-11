@@ -232,8 +232,12 @@ abstract class pudl {
 			$data += $pudl->auth();
 		}
 
-		if (empty($data['type'])  &&  !empty($data['server'])) {
-			$data['type'] = pudl_array($data['server']) ? 'Galera' : 'MySqli';
+		if (empty($data['type'])) {
+			if (!empty($data['server'])) {
+				$data['type'] = pudl_array($data['server']) ? 'Galera' : 'MySqli';
+			} else {
+				throw new pudlException('No database type or server specified');
+			}
 		}
 
 		switch (strtoupper($data['type'])) {
