@@ -54,7 +54,7 @@ trait pudlInsert {
 
 
 
-	public function reinsert($table, $data, $prefix=true) {
+	public function upsert($table, $data, $prefix=true) {
 		return $this->insert($table, $data, true, $prefix);
 	}
 
