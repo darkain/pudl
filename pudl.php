@@ -149,7 +149,7 @@ abstract class pudl {
 			$this->stats['total']++;
 			try {
 				$hash = $this->cachekey;
-				if (empty($hash)) $hash = hash('sha512', $this->salt().$query, true);
+				if (empty($hash)) $hash = $this->hash($query);
 
 				if ($this->cache < 0) {
 					$this->stats['total']--;

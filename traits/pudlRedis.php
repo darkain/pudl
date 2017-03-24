@@ -82,6 +82,27 @@ trait pudlRedis {
 
 
 
+	public function hash($data) {
+		if (!is_string($data)  ||  empty($data)) return false;
+
+		$data = $this->salt() . $data;
+
+		if (function_exists('hash')) {
+			$list = hash_algos();
+			switch (true) {
+				case in_array('sha512', $list): return hash('sha512', $data, true);
+				case in_array('sha384', $list): return hash('sha384', $data, true);
+				case in_array('sha256', $list): return hash('sha256', $data, true);
+				case in_array('sha224', $list): return hash('sha224', $data, true);
+			}
+		}
+
+		return sha1($data, true);
+	}
+
+
+
+
 	protected		$cache		= false;
 	protected		$cachekey	= false;
 	protected		$redis		= false;

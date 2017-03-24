@@ -86,10 +86,7 @@ class pudlSession {
 		}
 
 		$this->user = $data['user'];
-
-		$this->hash = is_string($data['data'])
-			? hash('sha512', $this->db->salt().$data['data'])
-			: false;
+		$this->hash = $this->db->hash($data['data']);
 
 		return $data['data'];
 	}
@@ -97,7 +94,7 @@ class pudlSession {
 
 
 	public function write($id, $data) {
-		if (is_string($data)  &&  $this->hash === hash('sha512', $this->db->salt().$data)) return true;
+		if (is_string($data)  &&  $this->hash === $this->db->hash($data)) return true;
 
 		if (empty($data)) return $this->destroy($id);
 
@@ -110,13 +107,13 @@ class pudlSession {
 		}
 
 		//Create new entity in database
-		$this->db->insert($this->table, [
+		$this->db->upsert($this->table, [
 			'id'		=> $id,
 			'user'		=> $this->user,
 			'access'	=> $this->db->time(),
 			'address'	=> $address,
 			'data'		=> $data,
-		], true);
+		]);
 
 		//Purge the cache for this ID
 		return $this->purge($id);
