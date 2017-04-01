@@ -12,6 +12,13 @@ trait pudlRedis {
 
 
 
+	public function recache($seconds, $key=false) {
+		$this->recache = true;
+		return $this->cache($seconds, $key);
+	}
+
+
+
 	public function uncache($key=false) {
 		$this->cache	= -1;
 		$this->cachekey	= $key;
@@ -105,6 +112,7 @@ trait pudlRedis {
 
 	protected		$cache		= false;
 	protected		$cachekey	= false;
+	protected		$recache	= false;
 	protected		$redis		= false;
 
 	protected		$stats		= [

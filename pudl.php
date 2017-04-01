@@ -157,7 +157,11 @@ abstract class pudl {
 					$result = new pudlCacheResult([], $this, '');
 
 				} else {
-					$data = $this->redis->get("pudl:$hash");
+					if ($this->recache) {
+						$data = false;
+					} else {
+						$data = $this->redis->get("pudl:$hash");
+					}
 
 					if ($data === false  ||  is_null($data)) {
 						$result = $this->missed($query);
@@ -196,7 +200,10 @@ abstract class pudl {
 
 
 		//RESET CACHE INFORMATION FOR NEXT QUERY
-		$this->cache = $this->cachekey = false;
+		$this->cache	=
+		$this->cachekey	=
+		$this->recache	=
+			false;
 
 
 		//PERFORMANCE PROFILING DATA
@@ -211,6 +218,8 @@ abstract class pudl {
 		$error = $this->errno();
 		if (!empty($error)) $this->trigger('debug', $this, $result);
 
+
+		//RETURN FINAL RESULT
 		return $result;
 	}
 
