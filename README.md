@@ -8,6 +8,9 @@ The primary function of this library is to provide a common interface for
 interacting with several different database engines without worrying about
 implementation specific syntax. PUDL takes basic PHP functions and data types,
 and then converts these over to engine specific SQL queries automatically.
+This is accomplished using a simplistic procedural style of programming rather
+than a more complex ORM style of programming. No custom classes outside of PUDL
+are required to take full advantage of this library.
 
 The [test](https://github.com/darkain/pudl/tree/master/test) folder contains
 a series of examples of PUDL function calls and their resulting SQL query
