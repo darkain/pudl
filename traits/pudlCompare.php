@@ -20,7 +20,7 @@ trait pudlCompare {
 	public static function notLike(		$v1=false,	$v2=false)	{ return self::like(		$v1, $v2)->not(); }
 	public static function notLikeLeft(	$v1=false,	$v2=false)	{ return self::likeLeft(	$v1, $v2)->not(); }
 	public static function notLikeRight($v1=false,	$v2=false)	{ return self::likeRight(	$v1, $v2)->not(); }
-	public static function notRegexp(	$v1=false,	$v2=false)	{ return self::pudlRegexp(	$v1, $v2)->not(); }
+	public static function notRegexp(	$v1=false)				{ return self::regexp(		$v1)->not(); }
 	public static function notBetween(	$v1, $v2,	$v3=false)	{ return self::between(		$v1, $v2, $v3)->not(); }
 
 
