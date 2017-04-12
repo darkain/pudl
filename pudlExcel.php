@@ -68,7 +68,10 @@ function pudlExcel($result, $filename, $headers=false) {
 			} else {
 				$cell = chr(64 + floor($key / 26)) . chr(65 + ($key % 26)) . $x;
 			}
-			if ($val==='0'  ||  $val==='0.0') {
+
+			if ($val === NULL) {
+				//OUTPUT NOTHING
+			} else if ($val==='0'  ||  $val==='0.0') {
 				echo '<c r="' . $cell . '"><v>' . $val . '</v></c>';
 			} else if (preg_match('/^[1-9][0-9]{0,12}\.?[0-9]{0,10}$/', $val)) {
 				echo '<c r="' . $cell . '"><v>' . $val . '</v></c>';
@@ -83,6 +86,7 @@ function pudlExcel($result, $filename, $headers=false) {
 				}
 				echo '<c r="' . $cell . '" t="s"><v>' . $index . '</v></c>';
 			}
+			//ELSE OUTPUT NOTHING
 		}
 		echo '</row>';
 		$x++;
