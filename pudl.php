@@ -312,20 +312,26 @@ abstract class pudl {
 
 
 
-	public function listFields($table) {
+	public function listFields($table, $prefix='') {
 		if (!pudl_array($table)) $table = [$table];
 
 		$return = [];
 
 		foreach ($table as $key => $value) {
-			if (in_array($key, ['on', 'clause', 'using'])) continue;
+			if (in_array($key, ['on', 'clause', 'using'], true)) continue;
 
 			if (is_array($value)) {
-				$return += $this->listFields($value);
+				if (is_int($key)) $key = '';
+				$return += $this->listFields($value, $key);
 
 			} else {
-				$result = $this('SHOW COLUMNS FROM ' . $this->_table($value));
-				while ($data = $result()) $return[$data['Field']] = $data;
+				$value	= $this->_table($value);
+				$result	= $this('SHOW COLUMNS FROM ' . $value);
+				while ($data = $result()) {
+					$data['Table']	= $value;
+					$data['Prefix']	= is_int($key) ? $prefix : $key;
+					$return[$data['Field']] = $data;
+				}
 				$result->free();
 			}
 		}

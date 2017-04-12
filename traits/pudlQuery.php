@@ -636,56 +636,22 @@ trait pudlQuery {
 
 
 
-	public function prefixColumns($table, $col=false, $unprefixed=true) {
-		$joiners = array(
-			'join', 'cross', 'left', 'right',
-			'natural', 'inner', 'outer', 'hack',
-		);
+	public function prefixColumns($tables, $columns=false, $unprefixed=true) {
+		if ($columns === false) return [];
 
-		$prefix = array();
+		$list	= $this->listFields($tables);
+		$return	= [];
 
-		if (!pudl_array($table)) return false;
+		foreach ($columns as $val) {
+			if (!empty($list[$val]['Prefix'])) {
+				$return[] = $list[$val]['Prefix'] . '.' . $val;
 
-		foreach ($table as $key => $val) {
-			if (pudl_array($val)) {
-				foreach ($val as $subtable) {
-					if (pudl_array($subtable)) {
-						foreach ($subtable as $joinkey => $jointable) {
-							if (in_array($joinkey, $joiners)) {
-								foreach ($jointable as $subkey => $subname) {
-									$fields = $this->listFields($subname);
-									foreach ($fields as $field) {
-										if (!isset($prefix[$field['Field']])) $prefix[$field['Field']] = $subkey;
-									}
-								}
-							}
-						}
-					} else {
-						$fields = $this->listFields($subtable);
-						foreach ($fields as $field) {
-							if (!isset($prefix[$field['Field']])) $prefix[$field['Field']] = $key;
-						}
-					}
-				}
-			} else {
-				$fields = $this->listFields($val);
-				foreach ($fields as $field) {
-					if (!isset($prefix[$field['Field']])) $prefix[$field['Field']] = $key;
-				}
-			}
-		}
-
-		if ($col === false) return $prefix;
-
-		$column = array();
-		foreach ($col as $val) {
-			if (isset($prefix[$val])) {
-				$column[] = $prefix[$val] . '.' . $val;
 			} else if ($unprefixed) {
-				$column[] = $val;
+				$return[] = $val;
 			}
 		}
-		return $column;
+
+		return $return;
 	}
 
 
