@@ -72,6 +72,28 @@ trait pudlInsert {
 
 
 
+	public function insertExtract($table, $data, $update=false, $prefix=true) {
+		return $this->insert(
+			$table,
+			$this->extractColumns($table, $data),
+			$update,
+			$prefix
+		);
+	}
+
+
+
+	public function upsertExtract($table, $data, $prefix=true) {
+		return $this->insert(
+			$table,
+			$this->extractColumns($table, $data),
+			true,
+			$prefix
+		);
+	}
+
+
+
 	public function replace($table, $data) {
 		return $this->insert($table, $data, 'REPLACE');
 	}
