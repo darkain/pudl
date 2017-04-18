@@ -662,8 +662,19 @@ trait pudlQuery {
 			$keys = func_get_args();
 			array_shift($keys);
 		}
-		foreach ($keys as $item) $return[$item] = $array[$item];
+		foreach ($keys as $key) {
+			if (array_key_exists($key, $array)) {
+				$return[$key] = $array[$key];
+			}
+		}
 		return $return;
+	}
+
+
+
+	public function extractColumns($table, $data) {
+		$list = array_keys($this->listFields($table));
+		return $this->extract($data, $list);
 	}
 
 
