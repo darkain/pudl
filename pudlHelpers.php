@@ -253,6 +253,17 @@ class pudlRemoveSet extends pudlEquals {}
 
 
 
+class pudlSort extends pudlEquals {
+	public function __construct($sort) {
+		parent::__construct($sort, false, ' ');
+	}
+
+	public function pudlValue($db, $quote=true) {
+		return $this->value;
+	}
+}
+
+
 
 class pudlRaw implements pudlValue, pudlHelper {
 	public function __construct($value) {

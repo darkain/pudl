@@ -23,6 +23,8 @@ trait pudlCompare {
 	public static function notRegexp(	$v1=false)				{ return self::regexp(		$v1)->not(); }
 	public static function notBetween(	$v1, $v2,	$v3=false)	{ return self::between(		$v1, $v2, $v3)->not(); }
 
+	public static function asc()	{ return new pudlSort('ASC'); }
+	public static function desc()	{ return new pudlSort('DESC'); }
 
 
 	public static function regexp($value) {

@@ -207,6 +207,9 @@ trait pudlQuery {
 			$item = $this->identifier($item);
 		} unset($item);
 
+		//WE'RE ONLY NEEDING THE COLUMN WITHOUT TABLE
+		if ($prefix === NULL) return end($list);
+
 		//EARLY OUT IF WE ARE NOT IN A DYNAMIC COLUMN
 		$return		= implode('.', $list);
 		if (count($dynamic) === 1) return $return;
@@ -319,27 +322,27 @@ trait pudlQuery {
 
 
 
-	protected function _order($order) {
+	protected function _order($order, $prefix=false) {
 		if (is_string($order)) return ' ORDER BY ' . $order;
 		if (!is_array($order)  &&  !is_object($order)) return '';
 		if ($order instanceof pudlStringResult) return (string) $order;
 		if (empty($order)) return '';
-		return ' ORDER BY ' . $this->_clauseRecurse($order,', ');
+		return ' ORDER BY ' . $this->_clauseRecurse($order, ', ', $prefix);
 	}
 
 
 
-	protected function _group($group) {
+	protected function _group($group, $prefix=false) {
 		if ($group === false)	return '';
 		if ($group instanceof pudlStringResult) return (string) $group;
-		if (is_array($group))	return ' GROUP BY ' . $this->_clauseRecurse($group,', ');
-		if (is_object($group))	return ' GROUP BY ' . $this->_clauseRecurse($group,', ');
+		if (is_array($group))	return ' GROUP BY ' . $this->_clauseRecurse($group, ', ', $prefix);
+		if (is_object($group))	return ' GROUP BY ' . $this->_clauseRecurse($group, ', ', $prefix);
 		return ' GROUP BY ' . $group;
 	}
 
 
 
-	private function _clauseRecurse($clause, $joiner=' AND ') {
+	private function _clauseRecurse($clause, $joiner=' AND ', $prefix=false) {
 		static $depth = 0;
 		$query = '';
 
@@ -354,7 +357,7 @@ trait pudlQuery {
 
 		if ($clause instanceof pudlColumn  &&  $clause->args) {
 			if (is_string($clause->column)) {
-				$query		.=	$this->identifiers($clause->column);
+				$query		.=	$this->identifiers($clause->column, $prefix);
 			} else {
 				$query		.=	$this->_value($clause->column);
 			}
@@ -384,14 +387,14 @@ trait pudlQuery {
 				$value->column = $key;
 
 			} else if (is_string($key)) {
-				$query			.= $this->identifiers($key);
+				$query			.= $this->identifiers($key, $prefix);
 				$query			.= $this->_clauseEquals($value);
 				if (pudl_array($value)) continue;
 
 			} else if ($value instanceof pudlColumn  &&  $value->args) {
 				$key			 = ''; //FORCE KEY TO STRING TYPE FOR _VALUE
 				if (is_string($value->column)) {
-					$query		.= $this->identifiers($value->column);
+					$query		.= $this->identifiers($value->column, $prefix);
 				} else {
 					$query		.= $this->_value($value->column);
 				}

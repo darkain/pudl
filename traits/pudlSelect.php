@@ -195,10 +195,10 @@ trait pudlSelect {
 			$query .= ' *, COUNT(*) FROM (SELECT ';
 		}
 
-		if (isset($params['column']))	$query .= $this->_column($params['column']);
+		if ( isset($params['column']))	$query .= $this->_column($params['column']);
 		if (!isset($params['column']))	$query .= '*';
-		if (isset($params['table']))	$query .= $this->_tables($params['table']);
-		if (isset($params['clause']))	$query .= $this->_clause($params['clause']);
+		if ( isset($params['table']))	$query .= $this->_tables($params['table']);
+		if ( isset($params['clause']))	$query .= $this->_clause($params['clause']);
 
 		if (isset($params['group'])  &&  isset($params['order'])) {
 			$query .= $this->_order($params['order']);
@@ -207,9 +207,18 @@ trait pudlSelect {
 			$query .= ' ';
 		}
 
-		if (isset($params['group']))	$query .= $this->_group($params['group']);
-		if (isset($params['having']))	$query .= $this->_clause($params['having'], 'HAVING');
-		if (isset($params['order']))	$query .= $this->_order($params['order']);
+		if (isset($params['order'])  &&  isset($params['group'])) {
+			$query .= $this->_group($params['group'], NULL);
+			if (isset($params['having'])) {
+				$query .= $this->_clause($params['having'], 'HAVING');
+			}
+			$query .= $this->_order($params['order'], NULL);
+
+		} else {
+			if (isset($params['group']))	$query .= $this->_group($params['group']);
+			if (isset($params['having']))	$query .= $this->_clause($params['having'], 'HAVING');
+			if (isset($params['order']))	$query .= $this->_order($params['order']);
+		}
 
 		$limit	= isset($params['limit'])	? $params['limit']	: false;
 		$offset	= isset($params['offset'])	? $params['offset']	: false;
