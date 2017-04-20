@@ -295,6 +295,7 @@ abstract class pudl {
 
 	public function query($query=false) {
 		if (func_num_args() < 1) return $this->query;
+		if (!pudl_array($query)) return $this($query);
 
 		$list = [];
 		$args = func_get_args();
