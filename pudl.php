@@ -294,7 +294,15 @@ abstract class pudl {
 
 
 	public function query($query=false) {
-		return ($query === false) ? $this->query : $this($query);
+		if (func_num_args() < 1) return $this->query;
+
+		$list = [];
+		$args = func_get_args();
+		foreach ($args as $arg) {
+			$list = array_merge_recursive($list, $arg);
+		}
+
+		return $this($list);
 	}
 
 
