@@ -4,6 +4,7 @@
 require_once('pudlConstants.php');
 require_once('pudlInterfaces.php');
 require_once('pudlHelpers.php');
+require_once('pudlOrm.php');
 
 //INTERNAL USAGE RESULT SETS
 require_once('pudlResult.php');
