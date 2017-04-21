@@ -331,17 +331,24 @@ abstract class pudl {
 
 			if (is_array($value)) {
 				if (is_int($key)) $key = '';
-				$return += $this->listFields($value, $key);
+				$return		+= $this->listFields($value, $key);
 
 			} else {
-				$value	= $this->_table($value);
-				$result	= $this('SHOW COLUMNS FROM ' . $value);
-				while ($data = $result()) {
-					$data['Table']	= $value;
-					$data['Prefix']	= is_int($key) ? $prefix : $key;
-					$return[$data['Field']] = $data;
+				$value		= $this->_table($value);
+
+				if (!empty($this->listcache[$value])) {
+					$list	= $this->listcache[$value];
+
+				} else {
+					$list	= $this('SHOW COLUMNS FROM ' . $value)->complete();
+					$this->listcache[$value] = $list;
 				}
-				$result->free();
+
+				foreach ($list as $item) {
+					$item['Table']	= $value;
+					$item['Prefix']	= is_int($key) ? $prefix : $key;
+					$return[$item['Field']] = $item;
+				}
 			}
 		}
 
@@ -594,6 +601,7 @@ abstract class pudl {
 	private			$query			= false;
 	private			$time			= 0;
 	private			$microtime		= 0.0;
+	private			$listcache		= [];
 	protected		$string			= [];
 	public static	$version		= 'PUDL 2.7.1';
 
