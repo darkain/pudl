@@ -39,9 +39,16 @@ abstract class	pudlOrm
 
 
 		//SET DEFAULT OBJECT ID AND FORCE INTEGER
-		$this->{static::column} = !empty($this->{static::column})
-								?  (int) $this->{static::column}
-								: 0;
+		if (static::hash) {
+			if (empty($this->{static::column})) {
+				$this->{static::column} = '';
+			}
+
+		} else {
+			$this->{static::column} = !empty($this->{static::column})
+									?  (int) $this->{static::column}
+									: 0;
+		}
 	}
 
 
@@ -326,4 +333,5 @@ abstract class	pudlOrm
 	const column	= 'id';
 	const table		= 'pudl';
 	const prefix	= -1;
+	const hash		= false;
 }
