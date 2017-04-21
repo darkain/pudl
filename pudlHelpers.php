@@ -121,7 +121,7 @@ class pudlFloat extends pudlEquals {
 class pudlColumn extends pudlEquals {
 	public function __construct($column, $value=false) {
 		parent::__construct($value);
-		$this->column	= $column;
+		$this->column	= is_array($column) ? implode('.', $column) : $column;
 		$this->args		= func_num_args() > 1;
 	}
 
