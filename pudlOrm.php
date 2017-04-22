@@ -135,20 +135,22 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	//GET A COLLECTION OF OBJECTS
 	////////////////////////////////////////////////////////////////////////////
-	public static function collect($clause, $pudl=[]) {
+	public static function collect(/* ...$selex */) {
 		global $db;
 
-		$result = $db(array_merge_recursive(
-			static::schema(),
-			$pudl,
-			['clause' => is_array($clause) ? $clause : [$clause]]
-		));
+		$return			= new pudlCollection;
+		$class			= static::classname;
+		$args			= static::schema();
+		$list			= func_get_args();
 
-		$class	= static::classname;
-		$return	= new pudlCollection;
+		foreach ($list as $item) {
+			$args		= array_merge_recursive($args, $item);
+		}
 
-		while ($data = $result()) {
-			$return[] = new $class($data);
+		$result			= $db->selex($args);
+
+		while ($data	= $result()) {
+			$return[]	= new $class($data);
 		}
 
 		$result->free();
@@ -162,8 +164,10 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	//GET A COLLECTION OF PARTS FROM ID NUMBERS
 	////////////////////////////////////////////////////////////////////////////
-	public static function group($items, $pudl=[]) {
-		return static::collect([static::column=>$items], $pudl);
+	public static function collection($items /*, ...$selex */) {
+		$args			= func_get_args();
+		$args[0]		= ['clause' => [static::column => $items]];
+		return static::collect($args);
 	}
 
 
