@@ -1,7 +1,7 @@
 <?php
 
 
-require_once('pudlObject.php');
+require_once('pudlCollection.php');
 
 
 
@@ -145,7 +145,7 @@ abstract class	pudlOrm
 		));
 
 		$class	= static::classname;
-		$return	= [];
+		$return	= new pudlCollection;
 
 		while ($data = $result()) {
 			$return[] = new $class($data);
