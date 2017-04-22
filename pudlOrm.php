@@ -139,9 +139,9 @@ abstract class	pudlOrm
 		$args	= func_get_args();
 		array_unshift($args, static::schema());
 
-		$result	= call_user_func_array([$db,'selex'], $args);
-		$return	= new pudlCollection;
 		$class	= static::classname;
+		$return	= new pudlCollection($class);
+		$result	= call_user_func_array([$db,'selex'], $args);
 
 		if ($class === __CLASS__) {
 			throw new pudlException('ORM const parameters were not overwritten');
