@@ -187,7 +187,14 @@ trait pudlSelect {
 
 
 
-	public function selex($params) {
+	public function selex(/* ...$selex */) {
+		$params		= [];
+		$args		= func_get_args();
+		foreach ($args as $arg) {
+			$params	= array_merge_recursive($params, $arg);
+		}
+
+
 		$query = 'SELECT ';
 		$query .= $this->_cache();
 

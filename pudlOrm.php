@@ -113,19 +113,15 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	//GET AN INSTANCE OF THIS OBJECT FROM THE DATABASE FOR A GIVEN CLAUSE
 	////////////////////////////////////////////////////////////////////////////
-	public static function select($clause, $pudl=[]) {
+	public static function select(/* ...$selex */) {
 		global $db;
 
-		$data = $db(array_merge_recursive(
-			static::schema(),
-			$pudl,
-			[
-				'clause'	=> is_array($clause) ? $clause : [$clause],
-				'limit'		=> 1,
-			]
-		))->complete();
+		$args	= func_get_args();
+		array_unshift($args, ['limit'=>1], static::schema());
 
-		$class = static::classname;
+		$data	= call_user_method_array('selex', $db, $args)->complete();
+		$class	= static::classname;
+
 		return new $class(reset($data));
 	}
 
@@ -138,16 +134,13 @@ abstract class	pudlOrm
 	public static function collect(/* ...$selex */) {
 		global $db;
 
-		$return			= new pudlCollection;
-		$class			= static::classname;
-		$args			= static::schema();
-		$list			= func_get_args();
+		$args	= func_get_args();
 
-		foreach ($list as $item) {
-			$args		= array_merge_recursive($args, $item);
-		}
+		array_unshift($args, static::schema());
 
-		$result			= $db->selex($args);
+		$result	= call_user_method_array('selex', $db, $args);
+		$return	= new pudlCollection;
+		$class	= static::classname;
 
 		while ($data	= $result()) {
 			$return[]	= new $class($data);
