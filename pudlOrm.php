@@ -13,7 +13,9 @@ abstract class	pudlOrm
 
 
 	public function __construct($item=false, $fetch=false) {
-		assert500(static::table !== 'pudl');
+		if (static::classname === __CLASS__) {
+			throw new pudlException('ORM const parameters were not overwritten');
+		}
 
 		if (is_array($item)) {
 			$fetch ? $this->fetch($item)		: $this->_replace($item);
@@ -119,10 +121,10 @@ abstract class	pudlOrm
 		$args	= func_get_args();
 		array_unshift($args, ['limit'=>1], static::schema());
 
-		$data	= call_user_method_array('selex', $db, $args)->complete();
+		$data	= call_user_func_array([$db,'selex'], $args)->complete();
 		$class	= static::classname;
 
-		return new $class(reset($data));
+		return is_array($data) ? new $class(reset($data)) : $data;
 	}
 
 
@@ -135,12 +137,15 @@ abstract class	pudlOrm
 		global $db;
 
 		$args	= func_get_args();
-
 		array_unshift($args, static::schema());
 
-		$result	= call_user_method_array('selex', $db, $args);
+		$result	= call_user_func_array([$db,'selex'], $args);
 		$return	= new pudlCollection;
 		$class	= static::classname;
+
+		if ($class === __CLASS__) {
+			throw new pudlException('ORM const parameters were not overwritten');
+		}
 
 		while ($data	= $result()) {
 			$return[]	= new $class($data);
@@ -158,9 +163,9 @@ abstract class	pudlOrm
 	//GET A COLLECTION OF PARTS FROM ID NUMBERS
 	////////////////////////////////////////////////////////////////////////////
 	public static function collection($items /*, ...$selex */) {
-		$args			= func_get_args();
-		$args[0]		= ['clause' => [static::column => $items]];
-		return static::collect($args);
+		$args		= func_get_args();
+		$args[0]	= ['clause' => [static::column => $items]];
+		return call_user_func_array([static::classname,'collect'], $args);
 	}
 
 
@@ -311,6 +316,8 @@ abstract class	pudlOrm
 
 	////////////////////////////////////////////////////////////////////////////
 	//SHORTCUT FUNCTIONS FOR ERROR CHECKING
+	//THESE ARE RELATED TO ALTAFORM. IF YOU'RE NOT USING THAT LIBRARY, THESE
+	//ARE THEN WORTHLESS
 	////////////////////////////////////////////////////////////////////////////
 	public function assert401($text=false) { assert401((string)$this, $text); return $this; }
 	public function assert402($text=false) { assert402((string)$this, $text); return $this; }
