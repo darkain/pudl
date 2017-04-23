@@ -47,6 +47,8 @@ class		pudlCollection
 		$list	= $this->_get();
 
 		foreach ($list as $item) {
+			if (!($item instanceof pudlOrm)) continue;
+
 			$return[] = call_user_func_array(
 				[$item, $name],
 				$arguments
