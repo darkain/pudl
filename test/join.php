@@ -41,12 +41,13 @@ $db->string()->select('*', ['x' => ['table1',
 pudlTest('SELECT * FROM `table1` AS `x` NATURAL JOIN `table2` AS `y`');
 
 
-/*
-$db->string()->select('*', ['x' => ['table1',
-	['hack' => ['y'=>'table2']],
+
+//NOTE: 'hack' will LEFT JOIN a group of tables with ZERO SQL SAFETY
+$db->string()->select('*', ['xx' => ['table1',
+	['hack' => 'table2 AS yy JOIN table3 AS zz'],
 ]]);
-pudlTest('SELECT * FROM `table1` AS `x` HACK `table2` AS `y`');
-*/
+pudlTest('SELECT * FROM `table1` AS `xx` LEFT JOIN (table2 AS yy JOIN table3 AS zz)');
+
 
 
 
