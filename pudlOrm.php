@@ -136,12 +136,13 @@ abstract class	pudlOrm
 	public static function collect(/* ...$selex */) {
 		global $db;
 
-		$args	= func_get_args();
+		$args		= func_get_args();
 		array_unshift($args, static::schema());
 
-		$class	= static::classname;
-		$return	= new pudlCollection($class);
-		$result	= call_user_func_array([$db,'selex'], $args);
+		$collector	= static::collector;
+		$class		= static::classname;
+		$return		= new $collector($class);
+		$result		= call_user_func_array([$db,'selex'], $args);
 
 		if ($class === __CLASS__) {
 			throw new pudlException('ORM const parameters were not overwritten');
@@ -333,6 +334,7 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	//LATE STATIC BINDING VARIABLES, OVERWRITE THESE IN YOUR CLASS
 	////////////////////////////////////////////////////////////////////////////
+	const collector	= 'pudlCollection';
 	const classname	= __CLASS__;
 	const column	= 'id';
 	const table		= 'pudl';
