@@ -18,7 +18,7 @@ abstract class	pudlOrm
 		}
 
 		if (is_array($item)) {
-			$fetch ? $this->fetch($item)		: $this->_replace($item);
+			$fetch ? $this->fetch($item)		: $this->replace($item);
 
 		} else if (is_a($item, 'af_url')) {
 			$this->fetch($item->id);
@@ -27,10 +27,10 @@ abstract class	pudlOrm
 			$this->fetch($item->id());
 
 		} else if (is_a($item, 'pudlResult')) {
-			$fetch ? $this->fetch($item())		: $this->_clone($item());
+			$fetch ? $this->fetch($item())		: $this->copy($item());
 
 		} else if (is_a($item, 'Traversable')) {
-			$fetch ? $this->fetch($item)		: $this->_clone($item);
+			$fetch ? $this->fetch($item)		: $this->copy($item);
 
 		} else if ($fetch  &&  (is_int($item)  ||  ctype_digit($item))) {
 			$this->fetch($item);
@@ -300,8 +300,8 @@ abstract class	pudlOrm
 					->complete();
 
 		!empty($data)
-			? $this->_replace($data[0])
-			: $this->_clear();
+			? $this->replace($data[0])
+			: $this->clear();
 	}
 
 

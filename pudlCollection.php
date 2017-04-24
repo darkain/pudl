@@ -44,7 +44,7 @@ class		pudlCollection
 		}
 
 		$return	= [];
-		$list	= $this->_get();
+		$list	= $this->raw();
 
 		foreach ($list as $item) {
 			if (!($item instanceof pudlOrm)) continue;
