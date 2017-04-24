@@ -546,7 +546,7 @@ trait pudlQuery {
 			if (pudl_array($value)) continue;
 			if (strlen($query)) $query .= ', ';
 			$query .= $this->_table($value);
-			if (is_string($key)) $query .= ' ' . $this->_table($key);
+			if (is_string($key)) $query .= ' AS ' . $this->_table($key);
 			$query .= ' ' . $lock;
 		}
 		return $query;
