@@ -95,11 +95,11 @@ abstract class	pudlOrm
 
 		if (tbx_array($id))	$id = $id[static::column];
 
-		if (empty($id)  &&  $get instanceof getvar) {
+		if ($id === false  &&  $get instanceof getvar) {
 			$id = $get->id();
 		}
 
-		if (empty($id)  &&  $afurl instanceof af_url) {
+		if ($id === false  &&  $afurl instanceof af_url) {
 			$id = $afurl->id;
 		}
 
