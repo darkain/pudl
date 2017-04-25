@@ -38,15 +38,15 @@ class pudlMySql extends pudl {
 		ini_set('mysql.connect_timeout', 10);
 
 		//ATTEMPT TO CREATE A PERSISTANT CONNECTION
-		$this->mysql = @mysql_pconnect(
+		$this->connection = @mysql_pconnect(
 			$auth['server'],
 			$auth['username'],
 			$auth['password']
 		);
 
 		//ATTEMPT TO CREATE A NON-PERSISTANT CONNECTION
-		if (empty($this->mysql)) {
-			$this->mysql = @mysql_connect(
+		if (empty($this->connection)) {
+			$this->connection = @mysql_connect(
 				$auth['server'],
 				$auth['username'],
 				$auth['password']
@@ -54,9 +54,9 @@ class pudlMySql extends pudl {
 		}
 
 		//ATTEMPT TO SELECT THE DATABASE AND SET UTF8 CHARACTER SET
-		if ($this->mysql) {
-			if (@mysql_select_db($auth['database'], $this->mysql)) {
-				$ok = @mysql_set_charset('utf8', $this->mysql);
+		if ($this->connection) {
+			if (@mysql_select_db($auth['database'], $this->connection)) {
+				$ok = @mysql_set_charset('utf8', $this->connection);
 			}
 		}
 
@@ -74,53 +74,49 @@ class pudlMySql extends pudl {
 
 	public function disconnect($trigger=true) {
 		parent::disconnect($trigger);
-		if (!$this->mysql) return;
-		@mysql_close($this->mysql);
-		$this->mysql = NULL;
+		if (!$this->connection) return;
+		@mysql_close($this->connection);
+		$this->connection = NULL;
 	}
 
 
 
 	public function escape($value) {
-		if (!$this->mysql) return @mysql_real_escape_string($value);
-		return @mysql_real_escape_string($value, $this->mysql);
+		if (!$this->connection) return @mysql_real_escape_string($value);
+		return @mysql_real_escape_string($value, $this->connection);
 	}
 
 
 
 	protected function process($query) {
-		if (!$this->mysql) return new pudlMySqlResult(false, $this);
-		$result = @mysql_query($query, $this->mysql);
+		if (!$this->connection) return new pudlMySqlResult(false, $this);
+		$result = @mysql_query($query, $this->connection);
 		return new pudlMySqlResult($result, $this);
 	}
 
 
 
 	public function insertId() {
-		if (!$this->mysql) return 0;
-		return @mysql_insert_id($this->mysql);
+		if (!$this->connection) return 0;
+		return @mysql_insert_id($this->connection);
 	}
 
 
 
 	public function updated() {
-		if (!$this->mysql) return 0;
-		return @mysql_affected_rows($this->mysql);
+		if (!$this->connection) return 0;
+		return @mysql_affected_rows($this->connection);
 	}
 
 
 
 	public function errno() {
-		return @mysql_errno($this->mysql);
+		return @mysql_errno($this->connection);
 	}
 
 
 
 	public function error() {
-		return @mysql_error($this->mysql);
+		return @mysql_error($this->connection);
 	}
-
-
-
-	private $mysql = NULL;
 }

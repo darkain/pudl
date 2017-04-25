@@ -36,11 +36,11 @@ class pudlMySqli extends pudl {
 	public function connect() {
 		$auth = $this->auth();
 
-		$this->mysqli = mysqli_init();
-		$this->mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, 10);
+		$this->connection = mysqli_init();
+		$this->connection->options(MYSQLI_OPT_CONNECT_TIMEOUT, 10);
 
 		//ATTEMPT TO CREATE A CONNECTION
-		$ok = @$this->mysqli->real_connect(
+		$ok = @$this->connection->real_connect(
 			(empty($auth['persistent']) ? '' : 'p:') . $auth['server'],
 			$auth['username'],
 			$auth['password'],
@@ -51,7 +51,7 @@ class pudlMySqli extends pudl {
 		if ($ok) $ok = ($this->connectErrno() === 0);
 
 		//ATTEMPT TO SET UTF8 CHARACTER SET
-		if ($ok) $ok = @$this->mysqli->set_charset('utf8');
+		if ($ok) $ok = @$this->connection->set_charset('utf8');
 
 		//CONNECTION IS GOOD!
 		if (!empty($ok)) return true;
@@ -71,69 +71,65 @@ class pudlMySqli extends pudl {
 
 	public function disconnect($trigger=true) {
 		parent::disconnect($trigger);
-		if (!$this->mysqli) return;
-		@$this->mysqli->close();
-		$this->mysqli = NULL;
+		if (!$this->connection) return;
+		@$this->connection->close();
+		$this->connection = NULL;
 	}
 
 
 
 	public function escape($value) {
-		if (!$this->mysqli) return false;
-		return @$this->mysqli->real_escape_string($value);
+		if (!$this->connection) return false;
+		return @$this->connection->real_escape_string($value);
 	}
 
 
 
 	protected function process($query) {
-		if (!$this->mysqli) return new pudlMySqliResult(false, $this);
-		$result = @$this->mysqli->query($query);
+		if (!$this->connection) return new pudlMySqliResult(false, $this);
+		$result = @$this->connection->query($query);
 		return new pudlMySqliResult($result, $this);
 	}
 
 
 
 	public function insertId() {
-		if (!$this->mysqli) return 0;
-		return $this->mysqli->insert_id;
+		if (!$this->connection) return 0;
+		return $this->connection->insert_id;
 	}
 
 
 
 	public function updated() {
-		if (!$this->mysqli) return 0;
-		return $this->mysqli->affected_rows;
+		if (!$this->connection) return 0;
+		return $this->connection->affected_rows;
 	}
 
 
 
 	public function errno() {
-		if (!$this->mysqli) return @mysqli_errno(NULL);
-		return $this->mysqli->errno;
+		if (!$this->connection) return @mysqli_errno(NULL);
+		return $this->connection->errno;
 	}
 
 
 
 	public function error() {
-		if (!$this->mysqli) return @mysqli_error(NULL);
-		return $this->mysqli->error;
+		if (!$this->connection) return @mysqli_error(NULL);
+		return $this->connection->error;
 	}
 
 
 
 	public function connectErrno() {
-		if (!$this->mysqli) return @mysqli_connect_errno();
-		return $this->mysqli->connect_errno;
+		if (!$this->connection) return @mysqli_connect_errno();
+		return $this->connection->connect_errno;
 	}
 
 
 
 	public function connectError() {
-		if (!$this->mysqli) return @mysqli_connect_error();
-		return $this->mysqli->connect_error;
+		if (!$this->connection) return @mysqli_connect_error();
+		return $this->connection->connect_error;
 	}
-
-
-
-	protected $mysqli	= NULL;
 }

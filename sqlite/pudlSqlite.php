@@ -37,66 +37,63 @@ class pudlSqlite extends pudl {
 		$auth = $this->auth();
 
 		//Create Sqlite3 object instance
-		$this->sqlite = new SQLite3($auth['database']);
+		$this->connection = new SQLite3($auth['database']);
 
 		//Cannot connect - Error out
-		if (empty($this->sqlite)) {
+		if (empty($this->connection)) {
 			throw new pudlException(
 				'Unable to open Sqlite database file: ' . $auth['database']
 			);
 		}
 
 		//Set a busy timeout for Sqlite to 5 seconds
-		$this->sqlite->busyTimeout(5000);
+		$this->connection->busyTimeout(5000);
 	}
 
 
 	public function disconnect($trigger=true) {
 		parent::disconnect($trigger);
-		if (!$this->sqlite) return;
-		@$this->sqlite->close();
-		$this->sqlite = false;
+		if (!$this->connection) return;
+		@$this->connection->close();
+		$this->connection = NULL;
 	}
 
 
 
 	public function escape($str) {
-		if (!$this->sqlite) return false;
-		return @$this->sqlite->escapeString($str);
+		if (!$this->connection) return false;
+		return @$this->connection->escapeString($str);
 	}
 
 
 	protected function process($query) {
-		if (!$this->sqlite) return new pudlSqliteResult(false, $this);
-		$result = $this->sqlite->query($query);
+		if (!$this->connection) return new pudlSqliteResult(false, $this);
+		$result = $this->connection->query($query);
 		return new pudlSqliteResult($result, $this);
 	}
 
 
 	public function insertId() {
-		if (!$this->sqlite) return 0;
-		return $this->sqlite->lastInsertRowID();
+		if (!$this->connection) return 0;
+		return $this->connection->lastInsertRowID();
 	}
 
 
 	public function updated() {
-		if (!$this->sqlite) return 0;
-		return $this->sqlite->changes();
+		if (!$this->connection) return 0;
+		return $this->connection->changes();
 	}
 
 
 	public function errno() {
-		if (!$this->sqlite) return 0;
-		return $this->sqlite->lastErrorCode();
+		if (!$this->connection) return 0;
+		return $this->connection->lastErrorCode();
 	}
 
 
 	public function error() {
-		if (!$this->sqlite) return '';
-		return $this->sqlite->lastErrorMsg();
+		if (!$this->connection) return '';
+		return $this->connection->lastErrorMsg();
 	}
 
-
-
-	private $sqlite = false;
 }

@@ -22,14 +22,14 @@ class pudlPgSql extends pudl {
 	public function connect() {
 		$auth = $this->auth();
 
-		$this->pgsql = @pg_connect(
+		$this->connection = @pg_connect(
 			' host='		. $auth['server'] .
 			' dbname='		. $auth['database'] .
 			' user='		. $auth['username'] .
 			' password='	. $auth['password']
 		);
 
-		if ($this->pgsql === false) {
+		if ($this->connection === false) {
 			throw new pudlException(
 				'ERROR CONNECTING TO POSTGRESQL: ' . $this->error()
 			);
@@ -40,30 +40,30 @@ class pudlPgSql extends pudl {
 
 	public function disconnect($trigger=true) {
 		parent::disconnect($trigger);
-		if (!$this->pgsql) return;
-		pg_close($this->pgsql);
-		$this->pgsql = false;
+		if (!$this->connection) return;
+		pg_close($this->connection);
+		$this->connection = NULL;
 	}
 
 
 
 	public function identifier($identifier) {
-		if (!$this->pgsql) return false;
-		return pg_escape_identifier($this->pgsql, $identifier);
+		if (!$this->connection) return false;
+		return pg_escape_identifier($this->connection, $identifier);
 	}
 
 
 
 	public function escape($value) {
-		if (!$this->pgsql) return false;
-		return pg_escape_string($this->pgsql, $value);
+		if (!$this->connection) return false;
+		return pg_escape_string($this->connection, $value);
 	}
 
 
 
 	protected function process($query) {
-		if (!$this->pgsql) return new pudlPgSqlResult(false, $this);
-		$result = @pg_query($this->pgsql, $query);
+		if (!$this->connection) return new pudlPgSqlResult(false, $this);
+		$result = @pg_query($this->connection, $query);
 		$this->numrows = ($result !== false) ? @pg_num_rows($result) : 0;
 		return new pudlPgSqlResult($result, $this);
 	}
@@ -71,8 +71,8 @@ class pudlPgSql extends pudl {
 
 
 	public function insertId() {
-		if (!$this->pgsql) return 0;
-		$result = @pg_query($this->pgsql, 'SELECT lastval()');
+		if (!$this->connection) return 0;
+		$result = @pg_query($this->connection, 'SELECT lastval()');
 		if ($result === false) return false;
 		$return = @pg_fetch_array($result, NULL, PGSQL_NUM);
 		pg_free_result($result);
@@ -82,8 +82,8 @@ class pudlPgSql extends pudl {
 
 
 	public function updated() {
-		if (!$this->pgsql) return 0;
-		return @pg_affected_rows($this->pgsql);
+		if (!$this->connection) return 0;
+		return @pg_affected_rows($this->connection);
 	}
 
 
@@ -95,12 +95,8 @@ class pudlPgSql extends pudl {
 
 
 	public function error() {
-		if (!$this->pgsql) return pg_last_error();
-		return pg_last_error($this->pgsql);
+		if (!$this->connection) return pg_last_error();
+		return pg_last_error($this->connection);
 	}
-
-
-
-	private $pgsql = false;
 
 }

@@ -40,14 +40,14 @@ class pudlPdo extends pudl {
 		$auth = $this->auth();
 
 		try {
-			$this->pdo = new PDO(
+			$this->connection = new PDO(
 				$auth['server'],
 				$auth['username'],
 				$auth['password'],
 				$auth['otions']
 			);
 
-			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+			$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
 
 		} catch (PDOException $e) {
 			throw new pudlException(
@@ -60,13 +60,13 @@ class pudlPdo extends pudl {
 
 	public function disconnect($trigger=true) {
 		parent::disconnect($trigger);
-		$this->pdo = false;
+		$this->connection = NULL;
 	}
 
 
 
 	public function identifier($identifier) {
-		if (!$this->pdo) return parent::identifier($identifier);
+		if (!$this->connection) return parent::identifier($identifier);
 
 		if ($this->identifier === ']') {
 			return '[' . str_replace(']', ']]', $identifier) . ']';
@@ -78,28 +78,28 @@ class pudlPdo extends pudl {
 
 
 	public function escape($value) {
-		if (!$this->pdo) return parent::escape($value);
-		return $this->pdo->quote($value);
+		if (!$this->connection) return parent::escape($value);
+		return $this->connection->quote($value);
 	}
 
 
 
 	protected function process($query) {
-		if (!$this->pdo) return new pudlPdoResult(false, $this);
+		if (!$this->connection) return new pudlPdoResult(false, $this);
 		if (strtoupper(substr($query, 0, 7)) === 'SELECT ') {
-			$result = @$this->pdo->query($query);
+			$result = @$this->connection->query($query);
 			return new pudlPdoResult($result, $this);
 		}
 
-		$this->updated = @$this->pdo->exec($query);
+		$this->updated = @$this->connection->exec($query);
 		return new pudlPdoResult(true, $this);
 	}
 
 
 
 	public function insertId() {
-		if (!$this->pdo) return 0;
-		return $this->pdo->lastInsertId();
+		if (!$this->connection) return 0;
+		return $this->connection->lastInsertId();
 	}
 
 
@@ -111,35 +111,35 @@ class pudlPdo extends pudl {
 
 
 	public function errno() {
-		if (!$this->pdo) return 0;
-		return $this->pdo->errorCode();
+		if (!$this->connection) return 0;
+		return $this->connection->errorCode();
 	}
 
 
 
 	public function error() {
-		if (!$this->pdo) return false;
-		return $this->pdo->errorInfo();
+		if (!$this->connection) return false;
+		return $this->connection->errorInfo();
 	}
 
 
 
 	public function inTransaction() {
-		if (!$this->pdo) return false;
-		return $this->pdo->inTransaction();
+		if (!$this->connection) return false;
+		return $this->connection->inTransaction();
 	}
 
 
 
 	public function begin() {
-		if ($this->pdo) $this->pdo->beginTransaction();
+		if ($this->connection) $this->connection->beginTransaction();
 		return $this;
 	}
 
 
 
 	public function commit($sync=false) {
-		if ($this->pdo) $this->pdo->commit();
+		if ($this->connection) $this->connection->commit();
 		if ($sync) $this->sync();
 		return $this;
 	}
@@ -147,12 +147,11 @@ class pudlPdo extends pudl {
 
 
 	public function rollback() {
-		if ($this->pdo) $this->pdo->rollback();
+		if ($this->connection) $this->connection->rollback();
 		return $this;
 	}
 
 
 
-	private $pdo		= false;
 	private $updated	= 0;
 }

@@ -64,16 +64,16 @@ class pudlGalera extends pudlMySqli {
 		$auth = $this->auth();
 
 		foreach ($this->pool as $server) {
-			$this->mysqli = mysqli_init();
+			$this->connection = mysqli_init();
 
 			//SET CONNECTION TIMEOUT TO 1 SECOND IF WE'RE IN A CLSUTER, ELSE 10 SECONDS
-			$this->mysqli->options(
+			$this->connection->options(
 				MYSQLI_OPT_CONNECT_TIMEOUT,
 				(count($this->pool)>1) ? 1 : 10
 			);
 
 			//ATTEMPT TO CREATE A CONNECTION
-			$ok = @$this->mysqli->real_connect(
+			$ok = @$this->connection->real_connect(
 				(empty($auth['persistent']) ? '' : 'p:') . $server,
 				$auth['username'],
 				$auth['password'],
@@ -84,7 +84,7 @@ class pudlGalera extends pudlMySqli {
 			if ($ok) $ok = ($this->connectErrno() === 0);
 
 			//ATTEMPT TO SET UTF-8 CHARACTER SET
-			if ($ok) $ok = @$this->mysqli->set_charset('utf8');
+			if ($ok) $ok = @$this->connection->set_charset('utf8');
 
 			//ATTEMPT TO GET THE CLUSTER SYNC STATE OF THIS NODE
 			$this->state = $ok ? $this->globals('wsrep_local_state') : [];
@@ -148,26 +148,26 @@ class pudlGalera extends pudlMySqli {
 
 
 	protected function process($query) {
-		if (!$this->mysqli) return new pudlMySqliResult(false, $this);
+		if (!$this->connection) return new pudlMySqliResult(false, $this);
 
 		//PROPERLY HANDLE RE-ENTRY TO THIS FUNCTION
 		$wait = $this->wait;
 		$this->wait = false;
 
 		if ($wait) {
-			@$this->mysqli->query(
+			@$this->connection->query(
 				'SET @wsrep_sync_wait_orig = @@wsrep_sync_wait'
 			);
 			if ($this->errno()) return new pudlMySqliResult(false, $this);
 
-			@$this->mysqli->query(
+			@$this->connection->query(
 				'SET SESSION wsrep_sync_wait = GREATEST(@wsrep_sync_wait_orig,'.$wait.')'
 			);
 			if ($this->errno()) return new pudlMySqliResult(false, $this);
 		}
 
 
-		$result = @$this->mysqli->query($query);
+		$result = @$this->connection->query($query);
 
 		switch ($this->errno()) {
 			case 0: break; //NO ERRORS!
@@ -197,19 +197,19 @@ class pudlGalera extends pudlMySqli {
 				//THIS CONDITION IS SIMPLE: JUST RETRY THE QUERY!
 				} else {
 					usleep(25000);
-					$result = @$this->mysqli->query($query);
+					$result = @$this->connection->query($query);
 
 					//IF WE DEADLOCK AGAIN, TRY ONCE MORE BUT WAIT LONGER
 					if ($this->errno() == 1205  ||  $this->errno() == 1213) {
 						usleep(50000);
-						$result = @$this->mysqli->query($query);
+						$result = @$this->connection->query($query);
 					}
 				}
 			break;
 		}
 
 		if ($wait  &&  !$this->errno()) {
-			@$this->mysqli->query(
+			@$this->connection->query(
 				'SET SESSION wsrep_sync_wait = @wsrep_sync_wait_orig'
 			);
 		}

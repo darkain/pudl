@@ -294,6 +294,12 @@ abstract class pudl {
 
 
 
+	public function connection() {
+		return $this->connection;
+	}
+
+
+
 	public function query($query=false) {
 		if (func_num_args() < 1) return $this->query;
 		if (!pudl_array($query)) return $this($query);
@@ -596,6 +602,7 @@ abstract class pudl {
 	private			$time			= 0;
 	private			$microtime		= 0.0;
 	private			$listcache		= [];
+	protected		$connection		= NULL;
 	protected		$string			= [];
 	public static	$version		= 'PUDL 2.8.0';
 

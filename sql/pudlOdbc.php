@@ -22,13 +22,13 @@ class pudlOdbc extends pudl {
 	public function connect() {
 		$auth = $this->auth();
 
-		$this->odbc = @odbc_connect(
+		$this->connection = @odbc_connect(
 			$auth['database'],
 			$auth['username'],
 			$auth['password']
 		);
 
-		if ($this->odbc === false) {
+		if ($this->connection === false) {
 			throw new pudlException(
 				'ERROR CONNECTING TO ODBC: ' . $this->errno() . ' - ' . $this->error()
 			);
@@ -38,8 +38,8 @@ class pudlOdbc extends pudl {
 
 
 	protected function process($query) {
-		if (!$this->odbc) return new pudlOdbcResult(false, $this);
-		$result = @odbc_exec($this->odbc, $query);
+		if (!$this->connection) return new pudlOdbcResult(false, $this);
+		$result = @odbc_exec($this->connection, $query);
 		$this->numrows = ($result !== false) ? @odbc_num_rows($result) : 0;
 		return new pudlOdbcResult($result, $this);
 	}
@@ -47,8 +47,8 @@ class pudlOdbc extends pudl {
 
 
 	public function insertId() {
-		if (!$this->odbc) return 0;
-		$result = @odbc_exec($this->odbc, 'SELECT @@IDENTITY');
+		if (!$this->connection) return 0;
+		$result = @odbc_exec($this->connection, 'SELECT @@IDENTITY');
 		if ($result === false) return false;
 		@odbc_fetch_row($result, 0);
 		$return = @odbc_result($this->result, 0);
@@ -65,19 +65,18 @@ class pudlOdbc extends pudl {
 
 
 	public function errno() {
-		if (!$this->odbc) return (int) odbc_error();
-		return (int) odbc_error($this->odbc);
+		if (!$this->connection) return (int) odbc_error();
+		return (int) odbc_error($this->connection);
 	}
 
 
 
 	public function error() {
-		if (!$this->odbc) return odbc_errormsg();
-		return odbc_errormsg($this->odbc);
+		if (!$this->connection) return odbc_errormsg();
+		return odbc_errormsg($this->connection);
 	}
 
 
 
-	private $odbc		= false;
 	private $numrows	= 0;
 }

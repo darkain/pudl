@@ -31,21 +31,21 @@ class pudlMsSql extends pudl {
 	public function connect() {
 		$auth = $this->auth();
 
-		$this->mssql = @mssql_pconnect(
+		$this->connection = @mssql_pconnect(
 			$auth['server'],
 			$auth['username'],
 			$auth['password']
 		);
 
-		if (!$this->mssql) {
-			$this->mssql = @mssql_connect(
+		if (!$this->connection) {
+			$this->connection = @mssql_connect(
 				$auth['server'],
 				$auth['username'],
 				$auth['password']
 			);
 		}
 
-		if (!$this->mssql) {
+		if (!$this->connection) {
 			$error  = "<br />\n";
 			$error .= 'Unable to connect to database server: "' . $auth['server'];
 			$error .= '" with the username: "' . $auth['username'];
@@ -53,7 +53,7 @@ class pudlMsSql extends pudl {
 			throw new pudlException($error);
 		}
 
-		if (!@mssql_select_db($auth['database'], $this->mssql)) {
+		if (!@mssql_select_db($auth['database'], $this->connection)) {
 			$error  = "<br />\n";
 			$error .= 'Unable to select database : "' . $auth['database'];
 			$error .= "\"<br />\nError " . $this->errno() . ': ' . $this->error();
@@ -63,9 +63,18 @@ class pudlMsSql extends pudl {
 
 
 
+	public function disconnect($trigger=true) {
+		parent::disconnect($trigger);
+		if (!$this->connection) return;
+		@mssql_close($this->connection);
+		$this->connection = NULL;
+	}
+
+
+
 	protected function process($query) {
-		if (!$this->mssql) return new pudlMsSqlResult(false, $this);
-		$result = @mssql_query($query, $this->mssql);
+		if (!$this->connection) return new pudlMsSqlResult(false, $this);
+		$result = @mssql_query($query, $this->connection);
 		return new pudlMsSqlResult($result, $this);
 	}
 
@@ -82,8 +91,8 @@ class pudlMsSql extends pudl {
 
 
 	public function insertId() {
-		if (!$this->mssql) return 0;
-		$result = @mssql_query('SELECT @@IDENTITY', $this->mssql);
+		if (!$this->connection) return 0;
+		$result = @mssql_query('SELECT @@IDENTITY', $this->connection);
 		if ($result === false) return false;
 		$return = @mssql_result($result, 0, 0);
 		@mssql_free_result($result);
@@ -93,8 +102,8 @@ class pudlMsSql extends pudl {
 
 
 	public function updated() {
-		if (!$this->mssql) return 0;
-		$result = @mssql_query('SELECT @@ROWCOUNT', $this->mssql);
+		if (!$this->connection) return 0;
+		$result = @mssql_query('SELECT @@ROWCOUNT', $this->connection);
 		if ($result === false) return false;
 		$return = @mssql_result($result, 0, 0);
 		@mssql_free_result($result);
@@ -132,9 +141,5 @@ class pudlMsSql extends pudl {
 
 		return $query;
 	}
-
-
-
-	private $mssql = false;
 
 }
