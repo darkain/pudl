@@ -211,7 +211,6 @@ trait pudlSelect {
 			$query .= $this->_order($params['order']);
 			$query .= ') ';
 			$query .= $this->_alias();
-			$query .= ' ';
 		}
 
 		if (isset($params['order'])  &&  isset($params['group'])) {
