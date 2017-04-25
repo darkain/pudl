@@ -234,10 +234,18 @@ class pudlObject implements ArrayAccess, Iterator {
 	public function extract($keys) {
 		$return = [];
 		if (!is_array($keys)) $keys = func_get_args();
-		foreach ($keys as $item) {
-			$return[$item] = $this->__array[$item];
+		foreach ($keys as $key) {
+			$return[$key] = $this->__array[$key];
 		}
 		return $return;
+	}
+
+
+	public function extractFrom($source, $keys) {
+		if (!pudl_array($keys)) $keys = [$keys];
+		foreach ($keys as $key) {
+			$this->__array[$key] = $source[$key];
+		}
 	}
 
 
@@ -248,17 +256,8 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	public function compare() {
-		$return = [];
-		if (!empty($this->__snapshot)) {
-			foreach ($this->__array as $key => $value) {
-				if (!array_key_exists($key, $this->__snapshot)) {
-					$return[$key] = $value;
-				} else if ($this->__snapshot[$key] !== $value) {
-					$return[$key] = $value;
-				}
-			}
-		}
-		return $return;
+		if (empty($this->__snapshot)) return [];
+		return array_diff_assoc($this->__array, $this->__snapshot);
 	}
 
 
