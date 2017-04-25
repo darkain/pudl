@@ -165,7 +165,12 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	public static function collection($items /*, ...$selex */) {
 		$args		= func_get_args();
-		$args[0]	= ['clause' => [static::column => $items]];
+
+		$args[0]	= ['clause' => [pudl::column(
+			[static::prefix, static::column],
+			$items
+		)]];
+
 		return call_user_func_array([static::classname,'collect'], $args);
 	}
 
