@@ -97,6 +97,7 @@ abstract class	pudlOrm
 
 		if ($id === false  &&  $get instanceof getvar) {
 			$id = $get->id();
+			if ($id === 0) $id = false;
 		}
 
 		if ($id === false  &&  $afurl instanceof af_url) {
