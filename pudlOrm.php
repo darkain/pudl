@@ -93,6 +93,9 @@ abstract class	pudlOrm
 	public static function get($id=false) {
 		global $get, $afurl;
 
+		if ($id instanceof getvar) $id = $get->id();
+		if ($id instanceof af_url) $id = $afurl->id;
+
 		if (tbx_array($id))	$id = $id[static::column];
 
 		if ($id === false  &&  $get instanceof getvar) {
@@ -103,6 +106,7 @@ abstract class	pudlOrm
 		if ($id === false  &&  $afurl instanceof af_url) {
 			$id = $afurl->id;
 		}
+
 
 		$id = (int) $id;
 
