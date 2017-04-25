@@ -67,6 +67,10 @@ class pudlMySql extends pudl {
 			$error .= '" with the username: "' . $auth['username'];
 			$error .= "\"<br />\nError " . $this->errno() . ': ' . $this->error();
 			if (self::$die) throw new pudlException($error);
+		} else {
+			if (!empty($auth['timeout'])) {
+				$this->timeout($auth['timeout']);
+			}
 		}
 	}
 

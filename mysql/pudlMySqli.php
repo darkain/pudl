@@ -54,7 +54,12 @@ class pudlMySqli extends pudl {
 		if ($ok) $ok = @$this->connection->set_charset('utf8');
 
 		//CONNECTION IS GOOD!
-		if (!empty($ok)) return true;
+		if (!empty($ok)) {
+			if (!empty($auth['timeout'])) {
+				$this->timeout($auth['timeout']);
+			}
+			return true;
+		}
 
 		//CANNOT CONNECT, BUT BAILING OUT OF SCRIPT IS DISABLED
 		if (!self::$die) return false;

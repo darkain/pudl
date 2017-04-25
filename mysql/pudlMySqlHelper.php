@@ -65,12 +65,28 @@ trait pudlMySqlHelper {
 
 
 
+	public function timeout($timeout) {
+		if ($this->timeout === false) {
+			$this->timeout = $this->variables('max_statement_time');
+		}
+
+		if (!empty($this->timeout)) {
+			$this->set('max_statement_time', $timeout);
+		}
+
+		return $this;
+	}
+
+
+
 	public static function dieOnError($die) {
 		self::$die = $die;
 	}
 
 
 
-	private static $die = true;
+	private static $die	= true;
 
+
+	private $timeout	= false;
 }
