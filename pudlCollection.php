@@ -33,10 +33,22 @@ class		pudlCollection
 
 	////////////////////////////////////////////////////////////////////////////
 	//FORWARD METHOD CALL TO ALL OBJECTS WITHIN COLLECTION
-	//TODO: single underscore prefix: remove prefix, and call parent
-	//TODO: only if method_exists(this->classname, $func)
 	////////////////////////////////////////////////////////////////////////////
 	public function __call($name, $arguments) {
+		if (empty($name)) return;
+
+
+		//ALLOW FORWARDING CALLS TO PUDLOBJECT METHEDS BY UNDERSCORE PREFIXING
+		if ($name[0] === '_') {
+			$newname = substr($name, 1);
+			if (method_exists($this->classname, $newname)) {
+				$name = $newname;
+			}
+		}
+
+
+		//ALLOW FORWARDING TO STATIC FUNCTION, ONLY CALLED ONCE PER COLLECTION
+		//INSTEAD OF ONCE PER OBJECT INSTANCE
 		$method = new ReflectionMethod($this->classname, $name);
 		if ($method->isStatic()) {
 			return call_user_func_array(
@@ -45,6 +57,8 @@ class		pudlCollection
 			);
 		}
 
+
+		//FORWARD CALL TO ALL OBJECTS WITHIN COLLECTION
 		$return	= [];
 		$list	= $this->raw();
 
@@ -58,20 +72,6 @@ class		pudlCollection
 		}
 
 		return $return;
-	}
-
-
-
-
-	////////////////////////////////////////////////////////////////////////////
-	//EXTRACT DATA FROM AN OBJECT AND PUT IT IN ALL OBJECTS IN THIS COLLECTION
-	////////////////////////////////////////////////////////////////////////////
-	public function extend() {
-		$arguments = func_get_args();
-		foreach ($this->raw() as $item) {
-			if (!($item instanceof pudlOrm)) continue;
-			call_user_func_array([$item,'extractFrom'],	$arguments);
-		}
 	}
 
 

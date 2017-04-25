@@ -241,7 +241,7 @@ class pudlObject implements ArrayAccess, Iterator {
 	}
 
 
-	public function extractFrom($source, $keys) {
+	public function extend($source, $keys) {
 		if (!pudl_array($keys)) $keys = [$keys];
 		foreach ($keys as $key) {
 			$this->__array[$key] = $source[$key];
