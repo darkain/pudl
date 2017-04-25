@@ -33,6 +33,8 @@ class		pudlCollection
 
 	////////////////////////////////////////////////////////////////////////////
 	//FORWARD METHOD CALL TO ALL OBJECTS WITHIN COLLECTION
+	//TODO: single underscore prefix: remove prefix, and call parent
+	//TODO: only if method_exists(this->classname, $func)
 	////////////////////////////////////////////////////////////////////////////
 	public function __call($name, $arguments) {
 		$method = new ReflectionMethod($this->classname, $name);
