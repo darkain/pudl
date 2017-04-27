@@ -1,7 +1,7 @@
 <?php
 
 
-function pudlExcel($result, $filename, $headers=false) {
+function pudlExportExcel($result, $filename, $headers=false) {
 	$zip = new ZipArchive();
 
 	@unlink($filename);

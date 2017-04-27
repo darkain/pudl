@@ -1,6 +1,10 @@
 <?php
 
+error_reporting(E_ALL);
+
+
 chdir(__DIR__);
+
 
 
 //TEST FOR PHP EXTENSIONS
@@ -22,17 +26,34 @@ if (!$found) throw new exception('No supported database PHP extensions found');
 //THIS ENSURES THEY CAN AT LEAST BE PARSED BY PHP/HHVM!
 
 require_once('../pudl.php');
+require_once('../file/pudlExportExcel.php');
+require_once('../file/pudlImportCsv.php');
+require_once('../file/pudlImportExcel.php');
+require_once('../mssql/pudlMsSql.php');
 require_once('../mysql/pudlGalera.php');
 require_once('../mysql/pudlMySql.php');
 require_once('../mysql/pudlMySqli.php');
-require_once('../mssql/pudlMsSql.php');
+require_once('../null/pudlNull.php');
+require_once('../null/pudlArrayResult.php');
+require_once('../null/pudlFakeResult.php');
+require_once('../pdo/pudlPdo.php');
 require_once('../pgsql/pudlPgSql.php');
-require_once('../sqlite/pudlSqlite.php');
 require_once('../sql/pudlOdbc.php');
 require_once('../sql/pudlShell.php');
 require_once('../sql/pudlWeb.php');
-require_once('../null/pudlNull.php');
+require_once('../sqlite/pudlSqlite.php');
 
+
+//TEST TO ENSURE EACH CLASS CAN INSTANTIATE PROPERLY
+new pudlMsSql(	[], false);
+new pudlGalera(	['server'=>['localhost']], false);
+new pudlMySql(	[], false);
+new pudlMySqli(	[], false);
+new pudlNull(	[], false);
+new pudlPdo(	['server'=>'localhost'], false);
+new pudlOdbc(	[], false);
+new pudlShell(	[], false);
+new pudlWeb(	[], false);
 
 
 $db = new pudlNull(['identifier' => '`']);
