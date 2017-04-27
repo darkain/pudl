@@ -32,10 +32,7 @@ trait pudlInsert {
 		if ($prefix) $cols .= ')'; else $cols = '';
 
 		$table = $this->_table($table);
-		if ($update === 'IGNORE') {
-			$query = "INSERT IGNORE INTO $table$cols VALUES ($vals)";
-
-		} else if ($update === 'REPLACE') {
+		if ($update === 'REPLACE') {
 			$query = "REPLACE INTO $table$cols VALUES ($vals)";
 
 		} else {
@@ -62,12 +59,6 @@ trait pudlInsert {
 
 	public function insertValues($table, $data, $update=false) {
 		return $this->insert($table, $data, $update, false);
-	}
-
-
-
-	public function insertIgnore($table, $data) {
-		return $this->insert($table, $data, 'IGNORE');
 	}
 
 
@@ -154,10 +145,7 @@ trait pudlInsert {
 			$query .= ')';
 		}
 
-		if ($update === 'IGNORE') {
-			$query = 'INSERT IGNORE INTO ' . $this->_table($table) . ' (' . $query;
-
-		} else if ($update === 'REPLACE') {
+		if ($update === 'REPLACE') {
 			$query = 'REPLACE INTO ' . $this->_table($table) . ' (' . $query;
 
 		} else {
@@ -176,12 +164,6 @@ trait pudlInsert {
 
 	public function replaceEx($table, $cols, $data) {
 		return $this->insertEx($table, $cols, $data, 'REPLACE');
-	}
-
-
-
-	public function insertIgnoreEx($table, $cols, $data) {
-		return $this->insertEx($table, $cols, $data, 'IGNORE');
 	}
 
 }

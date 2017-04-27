@@ -97,9 +97,7 @@ class pudlGalera extends pudlMySqli {
 			//ONLY CONNECT IF NODE IS IN A 'JOINED' OR 'SYNCED' STATE
 			$state = (int) $this->state['wsrep_local_state'];
 			if ($state === GALERA_JOINED  ||  $state === GALERA_SYNCED) {
-				if (!empty($auth['timeout'])) {
-					$this->timeout($auth['timeout']);
-				}
+				$this->strict()->timeout($auth);
 				$this->connected = $server;
 				return true;
 			}

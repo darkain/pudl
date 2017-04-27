@@ -20,18 +20,6 @@ trait pudlUpdate {
 
 
 
-	public function updateIgnore($table, $data, $clause, $limit=false, $offset=false) {
-		$query  = 'UPDATE IGNORE ';
-		$query .= $this->_table($table);
-		$query .= ' SET ';
-		$query .= $this->_update($data);
-		$query .= $this->_clause($clause);
-		$query .= $this->_limit($limit, $offset);
-		return $this($query);
-	}
-
-
-
 	public function updateIn($table, $data, $field, $in, $limit=false, $offset=false) {
 		if (pudl_array($in)) $in = implode(',', $in);
 		$query  = 'UPDATE ';

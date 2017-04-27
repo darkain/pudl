@@ -68,9 +68,7 @@ class pudlMySql extends pudl {
 			$error .= "\"<br />\nError " . $this->errno() . ': ' . $this->error();
 			if (self::$die) throw new pudlException($error);
 		} else {
-			if (!empty($auth['timeout'])) {
-				$this->timeout($auth['timeout']);
-			}
+			$this->strict()->timeout($auth);
 		}
 	}
 
@@ -96,6 +94,13 @@ class pudlMySql extends pudl {
 		if (!$this->connection) return new pudlMySqlResult(false, $this);
 		$result = @mysql_query($query, $this->connection);
 		return new pudlMySqlResult($result, $this);
+	}
+
+
+
+	public function _query($query) {
+		if (!$this->connection) return false;
+		return mysql_query($query, $this->connection);
 	}
 
 

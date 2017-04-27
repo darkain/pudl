@@ -55,9 +55,7 @@ class pudlMySqli extends pudl {
 
 		//CONNECTION IS GOOD!
 		if (!empty($ok)) {
-			if (!empty($auth['timeout'])) {
-				$this->timeout($auth['timeout']);
-			}
+			$this->strict()->timeout($auth);
 			return true;
 		}
 
@@ -94,6 +92,13 @@ class pudlMySqli extends pudl {
 		if (!$this->connection) return new pudlMySqliResult(false, $this);
 		$result = @$this->connection->query($query);
 		return new pudlMySqliResult($result, $this);
+	}
+
+
+
+	public function _query($query) {
+		if (!$this->connection) return false;
+		return $this->connection->query($query);
 	}
 
 

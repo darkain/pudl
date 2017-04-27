@@ -4,6 +4,11 @@
 trait pudlMySqlHelper {
 
 
+
+	abstract function _query($query);
+
+
+
 	protected function _cache() {
 		if (!$this->cache)						return '';
 		if ($this->isString())					return '';
@@ -66,6 +71,11 @@ trait pudlMySqlHelper {
 
 
 	public function timeout($timeout) {
+		if (pudl_array($timeout)) {
+			if (empty($timeout['timeout'])) return $this;
+			$timeout = $timeout['timeout'];
+		}
+
 		if ($this->timeout === false) {
 			$this->timeout = $this->variables('max_statement_time');
 		}
@@ -73,6 +83,16 @@ trait pudlMySqlHelper {
 		if (!empty($this->timeout)) {
 			$this->set('max_statement_time', $timeout);
 		}
+
+		return $this;
+	}
+
+
+
+	public function strict() {
+		$this->_query(
+			"SET @@SQL_MODE = CONCAT(@@SQL_MODE, ',TRADITIONAL')"
+		);
 
 		return $this;
 	}

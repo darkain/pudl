@@ -191,12 +191,6 @@ pudlTest('INSERT INTO `table` (`column1`, `column2`) VALUES (1, 2) ON DUPLICATE 
 
 
 
-$db->string()->insertIgnore('table', ['column'=>'value']);
-pudlTest("INSERT IGNORE INTO `table` (`column`) VALUES ('value')");
-
-
-
-
 $db->string()->replace('table', ['column'=>'value']);
 pudlTest("REPLACE INTO `table` (`column`) VALUES ('value')");
 
