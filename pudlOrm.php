@@ -70,7 +70,9 @@ abstract class	pudlOrm
 	//RETURN THE CURRENT OBJECT ID NUMBER
 	////////////////////////////////////////////////////////////////////////////
 	public function id() {
-		return (int) $this->{static::column};
+		return is_numeric($this->{static::column})
+			? $this->{static::column}
+			: 0;
 	}
 
 
