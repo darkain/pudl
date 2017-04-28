@@ -231,6 +231,11 @@ class pudlObject implements ArrayAccess, Iterator {
 	}
 
 
+	public function json() {
+		return pudl::jsonEncode($this->__array);
+	}
+
+
 	public function extract($keys) {
 		$return = [];
 		if (!is_array($keys)) $keys = func_get_args();

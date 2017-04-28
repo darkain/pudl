@@ -55,6 +55,20 @@ function pudlError($exception, $expected) {
 }
 
 
+function pudlUnit($result, $expected) {
+	if ($result === $expected) return;
+	$trace = debug_backtrace()[0];
+	echo "ERROR: FAILED!!\n\n";
+	echo "FILE: $trace[file]\n";
+	echo "LINE: $trace[line]\n\n";
+	echo "EXPECTED:\n";
+	echo "'" . $expected . "'\n\n";
+	echo "RESULT:\n";
+	echo "'" . $result . "'\n\n";
+	exit(1);
+}
+
+
 //PHP 5.x COMPATIBILITY
 if (!defined('PHP_INT_MIN')) {
 	define('PHP_INT_MIN', ~PHP_INT_MAX);
@@ -131,3 +145,6 @@ require 'errors.php';
 
 //QUERY LOGGING
 require 'log.php';
+
+//PUDL OBJECT
+require 'object.php';
