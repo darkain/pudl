@@ -80,13 +80,13 @@ class		pudlCollection
 	////////////////////////////////////////////////////////////////////////////
 	//CLOSURE STYLE PROCESSING
 	////////////////////////////////////////////////////////////////////////////
-	public function process($callback) {
+	public function closure($callback) {
 		$return	= [];
 		$list	= $this->raw();
 
 		foreach ($list as $key => $item) {
 			if (!($item instanceof pudlOrm)) continue;
-			$return[$key] = call_user_func($callback, $item);
+			$return[$key] = call_user_func($callback, $item, $key);
 		}
 
 		return $return;
