@@ -130,11 +130,12 @@ class			pudlImportCsv
 				if (empty($row)) continue;
 				$item = str_getcsv($row);
 				$data = [];
-				echo '<pre>';
+
 				foreach ($item as $key => $value) {
 					if (!isset($this->header[$key])) continue;
 					$data[$this->header[$key]] = $value;
 				}
+
 				if (!empty($data)) $this[] = $data;
 			}
 		}
