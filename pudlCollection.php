@@ -62,13 +62,31 @@ class		pudlCollection
 		$return	= [];
 		$list	= $this->raw();
 
-		foreach ($list as $item) {
+		foreach ($list as $key => $item) {
 			if (!($item instanceof pudlOrm)) continue;
 
-			$return[] = call_user_func_array(
+			$return[$key] = call_user_func_array(
 				[$item, $name],
 				$arguments
 			);
+		}
+
+		return $return;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//CLOSURE STYLE PROCESSING
+	////////////////////////////////////////////////////////////////////////////
+	public function process($callback) {
+		$return	= [];
+		$list	= $this->raw();
+
+		foreach ($list as $key => $item) {
+			if (!($item instanceof pudlOrm)) continue;
+			$return[$key] = call_user_func($callback, $item);
 		}
 
 		return $return;
