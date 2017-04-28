@@ -70,6 +70,7 @@ abstract class	pudlOrm
 	//RETURN THE CURRENT OBJECT ID NUMBER
 	////////////////////////////////////////////////////////////////////////////
 	public function id() {
+		if (static::hash) return $this->{static::column};
 		return is_numeric($this->{static::column})
 			? $this->{static::column}
 			: 0;
@@ -198,9 +199,15 @@ abstract class	pudlOrm
 	//COMPARE ITEM TO SEE IF IT IS THE CURRENT OBJECT INSTANCE
 	////////////////////////////////////////////////////////////////////////////
 	public function is($item=true) {
-		if ($item === true)		return $this->id() > 0;
-		if ($item === false)	return $this->id() === 0;
-		if (empty($item))		return false;
+		$id = $this->id();
+
+		if (is_bool($item)) {
+			if (static::hash) {
+				return ($item === true)	? !empty($id)	: empty($id);
+			} else {
+				return ($item === true)	? $id != 0		: $id === 0;
+			}
+		}
 
 		if (is_array($item)) {
 			if (empty($item[static::column])) return false;
@@ -211,10 +218,9 @@ abstract class	pudlOrm
 			$item = $item->{static::column};
 		}
 
-		$item = (int) $item;
-		if ($item === 0) return false;
+		if (!static::hash) $item = (int) $item;
 
-		return $item === $this->id();
+		return !empty($item) ? ($item === $id) : false;
 	}
 
 
