@@ -254,6 +254,15 @@ class pudlObject implements ArrayAccess, Iterator {
 	}
 
 
+	public function closure($callback) {
+		$return	= [];
+		foreach ($this->__array as $key => $item) {
+			$return[$key] = call_user_func($callback, $item, $key);
+		}
+		return $return;
+	}
+
+
 	public function snapshot($return=false) {
 		if ($return) return $this->__snapshot;
 		$this->__snapshot = $this->__array;
