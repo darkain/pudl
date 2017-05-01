@@ -20,7 +20,7 @@ class		pudlCollection
 		if (!pudl_array($list)) return;
 
 		foreach ($list as $item) {
-			$this[]	= $item instanceof pudlOrm
+			$this[]	= is_a($item, $classname)
 					? $item
 					: new $classname($item);
 		}
