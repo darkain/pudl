@@ -17,6 +17,10 @@ class		pudlCollection
 	public function __construct($classname, $list=NULL) {
 		$this->classname = $classname;
 
+		if ($list instanceof pudlResult) {
+			$list = $list->complete();
+		}
+
 		if (!pudl_array($list)) return;
 
 		foreach ($list as $item) {
