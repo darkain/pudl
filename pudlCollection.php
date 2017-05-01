@@ -14,8 +14,16 @@ class		pudlCollection
 	////////////////////////////////////////////////////////////////////////////
 	//CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
-	public function __construct($classname) {
+	public function __construct($classname, $list=NULL) {
 		$this->classname = $classname;
+
+		if (!pudl_array($list)) return;
+
+		foreach ($list as $item) {
+			$this[]	= $item instanceof pudlOrm
+					? $item
+					: new $classname($item);
+		}
 	}
 
 
