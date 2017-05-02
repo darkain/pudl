@@ -105,7 +105,7 @@ pudlTest("UPDATE `table` SET `column`=CONCAT_WS(',', `column`, 'item') WHERE (id
 
 //UPDATE statement - remove a value from a SET column
 $db->string()->update('table', ['column'=>pudl::removeSet('item')], 'id=1');
-pudlTest("UPDATE `table` SET `column`=REPLACE(CONCAT(',', `column`, ','), ',item,', ',') WHERE (id=1)");
+pudlTest("UPDATE `table` SET `column`=TRIM(BOTH ',' FROM REPLACE(CONCAT(',', `column`, ','), ',item,', ',')) WHERE (id=1)");
 
 
 

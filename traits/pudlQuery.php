@@ -625,9 +625,11 @@ trait pudlQuery {
 				$query .= '(' . (string)$value . ')';
 
 			} else if ($value instanceof pudlRemoveSet) {
-				$query .= 'REPLACE(CONCAT(\',\', ' .
-					$this->identifier($column) . ', \',\'), \',' .
-					$this->setEscape($this->_value($value->value, false)) . ',\', \',\')';
+				$query	.= 'TRIM(BOTH \',\' FROM REPLACE(CONCAT(\',\', '
+						.  $this->identifier($column)
+						. ', \',\'), \','
+						.  $this->setEscape($this->_value($value->value, false))
+						.  ',\', \',\'))';
 
 			} else {
 				$query .= $this->_dynamic_create($value);
