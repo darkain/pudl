@@ -64,7 +64,7 @@ class			pudlImportCsv
 
 
 		//PROCESS THE FILE
-		return $this->processing();
+		return $this->importing();
 	}
 
 
@@ -142,7 +142,7 @@ class			pudlImportCsv
 
 
 		//PROCESS THE FILE
-		return $this->processing();
+		return $this->importing();
 	}
 
 }

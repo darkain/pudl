@@ -31,7 +31,7 @@ abstract class	pudlImport
 	////////////////////////////////////////////////////////////////////////////
 	//CALLED AFTER VALIDATE() - GREAT FOR INHERITING THIS CLASS
 	////////////////////////////////////////////////////////////////////////////
-	public function process() { return true; }
+	public function import() { return true; }
 
 
 
@@ -39,7 +39,7 @@ abstract class	pudlImport
 	////////////////////////////////////////////////////////////////////////////
 	//PARSING DONE, NOW VALIDATE AND PROCESS
 	////////////////////////////////////////////////////////////////////////////
-	protected function processing() {
+	protected function importing() {
 		//VALIDATE CONTENTS OF FILE
 		$valid = $this->validate();
 
@@ -52,7 +52,7 @@ abstract class	pudlImport
 		}
 
 		//PROCESS CONTENTS OF FILE
-		return $valid ? $this->process() : false;
+		return $valid ? $this->import() : false;
 	}
 
 
@@ -79,7 +79,7 @@ abstract class	pudlImport
 	////////////////////////////////////////////////////////////////////////////
 	//PARSING DONE, NOW VALIDATE AND PROCESS
 	////////////////////////////////////////////////////////////////////////////
-	protected function _processing() {
+	protected function _importing() {
 		//VALIDATE CONTENTS OF FILE
 		$valid = $this->validate();
 
@@ -92,7 +92,7 @@ abstract class	pudlImport
 		}
 
 		//PROCESS CONTENTS OF FILE
-		return $valid ? $this->process() : false;
+		return $valid ? $this->import() : false;
 	}
 
 

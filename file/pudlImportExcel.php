@@ -55,7 +55,7 @@ class			pudlImportExcel
 
 
 		//PROCESS THE FILE
-		return $this->processing();
+		return $this->importing();
 	}
 
 
