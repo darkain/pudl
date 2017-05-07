@@ -1,9 +1,6 @@
 <?php
 
 
-//TODO:	MYSQLI_ASYNC
-//		use this to set query execution time limits
-
 
 require_once('pudlMySqli.php');
 
