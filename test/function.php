@@ -36,9 +36,44 @@ pudlTest("SELECT FROM_UNIXTIME(" . $db->time() . ")");
 
 
 
-//TIMESTAMP for December 13th, 2015 @ 9:46 AM (UTC)
+//TIMESTAMP for December 13th, 2015 @ 9:46 AM (UTC) - AS INTEGER
 $db->string()->select($db->datetime(1450000000));
 pudlTest("SELECT FROM_UNIXTIME(1450000000)");
+
+
+
+
+//TIMESTAMP for December 13th, 2015 @ 9:46 AM (UTC) - AS STRING-INT
+$db->string()->select($db->datetime('1450000000'));
+pudlTest("SELECT FROM_UNIXTIME(1450000000)");
+
+
+
+
+//TIMESTAMP for May 9th, 2017 at Midnight - AS ISO-8601 DATE
+$db->string()->select($db->datetime('2017-05-09'));
+pudlTest("SELECT FROM_UNIXTIME(1494288000)");
+
+
+
+
+//TIMESTAMP for May 9th, 2017 at 19:18:12 - AS ISO-8601 DATE-TIME
+$db->string()->select($db->datetime('2017-05-09T19:18:12+00:00'));
+pudlTest("SELECT FROM_UNIXTIME(1494357492)");
+
+
+
+
+//TIMESTAMP for March 25th 1984 at Midnight - written out
+$db->string()->select($db->datetime('March 25th 1984'));
+pudlTest("SELECT FROM_UNIXTIME(449020800)");
+
+
+
+
+//TIMESTAMP for March 25th 1984 at Midnight - written out with extra white space!
+$db->string()->select($db->datetime('  March  25th  1984  '));
+pudlTest("SELECT FROM_UNIXTIME(449020800)");
 
 
 
