@@ -46,8 +46,8 @@ pudlTest("SELECT * FROM `table` WHERE (`column`='value')");
 
 
 //SELECT statement with a single clause with BINARY STRING value
-$db->string()->select('*', 'table', ['column'=>"\t\r\n\0\x"]);
-pudlTest("SELECT * FROM `table` WHERE (`column`='\\t\\r\\n\\0\\\\x')");
+$db->string()->select('*', 'table', ['column'=>"\r\n\0\x"]);
+pudlTest("SELECT * FROM `table` WHERE (`column`='\\r\\n\\0\\\\x')");
 
 
 
