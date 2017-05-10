@@ -64,14 +64,34 @@ trait pudlUpdate {
 
 
 	public function increment($table, $col, $clause, $amount=1, $limit=false, $offset=false) {
-		$query = 'UPDATE ';
-		$query .= $this->_table($table);
-		$query .= ' SET '	. $this->identifiers($col);
-		$query .= '='		. $this->identifiers($col);
-		$query .= '+'		. $this->_value($amount);
-		$query .= $this->_clause($clause);
-		$query .= $this->_limit($limit, $offset);
-		return $this($query);
+		switch (true) {
+			case $amount === NAN:
+			case $amount === INF:
+			case $amount === -INF:
+			case is_bool($amount):
+			case is_null($amount):
+			case pudl_array($amount):
+				throw new pudlException('Invalid value for increment: ' . gettype($amount));
+			return false;
+		}
+
+		$value = $this->_value($amount);
+
+		switch (true) {
+			case is_int($value)		&&  $value >= 0:
+			case is_float($value)	&&  $value >= 0:
+			case !is_int($value)	&&  !is_float($value):
+				$value = '+' . (string)$value;
+		}
+
+		return $this('UPDATE '
+			. $this->_table($table)
+			. ' SET '	. $this->identifiers($col)
+			. '='		. $this->identifiers($col)
+			. $value
+			. $this->_clause($clause)
+			. $this->_limit($limit, $offset)
+		);
 	}
 
 
