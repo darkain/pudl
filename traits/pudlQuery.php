@@ -94,7 +94,7 @@ trait pudlQuery {
 
 
 			default:
-				return $this->_invalidType($value);
+				$query = $this->_invalidType($value);
 		}
 
 
@@ -721,8 +721,6 @@ trait pudlQuery {
 
 
 	protected function _invalidType($item, $thing=false) {
-		$error = false;
-
 		switch (true) {
 			case ($thing !== false)  &&  is_object($item):
 				$error = 'Invalid object type for ' . $thing . ': ' . get_class($item);
@@ -741,7 +739,9 @@ trait pudlQuery {
 			break;
 		}
 
-		if ($error) throw new pudlException($error);
+		throw new pudlException($error);
+
+		return NULL;
 	}
 
 
