@@ -255,13 +255,13 @@ pudlTest("SELECT CURDATE(), CURTIME()");
 
 
 
-
+/*
 $db->redis(true);
 if ($db instanceof pudlMySqli) {
 	$db->cache(1)->select(pudl::now());
 	pudlTest("SELECT SQL_CACHE NOW()");
 }
-
+*/
 
 
 
