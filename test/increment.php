@@ -47,7 +47,7 @@ try {
 	$db->string()->incrementId('table', 'item', 'column', 'value', NULL);
 	pudlTest('pudlException');
 } catch (pudlException $error) {
-	pudlError($error, 'Invalid value for increment: NULL');
+	pudlError($error, 'Invalid data type for increment: NULL');
 }
 
 
@@ -58,7 +58,7 @@ try {
 	$db->string()->incrementId('table', 'item', 'column', 'value', INF);
 	pudlTest('pudlException');
 } catch (pudlException $error) {
-	pudlError($error, 'Invalid value for increment: double');
+	pudlError($error, 'Invalid data type for increment: double');
 }
 
 
@@ -69,7 +69,7 @@ try {
 	$db->string()->incrementId('table', 'item', 'column', 'value', -INF);
 	pudlTest('pudlException');
 } catch (pudlException $error) {
-	pudlError($error, 'Invalid value for increment: double');
+	pudlError($error, 'Invalid data type for increment: double');
 }
 
 
@@ -80,7 +80,7 @@ try {
 	$db->string()->incrementId('table', 'item', 'column', 'value', true);
 	pudlTest('pudlException');
 } catch (pudlException $error) {
-	pudlError($error, 'Invalid value for increment: boolean');
+	pudlError($error, 'Invalid data type for increment: boolean');
 }
 
 
@@ -91,7 +91,7 @@ try {
 	$db->string()->incrementId('table', 'item', 'column', 'value', false);
 	pudlTest('pudlException');
 } catch (pudlException $error) {
-	pudlError($error, 'Invalid value for increment: boolean');
+	pudlError($error, 'Invalid data type for increment: boolean');
 }
 
 
@@ -102,5 +102,5 @@ try {
 	$db->string()->incrementId('table', 'item', 'column', 'value', []);
 	pudlTest('pudlException');
 } catch (pudlException $error) {
-	pudlError($error, 'Invalid value for increment: array');
+	pudlError($error, 'Invalid data type for increment: array');
 }

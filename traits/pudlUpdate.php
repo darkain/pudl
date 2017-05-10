@@ -71,8 +71,7 @@ trait pudlUpdate {
 			case is_bool($amount):
 			case is_null($amount):
 			case pudl_array($amount):
-				throw new pudlException('Invalid value for increment: ' . gettype($amount));
-			return false;
+			return $this->_invalidType($amount, 'increment');
 		}
 
 		$value = $this->_value($amount);
