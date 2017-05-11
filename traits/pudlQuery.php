@@ -318,7 +318,7 @@ trait pudlQuery {
 		}
 
 		if (is_string($clause)  &&  $type!=='IN') {
-			if (!preg_match('/\A\s*[A-Z][A-Z\d\.]*\s*(\=\s*([A-Z][A-Z\d\.]*|-?\d(\.\d)*)\s*)?\z/i', $clause)) {
+			if (!preg_match('/\A\s*[_A-Z][_A-Z\d\.]*\s*(\=\s*([_A-Z][_A-Z\d\.]*|-?\d(\.\d)*)\s*)?\z/i', $clause)) {
 				$this->trigger('warning', $this, $clause, []);
 			}
 		}
@@ -388,7 +388,7 @@ trait pudlQuery {
 			if (is_int($key)  &&  $value==='') continue;
 
 			if (is_int($key)  &&  is_string($value)) {
-				if (!preg_match('/\A\s*[A-Z][A-Z\d\.]*\s*(\=\s*([A-Z][A-Z\d\.]*|-?\d(\.\d)*)\s*)?\z/i', $value)) {
+				if (!preg_match('/\A\s*[_A-Z][_A-Z\d\.]*\s*(\=\s*([_A-Z][_A-Z\d\.]*|-?\d(\.\d)*)\s*)?\z/i', $value)) {
 					$this->trigger('warning', $this, $value, $clause);
 				}
 			}
