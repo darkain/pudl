@@ -261,13 +261,16 @@ class pudlRemoveSet extends pudlEquals {}
 
 
 class pudlSort extends pudlEquals {
-	public function __construct($sort) {
+	public function __construct($sort, $column=false) {
 		parent::__construct($sort, false, ' ');
+		$this->column = $column;
 	}
 
 	public function pudlValue($db, $quote=true) {
 		return $this->value;
 	}
+
+	public $column;
 }
 
 

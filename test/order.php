@@ -45,6 +45,18 @@ pudlTest('SELECT * FROM `table` ORDER BY `column` DESC LIMIT 1');
 
 
 
+$db->string()->row('table', false, pudl::desc('column'));
+pudlTest('SELECT * FROM `table` ORDER BY `column` DESC LIMIT 1');
+
+
+
+
+$db->string()->row('table', false, [pudl::desc('column')]);
+pudlTest('SELECT * FROM `table` ORDER BY `column` DESC LIMIT 1');
+
+
+
+
 $db->string()->row('table', false, ['column1', 'column2']);
 pudlTest('SELECT * FROM `table` ORDER BY column1, column2 LIMIT 1');
 

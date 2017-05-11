@@ -361,6 +361,11 @@ trait pudlQuery {
 			return $this->_clauseRecurse($clause->clause, $clause->joiner);
 		}
 
+		if ($clause instanceof pudlSort) {
+			$query			.=	$this->identifiers($clause->column, $prefix);
+			return $query	.	' ' . $clause->value;
+		}
+
 		if ($clause instanceof pudlColumn  &&  $clause->args) {
 			if (is_string($clause->column)) {
 				$query		.=	$this->identifiers($clause->column, $prefix);
@@ -402,6 +407,11 @@ trait pudlQuery {
 				$query			.= $this->identifiers($key, $prefix);
 				$query			.= $this->_clauseEquals($value);
 				if (pudl_array($value)) continue;
+
+			} else if ($value instanceof pudlSort  &&  is_int($key)) {
+				$query			.= $this->identifiers($value->column);
+				$query			.= ' ' . $value->value;
+				continue;
 
 			} else if ($value instanceof pudlColumn  &&  $value->args) {
 				$key			 = ''; //FORCE KEY TO STRING TYPE FOR _VALUE
