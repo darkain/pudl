@@ -534,9 +534,12 @@ abstract class pudl {
 
 
 	public function datetime($time=false) {
-		if ($time === false)	$time = $this->time();
-		if (ctype_digit($time))	$time = (int) $time;
-		if (!is_int($time))		$time = strtotime($time);
+		if ($time === false)	$time	= $this->time();
+
+		if (!is_int($time))		$time	= ctype_digit($time)
+										? ((int) $time)
+										: strtotime($time);
+
 		return self::from_unixtime($time);
 	}
 
