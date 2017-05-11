@@ -24,6 +24,7 @@ trait pudlCompare {
 	public static function notBetween(	$v1, $v2,	$v3=false)	{ return self::between(		$v1, $v2, $v3)->not(); }
 
 	public static function asc( $column=false)	{ return new pudlSort('ASC',  $column); }
+	public static function dsc( $column=false)	{ return new pudlSort('DESC', $column); }
 	public static function desc($column=false)	{ return new pudlSort('DESC', $column); }
 
 
