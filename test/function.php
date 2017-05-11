@@ -279,12 +279,12 @@ $db->string()->row('table', [
 			'b' => 2,
 		]),
 		pudl::_and([
-			'c=3',
-			'd=4',
+			'c' => 3,
+			'd' => 4,
 		]),
 	]),
 ]);
-pudlTest("SELECT * FROM `table` WHERE (`z`=0 AND ((`a`=1 AND `b`=2) AND (c=3 AND d=4))) LIMIT 1");
+pudlTest("SELECT * FROM `table` WHERE (`z`=0 AND ((`a`=1 AND `b`=2) AND (`c`=3 AND `d`=4))) LIMIT 1");
 
 
 
@@ -297,12 +297,12 @@ $db->string()->row('table', [
 			'b' => 2,
 		]),
 		pudl::_or([
-			'c=3',
-			'd=4',
+			'c' => 3,
+			'd' => 4,
 		]),
 	]),
 ]);
-pudlTest("SELECT * FROM `table` WHERE (`z`=0 AND ((`a`=1 OR `b`=2) OR (c=3 OR d=4))) LIMIT 1");
+pudlTest("SELECT * FROM `table` WHERE (`z`=0 AND ((`a`=1 OR `b`=2) OR (`c`=3 OR `d`=4))) LIMIT 1");
 
 
 
@@ -313,11 +313,11 @@ $db->string()->row('table', pudl::_or([
 		'b' => 2,
 	],
 	[
-		'c=3',
-		'd=4',
+		'c' => 3,
+		'd' => 4,
 	],
 ]));
-pudlTest("SELECT * FROM `table` WHERE ((`a`=1 AND `b`=2) OR (c=3 AND d=4)) LIMIT 1");
+pudlTest("SELECT * FROM `table` WHERE ((`a`=1 AND `b`=2) OR (`c`=3 AND `d`=4)) LIMIT 1");
 
 
 

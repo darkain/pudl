@@ -559,9 +559,9 @@ pudlTest('SELECT * FROM `table` WHERE (column1=value AND (column2=again OR colum
 //SELECT statement with complex AND and OR clause (nested arrays)
 $db->string()->select('*', 'table', [
 	[
-		['x=1', 'y=2'],
-		['x=2', 'y=1'],
+		['x'=>1, 'y'=>2],
+		['x'=>2, 'y'=>1],
 	],
-	'z=3'
+	'z'=>3
 ]);
-pudlTest('SELECT * FROM `table` WHERE (((x=1 AND y=2) OR (x=2 AND y=1)) AND z=3)');
+pudlTest('SELECT * FROM `table` WHERE (((`x`=1 AND `y`=2) OR (`x`=2 AND `y`=1)) AND `z`=3)');

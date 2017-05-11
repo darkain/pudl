@@ -70,6 +70,26 @@ new pudlWeb(	[], false);
 
 $db = new pudlNull(['identifier' => '`']);
 
+
+$warnings = false;
+$db->on('warning', function($action, $db, $value, $clause) use (&$warnings) {
+
+	echo "\nWARNING: deprecated syntax: " . print_r($value,true) . "\n";
+
+	$trace = debug_backtrace();
+	$count = count($trace);
+
+	echo $trace[$count-3]['line'] . ' : ' . $trace[$count-3]['file'] . "\n\n";
+
+	$warnings = true;
+});
+
+
 require('all.php');
+
+if ($warnings) {
+	echo "Warnings were found! Fix them!\n";
+	exit(1);
+}
 
 echo "ALL GOOD!!\n";
