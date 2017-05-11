@@ -428,7 +428,8 @@ trait pudlQuery {
 				$query .= $this->_clauseRecurse($value, $joiner);
 
 			} else {
-				return $this->_invalidType($value, 'clause');
+				$query = $this->_invalidType($value, 'clause');
+				break;
 			}
 		}
 
