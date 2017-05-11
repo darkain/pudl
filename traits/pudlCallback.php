@@ -28,6 +28,6 @@ trait pudlCallback {
 
 
 
-	private static $_callbacks = [];
+	private $_callbacks = [];
 
 }
