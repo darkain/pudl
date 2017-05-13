@@ -380,7 +380,7 @@ abstract class pudl {
 
 
 
-	public function count($table, $clause='1') {
+	public function count($table, $clause=true) {
 		$return = $this->cell($table, 'COUNT(*)', $clause);
 		if ($return instanceof pudlStringResult) return $return;
 		return $return === false ? $return : (int) $return;

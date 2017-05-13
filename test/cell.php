@@ -36,3 +36,21 @@ pudlTest("SELECT column FROM `table` WHERE (`id`='value') LIMIT 1");
 //Returns string of the cell's value (false if not found)
 $db->string()->cellId('table', 'column', 'id', pudl::unhex('abcdef1230'));
 pudlTest("SELECT column FROM `table` WHERE (`id`=UNHEX('abcdef1230')) LIMIT 1");
+
+
+
+
+$db->string()->count('table');
+pudlTest("SELECT COUNT(*) FROM `table` WHERE (1) LIMIT 1");
+
+
+
+
+$db->string()->count('table', 'cell=1');
+pudlTest("SELECT COUNT(*) FROM `table` WHERE (cell=1) LIMIT 1");
+
+
+
+
+$db->string()->count('table', ['cell'=>10]);
+pudlTest("SELECT COUNT(*) FROM `table` WHERE (`cell`=10) LIMIT 1");
