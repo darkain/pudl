@@ -41,7 +41,7 @@ pudlTest("SELECT column FROM `table` WHERE (`id`=UNHEX('abcdef1230')) LIMIT 1");
 
 
 $db->string()->count('table');
-pudlTest("SELECT COUNT(*) FROM `table` WHERE (1) LIMIT 1");
+pudlTest("SELECT COUNT(*) FROM `table` LIMIT 1");
 
 
 
