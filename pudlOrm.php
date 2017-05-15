@@ -169,7 +169,7 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//GET A COLLECTION OF PARTS FROM ID NUMBERS
+	//GET A COLLECTION OF OBJECTS FROM ID NUMBERS
 	////////////////////////////////////////////////////////////////////////////
 	public static function collection($items /*, ...$selex */) {
 		$args		= func_get_args();
