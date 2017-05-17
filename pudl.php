@@ -601,7 +601,8 @@ abstract class pudl {
 
 
 	public static function jsonEncode($data) {
-		return @json_encode($data, JSON_HEX_APOS|JSON_HEX_QUOT);
+		if ($data instanceof pudlObject) $data = $data->raw();
+		return @json_encode($data, JSON_HEX_APOS|JSON_HEX_QUOT|JSON_PARTIAL_OUTPUT_ON_ERROR);
 	}
 
 
