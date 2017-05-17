@@ -61,11 +61,32 @@ pudlTest('SELECT * FROM `table1` AS `x` LEFT JOIN `table2` AS `y` USING (`column
 $db->string()->select('*', ['x' => ['table1',
 	['left' => ['y'=>'table2'], 'on'=>'x.column=y.column'],
 ]]);
-pudlTest('SELECT * FROM `table1` AS `x` LEFT JOIN `table2` AS `y` ON (x.column=y.column)');
+pudlTest('SELECT * FROM `table1` AS `x` LEFT JOIN `table2` AS `y` ON (`x`.`column`=`y`.`column`)');
 
 
 
 $db->string()->select('*', ['x' => ['table1',
 	['left' => ['y'=>'table2'], 'clause'=>'x.column=y.column'],
 ]]);
-pudlTest('SELECT * FROM `table1` AS `x` LEFT JOIN `table2` AS `y` ON (x.column=y.column)');
+pudlTest('SELECT * FROM `table1` AS `x` LEFT JOIN `table2` AS `y` ON (`x`.`column`=`y`.`column`)');
+
+
+
+$db->string()->select('*', ['x' => ['table1',
+	['left' => ['y'=>'table2'], 'clause'=>'x.column=0'],
+]]);
+pudlTest('SELECT * FROM `table1` AS `x` LEFT JOIN `table2` AS `y` ON (`x`.`column`=0)');
+
+
+
+$db->string()->select('*', ['x' => ['table1',
+	['left' => ['y'=>'table2'], 'clause'=>'x.column=1'],
+]]);
+pudlTest('SELECT * FROM `table1` AS `x` LEFT JOIN `table2` AS `y` ON (`x`.`column`=1)');
+
+
+
+$db->string()->select('*', ['x' => ['table1',
+	['left' => ['y'=>'table2'], 'clause'=>'x.column=-1'],
+]]);
+pudlTest('SELECT * FROM `table1` AS `x` LEFT JOIN `table2` AS `y` ON (`x`.`column`=-1)');

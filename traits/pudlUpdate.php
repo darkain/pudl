@@ -21,14 +21,13 @@ trait pudlUpdate {
 
 
 	public function updateIn($table, $data, $field, $in, $limit=false, $offset=false) {
-		if (pudl_array($in)) $in = implode(',', $in);
 		$query  = 'UPDATE ';
 		$query .= $this->_table($table);
 		$query .= ' SET ';
 		$query .= $this->_update($data);
 		$query .= ' WHERE (';
 		$query .= $this->identifiers($field);
-		$query .= $this->_clause($in, 'IN');
+		$query .= $this->_in($in);
 		$query .= ')';
 		$query .= $this->_limit($limit, $offset);
 		return $this($query);

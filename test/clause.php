@@ -32,8 +32,36 @@ pudlTest('SELECT * FROM `table` WHERE (FALSE)');
 
 
 //SELECT statement with a single clause
-$db->string()->select('*', 'table', 'column=value');
-pudlTest('SELECT * FROM `table` WHERE (column=value)');
+$db->string()->select('*', 'table', 'column1=column2');
+pudlTest('SELECT * FROM `table` WHERE (`column1`=`column2`)');
+
+
+
+
+//SELECT statement with a single clause
+$db->string()->select('*', 'table', 'column1=0');
+pudlTest('SELECT * FROM `table` WHERE (`column1`=0)');
+
+
+
+
+//SELECT statement with a single clause
+$db->string()->select('*', 'table', 'column1=1');
+pudlTest('SELECT * FROM `table` WHERE (`column1`=1)');
+
+
+
+
+//SELECT statement with a single clause
+$db->string()->select('*', 'table', 'column1=5.5');
+pudlTest('SELECT * FROM `table` WHERE (`column1`=5.5)');
+
+
+
+
+//SELECT statement with a single clause
+$db->string()->select('*', 'table', 'column1=-5.5');
+pudlTest('SELECT * FROM `table` WHERE (`column1`=-5.5)');
 
 
 
@@ -517,41 +545,41 @@ pudlTest("SELECT * FROM `table` WHERE (COLUMN_GET(`column`, 'field' AS INTEGER) 
 $db->string()->select('*', 'table', [
 	'',
 	'',
-	'column1=something',
+	'column1=column3',
 	'',
-	'column2=else',
+	'column2=column4',
 	'',
 ]);
-pudlTest('SELECT * FROM `table` WHERE (column1=something AND column2=else)');
+pudlTest('SELECT * FROM `table` WHERE (`column1`=`column3` AND `column2`=`column4`)');
 
 
 
 
 //SELECT statement with an AND clause
 $db->string()->select('*', 'table', [
-	'column1=value',
-	'column2=other',
+	'column1=column3',
+	'column2=column4',
 ]);
-pudlTest('SELECT * FROM `table` WHERE (column1=value AND column2=other)');
+pudlTest('SELECT * FROM `table` WHERE (`column1`=`column3` AND `column2`=`column4`)');
 
 
 
 
 //SELECT statement with an OR clause (nested arrays)
 $db->string()->select('*', 'table', [[
-	'column1=value', 'column2=other'
+	'column1=column3', 'column2=column4'
 ]]);
-pudlTest('SELECT * FROM `table` WHERE ((column1=value OR column2=other))');
+pudlTest('SELECT * FROM `table` WHERE ((`column1`=`column3` OR `column2`=`column4`))');
 
 
 
 
 //SELECT statement with an AND and OR clause (nested arrays)
 $db->string()->select('*', 'table', [
-	'column1=value',
-	['column2=again', 'column3=other']
+	'column1=column4',
+	['column2=column5', 'column3=column6']
 ]);
-pudlTest('SELECT * FROM `table` WHERE (column1=value AND (column2=again OR column3=other))');
+pudlTest('SELECT * FROM `table` WHERE (`column1`=`column4` AND (`column2`=`column5` OR `column3`=`column6`))');
 
 
 

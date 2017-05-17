@@ -34,7 +34,7 @@ pudlTest('SELECT * FROM `table` LIMIT 1');
 
 
 $db->string()->row('table', false, ['column']);
-pudlTest('SELECT * FROM `table` ORDER BY column LIMIT 1');
+pudlTest('SELECT * FROM `table` ORDER BY `column` LIMIT 1');
 
 
 
@@ -58,19 +58,19 @@ pudlTest('SELECT * FROM `table` ORDER BY `column` DESC LIMIT 1');
 
 
 $db->string()->row('table', false, ['column1', 'column2']);
-pudlTest('SELECT * FROM `table` ORDER BY column1, column2 LIMIT 1');
+pudlTest('SELECT * FROM `table` ORDER BY `column1`, `column2` LIMIT 1');
 
 
 
 
 $db->string()->row('table', false, ['column1'=>pudl::asc(), 'column2']);
-pudlTest('SELECT * FROM `table` ORDER BY `column1` ASC, column2 LIMIT 1');
+pudlTest('SELECT * FROM `table` ORDER BY `column1` ASC, `column2` LIMIT 1');
 
 
 
 
 $db->string()->row('table', false, ['column1'=>pudl::desc(), 'column2']);
-pudlTest('SELECT * FROM `table` ORDER BY `column1` DESC, column2 LIMIT 1');
+pudlTest('SELECT * FROM `table` ORDER BY `column1` DESC, `column2` LIMIT 1');
 
 
 
@@ -94,7 +94,7 @@ pudlTest("SELECT * FROM `table` ORDER BY `a` IS NULL, `b` IS NOT NULL LIMIT 1");
 
 
 $db->string()->row('table', false, [['column1'], ['column2']]);
-pudlTest("SELECT * FROM `table` ORDER BY column1, column2 LIMIT 1");
+pudlTest("SELECT * FROM `table` ORDER BY `column1`, `column2` LIMIT 1");
 
 
 

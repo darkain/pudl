@@ -2,7 +2,7 @@
 
 //UPDATE statement - using associative array and clause
 $db->string()->update('table', ['column'=>'value'], 'id=1');
-pudlTest("UPDATE `table` SET `column`='value' WHERE (id=1)");
+pudlTest("UPDATE `table` SET `column`='value' WHERE (`id`=1)");
 
 
 
@@ -65,47 +65,82 @@ pudlTest("UPDATE `table` SET `column1`='value' WHERE (`id`=5)");
 
 //UPDATE statement - incrementing an INTEGER value
 $db->string()->update('table', ['column'=>pudlFunction::increment()], 'id=1');
-pudlTest("UPDATE `table` SET `column`=`column`+1 WHERE (id=1)");
+pudlTest("UPDATE `table` SET `column`=`column`+1 WHERE (`id`=1)");
 
 
 
 
 //UPDATE statement - incrementing an INTEGER value
 $db->string()->update('table', ['column'=>pudlFunction::increment('5')], 'id=1');
-pudlTest("UPDATE `table` SET `column`=`column`+'5' WHERE (id=1)");
+pudlTest("UPDATE `table` SET `column`=`column`+'5' WHERE (`id`=1)");
+
+
+
+
+//UPDATE statement - incrementing an INTEGER value
+$db->string()->updateIn('table', ['column'=>'value'], 'id', '1,7,7,9');
+pudlTest("UPDATE `table` SET `column`='value' WHERE (`id` IN ('1', '7', '7', '9'))");
+
+
+
+
+//UPDATE statement - incrementing an INTEGER value
+$db->string()->updateIn('table', ['column'=>'value'], 'id', '  1  ,  7  , 7,  9');
+pudlTest("UPDATE `table` SET `column`='value' WHERE (`id` IN ('1', '7', '7', '9'))");
 
 
 
 
 //UPDATE statement - incrementing an INTEGER value
 $db->string()->updateIn('table', ['column'=>'value'], 'id', [1,7,7,9]);
-pudlTest("UPDATE `table` SET `column`='value' WHERE (`id` IN (1,7,7,9))");
+pudlTest("UPDATE `table` SET `column`='value' WHERE (`id` IN (1, 7, 7, 9))");
+
+
+
+
+//UPDATE statement - incrementing an INTEGER value
+$db->string()->updateIn('table', ['column'=>'value'], 'id', ['1','7','7','9']);
+pudlTest("UPDATE `table` SET `column`='value' WHERE (`id` IN ('1', '7', '7', '9'))");
+
+
+
+
+//UPDATE statement - incrementing an INTEGER value
+$db->string()->updateIn('table', ['column'=>'value'], 'id', ['  1  ','  7  ','7','9']);
+pudlTest("UPDATE `table` SET `column`='value' WHERE (`id` IN ('  1  ', '  7  ', '7', '9'))");
+
+
+
+
+//UPDATE statement - incrementing an INTEGER value
+$db->string()->updateIn('table', ['column'=>'value'], 'id', [INF, -INF, NAN, NULL]);
+pudlTest("UPDATE `table` SET `column`='value' WHERE (`id` IN (NULL, NULL, NULL, NULL))");
 
 
 
 
 $db->string()->update('table', 'column=value', 'id=1');
-pudlTest("UPDATE `table` SET column=value WHERE (id=1)");
+pudlTest("UPDATE `table` SET column=value WHERE (`id`=1)");
 
 
 
 
 $db->string()->update('table', ['column=value'], 'id=1');
-pudlTest("UPDATE `table` SET column=value WHERE (id=1)");
+pudlTest("UPDATE `table` SET column=value WHERE (`id`=1)");
 
 
 
 
 //UPDATE statement - add a value to a SET column
 $db->string()->update('table', ['column'=>pudl::appendSet('item')], 'id=1');
-pudlTest("UPDATE `table` SET `column`=CONCAT_WS(',', `column`, 'item') WHERE (id=1)");
+pudlTest("UPDATE `table` SET `column`=CONCAT_WS(',', `column`, 'item') WHERE (`id`=1)");
 
 
 
 
 //UPDATE statement - remove a value from a SET column
 $db->string()->update('table', ['column'=>pudl::removeSet('item')], 'id=1');
-pudlTest("UPDATE `table` SET `column`=TRIM(BOTH ',' FROM REPLACE(CONCAT(',', `column`, ','), ',item,', ',')) WHERE (id=1)");
+pudlTest("UPDATE `table` SET `column`=TRIM(BOTH ',' FROM REPLACE(CONCAT(',', `column`, ','), ',item,', ',')) WHERE (`id`=1)");
 
 
 

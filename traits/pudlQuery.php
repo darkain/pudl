@@ -305,7 +305,7 @@ trait pudlQuery {
 
 	protected function _clause($clause, $type='WHERE') {
 		if ($clause === false)	return '';
-
+if ($type==='IN') var_dump($clause);
 		if ($clause instanceof pudlStringResult) return (string) $clause;
 
 		if ($clause instanceof pudlId) {
@@ -317,13 +317,7 @@ trait pudlQuery {
 			return ' ' . $type . ' (' . $this->_clauseRecurse($clause) .')';
 		}
 
-		if (is_string($clause)  &&  $type!=='IN') {
-			if (!preg_match('/\A\s*[_A-Z][_A-Z\d\.]*\s*(([<>=]|<=|>=|!=)\s*([_A-Z][_A-Z\d\.]*|-?\d(\.\d)*)\s*)?\z/i', $clause)) {
-				$this->trigger('warning', $this, $clause, []);
-			}
-		}
-
-		return ' ' . $type . ' (' . $clause . ')';
+		return ' ' . $type . ' (' . $this->_compare($clause) . ')';
 	}
 
 
@@ -392,13 +386,13 @@ trait pudlQuery {
 		foreach ($clause as $key => $value) {
 			if (is_int($key)  &&  $value==='') continue;
 
+			if (strlen($query)) $query .= $joiner;
+
 			if (is_int($key)  &&  is_string($value)) {
-				if (!preg_match('/\A\s*[_A-Z][_A-Z\d\.]*\s*(([<>=]|<=|>=|!=)\s*([_A-Z][_A-Z\d\.]*|-?\d(\.\d)*)\s*)?\z/i', $value)) {
-					$this->trigger('warning', $this, $value, $clause);
-				}
+				$query .= $this->_compare($value);
+				continue;
 			}
 
-			if (strlen($query)) $query .= $joiner;
 
 			if ($value instanceof pudlFloat) {
 				$value->column = $key;
@@ -516,6 +510,56 @@ trait pudlQuery {
 
 		return [$column => $id];
 	}
+
+
+
+
+	protected function _compare($clause) {
+		$equals	= [];
+		preg_match('/(<=?>|[<|>|!]?=|[><])/', $clause, $equals);
+
+		$parts	= preg_split('/(<=?>|[<|>|!]?=|[><])/', $clause);
+		if (!isset($parts[1])) $parts[1] = '';
+
+		$parts[0] = trim($parts[0]);
+		$parts[1] = trim($parts[1]);
+
+		if ($parts[0]===''  ||  count($parts)>2  ||  ($parts[1]==='' && !empty($equals[0]))) {
+			throw new pudlException('Invalid clause: ' . $clause);
+			return false;
+		}
+
+		$query	= is_numeric($parts[0])
+				? (float) $parts[0]
+				: $this->identifiers($parts[0]);
+
+		if (empty($equals[0])) return $query;
+
+		$query .= $equals[0];
+
+		return $query	. (is_numeric($parts[1])
+						? (float) $parts[1]
+						: $this->identifiers($parts[1]));
+	}
+
+
+
+
+	protected function _in($list) {
+		if (!pudl_array($list)) {
+			$list = explode(',', $list);
+			foreach ($list as &$item) { $item=trim($item); } unset($item);
+		}
+
+		$query = '';
+		foreach ($list as $item) {
+			if (strlen($query)) $query .=', ';
+			$query .= $this->_value($item);
+		}
+
+		return ' IN (' . $query . ')';
+	}
+
 
 
 

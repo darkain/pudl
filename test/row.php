@@ -10,8 +10,8 @@ pudlTest('SELECT * FROM `table` LIMIT 1');
 
 //SELECT statement shortcut to get a single row using a clause
 //Returns associative array instead of a pudlResult object
-$db->string()->row('table', 'column=value');
-pudlTest('SELECT * FROM `table` WHERE (column=value) LIMIT 1');
+$db->string()->row('table', 'column1=column2');
+pudlTest('SELECT * FROM `table` WHERE (`column1`=`column2`) LIMIT 1');
 
 
 
@@ -26,8 +26,8 @@ pudlTest('SELECT * FROM `table`');
 
 //SELECT statement shortcut to get multiple rows using a clause
 //Returns array of associative array instead of a pudlResult object
-$db->string()->rows('table', 'column=value');
-pudlTest('SELECT * FROM `table` WHERE (column=value)');
+$db->string()->rows('table', 'column1=column2');
+pudlTest('SELECT * FROM `table` WHERE (`column1`=`column2`)');
 
 
 

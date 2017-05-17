@@ -139,3 +139,69 @@ try {
 } catch (pudlException $error) {
 	pudlError($error, 'Update data cannot be empty');
 }
+
+
+
+
+
+try {
+	$db->string()->row('table', ['x=']);
+	pudlTest('pudlException');
+} catch (pudlException $error) {
+	pudlError($error, 'Invalid clause: x=');
+}
+
+
+
+
+
+try {
+	$db->string()->row('table', ['=x']);
+	pudlTest('pudlException');
+} catch (pudlException $error) {
+	pudlError($error, 'Invalid clause: =x');
+}
+
+
+
+
+
+try {
+	$db->string()->row('table', ['x=y=']);
+	pudlTest('pudlException');
+} catch (pudlException $error) {
+	pudlError($error, 'Invalid clause: x=y=');
+}
+
+
+
+
+
+try {
+	$db->string()->row('table', ['x=y=z']);
+	pudlTest('pudlException');
+} catch (pudlException $error) {
+	pudlError($error, 'Invalid clause: x=y=z');
+}
+
+
+
+
+
+try {
+	$db->string()->row('table', ['x<<1']);
+	pudlTest('pudlException');
+} catch (pudlException $error) {
+	pudlError($error, 'Invalid clause: x<<1');
+}
+
+
+
+
+
+try {
+	$db->string()->row('table', ['x><1']);
+	pudlTest('pudlException');
+} catch (pudlException $error) {
+	pudlError($error, 'Invalid clause: x><1');
+}
