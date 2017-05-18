@@ -232,14 +232,77 @@ if ($db instanceof pudlMySqli  ||  $db instanceof pudlNull) {
 
 
 
+$db->string()->select(pudl::raw());
+pudlTest("SELECT ");
+
+
+
+
+$db->string()->select(pudl::raw(''));
+pudlTest("SELECT ");
+
+
+
+
+$db->string()->select(pudl::raw('value'));
+pudlTest("SELECT value");
+
+
+
+
+$db->string()->select(pudl::raw('value', 'stuff'));
+pudlTest("SELECT value,stuff");
+
+
+
+
+$db->string()->select(pudl::raw(pudl::FROM_UNIXTIME('123'), pudl::column('stuff')));
+pudlTest("SELECT FROM_UNIXTIME('123'),`stuff`");
+
+
+
+
+$db->string()->select(pudl::text());
+pudlTest("SELECT ");
+
+
+
+
+$db->string()->select(pudl::text(''));
+pudlTest("SELECT ''");
+
+
+
+
 $db->string()->select(pudl::text('value'));
 pudlTest("SELECT 'value'");
 
 
 
 
+$db->string()->select(pudl::text('value1', 'value2'));
+pudlTest("SELECT 'value1','value2'");
+
+
+
+
+$db->string()->select(pudl::text(pudl::column('value1'), 'value2'));
+pudlTest("SELECT `value1`,'value2'");
+
+
+
+
 $db->string()->select(['column' => pudl::text('value')]);
 pudlTest("SELECT 'value' AS `column`");
+
+
+
+
+$db->string()->select([
+	'column1' => pudl::text('value1'),
+	'column2' => pudl::text('value2'),
+]);
+pudlTest("SELECT 'value1' AS `column1`, 'value2' AS `column2`");
 
 
 

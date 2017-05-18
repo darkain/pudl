@@ -281,22 +281,38 @@ class pudlSort extends pudlEquals {
 
 
 class pudlRaw implements pudlValue, pudlHelper {
-	public function __construct($value) {
-		$this->value = $value;
+	public function __construct(/* ...$values */) {
+		$this->value = func_get_args();
 	}
 
 	public function pudlValue($db, $quote=true) {
-		return $this->value;
+		$query = '';
+		foreach ($this->value as $item) {
+			if (strlen($query)) $query .= $this->joiner;
+
+			if ($item instanceof pudlValue) {
+				$query .= $db->_value($item);
+			} else {
+				$query .= $item;
+			}
+		}
+		return $query;
 	}
 
-	public $value;
+	public $value	= [];
+	public $joiner	= ',';
 }
 
 
 
 class pudlText extends pudlRaw {
 	public function pudlValue($db, $quote=true) {
-		return $db->_value($this->value);
+		$query = '';
+		foreach ($this->value as $item) {
+			if (strlen($query)) $query .= $this->joiner;
+			$query .= $db->_value($item);
+		}
+		return $query;
 	}
 }
 

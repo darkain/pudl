@@ -558,14 +558,16 @@ abstract class pudl {
 
 
 
-	public static function raw($value) {
-		return new pudlRaw($value);
+	public static function raw(/* ...$values */) {
+		return (new ReflectionClass('pudlRaw'))
+				->newInstanceArgs(func_get_args());
 	}
 
 
 
-	public static function text($text) {
-		return new pudlText($text);
+	public static function text(/* ...$values */) {
+		return (new ReflectionClass('pudlText'))
+				->newInstanceArgs(func_get_args());
 	}
 
 
