@@ -1,0 +1,36 @@
+list of every value to test
+
+INT
+	0
+	1
+	10
+	-1
+	-10
+
+FLOAT
+	0.0
+	1.2
+	-1.2
+	INF
+	-INF
+	NAN
+
+BOOL
+	TRUE
+	FALSE
+
+STRING
+	''
+	'0'
+	'TEST'
+	' TEST '
+	'KEY.VALUE'
+	' KEY . VALUE '
+
+NULL
+
+ARRAY
+
+OBJECT ARRAY
+
+RESOURCE (always throw exceptions)
