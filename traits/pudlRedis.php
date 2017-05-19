@@ -84,27 +84,38 @@ trait pudlRedis {
 
 	public function salt() {
 		$auth = $this->auth();
-		return empty($auth['salt']) ? '' : $auth['salt'];
+		return empty($auth['salt']) ? __FILE__ : $auth['salt'];
 	}
+
 
 
 
 	public function hash($data) {
 		if (!is_string($data)  ||  empty($data)) return false;
 
-		$data = $this->salt() . $data;
+		$list = extension_loaded('hash') ? hash_algos() : [];
 
-		if (function_exists('hash')) {
-			$list = hash_algos();
-			switch (true) {
-				case in_array('sha512', $list): return hash('sha512', $data, true);
-				case in_array('sha384', $list): return hash('sha384', $data, true);
-				case in_array('sha256', $list): return hash('sha256', $data, true);
-				case in_array('sha224', $list): return hash('sha224', $data, true);
-			}
+		switch (true) {
+			case in_array('sha512',	$list):
+				return hash_hmac('sha512',	$data, $this->salt(), true);
+
+			case in_array('sha384',	$list):
+				return hash_hmac('sha384',	$data, $this->salt(), true);
+
+			case in_array('sha256',	$list):
+				return hash_hmac('sha256',	$data, $this->salt(), true);
+
+			case in_array('sha224',	$list):
+				return hash_hmac('sha224',	$data, $this->salt(), true);
+
+			case in_array('sha1',	$list):
+				return hash_hmac('sha1',	$data, $this->salt(), true);
+
+			case in_array('md5',	$list):
+				return hash_hmac('md5',		$data, $this->salt(), true);
 		}
 
-		return sha1($data, true);
+		return sha1($this->salt().$data, true);
 	}
 
 
