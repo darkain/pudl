@@ -263,6 +263,29 @@ class pudlObject implements ArrayAccess, Iterator {
 	}
 
 
+	public function has($property, $value=true) {
+		if (is_array($value)) {
+			if (!isset($value[$property])) return false;
+			$value = $value[$property];
+
+		} else if (is_object($value)) {
+			if (!isset($value->{$property})) return false;
+			$value = $value->{$property};
+		}
+
+
+		if (!isset($this->__array[$property])) {
+			return $value === false;
+		}
+
+		if ($value === true) {
+			return !empty($this->__array[$property]);
+		}
+
+		return $this->__array[$property] === $value;
+	}
+
+
 	public function snapshot($return=false) {
 		if ($return) return $this->__snapshot;
 		$this->__snapshot = $this->__array;
