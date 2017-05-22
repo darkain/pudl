@@ -62,9 +62,11 @@ function pudlUnit($result, $expected) {
 	echo "FILE: $trace[file]\n";
 	echo "LINE: $trace[line]\n\n";
 	echo "EXPECTED:\n";
-	echo "'" . $expected . "'\n\n";
+	var_dump($expected);
+	echo "\n\n";
 	echo "RESULT:\n";
-	echo "'" . $result . "'\n\n";
+	var_dump($result);
+	echo "\n\n";
 	exit(1);
 }
 

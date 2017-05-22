@@ -263,6 +263,11 @@ class pudlObject implements ArrayAccess, Iterator {
 	}
 
 
+	public function hasValue($value, $strict=false) {
+		return in_array($value, $this->__array, $strict);
+	}
+
+
 	public function has($property, $value=true) {
 		if (is_array($value)) {
 			if (!isset($value[$property])) return false;
@@ -283,6 +288,27 @@ class pudlObject implements ArrayAccess, Iterator {
 		}
 
 		return $this->__array[$property] === $value;
+	}
+
+
+	//http://php.net/manual/en/function.array-chunk.php#75022
+	public function partition($columns) {
+		$columns = (int) $columns;
+		if ($columns < 1) return [];
+
+		$count	= count($this->__array);
+		$length	= (int)($count / $columns);
+		$mod	= $count % $columns;
+		$return	= [];
+		$offset	= 0;
+
+		for ($i=0; $i<$columns; $i++) {
+			$width		= ($i < $mod) ? $length + 1 : $length;
+			$return[]	= array_slice($this->__array, $offset, $width);
+			$offset		+= $width;
+		}
+
+		return $return;
 	}
 
 
