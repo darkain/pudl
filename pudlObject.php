@@ -56,7 +56,7 @@ class pudlObject implements ArrayAccess, Iterator {
 	//COPY THE GIVEN ARRAY INTO THIS OBJECT
 	////////////////////////////////////////////////////////////////////////////
 	public function merge($array) {
-		if (empty($array)  ||  !pudl_array($array)) return;
+		if (empty($array)  ||  !pudl_array($array)) return $this;
 		foreach($array as $key => $value) {
 			$this->__array[$key] = $value;
 		}
@@ -69,10 +69,11 @@ class pudlObject implements ArrayAccess, Iterator {
 	//COPIES THIS OBJECT INTO THE GIVEN ARRAY
 	////////////////////////////////////////////////////////////////////////////
 	public function mergeInto(&$array) {
-		if (empty($array)  ||  !pudl_array($array)) return;
+		if (empty($array)  ||  !pudl_array($array)) return $this;
 		foreach($this->__array as $key => $value) {
 			$array[$key] = $value;
 		}
+		return $this;
 	}
 
 
@@ -82,11 +83,12 @@ class pudlObject implements ArrayAccess, Iterator {
 	//COPY THE GIVEN ARRAY INTO THIS OBJECT, ONLY FOR KEYS THAT ARE MISSING
 	////////////////////////////////////////////////////////////////////////////
 	public function append($array) {
-		if (empty($array)  ||  !pudl_array($array)) return;
+		if (empty($array)  ||  !pudl_array($array)) return $this;
 		foreach($array as $key => $value) {
 			if (isset($this->__array[$key])) continue;
 			$this->__array[$key] = $value;
 		}
+		return $this;
 	}
 
 
@@ -96,11 +98,12 @@ class pudlObject implements ArrayAccess, Iterator {
 	//COPIES THIS OBJECT INTO THE GIVEN ARRAY, ONLY FOR KEYS THAT ARE MISSING
 	////////////////////////////////////////////////////////////////////////////
 	public function appendInto(&$array) {
-		if (empty($array)  ||  !pudl_array($array)) return;
+		if (empty($array)  ||  !pudl_array($array)) return $this;
 		foreach($this->__array as $key => $value) {
 			if (isset($array[$key])) continue;
 			$array[$key] = $value;
 		}
+		return $this;
 	}
 
 
@@ -466,6 +469,7 @@ class pudlObject implements ArrayAccess, Iterator {
 		foreach ($keys as $key) {
 			$this->__array[$key] = $source[$key];
 		}
+		return $this;
 	}
 
 
@@ -558,6 +562,7 @@ class pudlObject implements ArrayAccess, Iterator {
 	public function snapshot($return=false) {
 		if ($return) return $this->__snapshot;
 		$this->__snapshot = $this->__array;
+		return true;
 	}
 
 
