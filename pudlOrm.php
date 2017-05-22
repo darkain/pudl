@@ -144,17 +144,17 @@ abstract class	pudlOrm
 	public static function collect(/* ...$selex */) {
 		global $db;
 
-		$args		= func_get_args();
-		array_unshift($args, static::schema());
-
-		$collector	= static::collector;
-		$class		= static::classname;
-		$return		= new $collector($class);
-		$result		= call_user_func_array([$db,'selex'], $args);
-
-		if ($class === __CLASS__) {
+		if (static::collector === __CLASS__) {
 			throw new pudlException('ORM const parameters were not overwritten');
 		}
+
+		$args			= func_get_args();
+		array_unshift($args, static::schema());
+
+		$collector		= static::collector;
+		$class			= static::classname;
+		$return			= new $collector($class);
+		$result			= call_user_func_array([$db,'selex'], $args);
 
 		while ($data	= $result()) {
 			$return[]	= new $class($data);
