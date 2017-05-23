@@ -60,6 +60,7 @@ class pudlObject implements ArrayAccess, Iterator {
 		foreach($array as $key => $value) {
 			$this->__array[$key] = $value;
 		}
+		return $this;
 	}
 
 
