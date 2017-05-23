@@ -76,27 +76,27 @@ pudlUnit(
 
 
 pudlUnit(
-	$test_object->hasValue(1),
+	$test_object->in(1),
 	true
 );
 
 
 
 pudlUnit(
-	$test_object->hasValue('1'),
+	$test_object->in('1'),
 	true
 );
 
 
 
 pudlUnit(
-	$test_object->hasValue(1, true),
+	$test_object->in(1, true),
 	true
 );
 
 
 
 pudlUnit(
-	$test_object->hasValue('1', true),
+	$test_object->in('1', true),
 	false
 );

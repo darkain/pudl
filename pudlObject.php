@@ -120,7 +120,7 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//COUNT THE NUMBER OF ITEMS IN THIS OBJECT
+	//COUNT ALL ELEMENTS IN AN ARRAY, OR SOMETHING IN AN OBJECT
 	//http://php.net/manual/en/function.count.php
 	////////////////////////////////////////////////////////////////////////////
 	public function count() {
@@ -131,7 +131,18 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PUSH ITEMS ONTO THE END OF THIS OBJECT
+	//CHECKS IF A VALUE EXISTS IN AN ARRAY
+	//http://php.net/manual/en/function.in-array.php
+	////////////////////////////////////////////////////////////////////////////
+	public function in($value, $strict=false) {
+		return in_array($value, $this->__array, $strict);
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//PUSH ONE OR MORE ELEMENTS ONTO THE END OF ARRAY
 	//http://php.net/manual/en/function.array-push.php
 	////////////////////////////////////////////////////////////////////////////
 	public function push() {
@@ -145,7 +156,7 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//POP ITEMS OUT OF THE END OF THIS OBJECT
+	//POP THE ELEMENT OFF THE END OF ARRAY
 	//http://php.net/manual/en/function.array-pop.php
 	////////////////////////////////////////////////////////////////////////////
 	public function pop() {
@@ -173,7 +184,7 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PUSH ITEMS ONTO THE BEGINNING OF THIS OBJECT
+	//PREPEND ONE OR MORE ELEMENTS TO THE BEGINNING OF AN ARRAY
 	//http://php.net/manual/en/function.array-unshift.php
 	////////////////////////////////////////////////////////////////////////////
 	public function unshift() {
@@ -187,7 +198,7 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//COMPARE ARRAYS
+	//COMPUTES THE DIFFERENCE OF ARRAYS
 	//http://php.net/manual/en/function.array-diff.php
 	////////////////////////////////////////////////////////////////////////////
 	public function diff() {
@@ -200,7 +211,7 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//COMPARE ARRAYS WITH INDEX CHECK
+	//COMPUTES THE DIFFERENCE OF ARRAYS WITH ADDITIONAL INDEX CHECK
 	//http://php.net/manual/en/function.array-diff-assoc.php
 	////////////////////////////////////////////////////////////////////////////
 	public function diff_assoc() {
@@ -213,7 +224,7 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//COMPARE ARRAY KEYS
+	//COMPUTES THE DIFFERENCE OF ARRAYS USING KEYS FOR COMPARISON
 	//http://php.net/manual/en/function.array-diff-key.php
 	////////////////////////////////////////////////////////////////////////////
 	public function diff_key() {
@@ -226,7 +237,7 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//INTERSECTION OF ARRAYS
+	//COMPUTES THE INTERSECTION OF ARRAYS
 	//http://php.net/manual/en/function.array-intersect.php
 	////////////////////////////////////////////////////////////////////////////
 	public function intersect() {
@@ -239,7 +250,7 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//INTERSECTION OF ARRAYS WITH INDEX CHECK
+	//COMPUTES THE INTERSECTION OF ARRAYS WITH ADDITIONAL INDEX CHECK
 	//http://php.net/manual/en/function.array-intersect-assoc.php
 	////////////////////////////////////////////////////////////////////////////
 	public function intersect_assoc() {
@@ -252,7 +263,8 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//INTERSECTION OF ARRAYS COMPARING ONLY KEYS
+	//COMPUTES THE INTERSECTION OF ARRAYS USING KEYS FOR COMPARISON
+	//http://php.net/manual/en/function.array-intersect-key.php
 	////////////////////////////////////////////////////////////////////////////
 	public function intersect_key() {
 		$args = func_get_args();
@@ -264,7 +276,7 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//GET ALL OF THE KEYS IN THIS OBJECT
+	//RETURN ALL THE KEYS OR A SUBSET OF THE KEYS OF AN ARRAY
 	//http://php.net/manual/en/function.array-keys.php
 	////////////////////////////////////////////////////////////////////////////
 	public function keys($search_value=null, $strict=false) {
@@ -275,7 +287,7 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//GET A SLICE OF THE OBJECT
+	//EXTRACT A SLICE OF THE ARRAY
 	//http://php.net/manual/en/function.array-slice.php
 	////////////////////////////////////////////////////////////////////////////
 	public function slice($offset, $length=NULL, $preserve_keys=false) {
@@ -286,7 +298,7 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PHP MAGIC METHOD - ACCESS AS OBJECT
+	//MAGIC METHOD - RUN WHEN WRITING DATA TO INACCESSIBLE PROPERTIES
 	//http://php.net/manual/en/language.oop5.magic.php
 	////////////////////////////////////////////////////////////////////////////
 	public function __set($key, $value) {
@@ -296,9 +308,9 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 
-	////////////////////////////////////////////////////////////////////////////
-	//PHP ARRAY ACCESS
-	//http://php.net/manual/en/class.arrayaccess.php
+	////////////////////////////////////////////////////////////////////////
+	//ARRAY ACCESS - ASSIGN A VALUE TO THE SPECIFIED OFFSET
+	//http://php.net/manual/en/arrayaccess.offsetset.php
 	////////////////////////////////////////////////////////////////////////////
 	public function offsetSet($key, $value) {
 		if (is_null($key)) {
@@ -312,7 +324,7 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PHP MAGIC METHOD - ACCESS AS OBJECT
+	//MAGIC METHOD - UTILIZED FOR READING DATA FROM INACCESSIBLE PROPERTIES
 	//http://php.net/manual/en/language.oop5.magic.php
 	////////////////////////////////////////////////////////////////////////////
 	public function &__get($key) {
@@ -323,8 +335,8 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PHP ARRAY ACCESS
-	//http://php.net/manual/en/class.arrayaccess.php
+	//ARRAY ACCESS - OFFSET TO RETRIEVE
+	//http://php.net/manual/en/arrayaccess.offsetget.php
 	////////////////////////////////////////////////////////////////////////////
 	public function &offsetGet($key) {
 		return $this->__array[$key];
@@ -334,7 +346,7 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PHP MAGIC METHOD - ACCESS AS OBJECT
+	//MAGIC METHOD - CALLING ISSET() OR EMPTY() ON INACCESSIBLE PROPERTIES
 	//http://php.net/manual/en/language.oop5.magic.php
 	////////////////////////////////////////////////////////////////////////////
 	public function __isset($key) {
@@ -345,8 +357,8 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PHP ARRAY ACCESS
-	//http://php.net/manual/en/class.arrayaccess.php
+	//ARRAY ACCESS - WHETHER AN OFFSET EXISTS
+	//http://php.net/manual/en/arrayaccess.offsetexists.php
 	////////////////////////////////////////////////////////////////////////////
 	public function offsetExists($key, $isset=true) {
 		return $isset
@@ -358,7 +370,7 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PHP MAGIC METHOD - ACCESS AS OBJECT
+	//MAGIC METHOD - INVOKED WHEN UNSET() IS USED ON INACCESSIBLE PROPERTIES
 	//http://php.net/manual/en/language.oop5.magic.php
 	////////////////////////////////////////////////////////////////////////////
 	public function __unset($key) {
@@ -369,8 +381,8 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PHP ARRAY ACCESS
-	//http://php.net/manual/en/class.arrayaccess.php
+	//ARRAY ACCESS - UNSET AN OFFSET
+	//http://php.net/manual/en/arrayaccess.offsetunset.php
 	////////////////////////////////////////////////////////////////////////////
 	public function offsetUnset($key) {
 		unset($this->__array[$key]);
@@ -380,8 +392,8 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PHP ITERATOR
-	//http://php.net/manual/en/class.iterator.php
+	//ITERATOR - REWIND THE ITERATOR TO THE FIRST ELEMENT
+	//http://php.net/manual/en/iterator.rewind.php
 	////////////////////////////////////////////////////////////////////////////
 	public function rewind() {
 		reset($this->__array);
@@ -391,8 +403,8 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PHP ITERATOR
-	//http://php.net/manual/en/class.iterator.php
+	//ITERATOR - RETURN THE CURRENT ELEMENT
+	//http://php.net/manual/en/iterator.current.php
 	////////////////////////////////////////////////////////////////////////////
 	public function current() {
 		return current($this->__array);
@@ -402,8 +414,8 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PHP ITERATOR
-	//http://php.net/manual/en/class.iterator.php
+	//ITERATOR - RETURN THE KEY OF THE CURRENT ELEMENT
+	//http://php.net/manual/en/iterator.key.php
 	////////////////////////////////////////////////////////////////////////////
 	public function key() {
 		return key($this->__array);
@@ -413,8 +425,8 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PHP ITERATOR
-	//http://php.net/manual/en/class.iterator.php
+	//ITERATOR - MOVE FORWARD TO NEXT ELEMENT
+	//http://php.net/manual/en/iterator.next.php
 	////////////////////////////////////////////////////////////////////////////
 	public function next() {
 		return next($this->__array);
@@ -424,8 +436,8 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PHP ITERATOR
-	//http://php.net/manual/en/class.iterator.php
+	//ITERATOR - CHECKS IF CURRENT POSITION IS VALID
+	//http://php.net/manual/en/iterator.valid.php
 	////////////////////////////////////////////////////////////////////////////
 	public function valid() {
 		$key = key($this->__array);
@@ -436,7 +448,7 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//GET A JSON REPRESENTATION OF THIS OBJECT
+	//RETURNS THE JSON REPRESENTATION OF A VALUE
 	//http://php.net/manual/en/function.json-encode.php
 	////////////////////////////////////////////////////////////////////////////
 	public function json() {
@@ -490,16 +502,6 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//CHECK TO SEE IF THE GIVEN VALUE EXISTS
-	////////////////////////////////////////////////////////////////////////////
-	public function hasValue($value, $strict=false) {
-		return in_array($value, $this->__array, $strict);
-	}
-
-
-
-
-	////////////////////////////////////////////////////////////////////////////
 	//TRUE		CHECK TO SEE IF THE KEY EXISTS
 	//FALSE		CHECK TO SEE IF THE KEY DOESN'T EXIST
 	//OTHER		CHECK TO SEE IF THE KEY'S VALUE === GIVEN VALUE
@@ -530,7 +532,7 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PARTITION THE ROW INTO MULTIPE COLUMNS
+	//PARTITION THE ARRAY INTO MULTIPE EQUAL SIZED CHUNKS
 	//http://php.net/manual/en/function.array-chunk.php#75022
 	////////////////////////////////////////////////////////////////////////////
 	public function partition($columns) {
@@ -580,7 +582,7 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PHP MAGIC METHOD - USED WITH VAR_DUMP
+	//MAGIC METHOD - CALLED BY VAR_DUMP() WHEN DUMPING AN OBJECT
 	//http://php.net/manual/en/language.oop5.magic.php
 	////////////////////////////////////////////////////////////////////////////
 	public function __debugInfo() {
