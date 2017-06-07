@@ -30,7 +30,7 @@ trait pudlTransaction {
 
 
 	public function commitChunk($size=1000, $sync=false) {
-		if (++$this->_inserted === $size) {
+		if (++self::$_inserted === $size) {
 			$this->commit($sync)->begin();
 		}
 		return $this;
@@ -106,8 +106,8 @@ trait pudlTransaction {
 
 
 
-	public function inserted() {
-		return $this->_inserted;
+	public static function inserted() {
+		return self::$_inserted;
 	}
 
 
