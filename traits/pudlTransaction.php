@@ -29,6 +29,15 @@ trait pudlTransaction {
 
 
 
+	public function commitChunk($size=1000, $sync=false) {
+		if (++$this->_inserted === $size) {
+			$this->commit($sync)->begin();
+		}
+		return $this;
+	}
+
+
+
 	public function rollback() {
 		if (!$this->inTransaction()) return $this;
 		$this->transaction = false;
@@ -97,7 +106,14 @@ trait pudlTransaction {
 
 
 
-	protected	$transaction	= false;
-	private		$locked			= false;
+	public function inserted() {
+		return $this->_inserted;
+	}
+
+
+
+	protected		$transaction	= false;
+	private			$locked			= false;
+	private static	$_inserted		= 0;
 
 }
