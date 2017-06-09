@@ -69,11 +69,11 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	//RETURN THE CURRENT OBJECT ID NUMBER
 	////////////////////////////////////////////////////////////////////////////
-	public function id() {
+	public function id($default=0) {
 		if (static::hash) return $this->{static::column};
 		return is_numeric($this->{static::column})
 			? $this->{static::column}
-			: 0;
+			: $default;
 	}
 
 
