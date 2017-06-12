@@ -232,7 +232,7 @@ class pudlObject implements ArrayAccess, Iterator {
 	////////////////////////////////////////////////////////////////////////////
 	public function flip() {
 		$this->__array = array_flip($this->__array);
-		return true;
+		return $this;
 	}
 
 
@@ -244,7 +244,7 @@ class pudlObject implements ArrayAccess, Iterator {
 	////////////////////////////////////////////////////////////////////////////
 	public function reverse($preserve_keys=true) {
 		$this->__array = array_reverse($this->__array, $preserve_keys);
-		return true;
+		return $this;
 	}
 
 
@@ -255,7 +255,8 @@ class pudlObject implements ArrayAccess, Iterator {
 	//http://php.net/manual/en/function.sort.php
 	////////////////////////////////////////////////////////////////////////////
 	public function sort($sort_flags=SORT_REGULAR) {
-		return sort($this->__array);
+		sort($this->__array);
+		return $this;
 	}
 
 
@@ -266,7 +267,8 @@ class pudlObject implements ArrayAccess, Iterator {
 	//http://php.net/manual/en/function.shuffle.php
 	////////////////////////////////////////////////////////////////////////////
 	public function shuffle() {
-		return shuffle($this->__array);
+		shuffle($this->__array);
+		return $this;
 	}
 
 
