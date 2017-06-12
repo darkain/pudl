@@ -571,7 +571,7 @@ class pudlObject implements ArrayAccess, Iterator {
 		$return	= [];
 
 		foreach ($this->__array as $key => &$item) {
-			$return[$key] = call_user_func($callback, $item, $key);
+			$return[$key] = call_user_func_array($callback, [&$item, $key]);
 		} unset($item);
 
 		return $return;

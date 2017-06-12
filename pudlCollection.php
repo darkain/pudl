@@ -98,7 +98,7 @@ class		pudlCollection
 
 		foreach ($list as $key => &$item) {
 			if (!($item instanceof pudlOrm)) continue;
-			$return[$key] = call_user_func($callback, $item, $key);
+			$return[$key] = call_user_func_array($callback, [&$item, $key]);
 		} unset($item);
 
 		return $return;
