@@ -150,3 +150,6 @@ require 'log.php';
 
 //PUDL OBJECT
 require 'object.php';
+
+//DELETE QUERIES
+require 'delete.php';
