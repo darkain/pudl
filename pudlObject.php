@@ -7,18 +7,22 @@ class pudlObject implements ArrayAccess, Iterator {
 	////////////////////////////////////////////////////////////////////////////
 	//CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
-	public function __construct(&$array=NULL, $copy=false) {
+	public function __construct(&$data=NULL, $process=false) {
 		switch (true) {
-			case $copy === PUDL_CSV:
-				$this->copy(str_getcsv($array));
+			case is_string($data)  &&  is_string($process):
+				$this->replace(explode($process, $data));
 			break;
 
-			case !!$copy:
-				$this->copy($array);
+			case $process === PUDL_CSV:
+				$this->replace(str_getcsv($data));
+			break;
+
+			case !!$process:
+				$this->copy($data);
 			break;
 
 			default:
-				$this->replace($array);
+				$this->replace($data);
 		}
 	}
 

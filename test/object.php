@@ -100,3 +100,23 @@ pudlUnit(
 	$test_object->in('1', true),
 	false
 );
+
+
+
+
+$text_data_1	= 'a,b,c,d';
+$test_object_1	= new pudlObject($text_data_1, ',');
+pudlUnit(
+	$test_object_1->raw(),
+	['a', 'b', 'c', 'd']
+);
+
+
+
+
+$text_data_1	= '"a","b","c","d,e"';
+$test_object_1	= new pudlObject($text_data_1, PUDL_CSV);
+pudlUnit(
+	$test_object_1->raw(),
+	['a', 'b', 'c', 'd,e']
+);
