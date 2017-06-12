@@ -1,18 +1,21 @@
 <?php
 
 //Default Behavior
-define('PUDL_DEFAULT',	0);
+define('PUDL_DEFAULT',		0x00);
 
 //Array Types
-define('PUDL_ARRAY',	1);
-define('PUDL_NUMBER',	2);
-define('PUDL_BOTH',		3);
-define('PUDL_INDEX',	4);
+define('PUDL_ARRAY',		0x01);
+define('PUDL_NUMBER',		0x02);
+define('PUDL_BOTH',			0x03);
+define('PUDL_INDEX',		0x04);
 
 //Escapes
-define('PUDL_START',	1);
-define('PUDL_END',		2);
-//define('PUDL_BOTH',	3);
+define('PUDL_START',		0x01);
+define('PUDL_END',			0x02);
+//define('PUDL_BOTH',		0x03);
+
+//PUDL Object
+define('PUDL_CSV',			0x10);
 
 
 /* NOTE: HERE ARE THE NUMERICAL STATE VALUES FOR A GALERA CLUSTER LOCAL STATE
@@ -23,10 +26,10 @@ define('PUDL_END',		2);
 4 - Synced - node is synced with the cluster
 5 - Donor - node receives sync request from another node in the cluster
 6 - Resyncing - node completes sync request from another node in the cluster */
-define('GALERA_NONE',		0);
-define('GALERA_JOINING',	1);
-define('GALERA_DESYNCED',	2);
-define('GALERA_JOINED',		3);
-define('GALERA_SYNCED',		4);
-define('GALERA_DONOR',		5);
-define('GALERA_RESYNCING',	6);
+define('GALERA_NONE',		0x00);
+define('GALERA_JOINING',	0x01);
+define('GALERA_DESYNCED',	0x02);
+define('GALERA_JOINED',		0x03);
+define('GALERA_SYNCED',		0x04);
+define('GALERA_DONOR',		0x05);
+define('GALERA_RESYNCING',	0x06);

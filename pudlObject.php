@@ -8,7 +8,18 @@ class pudlObject implements ArrayAccess, Iterator {
 	//CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
 	public function __construct(&$array=NULL, $copy=false) {
-		$copy ? $this->copy($array) : $this->replace($array);
+		switch (true) {
+			case $copy === PUDL_CSV:
+				$this->copy(str_getcsv($array));
+			break;
+
+			case !!$copy:
+				$this->copy($array);
+			break;
+
+			default:
+				$this->replace($array);
+		}
 	}
 
 
@@ -132,6 +143,17 @@ class pudlObject implements ArrayAccess, Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
+	//JOIN ARRAY ELEMENTS WITH A STRING
+	//http://php.net/manual/en/function.implode.php
+	////////////////////////////////////////////////////////////////////////////
+	public function implode($glue=',') {
+		return implode($glue, $this->__array);
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
 	//CHECKS IF A VALUE EXISTS IN AN ARRAY
 	//http://php.net/manual/en/function.in-array.php
 	////////////////////////////////////////////////////////////////////////////
@@ -193,6 +215,52 @@ class pudlObject implements ArrayAccess, Iterator {
 		array_unshift($args, NULL);
 		$args[0] = &$this->__array;
 		return call_user_func_array('array_unshift', $args);
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//EXCHANGES ALL KEYS WITH THEIR ASSOCIATED VALUES IN AN ARRAY
+	//http://php.net/manual/en/function.array-flip.php
+	////////////////////////////////////////////////////////////////////////////
+	public function flip() {
+		$this->__array = array_flip($this->__array);
+		return true;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//RETURN AN ARRAY WITH ELEMENTS IN REVERSE ORDER
+	//http://php.net/manual/en/function.array-reverse.php
+	////////////////////////////////////////////////////////////////////////////
+	public function reverse($preserve_keys=true) {
+		$this->__array = array_reverse($this->__array, $preserve_keys);
+		return true;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//SORT AN ARRAY
+	//http://php.net/manual/en/function.sort.php
+	////////////////////////////////////////////////////////////////////////////
+	public function sort($sort_flags=SORT_REGULAR) {
+		return sort($this->__array);
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//SHUFFLE AN ARRAY
+	//http://php.net/manual/en/function.shuffle.php
+	////////////////////////////////////////////////////////////////////////////
+	public function shuffle() {
+		return shuffle($this->__array);
 	}
 
 
@@ -491,7 +559,7 @@ class pudlObject implements ArrayAccess, Iterator {
 	////////////////////////////////////////////////////////////////////////////
 	//RUN A CALLBACK FUNCTION FOR EVERY ITEM
 	////////////////////////////////////////////////////////////////////////////
-	public function process($callback) {
+	public function each($callback) {
 		$return	= [];
 		foreach ($this->__array as $key => $item) {
 			$return[$key] = call_user_func($callback, $item, $key);
