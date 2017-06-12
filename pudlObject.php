@@ -10,11 +10,13 @@ class pudlObject implements ArrayAccess, Iterator {
 	public function __construct(&$data=NULL, $process=false) {
 		switch (true) {
 			case is_string($data)  &&  is_string($process):
-				$this->replace(explode($process, $data));
+				$x = explode($process, $data);
+				$this->replace($x);
 			break;
 
 			case $process === PUDL_CSV:
-				$this->replace(str_getcsv($data));
+				$x = str_getcsv($data);
+				$this->replace($x);
 			break;
 
 			case !!$process:
