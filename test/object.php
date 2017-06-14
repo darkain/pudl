@@ -114,9 +114,9 @@ pudlUnit(
 
 
 
-$text_data_1	= '"a","b","c","d,e"';
-$test_object_1	= new pudlObject($text_data_1, PUDL_CSV);
+$text_data_2	= '"a","b","c","d,e"';
+$test_object_2	= new pudlObject($text_data_2, PUDL_CSV);
 pudlUnit(
-	$test_object_1->raw(),
+	$test_object_2->raw(),
 	['a', 'b', 'c', 'd,e']
 );
