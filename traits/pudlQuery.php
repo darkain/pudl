@@ -305,7 +305,7 @@ trait pudlQuery {
 
 	protected function _clause($clause, $type='WHERE') {
 		if ($clause === false)	return '';
-if ($type==='IN') var_dump($clause);
+
 		if ($clause instanceof pudlStringResult) return (string) $clause;
 
 		if ($clause instanceof pudlId) {
