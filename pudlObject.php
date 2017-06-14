@@ -255,7 +255,7 @@ class pudlObject implements ArrayAccess, Iterator {
 	//http://php.net/manual/en/function.sort.php
 	////////////////////////////////////////////////////////////////////////////
 	public function sort($sort_flags=SORT_REGULAR) {
-		sort($this->__array);
+		sort($this->__array, $sort_flags);
 		return $this;
 	}
 
@@ -267,7 +267,7 @@ class pudlObject implements ArrayAccess, Iterator {
 	//http://php.net/manual/en/function.rsort.php
 	////////////////////////////////////////////////////////////////////////////
 	public function rsort($sort_flags=SORT_REGULAR) {
-		rsort($this->__array);
+		rsort($this->__array, $sort_flags);
 		return $this;
 	}
 
@@ -279,7 +279,19 @@ class pudlObject implements ArrayAccess, Iterator {
 	//http://php.net/manual/en/function.asort.php
 	////////////////////////////////////////////////////////////////////////////
 	public function asort($sort_flags=SORT_REGULAR) {
-		asort($this->__array);
+		asort($this->__array, $sort_flags);
+		return $this;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//SORT AN ARRAY IN REVERSE ORDER AND MAINTAIN INDEX ASSOCIATION
+	//http://php.net/manual/en/function.arsort.php
+	////////////////////////////////////////////////////////////////////////////
+	public function arsort($sort_flags=SORT_REGULAR) {
+		arsort($this->__array, $sort_flags);
 		return $this;
 	}
 
@@ -291,7 +303,7 @@ class pudlObject implements ArrayAccess, Iterator {
 	//http://php.net/manual/en/function.ksort.php
 	////////////////////////////////////////////////////////////////////////////
 	public function ksort($sort_flags=SORT_REGULAR) {
-		ksort($this->__array);
+		ksort($this->__array, $sort_flags);
 		return $this;
 	}
 
@@ -303,7 +315,7 @@ class pudlObject implements ArrayAccess, Iterator {
 	//http://php.net/manual/en/function.krsort.php
 	////////////////////////////////////////////////////////////////////////////
 	public function krsort($sort_flags=SORT_REGULAR) {
-		krsort($this->__array);
+		krsort($this->__array, $sort_flags);
 		return $this;
 	}
 
