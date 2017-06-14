@@ -1,7 +1,11 @@
 <?php
 
 
-class pudlObject implements ArrayAccess, Iterator {
+class	pudlObject
+	implements
+		ArrayAccess,
+		Countable,
+		Iterator {
 
 
 	////////////////////////////////////////////////////////////////////////////
