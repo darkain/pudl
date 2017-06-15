@@ -8,6 +8,8 @@ class	pudlObject
 		Iterator {
 
 
+
+
 	////////////////////////////////////////////////////////////////////////////
 	//CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
@@ -50,12 +52,11 @@ class	pudlObject
 	////////////////////////////////////////////////////////////////////////////
 	//REPLACES THE OBJECT'S ARRAY WITH THE GIVEN ARRAY
 	////////////////////////////////////////////////////////////////////////////
-	public function replace(&$array) {
-		$this->clear();
+	public function replace(&$data) {
+		if (!is_array($data)) return $this->copy();
 
-		is_array($array)
-			? $this->__array = &$array
-			: $this->copy($array);
+		$this->clear();
+		$this->__array = &$data;
 
 		return $this;
 	}
@@ -66,8 +67,8 @@ class	pudlObject
 	////////////////////////////////////////////////////////////////////////////
 	//CLEARS THE OBJECT'S ARRAY, AND THEN COPIES THE GIVEN ARRAY
 	////////////////////////////////////////////////////////////////////////////
-	public function copy($array) {
-		return $this->clear()->merge($array);
+	public function copy($data) {
+		return $this->clear()->merge($data);
 	}
 
 
