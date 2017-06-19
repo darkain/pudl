@@ -16,13 +16,13 @@ class	pudlObject
 	public function __construct(&$data=NULL, $process=false) {
 		switch (true) {
 			case is_string($data)  &&  is_string($process):
-				$x = explode($process, $data);
-				$this->replace($x);
+				$x = @explode($process, $data);
+				$x === false ? $this->clear() : $this->replace($x);
 			break;
 
 			case $process === PUDL_CSV:
-				$x = str_getcsv($data);
-				$this->replace($x);
+				$x = @str_getcsv($data);
+				$x === [NULL] ? $this->clear() : $this->replace($x);
 			break;
 
 			case !!$process:
