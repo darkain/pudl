@@ -23,17 +23,15 @@ trait pudlTransaction {
 		if (!$this->inTransaction()) return $this;
 		$this('COMMIT');
 		$this->transaction = false;
-		if ($sync) $this->sync();
-		return $this;
+		return $sync ? $this->sync() : $this;
 	}
 
 
 
 	public function commitChunk($size=1000, $sync=false) {
-		if (++self::$_inserted === $size) {
-			$this->commit($sync)->begin();
-		}
-		return $this;
+		return (++self::$_inserted === $size)
+			 ? $this->commit($sync)->begin()
+			 : $this;
 	}
 
 
