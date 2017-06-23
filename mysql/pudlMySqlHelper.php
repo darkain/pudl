@@ -31,6 +31,8 @@ trait pudlMySqlHelper {
 
 
 
+	//TODO: MCRYPT SHOULD NOT BE USED ANYWHERE!
+	//	https://github.com/php/php-src/blob/php-7.2.0alpha2/UPGRADING
 	public static function aesDecrypt($data, $key) {
 		return rtrim(
 			mcrypt_decrypt(
