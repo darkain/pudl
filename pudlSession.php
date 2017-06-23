@@ -5,8 +5,20 @@ ini_set('session.hash_bits_per_character', 6);
 ini_set('session.gc_maxlifetime', 60*60*24*30);
 
 
-class pudlSession {
 
+
+////////////////////////////////////////////////////////////////////////////////
+//PUDL CUSTOM SESSION HANDLER
+////////////////////////////////////////////////////////////////////////////////
+class			pudlSession
+	implements	SessionHandlerInterface {
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//CONSTRUCTOR, PASS IN SOME PUDL AND SESSION CONFIGURATIONS
+	////////////////////////////////////////////////////////////////////////////
 	public function __construct($database, $table, $name=false, $domain=false, $secure=false) {
 		$this->db		= $database;
 		$this->table	= $table;
@@ -15,14 +27,7 @@ class pudlSession {
 
 		$this->db->on('disconnect', [$this, 'disconnect']);
 
-		session_set_save_handler(
-			[$this, 'open'],
-			[$this, 'close'],
-			[$this, 'read'],
-			[$this, 'write'],
-			[$this, 'destroy'],
-			[$this, 'clean']
-		);
+		session_set_save_handler($this, true);
 
 		//Different session name for HTTPS connections
 		session_name(
@@ -43,12 +48,20 @@ class pudlSession {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	//GET THE REDIS CACHE ID FOR THIS SESSION ID
+	////////////////////////////////////////////////////////////////////////////
 	private function cache($id) {
 		return 'session-' . $this->name . '-' . $this->domain . '-' . $id;
 	}
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	//PURGE SESSION DATA FROM REDIS CACHE
+	////////////////////////////////////////////////////////////////////////////
 	private function purge($id) {
 		$this->db->purge( $this->cache($id) );
 		return true;
@@ -56,24 +69,43 @@ class pudlSession {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	//FINALIZE SESSION
+	////////////////////////////////////////////////////////////////////////////
 	public function disconnect() {
 		session_write_close();
 	}
 
 
 
-	public function open() {
+
+	////////////////////////////////////////////////////////////////////////////
+	//INITIALIZE SESSION
+	//http://php.net/manual/en/sessionhandlerinterface.open.php
+	////////////////////////////////////////////////////////////////////////////
+	public function open($path, $name) {
 		return true;
 	}
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	//CLOSE THE SESSION
+	//http://php.net/manual/en/sessionhandlerinterface.close.php
+	////////////////////////////////////////////////////////////////////////////
 	public function close() {
 		return true;
 	}
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	//READ SESSION DATA
+	//http://php.net/manual/en/sessionhandlerinterface.read.php
+	////////////////////////////////////////////////////////////////////////////
 	public function read($id) {
 		$data = $this->db->cache(60*60, $this->cache($id))->selectRow(
 			['user', 'data'],
@@ -82,17 +114,22 @@ class pudlSession {
 		);
 
 		if (empty($data)  ||  !isset($data['data'])  ||  !isset($data['user'])) {
-			$data = ['data'=>false, 'user'=>0];
+			$data = ['data'=>'', 'user'=>0];
 		}
 
 		$this->user = $data['user'];
 		$this->hash = $this->db->hash($data['data']);
 
-		return $data['data'];
+		return (string) $data['data'];
 	}
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	//WRITE SESSION DATA
+	//http://php.net/manual/en/sessionhandlerinterface.write.php
+	////////////////////////////////////////////////////////////////////////////
 	public function write($id, $data) {
 		if (is_string($data)  &&  $this->hash === $this->db->hash($data)) return true;
 
@@ -121,6 +158,11 @@ class pudlSession {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	//DESTROY A SESSION
+	//http://php.net/manual/en/sessionhandlerinterface.destroy.php
+	////////////////////////////////////////////////////////////////////////////
 	public function destroy($id) {
 		//Delete the object
 		if ($this->hash !== false) {
@@ -133,7 +175,12 @@ class pudlSession {
 
 
 
-	public function clean($max) {
+
+	////////////////////////////////////////////////////////////////////////////
+	//CLEANUP OLD SESSIONS
+	//http://php.net/manual/en/sessionhandlerinterface.gc.php
+	////////////////////////////////////////////////////////////////////////////
+	public function gc($max) {
 		$expire = $this->db->time() - (int) $max;
 		$this->db->delete($this->table, ['access'=>pudl::lt($expire)]);
 		return true;
@@ -141,6 +188,10 @@ class pudlSession {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	//SET OR GET USER INFORMATION
+	////////////////////////////////////////////////////////////////////////////
 	public function user($user=false, $name=false) {
 		if ($user === false) return $this->user;
 
@@ -157,15 +208,23 @@ class pudlSession {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	//GET THE DATABASE TABLE THIS SESSION IS ASSOCIATED WITH
+	////////////////////////////////////////////////////////////////////////////
 	public function table() { return $this->table; }
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	//PRIVATE LOCAL VARIABLES
+	////////////////////////////////////////////////////////////////////////////
 	private $db;
 	private $table;
 	private $name;
 	private $domain;
-	private $hash		= false;
 	private $user		= 0;
+	private $hash		= false;
 	private $secure		= false;
 }
