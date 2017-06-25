@@ -20,33 +20,6 @@ trait pudlMySqlHelper {
 
 
 
-	public static function aesKey($key) {
-		$aes = str_repeat(chr(0), 16);
-		$len = strlen($key);
-		for ($i=0; $i<$len; $i++) {
-			$aes[$i%16] = $aes[$i%16] ^ $key[$i];
-		}
-		return $aes;
-	}
-
-
-
-	//TODO: MCRYPT SHOULD NOT BE USED ANYWHERE!
-	//	https://github.com/php/php-src/blob/php-7.2.0alpha2/UPGRADING
-	public static function aesDecrypt($data, $key) {
-		return rtrim(
-			mcrypt_decrypt(
-				MCRYPT_RIJNDAEL_128,
-				self::aesKey($key),
-				pack('H*', $data),
-				MCRYPT_MODE_ECB,
-				''
-			),
-			"\0"
-		);
-	}
-
-
 
 	public function fieldType($table, $column) {
 		if (substr($table, 0, 5) === 'pudl_') {
