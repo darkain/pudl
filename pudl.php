@@ -23,27 +23,29 @@ require_once('traits/pudlInsert.php');
 require_once('traits/pudlUpdate.php');
 require_once('traits/pudlDelete.php');
 require_once('traits/pudlCompare.php');
+require_once('traits/pudlCounter.php');
 require_once('traits/pudlDynamic.php');
 require_once('traits/pudlCallback.php');
 require_once('traits/pudlTransaction.php');
 
 
 
-abstract class pudl {
-	use pudlAuth;
-	use pudlAlias;
-	use pudlRedis;
-	use pudlQuery;
-	use pudlUnion;
-	use pudlTable;
-	use pudlSelect;
-	use pudlInsert;
-	use pudlUpdate;
-	use pudlDelete;
-	use pudlCompare;
-	use pudlDynamic;
-	use pudlCallback;
-	use pudlTransaction;
+abstract	class	pudl {
+			use		pudlAuth;
+			use		pudlAlias;
+			use		pudlRedis;
+			use		pudlQuery;
+			use		pudlUnion;
+			use		pudlTable;
+			use		pudlSelect;
+			use		pudlInsert;
+			use		pudlUpdate;
+			use		pudlDelete;
+			use		pudlCompare;
+			use		pudlCounter;
+			use		pudlDynamic;
+			use		pudlCallback;
+			use		pudlTransaction;
 
 
 
@@ -380,42 +382,6 @@ abstract class pudl {
 
 
 
-	public function count($table, $clause=false) {
-		$return = $this->cell($table, 'COUNT(*)', $clause);
-		if ($return instanceof pudlStringResult) return $return;
-		return $return === false ? $return : (int) $return;
-	}
-
-
-
-	public function countId($table, $column, $id=false) {
-		return $this->count($table, $this->_clauseId($column,$id));
-	}
-
-
-
-	public function countGroup($table, $clause, $group, $col=false) {
-		if ($col === false) $col = $group;
-
-		$query =	'SELECT ' .
-					$this->_cache() .
-					'COUNT(*) FROM (' .
-					'SELECT ' .
-					$this->_column($col) .
-					$this->_tables($table) .
-					$this->_clause($clause) .
-					$this->_group($group) .
-					') ' .
-					$this->_alias();
-
-		$result = $this($query);
-		if ($result instanceof pudlStringResult) return $result;
-		$return = $result->completeCell();
-		return $return === false ? $return : (int) $return;
-	}
-
-
-
 	public function found() {
 		$result = $this('SELECT FOUND_ROWS()');
 		if ($result instanceof pudlStringResult) return $result;
@@ -548,12 +514,6 @@ abstract class pudl {
 	public static function column($column, $value=false) {
 		if (func_num_args() === 2) return new pudlColumn($column, $value);
 		return new pudlColumn($column);
-	}
-
-
-
-	public static function _count($column='*') {
-		return new pudlCount($column);
 	}
 
 
