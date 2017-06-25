@@ -22,6 +22,7 @@ require_once('traits/pudlSelect.php');
 require_once('traits/pudlInsert.php');
 require_once('traits/pudlUpdate.php');
 require_once('traits/pudlDelete.php');
+require_once('traits/pudlStatic.php');
 require_once('traits/pudlCompare.php');
 require_once('traits/pudlCounter.php');
 require_once('traits/pudlDynamic.php');
@@ -41,6 +42,7 @@ abstract	class	pudl {
 			use		pudlInsert;
 			use		pudlUpdate;
 			use		pudlDelete;
+			use		pudlStatic;
 			use		pudlCompare;
 			use		pudlCounter;
 			use		pudlDynamic;
@@ -226,14 +228,6 @@ abstract	class	pudl {
 		return $result;
 	}
 
-
-
-	public static function __callStatic($name, $arguments) {
-		$value	= new pudlFunction();
-		$name	= '_' . strtoupper($name);
-		$value->$name = $arguments;
-		return $value;
-	}
 
 
 
@@ -507,70 +501,6 @@ abstract	class	pudl {
 										: strtotime($time);
 
 		return self::from_unixtime($time);
-	}
-
-
-
-	public static function column($column, $value=false) {
-		if (func_num_args() === 2) return new pudlColumn($column, $value);
-		return new pudlColumn($column);
-	}
-
-
-
-	public static function raw(/* ...$values */) {
-		return (new ReflectionClass('pudlRaw'))
-				->newInstanceArgs(func_get_args());
-	}
-
-
-
-	public static function text(/* ...$values */) {
-		return (new ReflectionClass('pudlText'))
-				->newInstanceArgs(func_get_args());
-	}
-
-
-
-	public static function date($timestamp=false) {
-		return ($timestamp === false)
-			? self::now()
-			: self::from_unixtime($timestamp);
-	}
-
-
-
-	public static function find($column, $values) {
-		if (!is_array($values)) $values = explode(',', $values);
-		$return = [];
-		foreach ($values as $item) {
-			$return[] = self::find_in_set($item, self::column($column));
-		}
-		return $return;
-	}
-
-
-
-	public static function notFind($column, $values) {
-		if (!is_array($values)) $values = explode(',', $values);
-		$return = [];
-		foreach ($values as $item) {
-			$return[] = self::{'!find_in_set'}($item, self::column($column));
-		}
-		return $return;
-	}
-
-
-
-	public static function jsonEncode($data) {
-		if ($data instanceof pudlObject) $data = $data->raw();
-		return @json_encode($data, JSON_HEX_APOS|JSON_HEX_QUOT|JSON_PARTIAL_OUTPUT_ON_ERROR);
-	}
-
-
-
-	public static function jsonDecode($data) {
-		return @json_decode($data, true, 512, JSON_BIGINT_AS_STRING);
 	}
 
 
