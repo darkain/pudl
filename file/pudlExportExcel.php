@@ -9,35 +9,42 @@ function pudlExportExcel($result, $filename, $headers=false) {
 		return 'Cannot open file: ' . $filename;
 	}
 
-	$xmlheader = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' . "\n";
 
-	$zip->addFromString('[Content_Types].xml', $xmlheader.'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Override PartName="/xl/theme/theme1.xml" ContentType="application/vnd.openxmlformats-officedocument.theme+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/sharedStrings.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/></Types>');
+	//ADD XML FILES UNMODIFIED
+	$zip->addFile(__DIR__.'/content_type.xml',	'[Content_Types].xml');
+	$zip->addFile(__DIR__.'/rels.xml',			'_rels/.rels');
+	$zip->addFile(__DIR__.'/workbook.xml.rels',	'xl/_rels/workbook.xml.rels');
+	$zip->addFile(__DIR__.'/styles.xml',		'xl/styles.xml');
 
-	$zip->addFromString('_rels/.rels', $xmlheader.'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" Target="docProps/app.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>');
+	//ADD XML AND REPLACE FILENAME
+	$zip->addFromString('docProps/app.xml', str_replace(
+		'[FILENAME]', $filename,
+		file_get_contents(__DIR__.'/app.xml')
+	));
 
-	$zip->addFromString('docProps/app.xml', $xmlheader.'<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"><Application>Microsoft Excel</Application><DocSecurity>0</DocSecurity><ScaleCrop>false</ScaleCrop><HeadingPairs><vt:vector size="2" baseType="variant"><vt:variant><vt:lpstr>Worksheets</vt:lpstr></vt:variant><vt:variant><vt:i4>1</vt:i4></vt:variant></vt:vector></HeadingPairs><TitlesOfParts><vt:vector size="1" baseType="lpstr"><vt:lpstr>'.$filename.'</vt:lpstr></vt:vector></TitlesOfParts><LinksUpToDate>false</LinksUpToDate><SharedDoc>false</SharedDoc><HyperlinksChanged>false</HyperlinksChanged><AppVersion>12.0000</AppVersion></Properties>');
+	//ADD XML AND REPLACE FILENAME
+	$zip->addFromString('xl/workbook.xml', str_replace(
+		'[FILENAME]', $filename,
+		file_get_contents(__DIR__.'/workbook.xml')
+	));
 
-	$zip->addFromString('docProps/core.xml', $xmlheader.'<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dcmitype="http://purl.org/dc/dcmitype/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:creator>PHP Universal Database Library</dc:creator><cp:lastModifiedBy>PHP Universal Database Library</cp:lastModifiedBy><dcterms:created xsi:type="dcterms:W3CDTF">'.date('c').'</dcterms:created><dcterms:modified xsi:type="dcterms:W3CDTF">'.date('c').'</dcterms:modified></cp:coreProperties>');
+	//ADD XML AND REPLACE DATE/TIME
+	$zip->addFromString('docProps/core.xml', str_replace(
+		'[DATE]', date('c'),
+		file_get_contents(__DIR__.'/core.xml')
+	));
 
-	$zip->addFromString('xl/_rels/workbook.xml.rels', $xmlheader.'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" Target="theme/theme1.xml"/><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId4" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings" Target="sharedStrings.xml"/></Relationships>');
-
-	$zip->addFromString('xl/styles.xml', $xmlheader.'<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="1"><font><sz val="11"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFC6EFCE"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="0" fillId="2" borderId="0" xfId="0" applyFill="1"/></cellXfs></styleSheet>');
-
-	$zip->addFromString('xl/workbook.xml', $xmlheader.'<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><fileVersion appName="xl" lastEdited="4" lowestEdited="4" rupBuild="4507"/><workbookPr defaultThemeVersion="124226"/><bookViews><workbookView xWindow="0" yWindow="120" windowWidth="28755" windowHeight="13095"/></bookViews><sheets><sheet name="'.$filename.'" sheetId="1" r:id="rId1"/></sheets><calcPr calcId="125725"/><fileRecoveryPr repairLoad="1"/></workbook>');
 
 	ob_start();
-	echo '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><dimension ref="A1:B6"/><sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/><selection pane="bottomLeft" activeCell="A1" sqref="A1"/></sheetView></sheetViews><sheetFormatPr defaultRowHeight="15"/><cols><col min="1" max="1" width="12" bestFit="1" customWidth="1"/></cols><sheetData>';
-
 	$x			= 1;
 	$total		= 0;
 	$strings	= [];
 	$colcount	= $result->fields();
 
-
 	//EXPORT HEADERS
 	$y = 0;
 	$fields = $result->listFields();
-	echo '<row r="' . $x . '" spans="1:' . $colcount . '" s="1" customFormat="1">';
+	echo "\n\t\t".'<row r="' . $x . '" spans="1:' . $colcount . '" s="1" customFormat="1">';
 	foreach ($fields as $key => $val) {
 		$name = $val->name;
 		if (!empty($headers[$name])) $name = $headers[$name];
@@ -60,7 +67,7 @@ function pudlExportExcel($result, $filename, $headers=false) {
 	//EXPORT CELL DATA
 	$x++;
 	while ($data = $result->row(PUDL_NUMBER)) {
-		echo '<row r="' . $x . '" spans="1:' . $colcount . '">';
+		echo "\n\t\t".'<row r="' . $x . '" spans="1:' . $colcount . '">';
 		$y = 0;
 		foreach ($data as $key => $val) {
 			if ($key < 26) {
@@ -92,17 +99,36 @@ function pudlExportExcel($result, $filename, $headers=false) {
 		$x++;
 	}
 
-	echo '</sheetData><pageMargins left="0.7" right="0.7" top="0.75" bottom="0.75" header="0.3" footer="0.3"/><pageSetup orientation="portrait" r:id="rId1"/></worksheet>';
-	$zip->addFromString('xl/worksheets/sheet1.xml', $xmlheader . ob_get_clean());
+
+	$zip->addFromString(
+		'xl/worksheets/sheet1.xml',
+		str_replace(
+			'[DATA]',
+			ob_get_clean(),
+			file_get_contents(__DIR__.'/sheet.xml')
+		)
+	);
+
+
 
 	ob_start();
+
+	echo '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' . "\n";
 	echo '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" ';
 	echo 'count="' . $total . '" uniqueCount="' . count($strings) . '">';
-	foreach ($strings as $key => $val) {
-		echo '<si><t>' . htmlspecialchars($val, ENT_XML1|ENT_SUBSTITUTE, 'UTF-8') . '</t></si>';
+
+	foreach ($strings as $string) {
+		$string = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', $string);
+		$string = @iconv('UTF-8', 'UTF-8//TRANSLIT', $string);
+		$string = htmlspecialchars($string, ENT_XML1|ENT_SUBSTITUTE, 'UTF-8');
+		echo "\n\t<si><t>" . $string . '</t></si>';
 	}
-	echo '</sst>';
-	$zip->addFromString('xl/sharedStrings.xml', $xmlheader . ob_get_clean());
+	echo "\n</sst>";
+
+	$zip->addFromString('xl/sharedStrings.xml', ob_get_clean());
+
+
+
 
 	$zip->close();
 
