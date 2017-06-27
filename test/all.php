@@ -55,7 +55,7 @@ function pudlError($exception, $expected) {
 }
 
 
-function pudlUnit($result, $expected) {
+function pudlUnit($result, $expected=true) {
 	if ($result === $expected) return;
 	$trace = debug_backtrace()[0];
 	echo "ERROR: FAILED!!\n\n";
@@ -153,3 +153,6 @@ require 'object.php';
 
 //DELETE QUERIES
 require 'delete.php';
+
+//VIRTUAL PUDL INTERFACE
+require 'clone.php';
