@@ -53,7 +53,7 @@ class	pudlObject
 	//REPLACES THE OBJECT'S ARRAY WITH THE GIVEN ARRAY
 	////////////////////////////////////////////////////////////////////////////
 	public function replace(&$data) {
-		if (!is_array($data)) return $this->copy();
+		if (!is_array($data)) return $this->copy($data);
 
 		$this->clear();
 		$this->__array = &$data;
