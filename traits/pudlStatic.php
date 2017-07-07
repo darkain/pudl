@@ -26,8 +26,9 @@ trait pudlStatic {
 	//SAFELY PASS A COLUMN INTO A QUERY
 	////////////////////////////////////////////////////////////////////////////
 	public static function column($column, $value=false) {
-		if (func_num_args() === 2) return new pudlColumn($column, $value);
-		return new pudlColumn($column);
+		return (func_num_args() < 2)
+			? new pudlColumn($column)
+			: new pudlColumn($column, $value);
 	}
 
 
