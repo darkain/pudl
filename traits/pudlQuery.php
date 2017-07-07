@@ -123,12 +123,14 @@ trait pudlQuery {
 		}
 
 		if (!pudl_array($column)) {
-			switch ($column) {
-				case '':
-				case '*':
-				case null:
-				case false:
-					return '*';
+			if (!is_object($column)) {
+				switch ($column) {
+					case '':
+					case '*':
+					case null:
+					case false:
+						return '*';
+				}
 			}
 			return $this->_value($column, false);
 		}

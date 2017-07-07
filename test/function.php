@@ -78,6 +78,13 @@ pudlTest("SELECT FROM_UNIXTIME(449020800)");
 
 
 
+//DATE RANGES
+$db->string()->select('*', 'table', ['column'=>pudl::daterange(449020800, 449040800)]);
+pudlTest("SELECT * FROM `table` WHERE (`column` BETWEEN FROM_UNIXTIME(449020800) AND FROM_UNIXTIME(449040800))");
+
+
+
+
 $db->string()->row('table', ['column'=>pudl::column('other')]);
 pudlTest("SELECT * FROM `table` WHERE (`column`=`other`) LIMIT 1");
 

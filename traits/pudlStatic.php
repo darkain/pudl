@@ -56,12 +56,22 @@ trait pudlStatic {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//CONVERT A TIMESTAMP INTO A DATETIME
+	//CONVERT A UNIX TIMESTAMP INTO A DATETIME
 	////////////////////////////////////////////////////////////////////////////
 	public static function date($timestamp=false) {
 		return ($timestamp === false)
 			? self::now()
 			: self::from_unixtime($timestamp);
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//HELPER FUNCTION FOR DATE RANGES FROM UNIX TIMESTAMPS
+	////////////////////////////////////////////////////////////////////////////
+	public static function daterange($begin, $end) {
+		return self::between(self::date($begin), self::date($end));
 	}
 
 
