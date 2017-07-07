@@ -35,6 +35,26 @@ trait pudlStatic {
 
 
 	////////////////////////////////////////////////////////////////////////////
+	//COMPARE A VALUE AGAINST MULTIPLE COLUMNS
+	////////////////////////////////////////////////////////////////////////////
+	public static function bravo($value, $columns /* ... */) {
+		if (!pudl_array($columns)) {
+			$columns = func_get_args();
+			array_shift($columns);
+		}
+
+		foreach ($columns as &$column) {
+			if (!is_string($column)) continue;
+			$column = self::column($column);
+		}
+
+		return new pudlEquals($value, $columns, ' IN ');
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
 	//UNSAFE - PASS RAW SQL INTO A QUERY - USE CAUTION WITH THIS METHOD!
 	////////////////////////////////////////////////////////////////////////////
 	public static function raw(/* ...$values */) {

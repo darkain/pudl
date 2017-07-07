@@ -314,6 +314,15 @@ trait pudlQuery {
 			return ' ' . $type . ' (' . $this->_clauseRecurse($clause->pudlId()) .')';
 		}
 
+
+		if ($clause instanceof pudlEquals  &&  $clause->equals === ' IN ') {
+			$query	 = ' ' . $type . ' (';
+			$query	.= $this->_value($clause->compare);
+			$query	.= $this->_clauseEquals($clause);
+			return $query .= '(' . $this->_clauseRecurse($clause->value, ' OR ') .'))';
+		}
+
+
 		if (is_array($clause)  ||  is_object($clause)) {
 			if (empty($clause))	return '';
 			return ' ' . $type . ' (' . $this->_clauseRecurse($clause) .')';
