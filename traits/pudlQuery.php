@@ -319,7 +319,7 @@ trait pudlQuery {
 			$query	 = ' ' . $type . ' (';
 			$query	.= $this->_value($clause->compare);
 			$query	.= $this->_clauseEquals($clause);
-			return $query .= '(' . $this->_clauseRecurse($clause->value, ' OR ') .'))';
+			return $query .= '(' . $this->_inSet($clause->value) .'))';
 		}
 
 
@@ -437,6 +437,12 @@ trait pudlQuery {
 				$key			 = ''; //FORCE KEY TO STRING TYPE FOR _VALUE
 				$query			.= $this->_value($value->compare);
 				$query			.= $this->_clauseEquals($value);
+
+				if ($value->equals === ' IN ') {
+					$query .= '(' . $this->_inSet($value->value) . ')';
+					break;
+				}
+
 				if (!($value instanceof pudlBetween)) $value = $value->value;
 			}
 

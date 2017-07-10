@@ -37,25 +37,25 @@ pudlTest('SELECT `column1` AS `x`, `column2` AS `y` FROM `table`');
 
 //BRAVO CUSTOM FUNCTION
 $db->string()->select('*', 'table', pudl::bravo(123, 'column1', 'column2'));
-pudlTest('SELECT * FROM `table` WHERE (123 IN (`column1` OR `column2`))');
+pudlTest('SELECT * FROM `table` WHERE (123 IN (`column1`, `column2`))');
 
 
 
 
 //BRAVO CUSTOM FUNCTION
 $db->string()->select('*', 'table', [pudl::bravo(123, 'column3', 'column4')]);
-pudlTest('SELECT * FROM `table` WHERE (123 IN (`column3` OR `column4`))');
+pudlTest('SELECT * FROM `table` WHERE (123 IN (`column3`, `column4`))');
 
 
 
 
 //BRAVO CUSTOM FUNCTION
 $db->string()->select('*', 'table', pudl::bravo(123, ['column5', 'column6']));
-pudlTest('SELECT * FROM `table` WHERE (123 IN (`column5` OR `column6`))');
+pudlTest('SELECT * FROM `table` WHERE (123 IN (`column5`, `column6`))');
 
 
 
 
 //BRAVO CUSTOM FUNCTION
 $db->string()->select('*', 'table', [pudl::bravo(123, ['column7', 'column8'])]);
-pudlTest('SELECT * FROM `table` WHERE (123 IN (`column7` OR `column8`))');
+pudlTest('SELECT * FROM `table` WHERE (123 IN (`column7`, `column8`))');
