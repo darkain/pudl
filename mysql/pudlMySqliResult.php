@@ -80,11 +80,18 @@ class pudlMySqliResult extends pudlResult {
 					$new = trim($new, " \t\n\r\0\x0B`");
 					$this->json[$key] = $new;
 				}
-			} unset($val);
+
+				if (substr_compare($key, 'JSON_QUERY', 0, 10) === 0) {
+					preg_match("/(?:(?:\"(?:\\\\\"|[^\"])+\")|(?:'(?:\\\'|[^'])+'))\s*\)\s*$/is", $key, $m);
+					if (!empty($m[0])) {
+						$this->json[$key] = trim($m[0], " \t\n\r\0\x0B`'\"()");
+					}
+				}
+			}
 		}
 
 		foreach ($this->json as $key => $new) {
-			$this->data[$new] = @json_decode($this->data[$key], true);
+			$this->data[$new] = pudl::jsonDecode($this->data[$key], true);
 			if ($this->data[$new] === NULL) $this->data[$new] = [];
 		} unset($new);
 
