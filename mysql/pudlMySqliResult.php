@@ -81,7 +81,7 @@ class pudlMySqliResult extends pudlResult {
 					$this->json[$key] = $new;
 				}
 
-				if (substr_compare($key, 'JSON_QUERY', 0, 10) === 0) {
+				else if (substr_compare($key, 'JSON_QUERY', 0, 10) === 0) {
 					preg_match("/(?:(?:\"(?:\\\\\"|[^\"])+\")|(?:'(?:\\\'|[^'])+'))\s*\)\s*$/is", $key, $m);
 					if (!empty($m[0])) {
 						$this->json[$key] = trim($m[0], " \t\n\r\0\x0B`'\"()");
