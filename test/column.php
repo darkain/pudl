@@ -59,3 +59,13 @@ pudlTest('SELECT * FROM `table` WHERE (123 IN (`column5`, `column6`))');
 //BRAVO CUSTOM FUNCTION
 $db->string()->select('*', 'table', [pudl::bravo(123, ['column7', 'column8'])]);
 pudlTest('SELECT * FROM `table` WHERE (123 IN (`column7`, `column8`))');
+
+
+
+
+//BRAVO CUSTOM FUNCTION
+$db->string()->select('*', 'table', [
+	pudl::bravo(123, ['column7', 'column8']),
+	'column' => 'value',
+]);
+pudlTest("SELECT * FROM `table` WHERE (123 IN (`column7`, `column8`) AND `column`='value')");

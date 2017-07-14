@@ -440,7 +440,7 @@ trait pudlQuery {
 
 				if ($value->equals === ' IN ') {
 					$query .= '(' . $this->_inSet($value->value) . ')';
-					break;
+					continue;
 				}
 
 				if (!($value instanceof pudlBetween)) $value = $value->value;
