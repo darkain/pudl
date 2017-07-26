@@ -108,12 +108,12 @@ class			pudlImportExcel
 		//OPTIMIZE STRINGS TABLE
 		foreach ($strings->si as $item) {
 			if (isset($item->t)) {
-				$this->strings[] = trim(reg_replace('/\s\s+/', ' ', (string)$item->t));
+				$this->strings[] = trim(preg_replace('/\s\s+/', ' ', (string)$item->t));
 
 			} else if (isset($item->r)) {
 				$string = '';
 				foreach ($item->r as $part) $string .= $part->t;
-				$this->strings[] = trim(reg_replace('/\s\s+/', ' ', $string));
+				$this->strings[] = trim(preg_replace('/\s\s+/', ' ', $string));
 
 			} else {
 				$this->strings[] = '';
