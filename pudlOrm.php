@@ -113,8 +113,18 @@ abstract class	pudlOrm
 
 		$id = (int) $id;
 
+		return static::instance($id, true);
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//CREATE AN INSTANCE OF THIS CLASS, USING LATE STATIC BINDING
+	////////////////////////////////////////////////////////////////////////////
+	public static function instance($item=false, $fetch=false) {
 		$class = static::classname;
-		return new $class($id, true);
+		return new $class($item, $fetch);
 	}
 
 
