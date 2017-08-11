@@ -139,10 +139,25 @@ abstract class pudlResult implements Countable, SeekableIterator {
 
 	public function tree($separator='.') {
 		$return = [];
+
 		while ($data = $this->row()) {
 			$keys = explode($separator, reset($data));
-			$return[] = end($data);
+			$node = &$return;
+
+			foreach ($keys as $count => $key) {
+				if ($count === count($keys)-1) break;
+				if (!isset($node[$key])) $node[$key] = [];
+				if (!is_array($node[$key])) $node[$key] = [$node[$key]];
+				$node = &$node[$key];
+			}
+
+			if (!isset($node[$key])) {
+				$node[$key] = end($data);
+			} else {
+				$node[$key][] = end($data);
+			}
 		}
+
 		$this->free();
 		return $return;
 	}
