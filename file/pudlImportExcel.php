@@ -32,7 +32,7 @@ class			pudlImportExcel
 
 
 		//LOOP THROUGH EACH ROW AND READ CONTENTS
-		foreach ($this->sheet->sheetData->row as $key => $value) {
+		foreach ($this->sheet->sheetData->row as $value) {
 			$row		= (int) $value->attributes()->r;
 			$columns	= count($value->c);
 

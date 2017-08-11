@@ -74,7 +74,6 @@ class			pudlImportCsv
 	//PARSE THE CSV INSIDE OF ZIP FILE
 	////////////////////////////////////////////////////////////////////////////
 	public function parseZip($file) {
-		$rownum	= 0;
 		$zip	= @zip_open(realpath($file));
 
 		//VERIFY FILE IS OKAY

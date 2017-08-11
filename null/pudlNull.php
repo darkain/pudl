@@ -24,7 +24,7 @@ class pudlNull extends pudl {
 
 
 	public static function instance($data, $autoconnect=true) {
-		return new pudlNull($data);
+		return new pudlNull($data, $autoconnect);
 	}
 
 
