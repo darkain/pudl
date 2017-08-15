@@ -6,8 +6,10 @@ require_once('pudlObject.php');
 
 
 class		pudlCollection
-	extends	pudlObject {
-
+	extends
+			pudlObject
+	implements
+			OuterIterator {
 
 
 
@@ -102,6 +104,17 @@ class		pudlCollection
 		} unset($item);
 
 		return $return;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//RETURNS THE INNER ITERATOR FOR THE CURRENT ENTRY.
+	//http://php.net/manual/en/outeriterator.getinneriterator.php
+	////////////////////////////////////////////////////////////////////////////
+	public function getInnerIterator() {
+		return $this->current();
 	}
 
 

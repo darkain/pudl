@@ -1,11 +1,13 @@
 <?php
 
 
+require_once(__DIR__.'/pudlInterfaces.php');
+
+
 class	pudlObject
 	implements
 		ArrayAccess,
-		Countable,
-		Iterator {
+		pudlData {
 
 
 
@@ -556,6 +558,19 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
+	//SEEKABLE ITERATOR - MOVE THE ARRAY POINTER TO THE GIVEN ROW NUMBER
+	//http://php.net/manual/en/seekableiterator.seek.php
+	////////////////////////////////////////////////////////////////////////////
+	public function seek($row) {
+		$row = (int) $row;
+		reset($this->__array);
+		while ($row-- > 0) next($this->__array);
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
 	//ITERATOR - REWIND THE ITERATOR TO THE FIRST ELEMENT
 	//http://php.net/manual/en/iterator.rewind.php
 	////////////////////////////////////////////////////////////////////////////
@@ -718,6 +733,68 @@ class	pudlObject
 		}
 
 		return $return;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//pudlData - GET TOTAL NUMBER OF FIELDS FROM FIRST OBJECT IN LIST
+	////////////////////////////////////////////////////////////////////////////
+	public function fields() {
+		if (empty($this->__array[0]))		return 0;
+		if (!pudl_array($this->__array[0]))	return 0;
+		return count($this->__array[0]);
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//pudlData - GET FIELD NAME FROM FIRST OBJECT IN LIST
+	//FORMAT MIRRORS: http://php.net/manual/en/mysqli-result.fetch-field.php
+	////////////////////////////////////////////////////////////////////////////
+	public function getField($column) {
+		$column	= (int) $column;
+		$count	= 0;
+
+		if ($column < $this->fields()) {
+			foreach ($this->__array[0] as $key => $value) {
+				if ($column === $count++) {
+					return [
+						'name'			=> $key,
+						'table'			=> get_class(),
+						'def'			=> '',
+						'db'			=> 'pudlObject',
+						'catalog'		=> 'def',
+						'max_length'	=> PHP_MAX_INT,
+						'length'		=> PHP_MAX_INT,
+						'charsetnr'		=> 0,
+						'flags'			=> 0,
+						'type'			=> gettype($value),
+						'decimals'		=> 0,
+					];
+				}
+			}
+		}
+
+		return false;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//pudlData - GET INFORMATION ON EVERY FIELD
+	////////////////////////////////////////////////////////////////////////////
+	public function listFields() {
+		$fields	= [];
+		$total	= $this->fields();
+		for ($i=0; $i<$total; $i++) {
+			$fields[] = $this->getField($i);
+		}
+
+		return $fields;
 	}
 
 

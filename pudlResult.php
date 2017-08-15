@@ -1,7 +1,11 @@
 <?php
 
 
-abstract class pudlResult implements Countable, SeekableIterator {
+require_once(__DIR__.'/pudlInterfaces.php');
+
+
+abstract class	pudlResult
+	implements	pudlData {
 
 
 	public function __construct($result, $db) {
@@ -26,14 +30,16 @@ abstract class pudlResult implements Countable, SeekableIterator {
 
 	abstract public function cell($row=0, $column=0);
 
-	abstract public function fields();
+//	Provided by: pudlData
+//	abstract public function fields();
 
-	abstract public function getField($column);
+//	Provided by: pudlData
+//	abstract public function getField($column);
 
-//	Provided by: Countable
+//	Provided by: pudlData -> Countable
 //	abstract public function count();
 
-//	Provided by: SeekableIterator
+//	Provided by: pudlData -> SeekableIterator
 //	abstract public function seek($row);
 
 
@@ -79,8 +85,8 @@ abstract class pudlResult implements Countable, SeekableIterator {
 		if (!$this->result) return false;
 
 		if ($this->fields === false) {
-			$this->fields = array();
-			$total = $this->fields($this->result);
+			$this->fields = [];
+			$total = $this->fields();
 			for ($i=0; $i<$total; $i++) {
 				$this->fields[] = $this->getField($i);
 			}

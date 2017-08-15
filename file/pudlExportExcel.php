@@ -1,7 +1,10 @@
 <?php
 
 
-function pudlExportExcel($result, $filename, $headers=false) {
+require_once(__DIR__.'/../pudlInterfaces.php');
+
+
+function pudlExportExcel(pudlData $result, $filename, $headers=false) {
 	$zip = new ZipArchive();
 
 	@unlink($filename);
