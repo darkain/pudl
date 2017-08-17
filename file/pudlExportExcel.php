@@ -49,7 +49,7 @@ function pudlExportExcel(pudlData $result, $filename, $headers=false) {
 	$fields = $result->listFields();
 	echo "\n\t\t".'<row r="' . $x . '" spans="1:' . $colcount . '" s="1" customFormat="1">';
 	foreach ($fields as $key => $val) {
-		$name = $val->name;
+		$name = is_object($val) ? $val->name : $val['name'];
 		if (!empty($headers[$name])) $name = $headers[$name];
 		$total++;
 		$index = array_search($name, $strings, true);

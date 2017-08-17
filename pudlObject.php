@@ -763,12 +763,14 @@ class	pudlObject
 				if ($column === $count++) {
 					return [
 						'name'			=> $key,
+						'orgname'		=> $key,
 						'table'			=> get_class(),
+						'orgtable'		=> get_class(),
 						'def'			=> '',
 						'db'			=> 'pudlObject',
 						'catalog'		=> 'def',
-						'max_length'	=> PHP_MAX_INT,
-						'length'		=> PHP_MAX_INT,
+						'max_length'	=> PHP_INT_MAX,
+						'length'		=> PHP_INT_MAX,
 						'charsetnr'		=> 0,
 						'flags'			=> 0,
 						'type'			=> gettype($value),
@@ -805,8 +807,19 @@ class	pudlObject
 	////////////////////////////////////////////////////////////////////////////
 	public function row($type=PUDL_ARRAY) {
 		$row = current($this->__array);
+		if ($row === false) return false;
+
 		next($this->__array);
-		return $row;
+
+		if ($type === PUDL_ARRAY) return $row;
+
+		$array = ($row instanceof pudlObject)
+				? $row->raw()
+				: (array) $row;
+
+		return ($type === PUDL_NUMBER)
+			? array_values($array)
+			: array_merge(array_values($array), $array);
 	}
 
 
