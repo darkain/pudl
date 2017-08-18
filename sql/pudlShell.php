@@ -5,9 +5,9 @@ require_once('pudlShellResult.php');
 
 
 class pudlShell extends pudl {
-	public function __construct($data) {
+	public function __construct($data, $autoconnect=true) {
 		$this->path = empty($data['path']) ? '' : $data['path'];
-		parent::__construct($data);
+		parent::__construct($data, $autoconnect);
 	}
 
 
@@ -20,7 +20,7 @@ class pudlShell extends pudl {
 
 
 	public static function instance($data, $autoconnect=true) {
-		return new pudlShell($data);
+		return new pudlShell($data, $autoconnect);
 	}
 
 

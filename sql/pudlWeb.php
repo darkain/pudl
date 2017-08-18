@@ -7,7 +7,7 @@ require_once('pudlShellResult.php');
 class pudlWeb extends pudlShell {
 
 	public static function instance($data, $autoconnect=true) {
-		return new pudlWeb($data);
+		return new pudlWeb($data, $autoconnect);
 	}
 
 
