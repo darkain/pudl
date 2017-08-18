@@ -25,8 +25,10 @@ class			pudlSession
 		$this->name		= $name;
 		$this->domain	= $domain;
 
+		//When the DB disconnects, call our disconnect handler
 		$this->db->on('disconnect', [$this, 'disconnect']);
 
+		//Set this instance as PHP's session handler
 		session_set_save_handler($this, true);
 
 		//Different session name for HTTPS connections
@@ -35,6 +37,7 @@ class			pudlSession
 			($secure ? '-SECURE' : '')
 		);
 
+		//Set parameters for browser session cookie
 		session_set_cookie_params(
 			60*60*24*30,		//Save session for one month
 			'/',				//Session is for entire domain
@@ -43,6 +46,7 @@ class			pudlSession
 			true				//HTTP(S) only - block JavaScript access
 		);
 
+		//Start the session
 		session_start();
 	}
 
@@ -135,9 +139,9 @@ class			pudlSession
 
 		if (empty($data)) return $this->destroy($id);
 
-		if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+		if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 			$address = $_SERVER['HTTP_X_FORWARDED_FOR'];
-		} else if (isset($_SERVER['REMOTE_ADDR'])) {
+		} else if (!empty($_SERVER['REMOTE_ADDR'])) {
 			$address = $_SERVER['REMOTE_ADDR'];
 		} else {
 			$address = '';
