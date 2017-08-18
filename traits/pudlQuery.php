@@ -210,7 +210,9 @@ trait pudlQuery {
 		} unset($item);
 
 		//WE'RE ONLY NEEDING THE COLUMN WITHOUT TABLE
-		if ($prefix === NULL) return end($list);
+		if ($prefix === NULL) {
+			return end($list);
+		}
 
 		//EARLY OUT IF WE ARE NOT IN A DYNAMIC COLUMN
 		$return		= implode('.', $list);
@@ -363,7 +365,7 @@ trait pudlQuery {
 		}
 
 		if ($clause instanceof pudlAnd) {
-			return $this->_clauseRecurse($clause->clause, $clause->joiner);
+			return $this->_clauseRecurse($clause->clause, $clause->joiner, $prefix);
 		}
 
 		if ($clause instanceof pudlSort) {
@@ -430,7 +432,7 @@ trait pudlQuery {
 				if (pudl_array($value)) continue;
 
 			} else if ($value instanceof pudlAnd) {
-				$query .= '(' . $this->_clauseRecurse($value->clause, $value->joiner) . ')';
+				$query .= '(' . $this->_clauseRecurse($value->clause, $value->joiner, $prefix) . ')';
 				continue;
 
 			} else if ($value instanceof pudlEquals  &&  $value->compare !== false) {
@@ -452,13 +454,13 @@ trait pudlQuery {
 				$query .= $new;
 
 			} else if ((is_array($value)  ||  is_object($value))  &&  $joiner === ' AND ') {
-				$query .= '(' . $this->_clauseRecurse($value, ' OR ') . ')';
+				$query .= '(' . $this->_clauseRecurse($value, ' OR ', $prefix) . ')';
 
 			} else if ((is_array($value)  ||  is_object($value))  &&  $joiner === ' OR ') {
-				$query .= '(' . $this->_clauseRecurse($value, ' AND ') . ')';
+				$query .= '(' . $this->_clauseRecurse($value, ' AND ', $prefix) . ')';
 
 			} else if ((is_array($value)  ||  is_object($value))  &&  $joiner === ', ') {
-				$query .= $this->_clauseRecurse($value, $joiner);
+				$query .= $this->_clauseRecurse($value, $joiner, $prefix);
 
 			} else {
 				$query = $this->_invalidType($value, 'clause');
