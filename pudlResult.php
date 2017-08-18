@@ -8,50 +8,52 @@ abstract class	pudlResult
 	implements	pudlData {
 
 
+
+
 	public function __construct($result, $db) {
 		$this->result	= $result;
 		$this->db		= $db;
 		$this->query	= $db->query();
 		$this->string	= $db->isString();
-		$this->fields	= false;
 	}
 
 
 
-	public function __destruct() {}
+	public function __destruct() {
+	}
 
 
 
-	public function __invoke() { return $this->row(); }
+	public function __invoke() {
+		return $this->row();
+	}
 
 
 
-	abstract public function free();
 
-	abstract public function cell($row=0, $column=0);
-
-//	Provided by: pudlData
-//	abstract public function fields();
-
-//	Provided by: pudlData
-//	abstract public function getField($column);
-
-//	Provided by: pudlData -> Countable
-//	abstract public function count();
-
-//	Provided by: pudlData -> SeekableIterator
-//	abstract public function seek($row);
-
-
-	public function rewind() { $this->seek(0); }
+	////////////////////////////////////////////////////////////////////////////
+	//Countable
+	////////////////////////////////////////////////////////////////////////////
+	abstract public function count();
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	//SeekableIterator
+	////////////////////////////////////////////////////////////////////////////
+	abstract public function seek($row);
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//Iterator
+	////////////////////////////////////////////////////////////////////////////
 	public function current() {
 		if ($this->row === false) $this();
 		return $this->data;
 	}
-
 
 
 	public function key() {
@@ -59,9 +61,14 @@ abstract class	pudlResult
 	}
 
 
+	public function next() {
+		return $this();
+	}
 
-	public function next() { $this(); }
 
+	public function rewind() {
+		$this->seek(0);
+	}
 
 
 	public function valid() {
@@ -71,14 +78,13 @@ abstract class	pudlResult
 
 
 
-	public function isString() { return $this->string; }
 
-
-
-	public function hasRows() {
-		return ($this->count() > 0);
-	}
-
+	////////////////////////////////////////////////////////////////////////////
+	//pudlData
+	////////////////////////////////////////////////////////////////////////////
+	abstract public function row($type=PUDL_ARRAY);
+	abstract public function fields();
+	abstract public function getField($column);
 
 
 	public function listFields() {
@@ -97,7 +103,24 @@ abstract class	pudlResult
 
 
 
-	abstract public function row($type=PUDL_ARRAY);
+
+	////////////////////////////////////////////////////////////////////////////
+	//pudlResult
+	////////////////////////////////////////////////////////////////////////////
+	abstract public function free();
+	abstract public function cell($row=0, $column=0);
+
+
+
+	public function isString() {
+		return $this->string;
+	}
+
+
+
+	public function hasRows() {
+		return ($this->count() > 0);
+	}
 
 
 
@@ -220,10 +243,10 @@ abstract class	pudlResult
 
 
 	protected $db;
-	protected $fields;
 	protected $result;
 	protected $query;
 	protected $string;
+	protected $fields	= false;
 	protected $row		= false;
 	protected $data		= false;
 }
