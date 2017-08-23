@@ -33,7 +33,7 @@ trait pudlCompare {
 	}
 
 	public static function notRegexp($value) {
-		$regexp = call_user_func_array([self,'regexp'], func_get_args());
+		$regexp = forward_static_call_array([__CLASS__,'regexp'], func_get_args());
 		return $regexp->not();
 	}
 
