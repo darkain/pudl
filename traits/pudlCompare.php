@@ -20,7 +20,6 @@ trait pudlCompare {
 	public static function notLike(		$v1=false,	$v2=false)	{ return self::like(		$v1, $v2)->not(); }
 	public static function notLikeLeft(	$v1=false,	$v2=false)	{ return self::likeLeft(	$v1, $v2)->not(); }
 	public static function notLikeRight($v1=false,	$v2=false)	{ return self::likeRight(	$v1, $v2)->not(); }
-	public static function notRegexp(	$v1=false)				{ return self::regexp(		$v1)->not(); }
 	public static function notBetween(	$v1, $v2,	$v3=false)	{ return self::between(		$v1, $v2, $v3)->not(); }
 
 	public static function asc( $column=false)	{ return new pudlSort('ASC',  $column); }
@@ -33,6 +32,10 @@ trait pudlCompare {
 		return (new ReflectionClass('pudlRegexp'))->newInstanceArgs(func_get_args());
 	}
 
+	public static function notRegexp($value) {
+		$regexp = call_user_func_array([self,'regexp'], func_get_args());
+		return $regexp->not();
+	}
 
 
 	//NOTE: this function is experimental and will most likely change syntax!
