@@ -52,7 +52,7 @@ trait pudlTable {
 
 
 	public function swapTables($table1, $table2) {
-		$temp = 'TABLE_SWAP_' . md5(microtime());
+		$temp = 'TABLE_SWAP_' . sha1(microtime().rand());
 
 		return $this->rename([
 			$table1	=> $temp,
