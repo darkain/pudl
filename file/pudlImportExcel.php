@@ -132,13 +132,27 @@ class			pudlImportExcel
 	protected function _header($row, $columns) {
 		for ($i=0; $i<$columns; $i++) {
 			$item = $row->c[$i];
+
 			if (!isset($item->attributes()->r)) continue;
 			if (!isset($item->v)) continue;
+
 			$column	= preg_replace('/\d/', '', $item->attributes()->r);
 			$name	= $this->strings[(int)$item->v];
 			$header	= $this->_translate($name);
-			if ($header === false) throw new pudlException('UNKNOWN HEADER: ' . $name);
-			if (is_string($header)) $this->header[$column] = $header;
+
+			switch (true) {
+				case $header === false:
+					throw new pudlException('UNKNOWN HEADER: ' . $name);
+				break;
+
+				case $header === true:
+					$this->header[$column] = $name;
+				break;
+
+				case is_string($header):
+					$this->header[$column] = $header;
+				break;
+			}
 		}
 	}
 
