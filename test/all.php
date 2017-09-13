@@ -156,3 +156,6 @@ require 'delete.php';
 
 //VIRTUAL PUDL INTERFACE
 require 'clone.php';
+
+//JSON FUNCTIONS - https://mariadb.com/kb/en/library/json-functions/
+require 'json.php';

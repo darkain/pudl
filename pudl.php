@@ -14,6 +14,7 @@ require_once('traits/pudlCacheResult.php');
 
 //TRAITS
 require_once('traits/pudlAuth.php');
+require_once('traits/pudlJson.php');
 require_once('traits/pudlAlias.php');
 require_once('traits/pudlRedis.php');
 require_once('traits/pudlQuery.php');
@@ -34,6 +35,7 @@ require_once('traits/pudlTransaction.php');
 
 abstract	class	pudl {
 			use		pudlAuth;
+			use		pudlJson;
 			use		pudlAlias;
 			use		pudlRedis;
 			use		pudlQuery;

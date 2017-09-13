@@ -307,31 +307,43 @@ trait pudlQuery {
 
 
 
-	protected function _clause($clause, $type='WHERE') {
-		if ($clause === false)	return '';
 
-		if ($clause instanceof pudlStringResult) return (string) $clause;
+	protected function _clause($clause, $type='WHERE') {
+		$prefix = empty($type) ? '' : (' ' . $type . ' (');
+		$suffix = empty($type) ? '' : ')';
+
+
+		if ($clause === false) return '';
+
+
+		if ($clause instanceof pudlStringResult) {
+			return (string) $clause;
+		}
+
 
 		if ($clause instanceof pudlId) {
-			return ' ' . $type . ' (' . $this->_clauseRecurse($clause->pudlId()) .')';
+			return $prefix . $this->_clauseRecurse($clause->pudlId()) . $suffix;
 		}
 
 
 		if ($clause instanceof pudlEquals  &&  $clause->equals === ' IN ') {
-			$query	 = ' ' . $type . ' (';
+			$query	 = $prefix;
 			$query	.= $this->_value($clause->compare);
 			$query	.= $this->_clauseEquals($clause);
-			return $query .= '(' . $this->_inSet($clause->value) .'))';
+			$query	.= '(' . $this->_inSet($clause->value) . ')';
+			return	$query . $suffix;
 		}
 
 
 		if (is_array($clause)  ||  is_object($clause)) {
 			if (empty($clause))	return '';
-			return ' ' . $type . ' (' . $this->_clauseRecurse($clause) .')';
+			return $prefix . $this->_clauseRecurse($clause) . $suffix;
 		}
 
-		return ' ' . $type . ' (' . $this->_compare($clause) . ')';
+
+		return $prefix . $this->_compare($clause) . $suffix;
 	}
+
 
 
 
@@ -692,7 +704,9 @@ trait pudlQuery {
 			if (strlen($query)) $query .= ', ';
 
 			if (is_int($column)) {
-				$query .= $value;
+				$query	.= ($value instanceof pudlValue)
+							? trim($this->_clause($value, ''))
+							: $value;
 				continue;
 			}
 
