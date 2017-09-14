@@ -255,6 +255,7 @@ abstract class	pudlOrm
 
 		if (tbx_array($data)) {
 			foreach ($data as $key => $item) {
+				if (is_int($key)) continue;
 				$this->{$key} = $item;
 			}
 		}
