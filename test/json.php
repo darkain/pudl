@@ -8,8 +8,23 @@ pudlTest("SELECT `column` AS `JSON(column)`");
 
 
 
+
+
+
+$db->string()->select(pudl::json('table.column'));
+pudlTest("SELECT `table`.`column` AS `JSON(table.column)`");
+
+
+
+
 $db->string()->select([pudl::json('column')]);
 pudlTest("SELECT `column` AS `JSON(column)`");
+
+
+
+
+$db->string()->select([pudl::json('table.column')]);
+pudlTest("SELECT `table`.`column` AS `JSON(table.column)`");
 
 
 
