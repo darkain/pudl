@@ -335,11 +335,6 @@ if ($db instanceof pudlMySqli) {
 
 
 
-$db->string()->select(pudl::json('column'));
-pudlTest("SELECT COLUMN_JSON(`column`)");
-
-
-
 
 $db->string()->row('table', [
 	'z' => 0,

@@ -10,6 +10,12 @@
 trait pudlJson {
 
 
+	public static function json($column) {
+		return ['JSON('.$column.')' => $column];
+	}
+
+
+
 	static function jsonSet($column, $field, $value) {
 		return pudl::column(
 			$column,

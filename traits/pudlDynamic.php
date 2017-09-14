@@ -49,12 +49,6 @@ trait pudlDynamic {
 
 
 
-	public static function json($column) {
-		return self::column_json( self::column($column) );
-	}
-
-
-
 	public static function dynamic_binary($blob, $column, $length=false) {
 		return self::column_get(
 			self::column($blob),

@@ -145,6 +145,8 @@ trait pudlQuery {
 					$query .= $this->_value($value, true);
 				}
 				$query .= ' AS ' . $this->identifier($key);
+			} else if (is_array($value)) {
+				$query .= $this->_column($value);
 			} else {
 				$query .= $this->_value($value, is_string($key));
 			}

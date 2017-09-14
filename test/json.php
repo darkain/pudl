@@ -1,5 +1,19 @@
 <?php
 
+
+
+$db->string()->select(pudl::json('column'));
+pudlTest("SELECT `column` AS `JSON(column)`");
+
+
+
+
+$db->string()->select([pudl::json('column')]);
+pudlTest("SELECT `column` AS `JSON(column)`");
+
+
+
+
 $db->string()->update('table', [
 	pudl::jsonReplace('column', 'parameter', 'value'),
 ], true);
