@@ -779,9 +779,20 @@ trait pudlQuery {
 
 
 
-	public function extractColumns($table, $data) {
-		$list = array_keys($this->listFields($table));
-		return $this->extract($data, $list);
+	public function extractColumns($table, $data, $virtual=true) {
+		$fields = $this->listFields($table);
+
+		if (!$virtual) {
+			foreach ($fields as $key => $field) {
+				if (!empty($field['Extra'])) {
+					if (!strcasecmp($field['Extra'], 'VIRTUAL GENERATED')) {
+						unset($fields[$key]);
+					}
+				}
+			}
+		}
+
+		return static::extract($data, array_keys($fields));
 	}
 
 
