@@ -13,6 +13,7 @@ trait pudlTransaction {
 	public function begin() {
 		if ($this->inTransaction()) return $this;
 		$this->transaction = [];
+		$this->_inserted = 0;
 		$this('START TRANSACTION');
 		return $this;
 	}
@@ -28,8 +29,8 @@ trait pudlTransaction {
 
 
 
-	public function commitChunk($size=1000, $sync=false) {
-		return (++self::$_inserted % $size === 0)
+	public function chunk($size=1000, $sync=false) {
+		return (++$this->_inserted % $size === 0)
 			 ? $this->commit($sync)->begin()
 			 : $this;
 	}
@@ -105,13 +106,13 @@ trait pudlTransaction {
 
 
 	public static function inserted() {
-		return self::$_inserted;
+		return $this->_inserted;
 	}
 
 
 
 	protected		$transaction	= false;
 	private			$locked			= false;
-	private static	$_inserted		= 0;
+	private			$_inserted		= 0;
 
 }
