@@ -31,11 +31,13 @@ trait pudlCallback {
 	//NOTIFY CALLBACKS OF A PARTICULAR ACTION
 	////////////////////////////////////////////////////////////////////////////
 	protected function trigger($action) {
-		if (empty($this->_callbacks[$action])) return;
-		$args = func_get_args();
+		if (empty($this->_callbacks[$action])) return NULL;
+		$args	= func_get_args();
+		$return	= [];
 		foreach ($this->_callbacks[$action] as $item) {
-			call_user_func_array($item, $args);
+			$return[] = call_user_func_array($item, $args);
 		}
+		return $return;
 	}
 
 

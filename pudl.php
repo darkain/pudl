@@ -223,8 +223,16 @@ abstract	class	pudl {
 
 
 		//ERROR REPORTING
-		$error = $this->errno();
-		if (!empty($error)) $this->trigger('debug', $this, $result);
+		$errno = $this->errno();
+		if (!empty($errno)) {
+			if ($this->trigger('debug', $this, $result) === NULL) {
+				$error = $this->error();
+				if ($result instanceof pudlResult) {
+					$error .= "\n" . $result->error();
+				}
+				throw new pudlException($error, $errno);
+			}
+		}
 
 
 		//RETURN FINAL RESULT
