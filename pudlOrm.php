@@ -267,6 +267,20 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
+	//UPDATE JSON VALUE IN THE DATABASE
+	////////////////////////////////////////////////////////////////////////////
+	public function updateJson($column, $field, $value=NULL) {
+		if (func_num_args() < 3  &&  static::json !== NULL) {
+			$value = $field;
+			$field = static::json;
+		}
+		return $this->update([pudl::jsonSet($column, $field, $value)]);
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
 	//UPDATE OBJECT'S CHANGES BACK INTO DATABASE - REQUIRES AN EXISTING SNAPSHOT
 	////////////////////////////////////////////////////////////////////////////
 	public function push($ignore=[]) {
@@ -380,4 +394,5 @@ abstract class	pudlOrm
 	const table		= 'pudl';
 	const prefix	= -1;
 	const hash		= false;
+	const json		= NULL;
 }
