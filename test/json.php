@@ -38,6 +38,33 @@ pudlTest("UPDATE `table` SET `column`=JSON_REPLACE(IFNULL(NULLIF(`column`, ''), 
 
 
 
+$db->string()->update('table', [
+	pudl::jsonReplace('column', '$.parameter', 'value'),
+], true);
+
+pudlTest("UPDATE `table` SET `column`=JSON_REPLACE(IFNULL(NULLIF(`column`, ''), '{}'), '$.parameter', 'value') WHERE (1)");
+
+
+
+
+$db->string()->update('table', [
+	pudl::jsonReplace('column', '[1]', 'value'),
+], true);
+
+pudlTest("UPDATE `table` SET `column`=JSON_REPLACE(IFNULL(NULLIF(`column`, ''), '{}'), '$[1]', 'value') WHERE (1)");
+
+
+
+
+$db->string()->update('table', [
+	pudl::jsonReplace('column', '{key}', 'value'),
+], true);
+
+pudlTest("UPDATE `table` SET `column`=JSON_REPLACE(IFNULL(NULLIF(`column`, ''), '{}'), '\${key}', 'value') WHERE (1)");
+
+
+
+
 
 $db->string()->update('table', [
 	'x' => 1,

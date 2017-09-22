@@ -17,11 +17,11 @@ trait pudlJson {
 
 
 	public static function jsonSet($column, $field, $value) {
-		return pudl::column(
+		return static::column(
 			$column,
-			pudl::json_set(
-				pudl::ifnull(pudl::nullif(pudl::column($column),''), '{}'),
-				'$.' . $field,
+			static::json_set(
+				static::ifnull(static::nullif(static::column($column),''), '{}'),
+				static::json_path($field),
 				$value
 			)
 		);
@@ -30,11 +30,11 @@ trait pudlJson {
 
 
 	public static function jsonInsert($column, $field, $value) {
-		return pudl::column(
+		return static::column(
 			$column,
-			pudl::json_insert(
-				pudl::ifnull(pudl::nullif(pudl::column($column),''), '{}'),
-				'$.' . $field,
+			static::json_insert(
+				static::ifnull(static::nullif(static::column($column),''), '{}'),
+				static::json_path($field),
 				$value
 			)
 		);
@@ -43,11 +43,11 @@ trait pudlJson {
 
 
 	public static function jsonReplace($column, $field, $value) {
-		return pudl::column(
+		return static::column(
 			$column,
-			pudl::json_replace(
-				pudl::ifnull(pudl::nullif(pudl::column($column),''), '{}'),
-				'$.' . $field,
+			static::json_replace(
+				static::ifnull(static::nullif(static::column($column),''), '{}'),
+				static::json_path($field),
 				$value
 			)
 		);
@@ -73,5 +73,18 @@ trait pudlJson {
 		);
 	}
 
+
+
+	protected static function json_path($field) {
+		switch (substr($field, 0, 1)) {
+			case '$':
+				return $field;
+
+			case '[':
+			case '{':
+				return '$' . $field;
+		}
+		return '$.' . $field;
+	}
 
 }
