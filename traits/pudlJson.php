@@ -55,6 +55,18 @@ trait pudlJson {
 
 
 
+	public static function jsonRemove($column, $field) {
+		return static::column(
+			$column,
+			static::json_remove(
+				static::ifnull(static::nullif(static::column($column),''), '{}'),
+				static::json_path($field)
+			)
+		);
+	}
+
+
+
 	public function jsonUpdate($table, $column, $field, $value, $clause) {
 		return $this->update(
 			$table,

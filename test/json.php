@@ -194,6 +194,52 @@ pudlTest("UPDATE `table` SET `column_1`=JSON_INSERT(IFNULL(NULLIF(`column_1`, ''
 
 
 
+$db->string()->update('table', [
+	pudl::jsonRemove('column', 'parameter'),
+], true);
+
+pudlTest("UPDATE `table` SET `column`=JSON_REMOVE(IFNULL(NULLIF(`column`, ''), '{}'), '$.parameter') WHERE (1)");
+
+
+
+
+
+$db->string()->update('table', [
+	'x' => 1,
+	pudl::jsonRemove('column', 'parameter'),
+], true);
+
+pudlTest("UPDATE `table` SET `x`=1, `column`=JSON_REMOVE(IFNULL(NULLIF(`column`, ''), '{}'), '$.parameter') WHERE (1)");
+
+
+
+
+
+
+$db->string()->update('table', [
+	'x' => 1,
+	pudl::jsonRemove('column', 'parameter'),
+	'y' => 2,
+], true);
+
+pudlTest("UPDATE `table` SET `x`=1, `column`=JSON_REMOVE(IFNULL(NULLIF(`column`, ''), '{}'), '$.parameter'), `y`=2 WHERE (1)");
+
+
+
+
+
+
+$db->string()->update('table', [
+	pudl::jsonRemove('column_1', 'param_1'),
+	pudl::jsonRemove('column_2', 'param_2'),
+], true);
+
+pudlTest("UPDATE `table` SET `column_1`=JSON_REMOVE(IFNULL(NULLIF(`column_1`, ''), '{}'), '$.param_1'), `column_2`=JSON_REMOVE(IFNULL(NULLIF(`column_2`, ''), '{}'), '$.param_2') WHERE (1)");
+
+
+
+
+
 
 $db->string()->jsonUpdate('table', 'column', 'path', 'new value', true);
 
