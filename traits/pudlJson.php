@@ -16,11 +16,11 @@ trait pudlJson {
 
 
 
-	static function jsonSet($column, $field, $value) {
+	public static function jsonSet($column, $field, $value) {
 		return pudl::column(
 			$column,
 			pudl::json_set(
-				pudl::column($column),
+				pudl::ifnull(pudl::nullif(pudl::column($column),''), '{}'),
 				'$.' . $field,
 				$value
 			)
@@ -28,11 +28,12 @@ trait pudlJson {
 	}
 
 
-	static function jsonInsert($column, $field, $value) {
+
+	public static function jsonInsert($column, $field, $value) {
 		return pudl::column(
 			$column,
 			pudl::json_insert(
-				pudl::column($column),
+				pudl::ifnull(pudl::nullif(pudl::column($column),''), '{}'),
 				'$.' . $field,
 				$value
 			)
@@ -40,14 +41,35 @@ trait pudlJson {
 	}
 
 
-	static function jsonReplace($column, $field, $value) {
+
+	public static function jsonReplace($column, $field, $value) {
 		return pudl::column(
 			$column,
 			pudl::json_replace(
-				pudl::column($column),
+				pudl::ifnull(pudl::nullif(pudl::column($column),''), '{}'),
 				'$.' . $field,
 				$value
 			)
+		);
+	}
+
+
+
+	public function jsonUpdate($table, $column, $field, $value, $clause) {
+		return $this->update(
+			$table,
+			[static::jsonSet($column, $field, $value)],
+			$clause
+		);
+	}
+
+
+
+	public function jsonUpdateId($table, $column, $field, $value, $col, $id) {
+		return $this->updateId(
+			$table,
+			[static::jsonSet($column, $field, $value)],
+			$col, $id
 		);
 	}
 
