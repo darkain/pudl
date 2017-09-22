@@ -17,10 +17,10 @@ trait pudlCompare {
 	public static function like(		$v1=false,	$v2=false)	{ return new pudlLike(		$v1, $v2, PUDL_BOTH ); }
 	public static function likeLeft(	$v1=false,	$v2=false)	{ return new pudlLike(		$v1, $v2, PUDL_START); }
 	public static function likeRight(	$v1=false,	$v2=false)	{ return new pudlLike(		$v1, $v2, PUDL_END  ); }
-	public static function notLike(		$v1=false,	$v2=false)	{ return self::like(		$v1, $v2)->not(); }
-	public static function notLikeLeft(	$v1=false,	$v2=false)	{ return self::likeLeft(	$v1, $v2)->not(); }
-	public static function notLikeRight($v1=false,	$v2=false)	{ return self::likeRight(	$v1, $v2)->not(); }
-	public static function notBetween(	$v1, $v2,	$v3=false)	{ return self::between(		$v1, $v2, $v3)->not(); }
+	public static function notLike(		$v1=false,	$v2=false)	{ return static::like(		$v1, $v2)->not(); }
+	public static function notLikeLeft(	$v1=false,	$v2=false)	{ return static::likeLeft(	$v1, $v2)->not(); }
+	public static function notLikeRight($v1=false,	$v2=false)	{ return static::likeRight(	$v1, $v2)->not(); }
+	public static function notBetween(	$v1, $v2,	$v3=false)	{ return static::between(	$v1, $v2, $v3)->not(); }
 
 	public static function asc( $column=false)	{ return new pudlSort('ASC',  $column); }
 	public static function dsc( $column=false)	{ return new pudlSort('DESC', $column); }
@@ -40,9 +40,9 @@ trait pudlCompare {
 
 	//NOTE: this function is experimental and will most likely change syntax!
 	public static function reglike($column, $like, $regexp, $replace='') {
-		return self::column(
-			self::regexp_replace(self::column($column), $regexp, $replace),
-			self::like($like)
+		return static::column(
+			static::regexp_replace(static::column($column), $regexp, $replace),
+			static::like($like)
 		);
 	}
 

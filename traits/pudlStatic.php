@@ -45,7 +45,7 @@ trait pudlStatic {
 
 		foreach ($columns as &$column) {
 			if (!is_string($column)) continue;
-			$column = self::column($column);
+			$column = static::column($column);
 		}
 
 		return new pudlEquals($value, $columns, ' IN ');
@@ -81,8 +81,8 @@ trait pudlStatic {
 	////////////////////////////////////////////////////////////////////////////
 	public static function date($timestamp=false) {
 		return ($timestamp === false)
-			? self::now()
-			: self::from_unixtime($timestamp);
+			? static::now()
+			: static::from_unixtime($timestamp);
 	}
 
 
@@ -92,7 +92,7 @@ trait pudlStatic {
 	//HELPER FUNCTION FOR DATE RANGES FROM UNIX TIMESTAMPS
 	////////////////////////////////////////////////////////////////////////////
 	public static function daterange($begin, $end) {
-		return self::between(self::date($begin), self::date($end));
+		return static::between(static::date($begin), static::date($end));
 	}
 
 
@@ -105,7 +105,7 @@ trait pudlStatic {
 		if (!is_array($values)) $values = explode(',', $values);
 		$return = [];
 		foreach ($values as $item) {
-			$return[] = self::find_in_set($item, self::column($column));
+			$return[] = static::find_in_set($item, static::column($column));
 		}
 		return $return;
 	}
@@ -120,7 +120,7 @@ trait pudlStatic {
 		if (!is_array($values)) $values = explode(',', $values);
 		$return = [];
 		foreach ($values as $item) {
-			$return[] = self::{'!find_in_set'}($item, self::column($column));
+			$return[] = static::{'!find_in_set'}($item, static::column($column));
 		}
 		return $return;
 	}
