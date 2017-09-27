@@ -37,7 +37,18 @@ trait pudlInsert {
 
 		} else {
 			$query = "INSERT INTO $table$cols VALUES ($vals)";
+
 			if ($update === true) $update = $data;
+
+			if (is_String($update)  &&  strpos($update,'=') === false) {
+				$update = static::column(
+					$update,
+					static::last_insert_id(
+						static::column($update)
+					)
+				);
+			}
+
 			if ($update !== false) {
 				$query .= ' ON DUPLICATE KEY UPDATE ';
 				$query .= $this->_update($update);

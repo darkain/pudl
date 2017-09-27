@@ -201,7 +201,16 @@ $db->string()->insert('table', [
 	'column1' => 1,
 	'column2' => 2,
 ], 'column1', false);
-pudlTest('INSERT INTO `table` VALUES (1, 2) ON DUPLICATE KEY UPDATE column1');
+pudlTest('INSERT INTO `table` VALUES (1, 2) ON DUPLICATE KEY UPDATE `column1`=LAST_INSERT_ID(`column1`)');
+
+
+
+
+$db->string()->insert('table', [
+	'column1' => 1,
+	'column2' => 2,
+], 'column1', true);
+pudlTest('INSERT INTO `table` (`column1`, `column2`) VALUES (1, 2) ON DUPLICATE KEY UPDATE `column1`=LAST_INSERT_ID(`column1`)');
 
 
 

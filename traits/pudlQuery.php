@@ -700,6 +700,10 @@ trait pudlQuery {
 
 		if (!is_array($data)  &&  !is_object($data)) return $data;
 
+		if ($data instanceof pudlHelper) {
+			return $this->_clauseRecurse($data);
+		}
+
 		$query = '';
 
 		foreach ($data as $column => $value) {

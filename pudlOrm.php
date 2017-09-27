@@ -82,9 +82,9 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	//CREATE A NEW INSTANCE OF THIS OBJECT IN THE DATABASE
 	////////////////////////////////////////////////////////////////////////////
-	public static function create($data=false) {
+	public static function create($data=false, $update=false) {
 		global $db;
-		return static::get($db->insert(static::table, $data));
+		return static::get($db->insert(static::table, $data, $update));
 	}
 
 
