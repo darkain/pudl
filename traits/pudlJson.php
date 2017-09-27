@@ -93,7 +93,7 @@ trait pudlJson {
 				static::trim(static::column($column)),
 				''
 			),
-			PUDL::RAW("'{\"\":0}'")
+			pudl::raw("'{\"\":0}'")
 			//TODO: this SHOULD be an empty JSON object
 			//		MariaDB 10.2.8 and earlier won't accept this
 			//		We'll switch it back to '{}' when MariaDB is fixed
