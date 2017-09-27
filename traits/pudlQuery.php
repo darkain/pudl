@@ -180,12 +180,12 @@ trait pudlQuery {
 		}
 
 		//PARSE OUT STRING
-		$dynamic	= explode('#', $identifiers);
+		$dynamic	= preg_split('/[#$]/', $identifiers);
 		$list		= explode('.', $dynamic[0]);
 
 		//VERIFY TOTAL NUMBER OF PARTS
 		if (count($dynamic) > 2) throw new pudlException(
-			'Wrong column format for dynamic column'
+			'Wrong column format for dynamic or JSON column'
 		);
 
 		//CLEAN UP TABLE AND COLUMN NAMES
@@ -219,6 +219,21 @@ trait pudlQuery {
 		//EARLY OUT IF WE ARE NOT IN A DYNAMIC COLUMN
 		$return		= implode('.', $list);
 		if (count($dynamic) === 1) return $return;
+
+
+		//JSON COLUMN FORMAT
+		if (strpos($identifiers, '$') !== false) {
+			if (substr($dynamic[1], 0, 1) !== '.') {
+				$dynamic[1] = '$.' . $dynamic[1];
+			} else {
+				$dynamic[1] = '$' . $dynamic[1];
+			}
+			return 'JSON_VALUE('
+					. $return
+					. ','
+					. $this->_value($dynamic[1])
+					. ')';
+		}
 
 
 		//PARSE OUT DATA TYPE
