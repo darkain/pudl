@@ -271,8 +271,9 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	public function updateJson($column, $field, $value=NULL) {
 		if (func_num_args() < 3  &&  static::json !== NULL) {
-			$value = $field;
-			$field = static::json;
+			$value	= $field;
+			$field	= $column;
+			$column	= static::json;
 		}
 		return $this->update([pudl::jsonSet($column, $field, $value)]);
 	}
