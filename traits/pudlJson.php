@@ -64,20 +64,20 @@ trait pudlJson {
 
 
 
-	public function jsonUpdate($table, $column, $field, $value, $clause) {
+	public function jsonUpdate($table, $column, $data, $clause) {
 		return $this->update(
 			$table,
-			[static::jsonSet($column, $field, $value)],
+			[static::jsonSet($column, $data)],
 			$clause
 		);
 	}
 
 
 
-	public function jsonUpdateId($table, $column, $field, $value, $col, $id) {
+	public function jsonUpdateId($table, $column, $data, $col, $id=false) {
 		return $this->updateId(
 			$table,
-			[static::jsonSet($column, $field, $value)],
+			[static::jsonSet($column, $data)],
 			$col, $id
 		);
 	}

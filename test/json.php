@@ -295,7 +295,7 @@ pudlTest("UPDATE `table` SET `column_1`=JSON_REMOVE(IFNULL(NULLIF(TRIM(`column_1
 
 
 
-$db->string()->jsonUpdate('table', 'column', 'path', 'new value', true);
+$db->string()->jsonUpdate('table', 'column', ['path' => 'new value'], true);
 
 pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{\"\":0}'), '$.path', 'new value') WHERE (1)");
 
@@ -304,7 +304,7 @@ pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), '')
 
 
 
-$db->string()->jsonUpdateId('table', 'column', 'path', 'new value', 'id', 1);
+$db->string()->jsonUpdateId('table', 'column', ['path' => 'new value'], 'id', 1);
 
 pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{\"\":0}'), '$.path', 'new value') WHERE (`id`=1)");
 
