@@ -268,15 +268,19 @@ abstract class	pudlOrm
 
 	////////////////////////////////////////////////////////////////////////////
 	//UPDATE JSON VALUE IN THE DATABASE
-	//TODO: support updating multiple paths at once with an array passed in
 	////////////////////////////////////////////////////////////////////////////
-	public function updateJson($column, $field, $value=NULL) {
-		if (func_num_args() < 3  &&  static::json !== NULL) {
-			$value	= $field;
-			$field	= $column;
-			$column	= static::json;
+	public function updateJson(/* ...[$column], $keys, $values */) {
+		$args		= func_get_args();
+
+		if (count($args) < 3  &&  pudl_array(end($args))) {
+			$args	= reset($args);
 		}
-		return $this->update([pudl::jsonSet($column, $field, $value)]);
+
+		$column		= (count($args) % 2)
+						? static::json
+						: array_shift($args);
+
+		return $this->update([pudl::jsonSet($column, $args)]);
 	}
 
 
