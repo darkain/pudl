@@ -331,3 +331,15 @@ $db->string()->update('table', [
 ], true);
 
 pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{\"\":0}'), '$.parameter', 'value', '$.key', 1) WHERE (1)");
+
+
+
+
+
+
+
+$db->string()->update('table', [
+	pudl::jsonSet('column', 'parameter', 'value', 'key', 1),
+], true);
+
+pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{\"\":0}'), '$.parameter', 'value', '$.key', 1) WHERE (1)");
