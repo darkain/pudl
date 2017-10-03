@@ -87,7 +87,7 @@ $db->string()->update('table', [
 	pudl::jsonReplace('column', 'parameter', 'value'),
 ], true);
 
-pudlTest("UPDATE `table` SET `column`=JSON_REPLACE(IFNULL(NULLIF(TRIM(`column`), ''), '{\"\":0}'), '$.parameter', 'value') WHERE (1)");
+pudlTest("UPDATE `table` SET `column`=JSON_REPLACE(IFNULL(NULLIF(TRIM(`column`), ''), '{}'), '$.parameter', 'value') WHERE (1)");
 
 
 
@@ -96,7 +96,7 @@ $db->string()->update('table', [
 	pudl::jsonReplace('column', '$.parameter', 'value'),
 ], true);
 
-pudlTest("UPDATE `table` SET `column`=JSON_REPLACE(IFNULL(NULLIF(TRIM(`column`), ''), '{\"\":0}'), '$.parameter', 'value') WHERE (1)");
+pudlTest("UPDATE `table` SET `column`=JSON_REPLACE(IFNULL(NULLIF(TRIM(`column`), ''), '{}'), '$.parameter', 'value') WHERE (1)");
 
 
 
@@ -105,7 +105,7 @@ $db->string()->update('table', [
 	pudl::jsonReplace('column', '[1]', 'value'),
 ], true);
 
-pudlTest("UPDATE `table` SET `column`=JSON_REPLACE(IFNULL(NULLIF(TRIM(`column`), ''), '{\"\":0}'), '$[1]', 'value') WHERE (1)");
+pudlTest("UPDATE `table` SET `column`=JSON_REPLACE(IFNULL(NULLIF(TRIM(`column`), ''), '{}'), '$[1]', 'value') WHERE (1)");
 
 
 
@@ -114,7 +114,7 @@ $db->string()->update('table', [
 	pudl::jsonReplace('column', '{key}', 'value'),
 ], true);
 
-pudlTest("UPDATE `table` SET `column`=JSON_REPLACE(IFNULL(NULLIF(TRIM(`column`), ''), '{\"\":0}'), '\${key}', 'value') WHERE (1)");
+pudlTest("UPDATE `table` SET `column`=JSON_REPLACE(IFNULL(NULLIF(TRIM(`column`), ''), '{}'), '\${key}', 'value') WHERE (1)");
 
 
 
@@ -125,7 +125,7 @@ $db->string()->update('table', [
 	pudl::jsonReplace('column', 'parameter', 'value'),
 ], true);
 
-pudlTest("UPDATE `table` SET `x`=1, `column`=JSON_REPLACE(IFNULL(NULLIF(TRIM(`column`), ''), '{\"\":0}'), '$.parameter', 'value') WHERE (1)");
+pudlTest("UPDATE `table` SET `x`=1, `column`=JSON_REPLACE(IFNULL(NULLIF(TRIM(`column`), ''), '{}'), '$.parameter', 'value') WHERE (1)");
 
 
 
@@ -138,7 +138,7 @@ $db->string()->update('table', [
 	'y' => 2,
 ], true);
 
-pudlTest("UPDATE `table` SET `x`=1, `column`=JSON_REPLACE(IFNULL(NULLIF(TRIM(`column`), ''), '{\"\":0}'), '$.parameter', 'value'), `y`=2 WHERE (1)");
+pudlTest("UPDATE `table` SET `x`=1, `column`=JSON_REPLACE(IFNULL(NULLIF(TRIM(`column`), ''), '{}'), '$.parameter', 'value'), `y`=2 WHERE (1)");
 
 
 
@@ -150,7 +150,7 @@ $db->string()->update('table', [
 	pudl::jsonReplace('column_2', 'param_2', 'value_y'),
 ], true);
 
-pudlTest("UPDATE `table` SET `column_1`=JSON_REPLACE(IFNULL(NULLIF(TRIM(`column_1`), ''), '{\"\":0}'), '$.param_1', 'value_x'), `column_2`=JSON_REPLACE(IFNULL(NULLIF(TRIM(`column_2`), ''), '{\"\":0}'), '$.param_2', 'value_y') WHERE (1)");
+pudlTest("UPDATE `table` SET `column_1`=JSON_REPLACE(IFNULL(NULLIF(TRIM(`column_1`), ''), '{}'), '$.param_1', 'value_x'), `column_2`=JSON_REPLACE(IFNULL(NULLIF(TRIM(`column_2`), ''), '{}'), '$.param_2', 'value_y') WHERE (1)");
 
 
 
@@ -160,7 +160,7 @@ $db->string()->update('table', [
 	pudl::jsonSet('column', 'parameter', 'value'),
 ], true);
 
-pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{\"\":0}'), '$.parameter', 'value') WHERE (1)");
+pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{}'), '$.parameter', 'value') WHERE (1)");
 
 
 
@@ -171,7 +171,7 @@ $db->string()->update('table', [
 	pudl::jsonSet('column', 'parameter', 'value'),
 ], true);
 
-pudlTest("UPDATE `table` SET `x`=1, `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{\"\":0}'), '$.parameter', 'value') WHERE (1)");
+pudlTest("UPDATE `table` SET `x`=1, `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{}'), '$.parameter', 'value') WHERE (1)");
 
 
 
@@ -184,7 +184,7 @@ $db->string()->update('table', [
 	'y' => 2,
 ], true);
 
-pudlTest("UPDATE `table` SET `x`=1, `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{\"\":0}'), '$.parameter', 'value'), `y`=2 WHERE (1)");
+pudlTest("UPDATE `table` SET `x`=1, `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{}'), '$.parameter', 'value'), `y`=2 WHERE (1)");
 
 
 
@@ -196,7 +196,7 @@ $db->string()->update('table', [
 	pudl::jsonSet('column_2', 'param_2', 'value_y'),
 ], true);
 
-pudlTest("UPDATE `table` SET `column_1`=JSON_SET(IFNULL(NULLIF(TRIM(`column_1`), ''), '{\"\":0}'), '$.param_1', 'value_x'), `column_2`=JSON_SET(IFNULL(NULLIF(TRIM(`column_2`), ''), '{\"\":0}'), '$.param_2', 'value_y') WHERE (1)");
+pudlTest("UPDATE `table` SET `column_1`=JSON_SET(IFNULL(NULLIF(TRIM(`column_1`), ''), '{}'), '$.param_1', 'value_x'), `column_2`=JSON_SET(IFNULL(NULLIF(TRIM(`column_2`), ''), '{}'), '$.param_2', 'value_y') WHERE (1)");
 
 
 
@@ -206,7 +206,7 @@ $db->string()->update('table', [
 	pudl::jsonInsert('column', 'parameter', 'value'),
 ], true);
 
-pudlTest("UPDATE `table` SET `column`=JSON_INSERT(IFNULL(NULLIF(TRIM(`column`), ''), '{\"\":0}'), '$.parameter', 'value') WHERE (1)");
+pudlTest("UPDATE `table` SET `column`=JSON_INSERT(IFNULL(NULLIF(TRIM(`column`), ''), '{}'), '$.parameter', 'value') WHERE (1)");
 
 
 
@@ -217,7 +217,7 @@ $db->string()->update('table', [
 	pudl::jsonInsert('column', 'parameter', 'value'),
 ], true);
 
-pudlTest("UPDATE `table` SET `x`=1, `column`=JSON_INSERT(IFNULL(NULLIF(TRIM(`column`), ''), '{\"\":0}'), '$.parameter', 'value') WHERE (1)");
+pudlTest("UPDATE `table` SET `x`=1, `column`=JSON_INSERT(IFNULL(NULLIF(TRIM(`column`), ''), '{}'), '$.parameter', 'value') WHERE (1)");
 
 
 
@@ -230,7 +230,7 @@ $db->string()->update('table', [
 	'y' => 2,
 ], true);
 
-pudlTest("UPDATE `table` SET `x`=1, `column`=JSON_INSERT(IFNULL(NULLIF(TRIM(`column`), ''), '{\"\":0}'), '$.parameter', 'value'), `y`=2 WHERE (1)");
+pudlTest("UPDATE `table` SET `x`=1, `column`=JSON_INSERT(IFNULL(NULLIF(TRIM(`column`), ''), '{}'), '$.parameter', 'value'), `y`=2 WHERE (1)");
 
 
 
@@ -242,7 +242,7 @@ $db->string()->update('table', [
 	pudl::jsonInsert('column_2', 'param_2', 'value_y'),
 ], true);
 
-pudlTest("UPDATE `table` SET `column_1`=JSON_INSERT(IFNULL(NULLIF(TRIM(`column_1`), ''), '{\"\":0}'), '$.param_1', 'value_x'), `column_2`=JSON_INSERT(IFNULL(NULLIF(TRIM(`column_2`), ''), '{\"\":0}'), '$.param_2', 'value_y') WHERE (1)");
+pudlTest("UPDATE `table` SET `column_1`=JSON_INSERT(IFNULL(NULLIF(TRIM(`column_1`), ''), '{}'), '$.param_1', 'value_x'), `column_2`=JSON_INSERT(IFNULL(NULLIF(TRIM(`column_2`), ''), '{}'), '$.param_2', 'value_y') WHERE (1)");
 
 
 
@@ -252,7 +252,7 @@ $db->string()->update('table', [
 	pudl::jsonRemove('column', 'parameter'),
 ], true);
 
-pudlTest("UPDATE `table` SET `column`=JSON_REMOVE(IFNULL(NULLIF(TRIM(`column`), ''), '{\"\":0}'), '$.parameter') WHERE (1)");
+pudlTest("UPDATE `table` SET `column`=JSON_REMOVE(IFNULL(NULLIF(TRIM(`column`), ''), '{}'), '$.parameter') WHERE (1)");
 
 
 
@@ -263,7 +263,7 @@ $db->string()->update('table', [
 	pudl::jsonRemove('column', 'parameter'),
 ], true);
 
-pudlTest("UPDATE `table` SET `x`=1, `column`=JSON_REMOVE(IFNULL(NULLIF(TRIM(`column`), ''), '{\"\":0}'), '$.parameter') WHERE (1)");
+pudlTest("UPDATE `table` SET `x`=1, `column`=JSON_REMOVE(IFNULL(NULLIF(TRIM(`column`), ''), '{}'), '$.parameter') WHERE (1)");
 
 
 
@@ -276,7 +276,7 @@ $db->string()->update('table', [
 	'y' => 2,
 ], true);
 
-pudlTest("UPDATE `table` SET `x`=1, `column`=JSON_REMOVE(IFNULL(NULLIF(TRIM(`column`), ''), '{\"\":0}'), '$.parameter'), `y`=2 WHERE (1)");
+pudlTest("UPDATE `table` SET `x`=1, `column`=JSON_REMOVE(IFNULL(NULLIF(TRIM(`column`), ''), '{}'), '$.parameter'), `y`=2 WHERE (1)");
 
 
 
@@ -288,7 +288,7 @@ $db->string()->update('table', [
 	pudl::jsonRemove('column_2', 'param_2'),
 ], true);
 
-pudlTest("UPDATE `table` SET `column_1`=JSON_REMOVE(IFNULL(NULLIF(TRIM(`column_1`), ''), '{\"\":0}'), '$.param_1'), `column_2`=JSON_REMOVE(IFNULL(NULLIF(TRIM(`column_2`), ''), '{\"\":0}'), '$.param_2') WHERE (1)");
+pudlTest("UPDATE `table` SET `column_1`=JSON_REMOVE(IFNULL(NULLIF(TRIM(`column_1`), ''), '{}'), '$.param_1'), `column_2`=JSON_REMOVE(IFNULL(NULLIF(TRIM(`column_2`), ''), '{}'), '$.param_2') WHERE (1)");
 
 
 
@@ -297,7 +297,7 @@ pudlTest("UPDATE `table` SET `column_1`=JSON_REMOVE(IFNULL(NULLIF(TRIM(`column_1
 
 $db->string()->jsonUpdate('table', 'column', ['path' => 'new value'], true);
 
-pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{\"\":0}'), '$.path', 'new value') WHERE (1)");
+pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{}'), '$.path', 'new value') WHERE (1)");
 
 
 
@@ -306,7 +306,7 @@ pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), '')
 
 $db->string()->jsonUpdateId('table', 'column', ['path' => 'new value'], 'id', 1);
 
-pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{\"\":0}'), '$.path', 'new value') WHERE (`id`=1)");
+pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{}'), '$.path', 'new value') WHERE (`id`=1)");
 
 
 
@@ -318,7 +318,7 @@ $db->string()->update('table', [
 	pudl::jsonSet('column', ['parameter' => 'value']),
 ], true);
 
-pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{\"\":0}'), '$.parameter', 'value') WHERE (1)");
+pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{}'), '$.parameter', 'value') WHERE (1)");
 
 
 
@@ -330,7 +330,7 @@ $db->string()->update('table', [
 	pudl::jsonSet('column', ['parameter' => 'value', 'key' => 1]),
 ], true);
 
-pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{\"\":0}'), '$.parameter', 'value', '$.key', 1) WHERE (1)");
+pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{}'), '$.parameter', 'value', '$.key', 1) WHERE (1)");
 
 
 
@@ -342,4 +342,4 @@ $db->string()->update('table', [
 	pudl::jsonSet('column', 'parameter', 'value', 'key', 1),
 ], true);
 
-pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{\"\":0}'), '$.parameter', 'value', '$.key', 1) WHERE (1)");
+pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{}'), '$.parameter', 'value', '$.key', 1) WHERE (1)");
