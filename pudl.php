@@ -253,7 +253,10 @@ abstract	class	pudl {
 			if (!empty($data['server'])) {
 				$data['type'] = pudl_array($data['server']) ? 'Galera' : 'MySqli';
 			} else {
-				throw new pudlException('No database type or server specified');
+				throw new pudlException(
+					'No database type or server specified',
+					PUDL_X_CONNECTION
+				);
 			}
 		}
 
@@ -269,8 +272,10 @@ abstract	class	pudl {
 			case 'NULL':	require_once('null/pudlNull.php');		break;
 
 			default:
-				throw new pudlException('Unknown Database Server Type: ' . $data['type']);
-				return false;
+				throw new pudlException(
+					'Unknown Database Server Type: ' . $data['type'],
+					PUDL_X_CONNECTION
+				);
 		}
 
 		return call_user_func(

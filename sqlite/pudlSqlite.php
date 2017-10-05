@@ -42,7 +42,8 @@ class pudlSqlite extends pudl {
 		//Cannot connect - Error out
 		if (empty($this->connection)) {
 			throw new pudlException(
-				'Unable to open Sqlite database file: ' . $auth['database']
+				'Unable to open Sqlite database file: ' . $auth['database'],
+				PUDL_X_CONNECTION
 			);
 		}
 

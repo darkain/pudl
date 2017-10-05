@@ -33,3 +33,7 @@ define('GALERA_JOINED',		0x03);
 define('GALERA_SYNCED',		0x04);
 define('GALERA_DONOR',		0x05);
 define('GALERA_RESYNCING',	0x06);
+
+
+//PudlException Codes
+define('PUDL_X_CONNECTION',	0x01);
