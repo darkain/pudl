@@ -25,8 +25,12 @@ trait pudlInsert {
 				$vals .= ', ';
 			} else $first = false;
 
+			if (pudl_array($value)) {
+				$value = empty($value) ? NULL : $this->jsonEncode($value);
+			}
+
 			$cols .= $this->identifiers($column, NULL);
-			$vals .= $this->_dynamic_create($value);
+			$vals .= $this->_value($value);
 		}
 
 		if ($prefix) $cols .= ')'; else $cols = '';
@@ -150,7 +154,8 @@ trait pudlInsert {
 			foreach ($set as $item) {
 				if (!$firstitem) $query .= ',';
 				$firstitem = false;
-				$query .= $this->_dynamic_create($item);
+				if (pudl_array($item)) $item = $this->jsonEncode($item);
+				$query .= $this->_value($item);
 			}
 
 			$query .= ')';

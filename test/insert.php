@@ -121,28 +121,28 @@ pudlTest("INSERT INTO `table` (`column`) VALUES (NULL)");
 
 //INSERT statement - using associative array - array
 $db->string()->insert('table', ['column'=>['item']]);
-pudlTest("INSERT INTO `table` (`column`) VALUES (COLUMN_CREATE(0,'item'))");
+pudlTest('INSERT INTO `table` (`column`) VALUES (\'[\"item\"]\')');
 
 
 
 
 //INSERT statement - using associative array - array
 $db->string()->insert('table', ['column'=>['dynamic'=>'item']]);
-pudlTest("INSERT INTO `table` (`column`) VALUES (COLUMN_CREATE('dynamic','item'))");
+pudlTest('INSERT INTO `table` (`column`) VALUES (\'{\"dynamic\":\"item\"}\')');
 
 
 
 
 //INSERT statement - using associative array - array
 $db->string()->insert('table', ['column'=>['item1','item2']]);
-pudlTest("INSERT INTO `table` (`column`) VALUES (COLUMN_CREATE(0,'item1', 1,'item2'))");
+pudlTest('INSERT INTO `table` (`column`) VALUES (\'[\"item1\",\"item2\"]\')');
 
 
 
 
 //INSERT statement - using associative array - array
 $db->string()->insert('table', ['column'=>['dynamic1'=>'item1', 'dynamic2'=>'item2']]);
-pudlTest("INSERT INTO `table` (`column`) VALUES (COLUMN_CREATE('dynamic1','item1', 'dynamic2','item2'))");
+pudlTest('INSERT INTO `table` (`column`) VALUES (\'{\"dynamic1\":\"item1\",\"dynamic2\":\"item2\"}\')');
 
 
 

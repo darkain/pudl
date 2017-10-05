@@ -280,7 +280,9 @@ abstract class	pudlOrm
 						? static::json
 						: array_shift($args);
 
-		return $this->update([pudl::jsonSet($column, $args)]);
+		return $this->update([
+			$column => array_replace_recursive($this->{$column}, $args)
+		]);
 	}
 
 

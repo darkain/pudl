@@ -752,8 +752,11 @@ trait pudlQuery {
 						.  $this->setEscape($this->_value($value->value, false))
 						.  ',\', \',\'))';
 
+			} else if (pudl_array($value)) {
+				$query .= $this->_value($this->jsonEncode($value));
+
 			} else {
-				$query .= $this->_dynamic_create($value);
+				$query .= $this->_value($value);
 			}
 		}
 
