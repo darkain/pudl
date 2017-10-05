@@ -74,6 +74,10 @@ class pudlMySqliResult extends pudlResult {
 			$this->first = false;
 			foreach ($this->data as $key => $val) {
 				switch (0) {
+					case substr_compare($key, '_json', -5, 5, true):
+						$this->json[$key] = $key;
+					break;
+
 					case substr_compare($key, 'JSON', 0, 4, true):
 						$new = substr($key, 5, -1);
 						$pos = strrpos($new, '.');
