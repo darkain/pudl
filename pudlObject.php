@@ -368,6 +368,19 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
+	//COMPUTES THE DIFFERENCE OF ARRAYS WITH ADDITIONAL INDEX CHECK RECURSIVELY
+	//http://php.net/manual/en/function.array-diff-assoc.php#111675
+	////////////////////////////////////////////////////////////////////////////
+	public function diff_assoc_recursive() {
+		$args = func_get_args();
+		array_unshift($args, $this->__array);
+		return call_user_func_array('array_diff_assoc_recursive', $args);
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
 	//COMPUTES THE DIFFERENCE OF ARRAYS USING KEYS FOR COMPARISON
 	//http://php.net/manual/en/function.array-diff-key.php
 	////////////////////////////////////////////////////////////////////////////
@@ -843,7 +856,7 @@ class	pudlObject
 	////////////////////////////////////////////////////////////////////////////
 	public function compare() {
 		if (empty($this->__snapshot)) return [];
-		return array_diff_assoc($this->__array, $this->__snapshot);
+		return array_diff_assoc_recursive($this->__array, $this->__snapshot);
 	}
 
 

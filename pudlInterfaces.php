@@ -58,3 +58,28 @@ interface	pudlData
 	public function listFields();
 	public function row($type=PUDL_ARRAY);
 }
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// FIX FOR PUDL OBJECT RECURSIVE ARRAYS
+// SOURCE: http://php.net/manual/en/function.array-diff-assoc.php#111675
+////////////////////////////////////////////////////////////////////////////////
+if (!function_exists('array_diff_assoc_recursive')) {
+	function array_diff_assoc_recursive($array1, $array2) {
+		$difference = [];
+		foreach($array1 as $key => $value) {
+			if(pudl_array($value)) {
+				if(!isset($array2[$key])  ||  !is_array($array2[$key])) {
+					$difference[$key] = $value;
+				} else {
+					$new_diff = array_diff_assoc_recursive($value, $array2[$key]);
+					if(!empty($new_diff)) $difference[$key] = $new_diff;
+				}
+			} else if(!array_key_exists($key,$array2)  ||  $array2[$key] !== $value) {
+				$difference[$key] = $value;
+			}
+		}
+		return $difference;
+	}
+}
