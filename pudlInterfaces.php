@@ -57,7 +57,11 @@ interface	pudlData
 	public function getField($column);
 	public function listFields();
 	public function row($type=PUDL_ARRAY);
+
+	//JSON
+	public function json();
 }
+
 
 
 
