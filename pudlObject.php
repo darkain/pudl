@@ -841,11 +841,18 @@ class	pudlObject
 	////////////////////////////////////////////////////////////////////////////
 	//TRUE:		GET THE CURRENT SNAPSHOT
 	//FALSE:	TAKE A NEW SNAPSHOT
+	//STRING:	GET ITEM FROM CURRENT SNAPSHOT
+	//INT:		GET INDEX FROM CURRENT SNAPSHOT
 	////////////////////////////////////////////////////////////////////////////
-	public function snapshot($return=false) {
-		if ($return) return $this->__snapshot;
-		$this->__snapshot = $this->__array;
-		return true;
+	public function snapshot($snapshot=true) {
+		if ($snapshot === true)		return $this->__snapshot = $this->__array;
+		if ($snapshot === false)	return $this->__snapshot;
+
+		if (!is_string($snapshot)  &&  !is_int($snapshot))	return NULL;
+
+		return isset($this->__snapshot[$snapshot])
+			? $this->__snapshot[$snapshot]
+			: NULL;
 	}
 
 
@@ -854,9 +861,20 @@ class	pudlObject
 	////////////////////////////////////////////////////////////////////////////
 	//COMPARE CURRENT DATA WITH SNAPSHOT DATA, RETURNING AN ARRAY OF CHANGES
 	////////////////////////////////////////////////////////////////////////////
-	public function compare() {
+	public function compareData() {
 		if (empty($this->__snapshot)) return [];
 		return array_diff_assoc_recursive($this->__array, $this->__snapshot);
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//COMPARE SNAPSHOT DATA WITH CURRENT DATA, RETURNING AN ARRAY OF CHANGES
+	////////////////////////////////////////////////////////////////////////////
+	public function compareSnap() {
+		if (empty($this->__snapshot)) return [];
+		return array_diff_assoc_recursive($this->__snapshot, $this->__array);
 	}
 
 

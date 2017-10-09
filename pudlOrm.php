@@ -294,7 +294,8 @@ abstract class	pudlOrm
 	public function push($ignore=[]) {
 		global $db;
 
-		$data = $this->compare();
+		$data = $this->compareData();
+		if (!is_array($data)) return false;
 
 		foreach ($data as $key => $value) {
 			if (in_array($key, $ignore)) {
