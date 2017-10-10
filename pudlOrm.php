@@ -269,19 +269,20 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	//UPDATE JSON VALUE IN THE DATABASE
 	////////////////////////////////////////////////////////////////////////////
-	public function updateJson(/* ...[$column], $keys, $values */) {
+	public function updateJson(/* ...$keys, $values OR [$keys => $values]*/) {
 		$args		= func_get_args();
 
-		if (count($args) < 3  &&  pudl_array(end($args))) {
+		if (count($args) === 1  &&  pudl_array($args[0])) {
 			$args	= reset($args);
 		}
 
-		$column		= (count($args) % 2)
-						? static::json
-						: array_shift($args);
+		if (empty($this->{static::json})) $this->{static::json} = [];
 
 		return $this->update([
-			$column => array_replace_recursive($this->{$column}, $args)
+			static::json => array_replace_recursive(
+				$this->{static::json},
+				$args
+			)
 		]);
 	}
 
