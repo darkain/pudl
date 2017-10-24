@@ -191,7 +191,7 @@ trait pudlSelect {
 		$params		= [];
 		$args		= func_get_args();
 		foreach ($args as $arg) {
-			$params	= array_merge_recursive($params, $arg);
+			$params	= array_replace_recursive($params, $arg);
 		}
 
 
