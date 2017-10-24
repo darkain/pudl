@@ -131,12 +131,19 @@ trait pudlStatic {
 	////////////////////////////////////////////////////////////////////////////
 	//EXTRACT KEYS FROM A GIVEN ARRAY
 	////////////////////////////////////////////////////////////////////////////
-	public static function extract($source, $keys) {
+	public static function extract($array, $keys) {
 		$return = [];
-		foreach ($source as $key => $value) {
-			if (!array_key_exists($key, $keys)) continue;
-			$return[$key] = $value;
+		if (!is_array($keys)) {
+			$keys = func_get_args();
+			array_shift($keys);
 		}
+
+		foreach ($keys as $key => $value) {
+			if (!is_string($key)) $key = $value;
+			if (!array_key_exists($key, $array)) continue;
+			$return[$key] = $array[$key];
+		}
+
 		return $return;
 	}
 

@@ -785,22 +785,6 @@ trait pudlQuery {
 
 
 
-	public static function extract($array, $keys) {
-		$return = [];
-		if (!is_array($keys)) {
-			$keys = func_get_args();
-			array_shift($keys);
-		}
-		foreach ($keys as $key) {
-			if (array_key_exists($key, $array)) {
-				$return[$key] = $array[$key];
-			}
-		}
-		return $return;
-	}
-
-
-
 	public function extractColumns($table, $data, $virtual=true) {
 		$fields = $this->listFields($table);
 
