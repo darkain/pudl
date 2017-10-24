@@ -18,7 +18,7 @@ abstract class	pudlOrm
 		}
 
 		if (is_array($item)) {
-			$fetch ? $this->fetch($item)		: $this->replace($item);
+			$fetch ? $this->fetch($item)		: $this->govern($item);
 
 		} else if (is_a($item, 'af_url')) {
 			$this->fetch($item->id);
@@ -364,7 +364,7 @@ abstract class	pudlOrm
 					->complete();
 
 		!empty($data)
-			? $this->replace($data[0])
+			? $this->govern($data[0])
 			: $this->clear();
 	}
 

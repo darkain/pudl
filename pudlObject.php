@@ -19,12 +19,12 @@ class	pudlObject
 		switch (true) {
 			case is_string($data)  &&  is_string($process):
 				$x = @explode($process, $data);
-				$x === false ? $this->clear() : $this->replace($x);
+				$x === false ? $this->clear() : $this->govern($x);
 			break;
 
 			case $process === PUDL_CSV:
 				$x = @str_getcsv($data);
-				$x === [NULL] ? $this->clear() : $this->replace($x);
+				$x === [NULL] ? $this->clear() : $this->govern($x);
 			break;
 
 			case !!$process:
@@ -32,7 +32,7 @@ class	pudlObject
 			break;
 
 			default:
-				$this->replace($data);
+				$this->govern($data);
 		}
 	}
 
@@ -52,13 +52,16 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//REPLACES THE OBJECT'S ARRAY WITH THE GIVEN ARRAY
+	//MANAGE THE GIVEN ARRAY
 	////////////////////////////////////////////////////////////////////////////
-	public function replace(&$data) {
-		if (!is_array($data)) return $this->copy($data);
-
+	public function govern(&$data) {
 		$this->clear();
-		$this->__array = &$data;
+
+		if (is_array($data)) {
+			$this->__array = &$data;
+		} else {
+			$this->merge($data);
+		}
 
 		return $this;
 	}
@@ -77,13 +80,13 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//COPY THE GIVEN ARRAY INTO THIS OBJECT
+	//MERGE THE GIVEN ARRAY VALUES INTO THIS OBJECT
+	//http://php.net/manual/en/function.array-merge.php
 	////////////////////////////////////////////////////////////////////////////
 	public function merge($array) {
+		if ($array instanceof pudlObject) $array = $array->raw();
 		if (empty($array)  ||  !pudl_array($array)) return $this;
-		foreach($array as $key => $value) {
-			$this->__array[$key] = $value;
-		}
+		$this->__array = array_merge($this->__array, $array);
 		return $this;
 	}
 
@@ -91,13 +94,54 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//COPIES THIS OBJECT INTO THE GIVEN ARRAY
+	//MERGE THE GIVEN ARRAY VALUES INTO THIS OBJECT, RECUSIVELY
+	//http://php.net/manual/en/function.array-merge-recursive.php
+	////////////////////////////////////////////////////////////////////////////
+	public function mergeRecursive($array) {
+		if ($array instanceof pudlObject) $array = $array->raw();
+		if (empty($array)  ||  !pudl_array($array)) return $this;
+		$this->__array = array_merge_recursive($this->__array, $array);
+		return $this;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//MERGE THIS OBJECT INTO THE GIVEN ARRAY
 	////////////////////////////////////////////////////////////////////////////
 	public function mergeInto(&$array) {
+		if ($array instanceof pudlObject) $array = $array->raw();
+		if (!pudl_array($array)) return $this;
+		$array = array_merge($array, $this->__array);
+		return $this;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//REPLACE THE GIVEN ARRAY VALUES INTO THIS OBJECT
+	//http://php.net/manual/en/function.array-replace.php
+	////////////////////////////////////////////////////////////////////////////
+	public function replace($array) {
+		if ($array instanceof pudlObject) $array = $array->raw();
 		if (empty($array)  ||  !pudl_array($array)) return $this;
-		foreach($this->__array as $key => $value) {
-			$array[$key] = $value;
-		}
+		$this->__array = array_replace($this->__array, $array);
+		return $this;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//REPLACE THE GIVEN ARRAY VALUES INTO THIS OBJECT, RECUSIVELY
+	//http://php.net/manual/en/function.array-replace-recursive.php
+	////////////////////////////////////////////////////////////////////////////
+	public function replaceRecursive($array) {
+		if ($array instanceof pudlObject) $array = $array->raw();
+		if (empty($array)  ||  !pudl_array($array)) return $this;
+		$this->__array = array_replace_recursive($this->__array, $array);
 		return $this;
 	}
 
@@ -655,10 +699,15 @@ class	pudlObject
 	////////////////////////////////////////////////////////////////////////////
 	public function extract($keys) {
 		$return = [];
+
 		if (!is_array($keys)) $keys = func_get_args();
-		foreach ($keys as $key) {
+
+		foreach ($keys as $key => $value) {
+			if (!is_string($key)) $key = $value;
+			if (!array_key_exists($key, $this->__array)) continue;
 			$return[$key] = $this->__array[$key];
 		}
+
 		return $return;
 	}
 
@@ -670,9 +719,18 @@ class	pudlObject
 	////////////////////////////////////////////////////////////////////////////
 	public function extend($source, $keys) {
 		if (!pudl_array($keys)) $keys = [$keys];
-		foreach ($keys as $key) {
+
+		if (!is_array($keys)) {
+			$keys = func_get_args();
+			array_shift($keys);
+		}
+
+		foreach ($keys as $key => $value) {
+			if (!is_string($key)) $key = $value;
+			if (!array_key_exists($key, $source)) continue;
 			$this->__array[$key] = $source[$key];
 		}
+
 		return $this;
 	}
 
@@ -805,6 +863,7 @@ class	pudlObject
 	public function listFields() {
 		$fields	= [];
 		$total	= $this->fields();
+
 		for ($i=0; $i<$total; $i++) {
 			$fields[] = $this->getField($i);
 		}
