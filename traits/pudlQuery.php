@@ -819,17 +819,6 @@ trait pudlQuery {
 
 
 
-	public static function merge($source, $keys) {
-		$return = [];
-		foreach ($source as $key => $value) {
-			if (!array_key_exists($key, $keys)) continue;
-			$return[$key] = $value;
-		}
-		return $return;
-	}
-
-
-
 	protected function _requireProperty($object, $property) {
 		if (!is_object($object)) $this->_invalidType($object, 'object');
 		if (property_exists($object, $property)) return;

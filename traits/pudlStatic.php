@@ -126,4 +126,19 @@ trait pudlStatic {
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//EXTRACT KEYS FROM A GIVEN ARRAY
+	////////////////////////////////////////////////////////////////////////////
+	public static function extract($source, $keys) {
+		$return = [];
+		foreach ($source as $key => $value) {
+			if (!array_key_exists($key, $keys)) continue;
+			$return[$key] = $value;
+		}
+		return $return;
+	}
+
+
 }
