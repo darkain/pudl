@@ -829,26 +829,26 @@ class	pudlObject
 		$column	= (int) $column;
 		$count	= 0;
 
-		if ($column < $this->fields()) {
-			foreach ($this->__array[0] as $key => $value) {
-				if ($column === $count++) {
-					return [
-						'name'			=> $key,
-						'orgname'		=> $key,
-						'table'			=> get_class(),
-						'orgtable'		=> get_class(),
-						'def'			=> '',
-						'db'			=> 'pudlObject',
-						'catalog'		=> 'def',
-						'max_length'	=> PHP_INT_MAX,
-						'length'		=> PHP_INT_MAX,
-						'charsetnr'		=> 0,
-						'flags'			=> 0,
-						'type'			=> gettype($value),
-						'decimals'		=> 0,
-					];
-				}
-			}
+		if ($column >= $this->fields()) return false;
+
+		foreach ($this->__array[0] as $key => $value) {
+			if ($column !== $count++) continue;
+
+			return [
+				'name'			=> $key,
+				'orgname'		=> $key,
+				'table'			=> get_class(),
+				'orgtable'		=> get_class(),
+				'def'			=> '',
+				'db'			=> 'pudlObject',
+				'catalog'		=> 'def',
+				'max_length'	=> PHP_INT_MAX,
+				'length'		=> PHP_INT_MAX,
+				'charsetnr'		=> 0,
+				'flags'			=> 0,
+				'type'			=> gettype($value),
+				'decimals'		=> 0,
+			];
 		}
 
 		return false;
