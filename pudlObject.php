@@ -718,6 +718,8 @@ class	pudlObject
 	//COPY SOURCE ARRAY INTO OBJECT, BUT ONLY FOR A GIVEN SET OF KEYS
 	////////////////////////////////////////////////////////////////////////////
 	public function extend($source, $keys) {
+		if ($source instanceof pudlObject) $source = $source->raw();
+
 		if (!pudl_array($keys)) $keys = [$keys];
 
 		if (!is_array($keys)) {
