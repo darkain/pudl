@@ -24,13 +24,15 @@ class			pudlImportCsv
 	////////////////////////////////////////////////////////////////////////////
 	//PARSE THE CSV FILE
 	////////////////////////////////////////////////////////////////////////////
-	public function parse($file=false) {
-		$handle	= @fopen(realpath($file), 'rb');
+	public function parse($filename=false) {
+		$this->filename = $filename;
+
+		$handle	= @fopen(realpath($filename), 'rb');
 
 
 		//VERIFY FILE IS OKAY
 		if (!is_resource($handle)) {
-			throw new pudlException('CANNOT OPEN CSV FILE - ' . $file);
+			throw new pudlException('CANNOT OPEN CSV FILE - ' . $filename);
 			return;
 		}
 
@@ -73,19 +75,21 @@ class			pudlImportCsv
 	////////////////////////////////////////////////////////////////////////////
 	//PARSE THE CSV INSIDE OF ZIP FILE
 	////////////////////////////////////////////////////////////////////////////
-	public function parseZip($file) {
-		$zip	= @zip_open(realpath($file));
+	public function parseZip($filename) {
+		$this->filename = $filename;
+
+		$zip	= @zip_open(realpath($filename));
 
 		//VERIFY FILE IS OKAY
 		if (!is_resource($zip)) {
-			throw new pudlException('CANNOT OPEN ZIP FILE - ' . $file);
+			throw new pudlException('CANNOT OPEN ZIP FILE - ' . $filename);
 			return false;
 		}
 
 		//VERIFY WE CAN READ THE FIRST ENTRY
 		$entry	= zip_read($zip);
 		if (!is_resource($entry)) {
-			throw new pudlException('ZIP FILE IS EMPTY - ' . $file);
+			throw new pudlException('ZIP FILE IS EMPTY - ' . $filename);
 			return false;
 		}
 

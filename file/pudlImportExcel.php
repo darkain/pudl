@@ -24,10 +24,10 @@ class			pudlImportExcel
 	////////////////////////////////////////////////////////////////////////////
 	//PARSE THE XLSX/ZIP FILE
 	////////////////////////////////////////////////////////////////////////////
-	public function parse($file=false) {
+	public function parse($filename=false) {
 		//OPEN XLSX/ZIP FILE
-		if (!empty($file)) {
-			if (!$this->_openfile($file)) return false;
+		if (!empty($filename)) {
+			if (!$this->_openfile($filename)) return false;
 		}
 
 
@@ -65,6 +65,8 @@ class			pudlImportExcel
 	//OPEN ZIP FILE AND READ CONTENTS
 	////////////////////////////////////////////////////////////////////////////
 	protected function _openfile($filename) {
+		$this->filename = $filename;
+
 		$zip = zip_open(realpath($filename));
 
 		if (!is_resource($zip)) {
