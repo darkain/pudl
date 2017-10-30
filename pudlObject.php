@@ -900,16 +900,22 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//TRUE:		GET THE CURRENT SNAPSHOT
-	//FALSE:	TAKE A NEW SNAPSHOT
+	//TRUE:		TAKE A NEW SNAPSHOT
+	//FALSE:	GET THE CURRENT SNAPSHOT
 	//STRING:	GET ITEM FROM CURRENT SNAPSHOT
 	//INT:		GET INDEX FROM CURRENT SNAPSHOT
 	////////////////////////////////////////////////////////////////////////////
 	public function snapshot($snapshot=true) {
-		if ($snapshot === true)		return $this->__snapshot = $this->__array;
-		if ($snapshot === false)	return $this->__snapshot;
+		if ($snapshot === true) $this->__snapshot = $this->__array;
 
-		if (!is_string($snapshot)  &&  !is_int($snapshot))	return NULL;
+		if (is_bool($snapshot)) {
+			$class = get_class($this);
+			return new $class($this->__snapshot);
+		}
+
+		if (!is_string($snapshot)  &&  !is_int($snapshot)) {
+			return NULL;
+		}
 
 		return isset($this->__snapshot[$snapshot])
 			? $this->__snapshot[$snapshot]
