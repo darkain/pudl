@@ -132,6 +132,12 @@ trait pudlStatic {
 	//EXTRACT KEYS FROM A GIVEN ARRAY
 	////////////////////////////////////////////////////////////////////////////
 	public static function extract($array, $keys) {
+		if ($array instanceof pudlObject) {
+			$array = $array->raw();
+		} else if ($array instanceof pudlResult) {
+			$array = $array->rows();
+		}
+
 		$return = [];
 		if (!is_array($keys)) {
 			$keys = func_get_args();
