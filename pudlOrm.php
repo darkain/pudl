@@ -84,7 +84,14 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	public static function create($data=false, $update=false) {
 		global $db;
-		return static::get($db->insert(static::table, $data, $update));
+
+		return static::get(
+			$db->insert(
+				static::table,
+				$data,
+				($update === false) ? static::column : $update
+			)
+		);
 	}
 
 
