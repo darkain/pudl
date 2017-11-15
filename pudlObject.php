@@ -19,12 +19,12 @@ class	pudlObject
 		switch (true) {
 			case is_string($data)  &&  is_string($process):
 				$x = @explode($process, $data);
-				$x === false ? $this->clear() : $this->govern($x);
+				$x === false ? $this->free() : $this->govern($x);
 			break;
 
 			case $process === PUDL_CSV:
 				$x = @str_getcsv($data);
-				$x === [NULL] ? $this->clear() : $this->govern($x);
+				$x === [NULL] ? $this->free() : $this->govern($x);
 			break;
 
 			case !!$process:
@@ -42,7 +42,7 @@ class	pudlObject
 	////////////////////////////////////////////////////////////////////////////
 	//CLEARS ALL DATA WITHIN OBJECT - RESETTING BACK TO DEFAULTS
 	////////////////////////////////////////////////////////////////////////////
-	public function clear() {
+	public function free() {
 		$this->__array		= [];
 		$this->__snapshot	= false;
 		return $this;
@@ -55,7 +55,7 @@ class	pudlObject
 	//MANAGE THE GIVEN ARRAY
 	////////////////////////////////////////////////////////////////////////////
 	public function govern(&$data) {
-		$this->clear();
+		$this->free();
 
 		if (is_array($data)) {
 			$this->__array = &$data;
@@ -73,7 +73,7 @@ class	pudlObject
 	//CLEARS THE OBJECT'S ARRAY, AND THEN COPIES THE GIVEN ARRAY
 	////////////////////////////////////////////////////////////////////////////
 	public function copy($data) {
-		return $this->clear()->merge($data);
+		return $this->free()->merge($data);
 	}
 
 

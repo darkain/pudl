@@ -372,7 +372,7 @@ abstract class	pudlOrm
 
 		!empty($data)
 			? $this->govern($data[0])
-			: $this->clear();
+			: $this->free();
 	}
 
 
