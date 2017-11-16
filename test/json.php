@@ -343,3 +343,40 @@ $db->string()->update('table', [
 ], true);
 
 pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{}'), '$.parameter', 'value', '$.key', 1) WHERE (1)");
+
+
+
+
+
+$db->string()->update('table', [
+	'column' => [
+		'key1' => 'value1',
+		'key2' => 'value2',
+	],
+], true);
+
+pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{}'),'$.key1','value1','$.key2','value2') WHERE (1)");
+
+
+
+
+
+$db->string()->update('table', [
+	'column' => [
+		'key1' => ['value1', 'value2'],
+	],
+], true);
+
+pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{}'),'$.key1','[\\\"value1\\\",\\\"value2\\\"]') WHERE (1)");
+
+
+
+
+
+$db->string()->update('table', [
+	'column' => [
+		'key1' => ['sub1'=>['value1', 'value2']],
+	],
+], true);
+
+pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{}'),'$.key1','{\\\"sub1\\\":[\\\"value1\\\",\\\"value2\\\"]}') WHERE (1)");

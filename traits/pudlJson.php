@@ -123,7 +123,7 @@ trait pudlJson {
 		array_shift($args);
 		$return	= [static::_json_column($column)];
 
-		if ((count($args) === 1)  &&  pudl_array($args[0])) {
+		if ((count($args) === 1)  &&  isset($args[0])  &&  pudl_array($args[0])) {
 			foreach ($args[0] as $key => $value) {
 				$return[] = static::_json_path($key);
 				$return[] = $value;

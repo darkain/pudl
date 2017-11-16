@@ -734,8 +734,8 @@ trait pudlQuery {
 			$query .= $this->identifier($column) . '=';
 
 			if ($value instanceof pudlFunction  &&  isset($value->__INCREMENT)) {
-				$query .= $this->identifier($column);
-				$query .= '+' . $this->_value(reset($value->__INCREMENT));
+				$query	.= $this->identifier($column);
+				$query	.= '+' . $this->_value(reset($value->__INCREMENT));
 
 			} else if ($value instanceof pudlAppendSet) {
 				$query .= 'CONCAT_WS(\',\', ' .
@@ -743,7 +743,7 @@ trait pudlQuery {
 					$this->setEscape($this->_value($value->value)) . ')';
 
 			} else if ($value instanceof pudlStringResult) {
-				$query .= '(' . (string)$value . ')';
+				$query	.= '(' . (string)$value . ')';
 
 			} else if ($value instanceof pudlRemoveSet) {
 				$query	.= 'TRIM(BOTH \',\' FROM REPLACE(CONCAT(\',\', '
@@ -752,11 +752,21 @@ trait pudlQuery {
 						.  $this->setEscape($this->_value($value->value, false))
 						.  ',\', \',\'))';
 
-			} else if (pudl_array($value)) {
-				$query .= $this->_value($this->jsonEncode($value));
+			} else if (pudl_array($value)  &&  count($value)) {
+				$query	.= 'JSON_SET(';
+				$query	.= $this->_value($this->_json_column($column));
+				foreach ($value as $json_path => $json_value) {
+					$query .= ",'" . $this->_json_path($json_path) . "',";
+					$query .= $this->_value(
+						is_string($json_value)
+							? $json_value
+							: $this->jsonEncode($json_value)
+					);
+				}
+				$query	.= ')';
 
 			} else {
-				$query .= $this->_value($value);
+				$query	.= $this->_value($value);
 			}
 		}
 
