@@ -17,7 +17,8 @@ class		pudlCollection
 	//CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
 	public function __construct($classname, $list=NULL) {
-		$this->classname = $classname;
+		$this->classname	= $classname;
+		$this->first		= true;
 
 		if ($list instanceof pudlResult) {
 			$list = $list->complete();
@@ -39,7 +40,32 @@ class		pudlCollection
 	//INVOKE, ALIAS FOR NEXT ITEM IN COLLECTION. EASY WAY TO WALK THE LIST
 	////////////////////////////////////////////////////////////////////////////
 	public function __invoke() {
-		return $this->next();
+		if (!$this->first) return $this->next();
+
+		$this->first = false;
+		return $this->current();
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//RESET INTERNAL POINTER TO FIRST OBJECT IN COLLECTION
+	////////////////////////////////////////////////////////////////////////////
+	public function rewind() {
+		$this->first = true;
+		return pudlObject::rewind();
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//MOVE INTERNAL POINTER TO SPECIFIC ITEM WITHIN COLLECTION
+	////////////////////////////////////////////////////////////////////////////
+	public function seek($row) {
+		if (!$row) $this->first = true;
+		return pudlObject::seek($row);
 	}
 
 
@@ -134,5 +160,6 @@ class		pudlCollection
 	//PRIVATE MEMBER VARIABLES
 	////////////////////////////////////////////////////////////////////////////
 	private $classname;
+	private $first;
 
 }
