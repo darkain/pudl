@@ -2,6 +2,9 @@
 
 
 function pudl_array($item) {
+	//	if ($item instanceof pudlCollection) return false;
+	//TODO:	this "if" statement is used in another variation of this function.
+	//		research to see if it should be included here, too!
 	return is_array($item) || ($item instanceof ArrayAccess);
 }
 
