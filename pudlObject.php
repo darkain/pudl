@@ -85,6 +85,7 @@ class	pudlObject
 	////////////////////////////////////////////////////////////////////////////
 	public function merge($array) {
 		if ($array instanceof pudlObject) $array = $array->raw();
+		if ($array instanceof pudlResult) $array = $array->complete();
 		if (empty($array)  ||  !pudl_array($array)) return $this;
 		$this->__array = array_merge($this->__array, $array);
 		return $this;
