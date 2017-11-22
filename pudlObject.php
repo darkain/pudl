@@ -700,7 +700,7 @@ class	pudlObject
 	public function extract($keys) {
 		$return = [];
 
-		if (!is_array($keys)) $keys = func_get_args();
+		if (!pudl_array($keys)) $keys = func_get_args();
 
 		foreach ($keys as $key => $value) {
 			if (!is_string($key)) $key = $value;
