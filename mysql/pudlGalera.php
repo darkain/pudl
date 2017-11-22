@@ -272,7 +272,7 @@ class pudlGalera extends pudlMySqli {
 		$list	= @shm_get_var($shm, $this->shmkey);
 		$change	= false;
 
-		if (!empty($list)  &&  is_array($list)) {
+		if (!empty($list)  &&  pudl_array($list)) {
 			foreach ($servers as $index => $item) {
 				if (empty($list[$item])) continue;
 				if (($this->time() - $list[$item]) < 10) {

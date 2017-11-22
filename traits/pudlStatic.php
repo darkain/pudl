@@ -102,7 +102,7 @@ trait pudlStatic {
 	//FIND IN SET
 	////////////////////////////////////////////////////////////////////////////
 	public static function find($column, $values) {
-		if (!is_array($values)) $values = explode(',', $values);
+		if (!pudl_array($values)) $values = explode(',', $values);
 		$return = [];
 		foreach ($values as $item) {
 			$return[] = static::find_in_set($item, static::column($column));
@@ -117,7 +117,7 @@ trait pudlStatic {
 	//-NOT- FIND IN SET
 	////////////////////////////////////////////////////////////////////////////
 	public static function notFind($column, $values) {
-		if (!is_array($values)) $values = explode(',', $values);
+		if (!pudl_array($values)) $values = explode(',', $values);
 		$return = [];
 		foreach ($values as $item) {
 			$return[] = static::{'!find_in_set'}($item, static::column($column));
@@ -139,7 +139,7 @@ trait pudlStatic {
 		}
 
 		$return = [];
-		if (!is_array($keys)) {
+		if (!pudl_array($keys)) {
 			$keys = func_get_args();
 			array_shift($keys);
 		}

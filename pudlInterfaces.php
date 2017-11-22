@@ -2,8 +2,7 @@
 
 
 function pudl_array($item) {
-	if (is_array($item)) return true;
-	return ($item instanceof ArrayAccess);
+	return is_array($item) || ($item instanceof ArrayAccess);
 }
 
 

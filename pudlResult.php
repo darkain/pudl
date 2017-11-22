@@ -73,7 +73,7 @@ abstract class	pudlResult
 
 	public function valid() {
 		if ($this->row === false) $this();
-		return is_array($this->data);
+		return pudl_array($this->data);
 	}
 
 
@@ -176,7 +176,7 @@ abstract class	pudlResult
 			foreach ($keys as $count => $key) {
 				if ($count === count($keys)-1) break;
 				if (!isset($node[$key])) $node[$key] = [];
-				if (!is_array($node[$key])) $node[$key] = [$node[$key]];
+				if (!pudl_array($node[$key])) $node[$key] = [$node[$key]];
 				$node = &$node[$key];
 			}
 

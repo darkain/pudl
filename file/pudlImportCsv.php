@@ -38,7 +38,7 @@ class			pudlImportCsv
 
 
 		//PARSE HEADERS
-		if (is_array($this->translate)) {
+		if (pudl_array($this->translate)) {
 			$this->header = $this->translate;
 		} else if ($this->translate !== true) {
 			$this->header = fgetcsv($handle);
@@ -113,7 +113,7 @@ class			pudlImportCsv
 
 
 		//PARSE HEADERS
-		if (is_array($this->translate)) {
+		if (pudl_array($this->translate)) {
 			$this->header = $this->translate;
 		} else if ($this->translate !== true  &&  count($rows)) {
 			$this->header = str_getcsv(reset($rows));

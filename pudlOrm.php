@@ -149,7 +149,7 @@ abstract class	pudlOrm
 		$data	= call_user_func_array([$db,'selex'], $args)->complete();
 		$class	= static::classname;
 
-		return is_array($data) ? new $class(reset($data)) : $data;
+		return pudl_array($data) ? new $class(reset($data)) : $data;
 	}
 
 
@@ -237,7 +237,7 @@ abstract class	pudlOrm
 			}
 		}
 
-		if (is_array($item)) {
+		if (pudl_array($item)) {
 			if (empty($item[static::column])) return false;
 			$item = $item[static::column];
 
@@ -346,7 +346,7 @@ abstract class	pudlOrm
 	protected function fetch($id) {
 		global $db;
 
-		if (is_array($id)) {
+		if (pudl_array($id)) {
 			$id = !empty($id[static::column])
 				? $id[static::column]
 				: 0;

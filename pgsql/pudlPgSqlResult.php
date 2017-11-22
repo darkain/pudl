@@ -23,7 +23,7 @@ class pudlPgSqlResult extends pudlResult {
 		if (!$this->result) return false;
 		$data = @pg_fetch_row($this->result, $this->row);
 
-		return (is_array($data)  &&  array_key_exists($column, $data))
+		return (pudl_array($data)  &&  array_key_exists($column, $data))
 			? $data[$column] : false;
 	}
 

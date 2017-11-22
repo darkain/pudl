@@ -341,7 +341,7 @@ abstract	class	pudl {
 		foreach ($table as $key => $value) {
 			if (in_array($key, ['on', 'clause', 'using'], true)) continue;
 
-			if (is_array($value)) {
+			if (pudl_array($value)) {
 				if (is_int($key)) $key = '';
 				$return		+= $this->listFields($value, $key);
 

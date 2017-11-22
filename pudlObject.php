@@ -760,7 +760,7 @@ class	pudlObject
 	//OTHER		CHECK TO SEE IF THE KEY'S VALUE === GIVEN VALUE
 	////////////////////////////////////////////////////////////////////////////
 	public function has($key, $value=true) {
-		if (is_array($value)) {
+		if (pudl_array($value)) {
 			if (!isset($value[$key])) return false;
 			$value = $value[$key];
 

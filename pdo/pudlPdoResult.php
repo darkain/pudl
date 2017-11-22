@@ -22,7 +22,7 @@ class pudlPdoResult extends pudlResult {
 
 		$data = $this->result->fetch(PDO::FETCH_BOTH, PDO::FETCH_ORI_ABS, $row);
 
-		return (is_array($data)  &&  array_key_exists($column, $data))
+		return (pudl_array($data)  &&  array_key_exists($column, $data))
 			? $data[$column] : false;
 	}
 

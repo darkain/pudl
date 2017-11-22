@@ -22,7 +22,7 @@ class pudlMySqliResult extends pudlResult {
 		$this->seek($row);
 		$data = $this->row(PUDL_NUMBER);
 
-		return (is_array($data)  &&  array_key_exists($column, $data))
+		return (pudl_array($data)  &&  array_key_exists($column, $data))
 			? $data[$column] : false;
 	}
 
