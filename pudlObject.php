@@ -720,9 +720,7 @@ class	pudlObject
 	public function extend($source, $keys) {
 		if ($source instanceof pudlObject) $source = $source->raw();
 
-		if (!pudl_array($keys)) $keys = [$keys];
-
-		if (!is_array($keys)) {
+		if (!pudl_array($keys)) {
 			$keys = func_get_args();
 			array_shift($keys);
 		}
