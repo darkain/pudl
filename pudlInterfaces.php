@@ -75,7 +75,7 @@ if (!function_exists('array_diff_assoc_recursive')) {
 		$difference = [];
 		foreach($array1 as $key => $value) {
 			if(pudl_array($value)) {
-				if(!isset($array2[$key])  ||  !is_array($array2[$key])) {
+				if(!isset($array2[$key])  ||  !pudl_array($array2[$key])) {
 					$difference[$key] = $value;
 				} else {
 					$new_diff = array_diff_assoc_recursive($value, $array2[$key]);
