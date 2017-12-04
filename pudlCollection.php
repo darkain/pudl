@@ -146,6 +146,25 @@ class		pudlCollection
 
 
 	////////////////////////////////////////////////////////////////////////////
+	//PULL ALL INSTANCES OF A PARTICULAR COLUMN
+	////////////////////////////////////////////////////////////////////////////
+	public function column($column) {
+		$return	= [];
+		$list	= $this->raw();
+
+		foreach ($list as $key => &$item) {
+			if (!($item instanceof pudlOrm)) continue;
+			if (empty($item[$column])) continue;
+			$return[$key] = $item[$column];
+		} unset($item);
+
+		return $return;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
 	//RETURNS THE INNER ITERATOR FOR THE CURRENT ENTRY.
 	//http://php.net/manual/en/outeriterator.getinneriterator.php
 	////////////////////////////////////////////////////////////////////////////
