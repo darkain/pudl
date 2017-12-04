@@ -16,6 +16,7 @@ function pudlExportExcel(pudlData $result, $filename, $headers=false) {
 	//ADD XML FILES UNMODIFIED
 	$zip->addFile(__DIR__.'/content_type.xml',	'[Content_Types].xml');
 	$zip->addFile(__DIR__.'/rels.xml',			'_rels/.rels');
+	$zip->addFile(__DIR__.'/workbook.xml',		'xl/workbook.xml');
 	$zip->addFile(__DIR__.'/workbook.xml.rels',	'xl/_rels/workbook.xml.rels');
 	$zip->addFile(__DIR__.'/styles.xml',		'xl/styles.xml');
 
@@ -23,12 +24,6 @@ function pudlExportExcel(pudlData $result, $filename, $headers=false) {
 	$zip->addFromString('docProps/app.xml', str_replace(
 		'[FILENAME]', $filename,
 		file_get_contents(__DIR__.'/app.xml')
-	));
-
-	//ADD XML AND REPLACE FILENAME
-	$zip->addFromString('xl/workbook.xml', str_replace(
-		'[FILENAME]', $filename,
-		file_get_contents(__DIR__.'/workbook.xml')
 	));
 
 	//ADD XML AND REPLACE DATE/TIME
