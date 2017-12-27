@@ -44,7 +44,7 @@ trait pudlInsert {
 
 			if ($update === true) $update = $data;
 
-			if (is_String($update)  &&  strpos($update,'=') === false) {
+			if (is_string($update)  &&  strpos($update,'=') === false) {
 				$update = static::column(
 					$update,
 					static::last_insert_id(
@@ -66,8 +66,14 @@ trait pudlInsert {
 
 
 
-	public function upsert($table, $data, $prefix=true) {
-		return $this->insert($table, $data, true, $prefix);
+	public function upsert($table, $data, $idcol=false) {
+		$update = $data;
+		if (!is_bool($idcol)) {
+			$update[$idcol] = pudl::last_insert_id(
+				pudl::column($idcol)
+			);
+		}
+		return $this->insert($table, $data, $update);
 	}
 
 
@@ -89,12 +95,11 @@ trait pudlInsert {
 
 
 
-	public function upsertExtract($table, $data, $prefix=true) {
-		return $this->insert(
+	public function upsertExtract($table, $data, $idcol=false) {
+		return $this->upsert(
 			$table,
 			$this->extractColumns($table, $data, false),
-			true,
-			$prefix
+			$idcol
 		);
 	}
 

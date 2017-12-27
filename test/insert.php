@@ -248,3 +248,17 @@ pudlTest('INSERT INTO `table` (`b`, `c`) VALUES (2, 3)');
 //INSERT statement - removing table prefix
 $db->string()->insert('table', ['prefix.column'=>'test']);
 pudlTest("INSERT INTO `table` (`column`) VALUES ('test')");
+
+
+
+
+//UPSERT statement
+$db->string()->upsert('table', ['column'=>'value']);
+pudlTest("INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE KEY UPDATE `column`='value'");
+
+
+
+
+//UPSERT statement
+$db->string()->upsert('table', ['column'=>'value'], 'id');
+pudlTest("INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE KEY UPDATE `column`='value', `id`=LAST_INSERT_ID(`id`)");
