@@ -255,6 +255,13 @@ pudlTest("SELECT * FROM `table` WHERE (`column1` LIKE CONCAT('%',X'65','%'))");
 
 
 
+//SELECT statement with a LIKE clause (left and right search)
+$db->string()->select('*', 'table', [pudl::like(pudl::column('column'), 'value')]);
+pudlTest("SELECT * FROM `table` WHERE (`column` LIKE '%value%')");
+
+
+
+
 //SELECT statement where column isnt equal to NULL
 $db->string()->select('*', 'table', ['column'=>pudl::eq(NULL)]);
 pudlTest("SELECT * FROM `table` WHERE (`column` IS NULL)");

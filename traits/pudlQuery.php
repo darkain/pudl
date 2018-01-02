@@ -473,8 +473,6 @@ trait pudlQuery {
 					$query .= '(' . $this->_inSet($value->value) . ')';
 					continue;
 				}
-
-				if (!($value instanceof pudlBetween)) $value = $value->value;
 			}
 
 			$new = $this->_value($value, is_string($key), is_string($key));
