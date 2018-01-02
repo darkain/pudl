@@ -47,7 +47,12 @@ class			pudlSession
 		);
 
 		//Start the session
-		session_start();
+		if (!headers_sent()) {
+			session_start();
+		} else {
+			global $_SESSION;
+			$_SESSION = [];
+		}
 	}
 
 
@@ -197,6 +202,8 @@ class			pudlSession
 	//SET OR GET USER INFORMATION
 	////////////////////////////////////////////////////////////////////////////
 	public function user($user=false, $name=false) {
+		global $_SESSION;
+
 		if ($user === false) return $this->user;
 
 		$this->user = (int) (pudl_array($user) ? $user['user_id'] : $user);
