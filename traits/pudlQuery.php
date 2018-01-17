@@ -755,11 +755,15 @@ trait pudlQuery {
 				$query	.= $this->_value($this->_json_column($column));
 				foreach ($value as $json_path => $json_value) {
 					$query .= ",'" . $this->_json_path($json_path) . "',";
-					$query .= $this->_value(
-						is_string($json_value)
-							? $json_value
-							: $this->jsonEncode($json_value)
-					);
+					if (is_string($json_value)) {
+						$query .= $this->_value($json_value);
+					} else {
+						$query .= 'JSON_COMPACT(';
+						$query .= $this->_value(
+							static::jsonEncode($json_value)
+						);
+						$query .= ')';
+					}
 				}
 				$query	.= ')';
 

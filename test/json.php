@@ -367,7 +367,7 @@ $db->string()->update('table', [
 	],
 ], true);
 
-pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{}'),'$.key1','[\\\"value1\\\",\\\"value2\\\"]') WHERE (1)");
+pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{}'),'$.key1',JSON_COMPACT('[\\\"value1\\\",\\\"value2\\\"]')) WHERE (1)");
 
 
 
@@ -379,7 +379,7 @@ $db->string()->update('table', [
 	],
 ], true);
 
-pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{}'),'$.key1','{\\\"sub1\\\":[\\\"value1\\\",\\\"value2\\\"]}') WHERE (1)");
+pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{}'),'$.key1',JSON_COMPACT('{\\\"sub1\\\":[\\\"value1\\\",\\\"value2\\\"]}')) WHERE (1)");
 
 
 

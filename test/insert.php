@@ -262,3 +262,17 @@ pudlTest("INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE KEY UPDAT
 //UPSERT statement
 $db->string()->upsert('table', ['column'=>'value'], 'id');
 pudlTest("INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE KEY UPDATE `column`='value', `id`=LAST_INSERT_ID(`id`)");
+
+
+
+
+$db->string()->upsert('table', ['column'=>['param'=>[1,2,3]]]);
+pudlTest("INSERT INTO `table` (`column`) VALUES ('{\\\"param\\\":[1,2,3]}') ON DUPLICATE KEY UPDATE `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{}'),'$.param',JSON_COMPACT('[1,2,3]'))");
+
+
+
+//TODO: THIS IS BUGGED
+//THIS SHOULD CREATE: JSON_COMPACT('[1,2,3]')
+//NOT: JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{}'),'$.0',1,'$.1',2,'$.2',3)
+//$db->string()->upsert('table', ['column'=>[1,2,3]]);
+//pudlTest('sss');

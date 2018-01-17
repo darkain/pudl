@@ -150,3 +150,15 @@ $db->string()->updateCount('parent', 'column1', [
 	'column2' => 'value',
 ], 'child');
 pudlTest("UPDATE `parent` SET `column1`=(SELECT COUNT(*) FROM `child` WHERE (`column2`='value') LIMIT 1) WHERE (`column2`='value')");
+
+
+
+$db->string()->update('table', [
+	'column' => ['param' => [
+		'one',
+		'two',
+		'three'
+	]]
+], true);
+
+pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{}'),'$.param',JSON_COMPACT('[\\\"one\\\",\\\"two\\\",\\\"three\\\"]')) WHERE (1)");
