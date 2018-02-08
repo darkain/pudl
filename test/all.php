@@ -30,9 +30,11 @@ function pudlTest($expected) {
 	if (is_string($expected)	&&	$expected === $db->query()) return;
 	if (is_bool($expected)		&&	$expected) return;
 	$trace = debug_backtrace()[0];
+	echo "\n\n";
 	echo "ERROR: FAILED!!\n\n";
-	echo "FILE: $trace[file]\n";
-	echo "LINE: $trace[line]\n\n";
+	echo "PHP:\t" . PHP_VERSION . "\n";
+	echo "FILE:\t$trace[file]\n";
+	echo "LINE:\t$trace[line]\n\n";
 	echo "EXPECTED:\n";
 	echo "'" . (is_bool($expected) ? 'TRUE' : $expected) . "'\n\n";
 	echo "QUERY:\n";
@@ -44,13 +46,16 @@ function pudlTest($expected) {
 function pudlError($exception, $expected) {
 	if ($exception->getMessage() === $expected) return;
 	$trace = debug_backtrace()[0];
+	echo "\n\n";
 	echo "ERROR: FAILED!!\n\n";
-	echo "FILE: $trace[file]\n";
-	echo "LINE: $trace[line]\n\n";
+	echo "PHP:\t" . PHP_VERSION . "\n";
+	echo "FILE:\t$trace[file]\n";
+	echo "LINE:\t$trace[line]\n\n";
 	echo "EXPECTED:\n";
 	echo "'" . $expected . "'\n\n";
 	echo "ERROR:\n";
 	echo "'" . $exception->getMessage() . "'\n\n";
+	echo "\n\n";
 	exit(1);
 }
 
@@ -58,15 +63,16 @@ function pudlError($exception, $expected) {
 function pudlUnit($result, $expected=true) {
 	if ($result === $expected) return;
 	$trace = debug_backtrace()[0];
+	echo "\n\n";
 	echo "ERROR: FAILED!!\n\n";
-	echo "FILE: $trace[file]\n";
-	echo "LINE: $trace[line]\n\n";
+	echo "PHP:\t" . PHP_VERSION . "\n";
+	echo "FILE:\t$trace[file]\n";
+	echo "LINE:\t$trace[line]\n\n";
 	echo "EXPECTED:\n";
 	var_dump($expected);
 	echo "\n\n";
 	echo "RESULT:\n";
 	var_dump($result);
-	echo "\n\n";
 	exit(1);
 }
 

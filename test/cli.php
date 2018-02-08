@@ -87,9 +87,13 @@ $db->on('warning', function($action, $db, $value, $clause) use (&$warnings) {
 
 require('all.php');
 
+
+echo "PHP:\t" . PHP_VERSION . "\n";
+
 if ($warnings) {
 	echo "Warnings were found! Fix them!\n";
 	exit(1);
 }
+
 
 echo "ALL GOOD!!\n";
