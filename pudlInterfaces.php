@@ -2,9 +2,6 @@
 
 
 function pudl_array($item) {
-	//	if ($item instanceof pudlCollection) return false;
-	//TODO:	this "if" statement is used in another variation of this function.
-	//		research to see if it should be included here, too!
 	return is_array($item) || ($item instanceof ArrayAccess);
 }
 
@@ -26,43 +23,6 @@ interface pudlId {
 
 interface pudlValue {
 	public function pudlValue($db, $quote=true);
-}
-
-
-
-
-////////////////////////////////////////////////////////////////////////////////
-//Used by both pudlResult and pudlObject
-//http://php.net/manual/en/class.countable.php
-//http://php.net/manual/en/class.seekableiterator.php
-////////////////////////////////////////////////////////////////////////////////
-interface	pudlData
-	extends
-			Countable,
-			SeekableIterator {
-
-	//Countable
-	public function count();
-
-	//SeekableIterator
-	public function seek($position);
-
-	//Iterator
-	public function current();
-	public function key();
-	public function next();
-	public function rewind();
-	public function valid();
-
-	//pudlData
-	public function fields();
-	public function getField($column);
-	public function listFields();
-	public function row($type=PUDL_ARRAY);
-	public function free();
-
-	//JSON
-	public function json();
 }
 
 
