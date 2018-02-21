@@ -6,14 +6,21 @@ INT
 	10
 	-1
 	-10
+	PHP_INT_MIN
+	PHP_INT_MAX
 
 FLOAT
 	0.0
 	1.2
 	-1.2
+	1e50
+	-1e50
 	INF
 	-INF
 	NAN
+	PHP_FLOAT_EPSILON
+	PHP_FLOAT_MIN
+	PHP_FLOAT_MAX
 
 BOOL
 	TRUE
@@ -26,11 +33,14 @@ STRING
 	' TEST '
 	'KEY.VALUE'
 	' KEY . VALUE '
+	' `KEY` '
 
 NULL
 
 ARRAY
 
-OBJECT ARRAY
+OBJECT
+
+OBJECT with ArrayAccess
 
 RESOURCE (always throw exceptions)
