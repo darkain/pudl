@@ -78,9 +78,12 @@ function pudlUnit($result, $expected=true) {
 
 
 //PHP 5.x COMPATIBILITY
-if (!defined('PHP_INT_MIN')) {
-	define('PHP_INT_MIN', ~PHP_INT_MAX);
-}
+if (!defined('PHP_INT_MIN'))		define('PHP_INT_MIN',		~PHP_INT_MAX);
+if (!defined('PHP_FLOAT_MIN'))		define('PHP_FLOAT_MIN',		2.2250738585072E-308);
+if (!defined('PHP_FLOAT_MAX'))		define('PHP_FLOAT_MAX',		1.7976931348623E+308);
+if (!defined('PHP_FLOAT_EPSILON'))	define('PHP_FLOAT_EPSILON',	2.2204460492503E-16);
+
+
 
 
 //BASIC QUERIES, NOT USING THE CUSTOM GENERATOR
