@@ -31,9 +31,14 @@ STRING
 	'0'
 	'TEST'
 	' TEST '
+	' TE`ST '
+	' TE"ST '
+	" TE'ST "
 	'KEY.VALUE'
 	' KEY . VALUE '
-	' `KEY` '
+	' `KEY` . VALUE '
+	' KEY . `VALUE` '
+	' `KEY` . `VALUE` '
 
 NULL
 

@@ -15,8 +15,50 @@ pudlTest("INSERT INTO `table` () VALUES ()");
 
 
 //INSERT statement - using associative array - string
+$db->string()->insert('table', ['column'=>'']);
+pudlTest("INSERT INTO `table` (`column`) VALUES ('')");
+
+
+
+
+//INSERT statement - using associative array - string
+$db->string()->insert('table', ['column'=>'0']);
+pudlTest("INSERT INTO `table` (`column`) VALUES ('0')");
+
+
+
+
+//INSERT statement - using associative array - string
 $db->string()->insert('table', ['column'=>'value']);
 pudlTest("INSERT INTO `table` (`column`) VALUES ('value')");
+
+
+
+
+//INSERT statement - using associative array - string
+$db->string()->insert('table', ['column'=>' value ']);
+pudlTest("INSERT INTO `table` (`column`) VALUES (' value ')");
+
+
+
+
+//INSERT statement - using associative array - string
+$db->string()->insert('table', ['column'=>' `value` ']);
+pudlTest("INSERT INTO `table` (`column`) VALUES (' `value` ')");
+
+
+
+
+//INSERT statement - using associative array - string
+$db->string()->insert('table', ['column'=>' va"lue ']);
+pudlTest("INSERT INTO `table` (`column`) VALUES (' va\\\"lue ')");
+
+
+
+
+//INSERT statement - using associative array - string
+$db->string()->insert('table', ['column'=>" va'lue "]);
+pudlTest('INSERT INTO `table` (`column`) VALUES (\' va\\\'lue \')');
 
 
 
