@@ -29,6 +29,13 @@ pudlTest("UPDATE `table` SET `column`=1.1 WHERE (`id`='value')");
 
 
 //UPDATE statement
+$db->string()->updateId('table', ['column'=>NULL], 'id', 'value');
+pudlTest("UPDATE `table` SET `column`=NULL WHERE (`id`='value')");
+
+
+
+
+//UPDATE statement
 $db->string()->updateId('table', ['column'=>NAN], 'id', 'value');
 pudlTest("UPDATE `table` SET `column`=NULL WHERE (`id`='value')");
 
@@ -153,6 +160,7 @@ pudlTest("UPDATE `parent` SET `column1`=(SELECT COUNT(*) FROM `child` WHERE (`co
 
 
 
+
 $db->string()->update('table', [
 	'column' => ['param' => [
 		'one',
@@ -162,3 +170,12 @@ $db->string()->update('table', [
 ], true);
 
 pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{}'),'$.param',JSON_COMPACT('[\\\"one\\\",\\\"two\\\",\\\"three\\\"]')) WHERE (1)");
+
+
+
+
+$db->string()->update('table', [
+	'column' => []
+], true);
+
+pudlTest("UPDATE `table` SET `column`=NULL WHERE (1)");

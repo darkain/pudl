@@ -767,6 +767,9 @@ trait pudlQuery {
 				}
 				$query	.= ')';
 
+			} else if (is_array($value)) {
+				$query	.= 'NULL';
+
 			} else {
 				$query	.= $this->_value($value);
 			}
