@@ -127,6 +127,10 @@ class pudlMySqliResult extends pudlResult {
 		throw new pudlException('Serious PHP Processor Error');
 	}
 
+	public function data_seek() {
+		throw new pudlException('Serious PHP Processor Error');
+	}
+
 
 
 
