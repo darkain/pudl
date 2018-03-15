@@ -400,3 +400,15 @@ $db->string()->row('table',
 );
 
 pudlTest("SELECT * FROM `table` WHERE (JSON_VALUE(IFNULL(NULLIF(TRIM(`column`), ''), '{}'), '$.parameter')='value') LIMIT 1");
+
+
+
+
+
+$db->string()->update('table', [
+	'column' => [
+		'=key1.' => 'value',
+	],
+], true);
+
+pudlTest("UPDATE `table` SET `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{}'),'$.=key1\\\\.','value') WHERE (1)");

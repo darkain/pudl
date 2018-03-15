@@ -754,7 +754,7 @@ trait pudlQuery {
 				$query	.= 'JSON_SET(';
 				$query	.= $this->_value($this->_json_column($column));
 				foreach ($value as $json_path => $json_value) {
-					$query .= ",'" . $this->_json_path($json_path) . "',";
+					$query .= ",'$." . $this->jsonPathSafe($json_path) . "',";
 					if (is_string($json_value)) {
 						$query .= $this->_value($json_value);
 					} else {
