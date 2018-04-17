@@ -19,6 +19,7 @@ define('PUDL_CSV',			0x10);
 
 
 /* NOTE: HERE ARE THE NUMERICAL STATE VALUES FOR A GALERA CLUSTER LOCAL STATE
+http://galeracluster.com/documentation-webpages/nodestates.html#node-state-changes
 0 - No cluster state information available
 1 - Joining (requesting/receiving State Transfer) - node is joining the cluster
 2 - Desynced - node is the donor to another node joining the cluster
@@ -36,7 +37,8 @@ define('GALERA_RESYNCING',	0x06);
 
 
 
-/* http://galeracluster.com/documentation-webpages/mysqlwsrepoptions.html#wsrep-sync-wait
+/* NOTE: HERE ARE THE NUMERICAL VALUES FOR GALERA SYNC STATE
+http://galeracluster.com/documentation-webpages/mysqlwsrepoptions.html#wsrep-sync-wait
 0 - Disabled
 1 - Checks on READ statements, including SELECT, and BEGIN / START TRANSACTION
 2 - Checks made on UPDATE and DELETE statements
