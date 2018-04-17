@@ -237,9 +237,7 @@ class pudlGalera extends pudlMySqli {
 			$sync	= new pudlGalera([$this, 'server'=>[$server]]);
 			if ($sync->server() === false) continue;
 
-			$sync->wait()->query(
-				'SELECT * FROM information_schema.GLOBAL_VARIABLES LIMIT 1'
-			);
+			$sync->wait()->row('information_schema.SESSION_VARIABLES');
 		}
 		self::$die	= $die;
 		return $this;
