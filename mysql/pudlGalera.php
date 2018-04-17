@@ -234,7 +234,7 @@ class pudlGalera extends pudlMySqli {
 		foreach ($this->pool as $server) {
 			if ($server == $this->connected) continue;
 
-			$sync = new pudlGalera([$this, 'server'=>[$server]]);
+			$sync	= new pudlGalera([$this, 'server'=>[$server]]);
 			if ($sync->server() === false) continue;
 
 			$sync->wait()->query(
