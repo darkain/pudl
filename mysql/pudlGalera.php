@@ -221,10 +221,16 @@ class pudlGalera extends pudlMySqli {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// SET THE wsrep_sync_wait VARIABLE FOR THE NEXT STATEMENT
+	// SEE pudlConstants.php FOR LIST OF VALUES
+	////////////////////////////////////////////////////////////////////////////
 	public function wait($wait=true) {
 		$this->wait = ($wait === true) ? GALERA_ALL : (int)$wait;
 		return $this;
 	}
+
 
 
 
