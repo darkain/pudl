@@ -35,5 +35,23 @@ define('GALERA_DONOR',		0x05);
 define('GALERA_RESYNCING',	0x06);
 
 
+
+/* http://galeracluster.com/documentation-webpages/mysqlwsrepoptions.html#wsrep-sync-wait
+0 - Disabled
+1 - Checks on READ statements, including SELECT, and BEGIN / START TRANSACTION
+2 - Checks made on UPDATE and DELETE statements
+4 - Checks made on INSERT and REPLACE statements
+8 - Checks made on SHOW statements*/
+//define('GALERA_NONE',		0x00);
+define('GALERA_READ',		0x01);
+define('GALERA_UPDATE',		0x02);
+define('GALERA_INSERT',		0x04);
+define('GALERA_WRITE',		0x06);
+define('GALERA_READWRITE',	0x07);
+define('GALERA_SHOW',		0x08);
+define('GALERA_ALL',		0xFF);
+
+
+
 //PudlException Codes
 define('PUDL_X_CONNECTION',	0x01);

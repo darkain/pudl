@@ -222,7 +222,7 @@ class pudlGalera extends pudlMySqli {
 
 
 	public function wait($wait=true) {
-		$this->wait = ($wait === true) ? 7 : (int)$wait;
+		$this->wait = ($wait === true) ? GALERA_ALL : (int)$wait;
 		return $this;
 	}
 
