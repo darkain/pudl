@@ -18,6 +18,9 @@ define('PUDL_END',			0x02);
 define('PUDL_CSV',			0x10);
 
 
+
+
+////////////////////////////////////////////////////////////////////////////////
 /* NOTE: HERE ARE THE NUMERICAL STATE VALUES FOR A GALERA CLUSTER LOCAL STATE
 http://galeracluster.com/documentation-webpages/nodestates.html#node-state-changes
 0 - No cluster state information available
@@ -27,6 +30,7 @@ http://galeracluster.com/documentation-webpages/nodestates.html#node-state-chang
 4 - Synced - node is synced with the cluster
 5 - Donor - node receives sync request from another node in the cluster
 6 - Resyncing - node completes sync request from another node in the cluster */
+////////////////////////////////////////////////////////////////////////////////
 define('GALERA_NONE',		0x00);
 define('GALERA_JOINING',	0x01);
 define('GALERA_DESYNCED',	0x02);
@@ -37,6 +41,8 @@ define('GALERA_RESYNCING',	0x06);
 
 
 
+
+////////////////////////////////////////////////////////////////////////////////
 /* NOTE: HERE ARE THE NUMERICAL VALUES FOR GALERA SYNC STATE
 http://galeracluster.com/documentation-webpages/mysqlwsrepoptions.html#wsrep-sync-wait
 0 - Disabled
@@ -44,6 +50,7 @@ http://galeracluster.com/documentation-webpages/mysqlwsrepoptions.html#wsrep-syn
 2 - Checks made on UPDATE and DELETE statements
 4 - Checks made on INSERT and REPLACE statements
 8 - Checks made on SHOW statements*/
+////////////////////////////////////////////////////////////////////////////////
 //define('GALERA_NONE',		0x00);
 define('GALERA_READ',		0x01);
 define('GALERA_UPDATE',		0x02);
@@ -55,5 +62,8 @@ define('GALERA_ALL',		0xFF);
 
 
 
+
+////////////////////////////////////////////////////////////////////////////////
 //PudlException Codes
+////////////////////////////////////////////////////////////////////////////////
 define('PUDL_X_CONNECTION',	0x01);
