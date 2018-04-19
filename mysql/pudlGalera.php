@@ -150,7 +150,7 @@ class pudlGalera extends pudlMySqli {
 
 
 	protected function process($query) {
-		if (!$this->connection) return new pudlMySqliResult(false, $this);
+		if (!$this->connection) return new pudlMySqliResult($this);
 
 		//PROPERLY HANDLE RE-ENTRY TO THIS FUNCTION
 		$wait = $this->wait;
@@ -160,12 +160,12 @@ class pudlGalera extends pudlMySqli {
 			@$this->connection->query(
 				'SET @wsrep_sync_wait_orig = @@wsrep_sync_wait'
 			);
-			if ($this->errno()) return new pudlMySqliResult(false, $this);
+			if ($this->errno()) return new pudlMySqliResult($this);
 
 			@$this->connection->query(
-				'SET SESSION wsrep_sync_wait = GREATEST(@wsrep_sync_wait_orig,'.$wait.')'
+				'SET SESSION wsrep_sync_wait = @wsrep_sync_wait_orig | ' . ((int)$wait)
 			);
-			if ($this->errno()) return new pudlMySqliResult(false, $this);
+			if ($this->errno()) return new pudlMySqliResult($this);
 		}
 
 
@@ -180,7 +180,7 @@ class pudlGalera extends pudlMySqli {
 			case 2006: // "MYSQL SERVER HAS GONE AWAY"
 			case 2013: // "LOST CONNECTION TO MYSQL SERVER DURING QUERY"
 			case 2062: // "READ TIMEOUT IS REACHED"
-				if (!$this->reconnect()) return new pudlMySqliResult(false, $this);
+				if (!$this->reconnect()) return new pudlMySqliResult($this);
 				if ($this->inTransaction()) {
 					$result = $this->retryTransaction();
 				} else {
@@ -216,7 +216,10 @@ class pudlGalera extends pudlMySqli {
 			);
 		}
 
-		return new pudlMySqliResult($result, $this);
+		return new pudlMySqliResult($this,
+			$result instanceof mysqli_result ?
+			$result : NULL
+		);
 	}
 
 

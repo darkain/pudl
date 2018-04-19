@@ -162,7 +162,7 @@ abstract	class	pudl {
 				if ($this->cache < 0) {
 					$this->stats['total']--;
 					$this->purge($hash);
-					$result = new pudlCacheResult([], $this, '');
+					$result = new pudlCacheResult($this, [], '');
 
 				} else {
 					if ($this->recache) {
@@ -176,12 +176,12 @@ abstract	class	pudl {
 						if (!$this->error()  &&  !$result->error()) {
 							$data = $result->complete();
 							$this->redis->set("pudl:$hash", $data, $this->cache);
-							$result = new pudlCacheResult($data, $this, $hash);
+							$result = new pudlCacheResult($this, $data, $hash);
 						}
 
 					} else if (!empty($data)  &&  pudl_array($data)) {
 						$this->stats['hits']++;
-						$result = new pudlCacheResult($data, $this, $hash);
+						$result = new pudlCacheResult($this, $data, $hash);
 					}
 				}
 			} catch (RedisException $e) {}

@@ -39,10 +39,10 @@ class pudlOdbc extends pudl {
 
 
 	protected function process($query) {
-		if (!$this->connection) return new pudlOdbcResult(false, $this);
+		if (!$this->connection) return new pudlOdbcResult($this);
 		$result = @odbc_exec($this->connection, $query);
 		$this->numrows = ($result !== false) ? @odbc_num_rows($result) : 0;
-		return new pudlOdbcResult($result, $this);
+		return new pudlOdbcResult($this, $result);
 	}
 
 

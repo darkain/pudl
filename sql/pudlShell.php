@@ -34,7 +34,7 @@ class pudlShell extends pudl {
 
 
 	protected function _process($json) {
-		$item = new pudlShellResult($json, $this);
+		$item = new pudlShellResult($this, $json);
 		$this->insertId	= $item->insertId();
 		$this->updated	= $item->updated();
 		$this->errno	= $item->error();

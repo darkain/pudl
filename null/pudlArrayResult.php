@@ -6,8 +6,8 @@
 
 class pudlArrayResult extends pudlResult {
 
-	public function __construct($db, $array) {
-		parent::__construct(false, $db);
+	public function __construct(pudl $db, $array) {
+		parent::__construct($db);
 
 		$this->array = $array;
 	}
