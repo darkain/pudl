@@ -4,8 +4,8 @@
 class pudlStringResult extends pudlResult implements pudlValue, pudlHelper {
 
 
-	public function __construct($db, $type) {
-		parent::__construct(false, $db);
+	public function __construct(pudl $db, $type) {
+		parent::__construct($db);
 		$this->type = $type;
 	}
 

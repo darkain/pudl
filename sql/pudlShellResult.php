@@ -3,7 +3,7 @@
 
 class pudlShellResult extends pudlResult {
 
-	public function __construct($result, $db) {
+	public function __construct(pudl $db, $result) {
 		parent::__construct($result, $db);
 
 		$this->row		= 0;

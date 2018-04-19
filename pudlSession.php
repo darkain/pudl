@@ -19,7 +19,9 @@ class			pudlSession
 	////////////////////////////////////////////////////////////////////////////
 	//CONSTRUCTOR, PASS IN SOME PUDL AND SESSION CONFIGURATIONS
 	////////////////////////////////////////////////////////////////////////////
-	public function __construct($database, $table, $name=false, $domain=false, $secure=false) {
+	public function __construct(pudl $database, $table, $name=false,
+		$domain=false, $secure=false) {
+
 		$this->db		= $database;
 		$this->table	= $table;
 		$this->name		= $name;

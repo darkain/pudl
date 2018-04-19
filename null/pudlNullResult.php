@@ -3,12 +3,6 @@
 
 class pudlNullResult extends pudlResult {
 
-	public function __construct($db) {
-		parent::__construct(false, $db);
-	}
-
-
-
 	public function free()						{}
 	public function cell($row=0, $column=0)		{ return false; }
 	public function count()						{ return 0; }

@@ -14,7 +14,7 @@ abstract class	pudlResult
 
 
 
-	public function __construct($result, $db) {
+	public function __construct(pudl $db, $result=false) {
 		$this->result	= $result;
 		$this->db		= $db;
 		$this->query	= $db->query();
@@ -241,7 +241,7 @@ abstract class	pudlResult
 
 
 	public function error() {
-		return $this->result === false;
+		return ($this->result === false)  ||  ($this->result === NULL);
 	}
 
 

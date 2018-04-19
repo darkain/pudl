@@ -63,10 +63,10 @@ class pudlPgSql extends pudl {
 
 
 	protected function process($query) {
-		if (!$this->connection) return new pudlPgSqlResult(false, $this);
+		if (!$this->connection) return new pudlPgSqlResult($this);
 		$result = @pg_query($this->connection, $query);
 		$this->numrows = ($result !== false) ? @pg_num_rows($result) : 0;
-		return new pudlPgSqlResult($result, $this);
+		return new pudlPgSqlResult($this, $result);
 	}
 
 

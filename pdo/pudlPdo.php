@@ -86,14 +86,14 @@ class pudlPdo extends pudl {
 
 
 	protected function process($query) {
-		if (!$this->connection) return new pudlPdoResult(false, $this);
+		if (!$this->connection) return new pudlPdoResult($this);
 		if (strtoupper(substr($query, 0, 7)) === 'SELECT ') {
 			$result = @$this->connection->query($query);
-			return new pudlPdoResult($result, $this);
+			return new pudlPdoResult($this, $result);
 		}
 
 		$this->updated = @$this->connection->exec($query);
-		return new pudlPdoResult(true, $this);
+		return new pudlPdoResult($this, true);
 	}
 
 
