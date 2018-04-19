@@ -58,7 +58,7 @@ define('GALERA_INSERT',		0x04);
 define('GALERA_WRITE',		0x06);
 define('GALERA_READWRITE',	0x07);
 define('GALERA_SHOW',		0x08);
-define('GALERA_ALL',		0xFF);
+define('GALERA_ALL',		0x0F);
 
 
 
