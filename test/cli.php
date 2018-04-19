@@ -14,6 +14,12 @@ date_default_timezone_set('UTC');
 
 
 
+//SET FLOATING POINT SERIALIZATION PRECISION TO A KNOWN VALUE
+ini_set('precision', 14);
+ini_set('serialize_precision', 14);
+
+
+
 //CHANGE TO THIS DIRECTORY FOR CONSISTENCY
 chdir(__DIR__);
 
