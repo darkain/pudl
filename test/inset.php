@@ -37,9 +37,9 @@ pudlTest("SELECT * FROM `table` WHERE (`column` NOT IN (1, 2, 3))");
 
 
 if (($db instanceof pudlNull)) {
-	$set = new pudlShellResult(json_encode(
+	$set = new pudlShellResult($db, json_encode(
 		['header'=>['column'], 'data'=>[[strtoupper(bin2hex('VALUE'))]]]
-	), $db);
+	));
 } else {
 	$set = $db->select([pudl::hex('VALUE')], false);
 }
@@ -50,9 +50,9 @@ pudlTest("SELECT * FROM `table` WHERE (`column` IN ('56414C5545'))");
 
 
 if (($db instanceof pudlNull)) {
-	$set = new pudlShellResult(json_encode(
+	$set = new pudlShellResult($db, json_encode(
 		['header'=>['column'], 'data'=>[[strtoupper(bin2hex('VALUE'))]]]
-	), $db);
+	));
 } else {
 	$set = $db->select([pudl::hex('VALUE')], false);
 }
