@@ -179,12 +179,12 @@ abstract class	pudlResult
 
 			foreach ($keys as $count => $key) {
 				if ($count === count($keys)-1) break;
-				if (!isset($node[$key])) $node[$key] = [];
+				if (!array_key_exists($key, $node)) $node[$key] = [];
 				if (!pudl_array($node[$key])) $node[$key] = [$node[$key]];
 				$node = &$node[$key];
 			}
 
-			if (!isset($node[$key])) {
+			if (!array_key_exists($key, $node)) {
 				$node[$key] = end($data);
 			} else {
 				$node[$key][] = end($data);

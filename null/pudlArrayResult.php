@@ -53,7 +53,7 @@ class pudlArrayResult extends pudlResult {
 	public function getField($column) {
 		$fields = $this->fields();
 		if ($fields === false) return false;
-		if (!isset($fields[$column])) return false;
+		if (!array_key_exists($column, $fields)) return false;
 		return $fields[$column];
 	}
 

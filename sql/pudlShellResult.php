@@ -35,7 +35,8 @@ class pudlShellResult extends pudlResult {
 
 	public function cell($row=0, $column=0) {
 		if (!$this->result) return false;
-		if (!isset($this->json['data'][$row][$column])) return false;
+		if (empty($this->json['data'][$row])) return false;
+		if (!array_key_exists($column, $this->json['data'][$row])) return false;
 		return $this->json['data'][$row][$column];
 	}
 

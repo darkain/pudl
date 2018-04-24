@@ -159,7 +159,7 @@ class	pudlObject
 	public function append($array) {
 		if (empty($array)  ||  !pudl_array($array)) return $this;
 		foreach($array as $key => $value) {
-			if (isset($this->__array[$key])) continue;
+			if (array_key_exists($key, $this->__array)) continue;
 			$this->__array[$key] = $value;
 		}
 		return $this;
@@ -174,7 +174,7 @@ class	pudlObject
 	public function appendInto(&$array) {
 		if (empty($array)  ||  !pudl_array($array)) return $this;
 		foreach($this->__array as $key => $value) {
-			if (isset($array[$key])) continue;
+			if (array_key_exists($key, $array)) continue;
 			$array[$key] = $value;
 		}
 		return $this;
@@ -920,7 +920,7 @@ class	pudlObject
 			return NULL;
 		}
 
-		return isset($this->__snapshot[$snapshot])
+		return array_key_exists($snapshot, $this->__snapshot)
 			? $this->__snapshot[$snapshot]
 			: NULL;
 	}
