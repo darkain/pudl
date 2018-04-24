@@ -35,29 +35,29 @@ trait pudlUpdate {
 
 
 
-	public function updateId($table, $data, $column, $id=false) {
-		return $this->update($table, $data, $this->_clauseId($column,$id));
+	public function updateId($table, $data, $column, $id=false, $limit=false, $offset=false) {
+		return $this->update($table, $data, $this->_clauseId($column,$id), $limit, $offset);
 	}
 
 
 
-	public function updateField($table, $field, $value, $clause) {
-		return $this->update($table, [$field=>$value], $clause);
+	public function updateField($table, $field, $value, $clause, $limit=false, $offset=false) {
+		return $this->update($table, [$field=>$value], $clause, $limit, $offset);
 	}
 
 
 
-	public function updateFieldId($table, $field, $value, $column, $id=false) {
-		return $this->update($table, [$field=>$value], $this->_clauseId($column,$id));
+	public function updateFieldId($table, $field, $value, $column, $id=false, $limit=false, $offset=false) {
+		return $this->update($table, [$field=>$value], $this->_clauseId($column,$id), $limit, $offset);
 	}
 
 
 
-	public function updateCount($table_update, $field, $clause_update, $table_select, $clause_select=true) {
+	public function updateCount($table_update, $field, $clause_update, $table_select, $clause_select=true, $limit=false, $offset=false) {
 		if ($clause_select === true) $clause_select = $clause_update;
 		return $this->update($table_update, [
 			$field => $this->string()->count($table_select, $clause_select)
-		], $clause_update);
+		], $clause_update, $limit, $offset);
 	}
 
 
@@ -94,8 +94,8 @@ trait pudlUpdate {
 
 
 
-	public function incrementId($table, $col, $column, $id=false, $amount=1) {
-		return $this->increment($table, $col, $this->_clauseId($column,$id), $amount);
+	public function incrementId($table, $col, $column, $id=false, $amount=1, $limit=false, $offset=false) {
+		return $this->increment($table, $col, $this->_clauseId($column,$id), $amount, $limit, $offset);
 	}
 
 }
