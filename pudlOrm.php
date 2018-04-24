@@ -267,7 +267,7 @@ abstract class	pudlOrm
 			}
 		}
 
-		return $db->updateId(static::table, $data, $this, 1);
+		return $db->updateId(static::table, $data, $this, false, 1);
 	}
 
 
@@ -312,7 +312,7 @@ abstract class	pudlOrm
 		}
 
 		return !empty($data)
-			? $db->updateId(static::table, $data, $this, 1)
+			? $db->updateId(static::table, $data, $this, false, 1)
 			: true;
 	}
 
@@ -324,7 +324,7 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	public function delete() {
 		global $db;
-		return $db->deleteId(static::table, $this, 1);
+		return $db->deleteId(static::table, $this, false, 1);
 	}
 
 
