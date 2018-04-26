@@ -87,11 +87,25 @@ class	pudlObject
 	//MERGE THE GIVEN ARRAY VALUES INTO THIS OBJECT
 	//http://php.net/manual/en/function.array-merge.php
 	////////////////////////////////////////////////////////////////////////////
-	public function merge($array) {
+	public function merge($array, $nulls=true) {
 		if ($array instanceof pudlObject) $array = $array->raw();
 		if ($array instanceof pudlResult) $array = $array->complete();
 		if (empty($array)  ||  !pudl_array($array)) return $this;
-		$this->__array = array_merge($this->__array, $array);
+
+		if ($nulls) {
+			$this->__array = array_merge($this->__array, $array);
+
+		} else {
+			foreach ($array as $key => $value) {
+				if (isset($this->__array[$key])) continue;
+				if (is_null($value)) continue;
+
+				is_int($key)
+					? ($this->__array[]		= $value)
+					: ($this->__array[$key]	= $value);
+			}
+		}
+
 		return $this;
 	}
 
@@ -115,10 +129,29 @@ class	pudlObject
 	////////////////////////////////////////////////////////////////////////////
 	//MERGE THIS OBJECT INTO THE GIVEN ARRAY
 	////////////////////////////////////////////////////////////////////////////
-	public function mergeInto(&$array) {
-		if ($array instanceof pudlObject) $array = $array->raw();
-		if (!pudl_array($array)) return $this;
-		$array = array_merge($array, $this->__array);
+	public function mergeInto(&$array, $nulls=true) {
+		if ($array instanceof pudlObject) {
+			$arr = &$array->raw();
+		} else if (pudl_array($array)) {
+			$arr = &$array;
+		} else {
+			return $this;
+		}
+
+		if ($nulls) {
+			$arr = array_merge($arr, $this->__array);
+
+		} else {
+			foreach ($this->__array as $key => $value) {
+				if (isset($arr[$key])) continue;
+				if (is_null($value)) continue;
+
+				is_int($key)
+					? ($arr[]		= $value)
+					: ($arr[$key]	= $value);
+			}
+		}
+
 		return $this;
 	}
 
