@@ -43,7 +43,7 @@ trait pudlRedis {
 		if (is_object($server)  &&  is_a($server, 'Redis')) {
 			$this->redis = $server;
 
-		} else if ($server === true) {
+		} else if (is_bool($server)  ||  $server === NULL) {
 			$this->redis = false;
 
 		} else if (class_exists('Redis')) {
