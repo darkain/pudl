@@ -106,7 +106,7 @@ abstract class	pudlOrm
 		if ($id instanceof getvar) $id = $get->id();
 		if ($id instanceof af_url) $id = $afurl->id;
 
-		if (tbx_array($id))	$id = $id[static::column];
+		if (pudl_array($id))	$id = $id[static::column];
 
 		if ($id === false  &&  $get instanceof getvar) {
 			$id = $get->id();
@@ -260,7 +260,7 @@ abstract class	pudlOrm
 	public function update($data) {
 		global $db;
 
-		if (tbx_array($data)) {
+		if (pudl_array($data)) {
 			foreach ($data as $key => $item) {
 				if (is_int($key)) continue;
 				$this->{$key} = $item;
