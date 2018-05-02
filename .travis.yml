@@ -9,11 +9,15 @@ php:
   - 7.0
   - 7.1
   - 7.2
+  - 7.3
   - nightly
   - hhvm
   - hhvm-3.12
   - hhvm-3.15
   - hhvm-3.18
+  - hhvm-3.21
+  - hhvm-3.24
+  - hhvm-3.27
   - hhvm-nightly
 
 before_script:
