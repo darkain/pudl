@@ -20,16 +20,16 @@ abstract class	pudlOrm
 		if (is_array($item)) {
 			$fetch ? $this->fetch($item)		: $this->govern($item);
 
-		} else if (is_a($item, 'af_url')) {
+		} else if ($item instanceof afUrl) {
 			$this->fetch($item->id);
 
-		} else if (is_a($item, 'getvar')) {
+		} else if ($item instanceof getvar) {
 			$this->fetch($item->id());
 
-		} else if (is_a($item, 'pudlResult')) {
+		} else if ($item instanceof pudlResult) {
 			$fetch ? $this->fetch($item())		: $this->copy($item());
 
-		} else if (is_a($item, 'Traversable')) {
+		} else if ($item instanceof Traversable) {
 			$fetch ? $this->fetch($item)		: $this->copy($item);
 
 		} else if ($fetch  &&  (is_int($item)  ||  ctype_digit($item))) {
@@ -103,8 +103,8 @@ abstract class	pudlOrm
 	public static function get($id=false) {
 		global $get, $afurl;
 
-		if ($id instanceof getvar) $id = $get->id();
-		if ($id instanceof af_url) $id = $afurl->id;
+		if ($id instanceof getvar)	$id = $get->id();
+		if ($id instanceof afUrl)	$id = $afurl->id;
 
 		if (pudl_array($id))	$id = $id[static::column];
 
@@ -113,7 +113,7 @@ abstract class	pudlOrm
 			if ($id === 0) $id = false;
 		}
 
-		if ($id === false  &&  $afurl instanceof af_url) {
+		if ($id === false  &&  $afurl instanceof afUrl) {
 			$id = $afurl->id;
 		}
 

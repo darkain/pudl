@@ -40,7 +40,7 @@ trait pudlRedis {
 	public function redis($server=false) {
 		if ($server === false) return $this->redis;
 
-		if (is_object($server)  &&  is_a($server, 'Redis')) {
+		if ($server instanceof Redis) {
 			$this->redis = $server;
 
 		} else if (is_bool($server)  ||  $server === NULL) {
