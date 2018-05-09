@@ -351,6 +351,35 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
+	//GET THE TABLE DEFINITION FOR THUMBNAIL (SPECIFIC TO ALTAFORM)
+	////////////////////////////////////////////////////////////////////////////
+	public static function thumbnail($type=200) {
+		if (empty(static::thumbnail)) return NULL;
+
+		return [
+			static::prefix			=> static::table,
+
+			static::prefix . '_th'	=> [
+				'left'	=> ['th'	=> 'pudl_file_thumb'],
+				'on'	=> [
+					'th.file_hash'	=> pudl::column(static::thumbnail),
+					'th.thumb_type'	=> (string) $type,
+				],
+			],
+
+			static::prefix . '_fl'	=> [
+				'left'	=> ['tx'	=> 'pudl_file'],
+				'on'	=> [
+					'tx.file_hash'	=> pudl::column(static::thumbnail),
+				],
+			],
+		];
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
 	//FETCH DATA FROM DATABASE
 	////////////////////////////////////////////////////////////////////////////
 	protected function fetch($id) {
@@ -422,4 +451,5 @@ abstract class	pudlOrm
 	const prefix	= -1;
 	const hash		= false;
 	const json		= NULL;
+	const thumbnail	= NULL;
 }
