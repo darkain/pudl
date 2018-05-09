@@ -444,12 +444,12 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	//LATE STATIC BINDING VARIABLES, OVERWRITE THESE IN YOUR CLASS
 	////////////////////////////////////////////////////////////////////////////
-	const collector	= 'pudlCollection';
-	const classname	= __CLASS__;
-	const column	= 'id';
-	const table		= 'pudl';
-	const prefix	= -1;
-	const hash		= false;
-	const json		= NULL;
-	const thumbnail	= NULL;
+	const	collector	= 'pudlCollection';
+	const	classname	= __CLASS__;
+	const	column		= 'id';
+	const	table		= 'pudl';
+	const	prefix		= -1;
+	const	hash		= false;
+	const	json		= NULL;
+	const	thumbnail	= NULL;
 }
