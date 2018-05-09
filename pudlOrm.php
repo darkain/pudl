@@ -354,7 +354,7 @@ abstract class	pudlOrm
 	//GET THE TABLE DEFINITION FOR ICON (SPECIFIC TO ALTAFORM)
 	////////////////////////////////////////////////////////////////////////////
 	public static function icon($type=200) {
-		if (empty(static::icon)) return NULL;
+		if (empty(static::thumbnail)) return NULL;
 
 		$column = pudl::column(static::prefix . '.' . static::icon);
 
@@ -453,5 +453,5 @@ abstract class	pudlOrm
 	const	prefix		= -1;
 	const	hash		= false;
 	const	json		= NULL;
-	const	icon		= NULL;
+	const	thumbnail	= NULL;
 }
