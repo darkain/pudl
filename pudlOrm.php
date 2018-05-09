@@ -351,12 +351,12 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//GET THE TABLE DEFINITION FOR THUMBNAIL (SPECIFIC TO ALTAFORM)
+	//GET THE TABLE DEFINITION FOR ICON (SPECIFIC TO ALTAFORM)
 	////////////////////////////////////////////////////////////////////////////
-	public static function thumbnail($type=200) {
-		if (empty(static::thumbnail)) return NULL;
+	public static function icon($type=200) {
+		if (empty(static::icon)) return NULL;
 
-		$column = pudl::column(static::prefix . '.' . static::thumbnail);
+		$column = pudl::column(static::prefix . '.' . static::icon);
 
 		return [
 			static::prefix			=> static::table,
@@ -453,5 +453,5 @@ abstract class	pudlOrm
 	const	prefix		= -1;
 	const	hash		= false;
 	const	json		= NULL;
-	const	thumbnail	= NULL;
+	const	icon	= NULL;
 }
