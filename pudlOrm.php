@@ -453,5 +453,5 @@ abstract class	pudlOrm
 	const	prefix		= -1;
 	const	hash		= false;
 	const	json		= NULL;
-	const	icon	= NULL;
+	const	icon		= NULL;
 }
