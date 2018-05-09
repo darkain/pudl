@@ -356,13 +356,15 @@ abstract class	pudlOrm
 	public static function thumbnail($type=200) {
 		if (empty(static::thumbnail)) return NULL;
 
+		$column = pudl::column(static::prefix . '.' . static::thumbnail);
+
 		return [
 			static::prefix			=> static::table,
 
 			static::prefix . '_th'	=> [
 				'left'	=> ['th'	=> 'pudl_file_thumb'],
 				'on'	=> [
-					'th.file_hash'	=> pudl::column(static::thumbnail),
+					'th.file_hash'	=> $column,
 					'th.thumb_type'	=> (string) $type,
 				],
 			],
@@ -370,7 +372,7 @@ abstract class	pudlOrm
 			static::prefix . '_fl'	=> [
 				'left'	=> ['tx'	=> 'pudl_file'],
 				'on'	=> [
-					'tx.file_hash'	=> pudl::column(static::thumbnail),
+					'tx.file_hash'	=> $column,
 				],
 			],
 		];
