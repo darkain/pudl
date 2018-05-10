@@ -87,84 +87,84 @@ if (!defined('PHP_FLOAT_EPSILON'))	define('PHP_FLOAT_EPSILON',	2.2204460492503E-
 
 
 //BASIC QUERIES, NOT USING THE CUSTOM GENERATOR
-require 'basic.php';
+require __DIR__ . '/basic.php';
 
 //RETURNED COLUMNS
-require 'column.php';
+require __DIR__ . '/column.php';
 
 //FROM TABLES
-require 'table.php';
+require __DIR__ . '/table.php';
 
 //JOIN TABLES
-require 'join.php';
+require __DIR__ . '/join.php';
 
 //WHERE CLAUSES
-require 'clause.php';
+require __DIR__ . '/clause.php';
 
 //ORDER BY
-require 'order.php';
+require __DIR__ . '/order.php';
 
 //SET OF DATA
-require 'inset.php';
+require __DIR__ . '/inset.php';
 
 //SELEX - ALL OF THE ABOVE AT ONCE
-require 'selex.php';
+require __DIR__ . '/selex.php';
 
 //INSERT STATEMENTS
-require 'insert.php';
+require __DIR__ . '/insert.php';
 
 //UPDATE STATEMENTS
-require 'update.php';
+require __DIR__ . '/update.php';
 
 //SHORTHAND NOTATION FOR SELECT STATEMENTS
 //CUSTOM COMPLEX SELECTS
-require 'select.php';
+require __DIR__ . '/select.php';
 
 //SHORTHAND NOTATION FOR SELECT STATEMENTS
 //RETURN A SINGLE CELL
-require 'cell.php';
+require __DIR__ . '/cell.php';
 
 //SHORTHAND NOTATION FOR SELECT STATEMENTS
 //RETURN A SINGLE ROW OR ROWS
-require 'row.php';
+require __DIR__ . '/row.php';
 
 //SHORTHAND NOTATION FOR SELECT STATEMENTS
 //TRANSLATE TWO COLUMNS INTO A KEY/VALUE PAIR IN AN ARRAY
-require 'collection.php';
+require __DIR__ . '/collection.php';
 
 //SHORTHAND NOTATION FOR UPDATE STATEMENTS
 //INCREMENT A SINGLE COLUMN'S VALUE
-require 'increment.php';
+require __DIR__ . '/increment.php';
 
 //SUBQUERIES
-require 'subquery.php';
+require __DIR__ . '/subquery.php';
 
 //CUSTOM FUNCTIONS
-require 'function.php';
+require __DIR__ . '/function.php';
 
 //MYSQL GLOBALS, VARIABLES, STATUS
-require 'variables.php';
+require __DIR__ . '/variables.php';
 
 //LOCK TABLES
-require 'lock.php';
+require __DIR__ . '/lock.php';
 
 //DYNAMIC COLUMNS
-require 'dynamic.php';
+require __DIR__ . '/dynamic.php';
 
 //ERROR HANDLING
-require 'errors.php';
+require __DIR__ . '/errors.php';
 
 //QUERY LOGGING
-require 'log.php';
+require __DIR__ . '/log.php';
 
 //PUDL OBJECT
-require 'object.php';
+require __DIR__ . '/object.php';
 
 //DELETE QUERIES
-require 'delete.php';
+require __DIR__ . '/delete.php';
 
 //VIRTUAL PUDL INTERFACE
-require 'clone.php';
+require __DIR__ . '/clone.php';
 
 //JSON FUNCTIONS - https://mariadb.com/kb/en/library/json-functions/
-require 'json.php';
+require __DIR__ . '/json.php';
