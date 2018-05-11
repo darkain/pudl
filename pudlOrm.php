@@ -432,7 +432,7 @@ abstract class	pudlOrm
 	//THESE ARE RELATED TO ALTAFORM. IF YOU'RE NOT USING THAT LIBRARY, THESE
 	//ARE THEN WORTHLESS
 	////////////////////////////////////////////////////////////////////////////
-	public function assert401($text=false) { assert400((string)$this, $text); return $this; }
+	public function assert400($text=false) { assert400((string)$this, $text); return $this; }
 	public function assert401($text=false) { assert401((string)$this, $text); return $this; }
 	public function assert402($text=false) { assert402((string)$this, $text); return $this; }
 	public function assert403($text=false) { assert403((string)$this, $text); return $this; }
