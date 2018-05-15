@@ -43,23 +43,23 @@ if (!$found) throw new exception('No supported database PHP extensions found');
 //REQUIRE ALL VERSIONS EVEN THOUGH WE ONLY USE SQL
 //THIS ENSURES THEY CAN AT LEAST BE PARSED BY PHP/HHVM!
 
-require_once('../pudl.php');
-require_once('../file/pudlExportExcel.php');
-require_once('../file/pudlImportCsv.php');
-require_once('../file/pudlImportExcel.php');
-require_once('../mssql/pudlMsSql.php');
-require_once('../mysql/pudlGalera.php');
-require_once('../mysql/pudlMySql.php');
-require_once('../mysql/pudlMySqli.php');
-require_once('../null/pudlNull.php');
-require_once('../null/pudlArrayResult.php');
-require_once('../null/pudlFakeResult.php');
-require_once('../pdo/pudlPdo.php');
-require_once('../pgsql/pudlPgSql.php');
-require_once('../sql/pudlOdbc.php');
-require_once('../sql/pudlShell.php');
-require_once('../sql/pudlWeb.php');
-require_once('../sqlite/pudlSqlite.php');
+require_once(__DIR__.'/../pudl.php');
+require_once(__DIR__.'/../file/pudlExportExcel.php');
+require_once(__DIR__.'/../file/pudlImportCsv.php');
+require_once(__DIR__.'/../file/pudlImportExcel.php');
+require_once(__DIR__.'/../mssql/pudlMsSql.php');
+require_once(__DIR__.'/../mysql/pudlGalera.php');
+require_once(__DIR__.'/../mysql/pudlMySql.php');
+require_once(__DIR__.'/../mysql/pudlMySqli.php');
+require_once(__DIR__.'/../null/pudlNull.php');
+require_once(__DIR__.'/../null/pudlArrayResult.php');
+require_once(__DIR__.'/../null/pudlFakeResult.php');
+require_once(__DIR__.'/../pdo/pudlPdo.php');
+require_once(__DIR__.'/../pgsql/pudlPgSql.php');
+require_once(__DIR__.'/../sql/pudlOdbc.php');
+require_once(__DIR__.'/../sql/pudlShell.php');
+require_once(__DIR__.'/../sql/pudlWeb.php');
+require_once(__DIR__.'/../sqlite/pudlSqlite.php');
 
 
 //TEST TO ENSURE EACH CLASS CAN INSTANTIATE PROPERLY
@@ -91,7 +91,7 @@ $db->on('warning', function($action, $db, $value, $clause) use (&$warnings) {
 });
 
 
-require('all.php');
+require(__DIR__.'/all.php');
 
 
 echo "PHP:\t" . PHP_VERSION . "\n";

@@ -1,7 +1,7 @@
 <?php
 
 
-require_once('pudlOdbcResult.php');
+require_once(__DIR__.'/pudlOdbcResult.php');
 
 
 class pudlOdbc extends pudl {

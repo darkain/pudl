@@ -1,7 +1,7 @@
 <?php
 
 
-require_once('pudlCollection.php');
+require_once(__DIR__.'/pudlCollection.php');
 
 
 

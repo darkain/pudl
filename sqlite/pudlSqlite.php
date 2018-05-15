@@ -1,7 +1,7 @@
 <?php
 
 
-require_once('pudlSqliteResult.php');
+require_once(__DIR__.'/pudlSqliteResult.php');
 
 
 class pudlSqlite extends pudl {

@@ -1,7 +1,7 @@
 <?php
 
 
-require_once('pudlShellResult.php');
+require_once(__DIR__.'/pudlShellResult.php');
 
 
 class pudlWeb extends pudlShell {

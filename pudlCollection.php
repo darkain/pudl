@@ -1,7 +1,7 @@
 <?php
 
 
-require_once('pudlObject.php');
+require_once(__DIR__.'/pudlObject.php');
 
 
 
