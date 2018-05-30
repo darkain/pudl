@@ -86,7 +86,7 @@ abstract class	pudlOrm
 		global $db;
 
 		return static::get(
-			$db->insert(
+			$db->insertExtract(
 				static::table,
 				$data,
 				($update === false) ? static::column : $update
