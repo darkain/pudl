@@ -335,11 +335,16 @@ abstract	class	pudl {
 
 
 	public function listFields($table, $prefix='') {
-		if (!pudl_array($table)) $table = [$table];
+		static $cache = [];
 
-		$return = [];
+		if (is_string($table)) {
+			if (isset($cache[$table])) return $cache[$table];
+		}
 
-		foreach ($table as $key => $value) {
+		$return	= [];
+		$array	= pudl_array($table) ? $table : [$table];
+
+		foreach ($array as $key => $value) {
 			if (in_array($key, ['on', 'clause', 'using'], true)) continue;
 
 			if (pudl_array($value)) {
@@ -363,6 +368,10 @@ abstract	class	pudl {
 					$return[$item['Field']] = $item;
 				}
 			}
+		}
+
+		if (is_string($table)) {
+			$cache[$table] = $return;
 		}
 
 		return $return;
