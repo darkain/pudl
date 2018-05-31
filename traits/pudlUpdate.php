@@ -41,6 +41,44 @@ trait pudlUpdate {
 
 
 
+
+	public function updateExtract($table, $data, $clause, $limit=false, $offset=false) {
+		return $this->update(
+			$table,
+			$this->extractColumns($table, $data, false),
+			$clause,
+			$limit,
+			$offset
+		);
+	}
+
+
+
+	public function updateExtractIn($table, $data, $field, $in, $limit=false, $offset=false) {
+		return $this->updateIn(
+			$table,
+			$this->extractColumns($table, $data, false),
+			$field,
+			$in,
+			$limit,
+			$offset
+		);
+	}
+
+
+
+	public function updateExtractId($table, $data, $column, $id=false, $limit=false, $offset=false) {
+		return $this->update(
+			$table,
+			$this->extractColumns($table, $data, false),
+			$this->_clauseId($column, $id),
+			$limit,
+			$offset
+		);
+	}
+
+
+
 	public function updateField($table, $field, $value, $clause, $limit=false, $offset=false) {
 		return $this->update($table, [$field=>$value], $clause, $limit, $offset);
 	}
