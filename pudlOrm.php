@@ -267,7 +267,7 @@ abstract class	pudlOrm
 			}
 		}
 
-		return $db->updateId(static::table, $data, $this, false, 1);
+		return $db->updateExtractId(static::table, $data, $this, false, 1);
 	}
 
 
