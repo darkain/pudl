@@ -233,7 +233,7 @@ abstract class	pudlOrm
 			if (static::hash) {
 				return ($item === true)	? !empty($id)	: empty($id);
 			} else {
-				return ($item === true)	? $id != 0		: $id === 0;
+				return ($item === true)	? ($id != 0)	: ($id === 0);
 			}
 		}
 
@@ -250,6 +250,15 @@ abstract class	pudlOrm
 
 		return !empty($item) ? ($item === $id) : false;
 	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//COMPARE ITEM TO SEE IF IT IS *NOT* THE CURRENT OBJECT INSTANCE
+	////////////////////////////////////////////////////////////////////////////
+	public function isnt( $item=true)	{ return !$this->is($item); }
+	public function isnot($item=true)	{ return !$this->is($item); }
 
 
 
