@@ -147,9 +147,8 @@ abstract class	pudlOrm
 		array_unshift($args, ['limit'=>1], static::schema());
 
 		$data	= call_user_func_array([$db,'selex'], $args)->complete();
-		$class	= static::classname;
 
-		return pudl_array($data) ? new $class(reset($data)) : $data;
+		return pudl_array($data) ? static::instance(reset($data)) : $data;
 	}
 
 
