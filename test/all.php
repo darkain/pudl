@@ -85,86 +85,9 @@ if (!defined('PHP_FLOAT_EPSILON'))	define('PHP_FLOAT_EPSILON',	2.2204460492503E-
 
 
 
-
-//BASIC QUERIES, NOT USING THE CUSTOM GENERATOR
-require(__DIR__.'/basic.php');
-
-//RETURNED COLUMNS
-require(__DIR__.'/column.php');
-
-//FROM TABLES
-require(__DIR__.'/table.php');
-
-//JOIN TABLES
-require(__DIR__.'/join.php');
-
-//WHERE CLAUSES
-require(__DIR__.'/clause.php');
-
-//ORDER BY
-require(__DIR__.'/order.php');
-
-//SET OF DATA
-require(__DIR__.'/inset.php');
-
-//SELEX - ALL OF THE ABOVE AT ONCE
-require(__DIR__.'/selex.php');
-
-//INSERT STATEMENTS
-require(__DIR__.'/insert.php');
-
-//UPDATE STATEMENTS
-require(__DIR__.'/update.php');
-
-//SHORTHAND NOTATION FOR SELECT STATEMENTS
-//CUSTOM COMPLEX SELECTS
-require(__DIR__.'/select.php');
-
-//SHORTHAND NOTATION FOR SELECT STATEMENTS
-//RETURN A SINGLE CELL
-require(__DIR__.'/cell.php');
-
-//SHORTHAND NOTATION FOR SELECT STATEMENTS
-//RETURN A SINGLE ROW OR ROWS
-require(__DIR__.'/row.php');
-
-//SHORTHAND NOTATION FOR SELECT STATEMENTS
-//TRANSLATE TWO COLUMNS INTO A KEY/VALUE PAIR IN AN ARRAY
-require(__DIR__.'/collection.php');
-
-//SHORTHAND NOTATION FOR UPDATE STATEMENTS
-//INCREMENT A SINGLE COLUMN'S VALUE
-require(__DIR__.'/increment.php');
-
-//SUBQUERIES
-require(__DIR__.'/subquery.php');
-
-//CUSTOM FUNCTIONS
-require(__DIR__.'/function.php');
-
-//MYSQL GLOBALS, VARIABLES, STATUS
-require(__DIR__.'/variables.php');
-
-//LOCK TABLES
-require(__DIR__.'/lock.php');
-
-//DYNAMIC COLUMNS
-require(__DIR__.'/dynamic.php');
-
-//ERROR HANDLING
-require(__DIR__.'/errors.php');
-
-//QUERY LOGGING
-require(__DIR__.'/log.php');
-
-//PUDL OBJECT
-require(__DIR__.'/object.php');
-
-//DELETE QUERIES
-require(__DIR__.'/delete.php');
-
-//VIRTUAL PUDL INTERFACE
-require(__DIR__.'/clone.php');
-
-//JSON FUNCTIONS - https://mariadb.com/kb/en/library/json-functions/
-require(__DIR__.'/json.php');
+//RUN ALL UNIT TESTS
+$list = scandir(__DIR__);
+foreach ($list as $item) {
+	if (strtolower(substr($item, -8)) !== '.inc.php') continue;
+	require_once(__DIR__ . '/' . $item);
+}

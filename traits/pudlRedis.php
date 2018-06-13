@@ -27,6 +27,15 @@ trait pudlRedis {
 
 
 
+	public function decache() {
+		$this->cache	= false;
+		$this->cachekey	= false;
+		$this->recache	= false;
+		return $this;
+	}
+
+
+
 	public function purge($key) {
 		if (!$this->redis  ||  empty($key)) return false;
 		try {

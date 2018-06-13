@@ -209,10 +209,7 @@ abstract	class	pudl {
 
 
 		//RESET CACHE INFORMATION FOR NEXT QUERY
-		$this->cache	=
-		$this->cachekey	=
-		$this->recache	=
-			false;
+		$this->decache();
 
 
 		//PERFORMANCE PROFILING DATA
@@ -480,6 +477,13 @@ abstract	class	pudl {
 
 	public function string() {
 		$this->string[] = true;
+		return $this;
+	}
+
+
+
+	public function destring() {
+		array_pop($this->string);
 		return $this;
 	}
 
