@@ -142,14 +142,14 @@ pudlTest("INSERT INTO `table` (`column`) VALUES (-1.0E+78)");
 
 //INSERT statement - using associative array - integer constant
 $db->string()->insert('table', ['column'=>PHP_INT_MAX]);
-pudlTest("INSERT INTO `table` (`column`) VALUES (9223372036854775807)");
+pudlTest('INSERT INTO `table` (`column`) VALUES ('.PHP_INT_MAX.')');
 
 
 
 
 //INSERT statement - using associative array - integer constant
 $db->string()->insert('table', ['column'=>PHP_INT_MIN]);
-pudlTest("INSERT INTO `table` (`column`) VALUES (-9223372036854775808)");
+pudlTest('INSERT INTO `table` (`column`) VALUES ('.PHP_INT_MIN.')');
 
 
 
@@ -163,14 +163,14 @@ pudlTest("INSERT INTO `table` (`column`) VALUES (2.2204460492503E-16)");
 
 //INSERT statement - using associative array - float constant
 $db->string()->insert('table', ['column'=>PHP_FLOAT_MIN]);
-pudlTest("INSERT INTO `table` (`column`) VALUES (2.2250738585072E-308)");
+pudlTest('INSERT INTO `table` (`column`) VALUES ('.PHP_FLOAT_MIN.')');
 
 
 
 
 //INSERT statement - using associative array - float constant
 $db->string()->insert('table', ['column'=>PHP_FLOAT_MAX]);
-pudlTest("INSERT INTO `table` (`column`) VALUES (1.7976931348623E+308)");
+pudlTest('INSERT INTO `table` (`column`) VALUES ('.PHP_FLOAT_MAX.')');
 
 
 
