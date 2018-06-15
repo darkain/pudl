@@ -527,6 +527,16 @@ abstract	class	pudl {
 
 
 
+	////////////////////////////////////////////////////////////////////////////
+	// GET THE LOCAL PATH OF THE PUDL LIBRARY
+	////////////////////////////////////////////////////////////////////////////
+	public static function dir() {
+		return __DIR__;
+	}
+
+
+
+
 	private			$log			= false;
 	private			$bench			= false;
 	private			$query			= false;
