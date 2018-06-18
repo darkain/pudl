@@ -70,6 +70,13 @@ class pudlGalera extends pudlMySqli {
 				(count($this->pool)>1) ? 1 : 10
 			);
 
+			//SET CONNECTION TIMEOUT TO 1 SECOND IF WE'RE IN A CLSUTER, ELSE 10 SECONDS
+			//THIS TIMEOUT IS INCREASED AFTER OUR FIRST SUCCESSFUL COMMAND BELOW
+			$this->connection->options(
+				MYSQLI_OPT_READ_TIMEOUT,
+				(count($this->pool)>1) ? 1 : 10
+			);
+
 			//ATTEMPT TO CREATE A CONNECTION
 			$ok = @$this->connection->real_connect(
 				(empty($auth['persistent']) ? '' : 'p:') . $server,
@@ -95,8 +102,14 @@ class pudlGalera extends pudlMySqli {
 			//ONLY CONNECT IF NODE IS IN A 'JOINED' OR 'SYNCED' STATE
 			$state = (int) $this->state['wsrep_local_state'];
 			if ($state === GALERA_JOINED  ||  $state === GALERA_SYNCED) {
+				$this->connection->options(
+					MYSQLI_OPT_READ_TIMEOUT,
+					ini_get('mysqlnd.net_read_timeout')
+				);
+
 				$this->strict()->timeout($auth);
 				$this->connected = $server;
+
 				return true;
 			}
 
