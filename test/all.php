@@ -44,7 +44,15 @@ function pudlTest($expected) {
 
 
 function pudlError($exception, $expected) {
-	if ($exception->getMessage() === $expected) return;
+	if (is_array($expected)) {
+		foreach ($expected as $item) {
+			if ($exception->getMessage() === $expected) {
+				return;
+			}
+		}
+	} else if ($exception->getMessage() === $expected) {
+		return;
+	}
 	$trace = debug_backtrace()[0];
 	echo "\n\n";
 	echo "ERROR: FAILED!!\n\n";
