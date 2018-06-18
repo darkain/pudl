@@ -82,7 +82,7 @@ class pudlGalera extends pudlMySqli {
 			if ($ok) $ok = ($this->connectErrno() === 0);
 
 			//ATTEMPT TO SET UTF-8 CHARACTER SET
-			if ($ok) $ok = @$this->connection->set_charset('utf8');
+			if ($ok) $ok = @$this->connection->set_charset('utf8mb4');
 
 			//ATTEMPT TO GET THE CLUSTER SYNC STATE OF THIS NODE
 			$this->state = $ok ? $this->globals('wsrep_local_state') : [];

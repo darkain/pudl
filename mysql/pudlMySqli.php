@@ -51,7 +51,7 @@ class pudlMySqli extends pudl {
 		if ($ok) $ok = ($this->connectErrno() === 0);
 
 		//ATTEMPT TO SET UTF8 CHARACTER SET
-		if ($ok) $ok = @$this->connection->set_charset('utf8');
+		if ($ok) $ok = @$this->connection->set_charset('utf8mb4');
 
 		//CONNECTION IS GOOD!
 		if (!empty($ok)) {
