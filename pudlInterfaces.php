@@ -12,7 +12,7 @@ class pudlException extends Exception {
 		parent::__construct($message, $code, $previous);
 
 		global $db;
-		$db->decache()->destring();
+		if (!empty($db)) $db->decache()->destring();
 	}
 }
 
