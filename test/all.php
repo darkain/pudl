@@ -91,3 +91,7 @@ foreach ($list as $item) {
 	if (strtolower(substr($item, -8)) !== '.inc.php') continue;
 	require_once(__DIR__ . '/' . $item);
 }
+
+if (!empty($found)) {
+	require_once(__DIR__ . '/timeout.php');
+}
