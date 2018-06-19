@@ -46,7 +46,7 @@ function pudlTest($expected) {
 function pudlError($exception, $expected) {
 	if (is_array($expected)) {
 		foreach ($expected as $item) {
-			if ($exception->getMessage() === $expected) {
+			if ($exception->getMessage() === $item) {
 				return;
 			}
 		}
