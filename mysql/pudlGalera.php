@@ -70,12 +70,9 @@ class pudlGalera extends pudlMySqli {
 				(count($this->pool)>1) ? 1 : 10
 			);
 
-			//SET CONNECTION TIMEOUT TO 1 SECOND IF WE'RE IN A CLSUTER, ELSE 10 SECONDS
+			//SET CONNECTION TIMEOUT TO 10 SECONDS
 			//THIS TIMEOUT IS INCREASED AFTER OUR FIRST SUCCESSFUL COMMAND BELOW
-			$this->connection->options(
-				MYSQLI_OPT_READ_TIMEOUT,
-				(count($this->pool)>1) ? 1 : 10
-			);
+			$this->connection->options(MYSQLI_OPT_READ_TIMEOUT, 10);
 
 			//ATTEMPT TO CREATE A CONNECTION
 			$ok = @$this->connection->real_connect(
