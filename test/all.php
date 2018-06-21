@@ -93,13 +93,26 @@ if (!defined('PHP_FLOAT_EPSILON'))	define('PHP_FLOAT_EPSILON',	2.2204460492503E-
 
 
 
+//PREP THE DIRECTORY
+$parent	= dirname(dirname(__DIR__));
+$dir	= substr(__DIR__, strlen($parent)-strlen(__DIR__)+1);
+$list	= scandir(__DIR__);
+shuffle($list);
+
+
+
 //RUN ALL UNIT TESTS
-$list = scandir(__DIR__);
 foreach ($list as $item) {
 	if (strtolower(substr($item, -8)) !== '.inc.php') continue;
+	echo "\033[97m" . "Testing:\t";
+	echo "\033[36m" . $dir . '/';
+	echo "\033[96m" . $item . "\033[0m\n";
 	require_once(__DIR__ . '/' . $item);
 }
 
+
+
+//OPTIONAL UNIT TESTS ONLY FOR TRAVIS CI
 if (!empty($found)) {
 	require_once(__DIR__ . '/timeout.php');
 }
