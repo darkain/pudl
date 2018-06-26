@@ -188,7 +188,21 @@ abstract class	pudlOrm
 	//GET A COLLECTION OF OBJECTS FROM ID NUMBERS
 	////////////////////////////////////////////////////////////////////////////
 	public static function collection($items /*, ...$selex */) {
+		global $db;
+
 		$args		= func_get_args();
+
+		if (is_string($items)) {
+			$items	= $db($items);
+		}
+
+		if ($items instanceof pudlResult) {
+			$list	= $items;
+			$items	= [];
+			foreach ($list as $item) {
+				$items[] = $item[static::column];
+			}
+		}
 
 		$args[0]	= ['clause' => [pudl::column(
 			[static::prefix, static::column],
