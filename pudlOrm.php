@@ -192,6 +192,10 @@ abstract class	pudlOrm
 
 		$args		= func_get_args();
 
+		if ($items instanceof pudlStringResult) {
+			$items = (string) $items;
+		}
+
 		if (is_string($items)) {
 			$items	= $db($items);
 		}
