@@ -545,6 +545,6 @@ abstract	class	pudl {
 	private			$listcache		= [];
 	protected		$connection		= NULL;
 	protected		$string			= [];
-	public static	$version		= 'PUDL 2.8.4';
+	public static	$version		= 'PUDL 2.9.0';
 
 }
