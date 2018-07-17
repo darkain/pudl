@@ -157,7 +157,10 @@ abstract class	pudlImport
 	//STORE ERROR MESSAGE
 	////////////////////////////////////////////////////////////////////////////
 	protected function invalid($text, $row=0) {
-		if ($row) $text = '• ROW: ' . $row . ' - ' . $text;
+		if ($row) {
+			$text = '• ROW: ' . $row . ' - ' . $text;
+			$text .= ' - ' . json_encode($this[$row]);
+		}
 		$this->errors[] = $text;
 		return false;
 	}
