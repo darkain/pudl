@@ -52,7 +52,17 @@ abstract class	pudlImport
 		}
 
 		//PROCESS CONTENTS OF FILE
-		return $valid ? $this->import() : false;
+		$return = $valid ? $this->import() : false;
+
+		if (!empty($this->errors)) {
+			throw new pudlException(
+				"FILE FAILED DATA IMPORT\n" .
+				implode("\n", $this->errors)
+			);
+			return false;
+		}
+
+		return $return;
 	}
 
 
