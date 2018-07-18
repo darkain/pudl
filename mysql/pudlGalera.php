@@ -89,7 +89,7 @@ class pudlGalera extends pudlMySqli {
 			if ($ok) $ok = @$this->connection->set_charset('utf8mb4');
 
 			//VERIFY WE'RE NOT IN A READ-ONLY STATE
-			if ($ok) $ok = !$this->readonly();
+			if ($ok  &&  !self::$die) $ok = !$this->readonly();
 
 			//ATTEMPT TO GET THE CLUSTER SYNC STATE OF THIS NODE
 			$this->state = $ok ? $this->globals('wsrep_local_state') : [];
