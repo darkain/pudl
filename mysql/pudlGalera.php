@@ -64,15 +64,20 @@ class pudlGalera extends pudlMySqli {
 		foreach ($this->pool as $server) {
 			$this->connection = mysqli_init();
 
-			//SET CONNECTION TIMEOUT TO 1 SECOND IF WE'RE IN A CLSUTER, ELSE 10 SECONDS
+			//SET CONNECTION TIMEOUT TO 1 SECOND IF IN CLSUTER MODE
+			//SET CONNECTION TIMEOUT TO 10 SECONDS IF IT IS THE LAST NODE
 			$this->connection->options(
 				MYSQLI_OPT_CONNECT_TIMEOUT,
 				(count($this->pool)>1) ? 1 : 10
 			);
 
-			//SET CONNECTION TIMEOUT TO 10 SECONDS
+			//SET READ TIMEOUT TO 2 SECONDS IF IN CLUSTER MODE
+			//SET READ TIMEOUT TO 10 SECONDS IF IT IS THE LAST NODE
 			//THIS TIMEOUT IS INCREASED AFTER OUR FIRST SUCCESSFUL COMMAND BELOW
-			$this->connection->options(MYSQLI_OPT_READ_TIMEOUT, 10);
+			$this->connection->options(
+				MYSQLI_OPT_READ_TIMEOUT,
+				(count($this->pool)>1) ? 2 : 10
+			);
 
 			//ATTEMPT TO CREATE A CONNECTION
 			$ok = @$this->connection->real_connect(
