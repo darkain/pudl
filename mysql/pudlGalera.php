@@ -71,13 +71,10 @@ class pudlGalera extends pudlMySqli {
 				(count($this->pool)>1) ? 1 : 10
 			);
 
-			//SET READ TIMEOUT TO 2 SECONDS IF IN CLUSTER MODE
-			//SET READ TIMEOUT TO 10 SECONDS IF IT IS THE LAST NODE
+			//SET READ TIMEOUT TO 10 SECONDS
+			//SHORTER TIMES ARE STILL UNSTABLE
 			//THIS TIMEOUT IS INCREASED AFTER OUR FIRST SUCCESSFUL COMMAND BELOW
-			$this->connection->options(
-				MYSQLI_OPT_READ_TIMEOUT,
-				(count($this->pool)>1) ? 2 : 10
-			);
+			$this->connection->options(MYSQLI_OPT_READ_TIMEOUT, 10);
 
 			//ATTEMPT TO CREATE A CONNECTION
 			$ok = @$this->connection->real_connect(
