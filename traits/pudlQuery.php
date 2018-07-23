@@ -272,7 +272,7 @@ trait pudlQuery {
 	protected function _tables($table) {
 		if ($table === false)		return;
 		if (is_string($table))		return ' FROM ' . $this->_table($table);
-		if (!pudl_array($table))	return $this->_invalidType($value, 'table');
+		if (!pudl_array($table))	return $this->_invalidType($table, 'table');
 
 		$query = '';
 		foreach ($table as $key => $value) {
