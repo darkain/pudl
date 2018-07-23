@@ -145,7 +145,7 @@ trait pudlInsert {
 		foreach ($cols as &$name) {
 			if (strlen($query)) $query .= ',';
 			$query .= $this->identifiers($name, NULL);
-		} unst($name);
+		} unset($name);
 
 		$query .= ') VALUES ';
 
