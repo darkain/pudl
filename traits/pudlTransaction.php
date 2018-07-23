@@ -105,7 +105,7 @@ trait pudlTransaction {
 
 
 
-	public static function inserted() {
+	public function inserted() {
 		return $this->_inserted;
 	}
 
