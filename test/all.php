@@ -27,6 +27,7 @@
 
 function pudlTest($expected) {
 	global $db;
+	if (empty($db)) return;
 	if (is_string($expected)	&&	$expected === $db->query()) return;
 	if (is_bool($expected)		&&	$expected) return;
 	$trace = debug_backtrace()[0];
