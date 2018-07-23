@@ -147,4 +147,14 @@ trait pudlTable {
 		return $this($query);
 	}
 
+
+
+
+	public function addVersioning($table) {
+		$query  = 'ALTER TABLE ' . $this->_table($table) . ' ';
+		$query .= 'ADD SYSTEM VERSIONING PARTITION BY SYSTEM_TIME (';
+		$query .= 'PARTITION p_hist HISTORY,';
+		$query .= 'PARTITION p_cur CURRENT';
+		$query .= ')';
+	}
 }
