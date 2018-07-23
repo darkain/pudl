@@ -806,7 +806,7 @@ trait pudlQuery {
 		if (!$virtual) {
 			foreach ($fields as $key => $field) {
 				if (!empty($field['Extra'])) {
-					if (!strcasecmp($field['Extra'], 'VIRTUAL GENERATED')) {
+					if (stripos($field['Extra'], 'GENERATED') !== FALSE) {
 						unset($fields[$key]);
 					}
 				}
