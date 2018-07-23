@@ -17,6 +17,8 @@ class		pudlCollection
 	//CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
 	public function __construct($classname, $list=NULL) {
+		parent::__construct(NULL, false);
+
 		$this->classname	= $classname;
 		$this->first		= true;
 
