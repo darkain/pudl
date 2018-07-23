@@ -26,8 +26,8 @@ chdir(__DIR__);
 
 
 //TEST FOR PHP EXTENSIONS
-if (!extension_loaded('date')) throw new exception('Missing "date" PHP extension');
-if (!extension_loaded('json')) throw new exception('Missing "json" PHP extension');
+if (!extension_loaded('date')) throw new Exception('Missing "date" PHP extension');
+if (!extension_loaded('json')) throw new Exception('Missing "json" PHP extension');
 if (!extension_loaded('session'))	echo "Missing optional \"session\" PHP extension\n";
 if (!extension_loaded('redis'))		echo "Missing optional \"redis\" PHP extension\n";
 
@@ -37,7 +37,7 @@ foreach (['PDO', 'mysql', 'mysqli', 'sqlite3', 'pgsql', 'mssql', 'odbc'] as $ite
 		$found = true;
 	}
 }
-if (!$found) throw new exception('No supported database PHP extensions found');
+if (!$found) throw new Exception('No supported database PHP extensions found');
 
 
 //REQUIRE ALL VERSIONS EVEN THOUGH WE ONLY USE SQL
