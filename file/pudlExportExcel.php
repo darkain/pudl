@@ -8,7 +8,7 @@ function pudlExportExcel(pudlData $result, $filename, $headers=false) {
 	$zip = new ZipArchive();
 
 	@unlink($filename);
-	if ($zip->open($filename, ZIPARCHIVE::CREATE) !== true) {
+	if ($zip->open($filename, ZipArchive::CREATE) !== true) {
 		return 'Cannot open file: ' . $filename;
 	}
 
