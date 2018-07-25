@@ -30,6 +30,7 @@ trait pudlTransaction {
 
 
 	public function chunk($size=1000, $sync=false) {
+		if (!$this->inTransaction()) return $this;
 		return (++$this->_inserted % $size === 0)
 			 ? $this->commit($sync)->begin()
 			 : $this;
