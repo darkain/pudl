@@ -388,10 +388,10 @@ abstract class	pudlOrm
 			static::prefix			=> static::table,
 
 			static::prefix . '_th'	=> [
-				'left'	=> ['th'	=> 'pudl_file_thumb'],
+				'left'	=> ['th'	=> 'pudl_thumbnail'],
 				'on'	=> [
 					'th.file_hash'	=> $column,
-					'th.thumb_type'	=> (string) $type,
+					'th.thumb_edge'	=> $type,
 				],
 			],
 
