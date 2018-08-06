@@ -69,12 +69,8 @@ trait pudlMySqlHelper {
 			$timeout = $timeout['timeout'];
 		}
 
-		if ($this->timeout === false) {
-			$this->timeout = $this->variables('max_statement_time');
-		}
-
-		if (!empty($this->timeout)) {
-			$this->set('max_statement_time', $timeout);
+		if (!empty($timeout)) {
+			$this->set('max_statement_time', (int)$timeout);
 		}
 
 		return $this;
@@ -116,14 +112,6 @@ trait pudlMySqlHelper {
 	public static function dieOnError($die) {
 		self::$die = $die;
 	}
-
-
-
-
-	////////////////////////////////////////////////////////////////////////////
-	//PRIVATE VARIABLES
-	////////////////////////////////////////////////////////////////////////////
-	private $timeout	= false;
 
 
 
