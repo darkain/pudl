@@ -97,6 +97,11 @@ pudlTest('SELECT * FROM `table1` AS `x` LEFT JOIN `table2` AS `y` ON (`x`.`colum
 
 
 
+$db->string()->select('*', ['tbl1', '~tbl2']);
+pudlTest('SELECT * FROM `tbl1` JOIN `tbl2`');
+
+
+
 $db->string()->select('*', ['tbl1', '<tbl2']);
 pudlTest('SELECT * FROM `tbl1` LEFT JOIN `tbl2`');
 
@@ -139,3 +144,38 @@ pudlTest('SELECT * FROM `tbl1` CROSS JOIN `tbl2`');
 
 $db->string()->select('*', ['a'=>'tbl1', 'b'=>'=tbl2', 'c'=>'=tbl3']);
 pudlTest('SELECT * FROM `tbl1` AS `a` NATURAL JOIN `tbl2` AS `b` NATURAL JOIN `tbl3` AS `c`');
+
+
+
+$db->string()->select('*', ['tbl1', '~tbl2(col)']);
+pudlTest('SELECT * FROM `tbl1` JOIN `tbl2` USING (`col`)');
+
+
+
+$db->string()->select('*', ['tbl1', '>tbl2( col ) ']);
+pudlTest('SELECT * FROM `tbl1` RIGHT JOIN `tbl2` USING (`col`)');
+
+
+
+$db->string()->select('*', ['tbl1', 'x'=>' < tbl2 ( col )  ']);
+pudlTest('SELECT * FROM `tbl1` LEFT JOIN `tbl2` USING (`col`) AS `x`');
+
+
+
+$db->string()->select('*', ['tbl1', 'y'=>'+ tbl2']);
+pudlTest('SELECT * FROM `tbl1` CROSS JOIN `tbl2` AS `y`');
+
+
+
+$db->string()->select('*', ['tbl1', 'z'=>' <tbl2']);
+pudlTest('SELECT * FROM `tbl1` LEFT JOIN `tbl2` AS `z`');
+
+
+
+$db->string()->select('*', ['tbl1', ' > tbl2']);
+pudlTest('SELECT * FROM `tbl1` RIGHT JOIN `tbl2`');
+
+
+
+$db->string()->select('*', ['tbl1', " ~ \t tbl2"]);
+pudlTest('SELECT * FROM `tbl1` JOIN `tbl2`');

@@ -674,33 +674,75 @@ trait pudlQuery {
 
 
 
-	protected function _join($table) {
+	protected function _join($table, $alias=false) {
+		$table = Ltrim($table);
 		if (strlen($table) < 2) return false;
+
+		$query	= false;
+		$pos	= strpos($table, '(');
+
+		if ($pos === false) $pos = strlen($table);
 
 		switch ($table[0]) {
 			case '<':
-				return ($table[1] === '>')
-					? ' OUTER JOIN ' . $this->_table(substr($table, 2))
-					: ' LEFT JOIN '  . $this->_table(substr($table, 1));
+				$query = ($table[1] === '>')
+					? (' OUTER JOIN ' . $this->_table(substr($table, 2, $pos-2)))
+					: (' LEFT JOIN '  . $this->_table(substr($table, 1, $pos-1)));
+			break;
+
 
 			case '>':
-				return ($table[1] === '<')
-					? ' INNER JOIN ' . $this->_table(substr($table, 2))
-					: ' RIGHT JOIN ' . $this->_table(substr($table, 1));
+				$query = ($table[1] === '<')
+					? (' INNER JOIN ' . $this->_table(substr($table, 2, $pos-2)))
+					: (' RIGHT JOIN ' . $this->_table(substr($table, 1, $pos-1)));
+			break;
+
+
+			case '~':
+				$query	= ' JOIN '
+						. $this->_table(substr($table, 1, $pos-1));
+			break;
+
 
 			case '+':
-				return ' CROSS JOIN ' . $this->_table(substr($table, 1));
+				$query	= ' CROSS JOIN '
+						. $this->_table(substr($table, 1, $pos-1));
+			break;
+
 
 			case '=':
 				if ($table[1] === '<') {
-					return ' NATURAL LEFT JOIN ' . $this->_table(substr($table, 2));
+					$query	= ' NATURAL LEFT JOIN '
+							. $this->_table(substr($table, 2, $pos-2));
+
 				} else if ($table[1] === '>') {
-					return ' NATURAL RIGHT JOIN ' . $this->_table(substr($table, 2));
+					$query	= ' NATURAL RIGHT JOIN '
+							. $this->_table(substr($table, 2, $pos-2));
+
+				} else {
+					$query	= ' NATURAL JOIN '
+							. $this->_table(substr($table, 1, $pos-1));
 				}
-				return ' NATURAL JOIN ' . $this->_table(substr($table, 1));
+			break;
 		}
 
-		return false;
+
+		if ($query !== false) {
+			if (is_string($alias)) {
+				$query .= ' AS ' . $this->identifier($alias);
+			}
+
+			if ($pos < strlen($table)) {
+				$end = strpos($table, ')', $pos+1);
+				if ($end === false) {
+					return $this->_invalidType($table, 'table');
+				}
+				$query .= $this->_joinUsing(substr($table, $pos+1, $end-$pos-1));
+			}
+		}
+
+
+		return $query;
 	}
 
 
