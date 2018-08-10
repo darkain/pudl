@@ -276,19 +276,26 @@ trait pudlQuery {
 
 		$query = '';
 		foreach ($table as $key => $value) {
-			if (strlen($query)) $query .= ', ';
-
 			if (!pudl_array($value)) {
 				if ($value instanceof pudlStringResult) {
-					$query .= (string) $value;
+					if (strlen($query)) $query .= ', ';
+					$query	.= (string) $value;
 				} else {
-					$query .= $this->_table($value);
+					$join	 = $this->_join($value);
+					if ($join !== false) {
+						$query	.= $join;
+					} else {
+						if (strlen($query)) $query .= ', ';
+						$query	.= $this->_table($value);
+					}
 				}
 				if (is_string($key)) $query .= ' AS ' . $this->identifier($key);
 
 			} else {
+				if (strlen($query)) $query .= ', ';
 				$query .= $this->_table(reset($value));
 				if (is_string($key)) $query .= ' AS ' . $this->identifier($key);
+
 				foreach ($value as $join) {
 					if (!empty($join['join'])) {
 						$query .= $this->_joinTable($join['join'], false);
@@ -663,6 +670,37 @@ trait pudlQuery {
 			$query .= ' ' . $lock;
 		}
 		return $query;
+	}
+
+
+
+	protected function _join($table) {
+		if (strlen($table) < 2) return false;
+
+		switch ($table[0]) {
+			case '<':
+				return ($table[1] === '>')
+					? ' OUTER JOIN ' . $this->_table(substr($table, 2))
+					: ' LEFT JOIN '  . $this->_table(substr($table, 1));
+
+			case '>':
+				return ($table[1] === '<')
+					? ' INNER JOIN ' . $this->_table(substr($table, 2))
+					: ' RIGHT JOIN ' . $this->_table(substr($table, 1));
+
+			case '+':
+				return ' CROSS JOIN ' . $this->_table(substr($table, 1));
+
+			case '=':
+				if ($table[1] === '<') {
+					return ' NATURAL LEFT JOIN ' . $this->_table(substr($table, 2));
+				} else if ($table[1] === '>') {
+					return ' NATURAL RIGHT JOIN ' . $this->_table(substr($table, 2));
+				}
+				return ' NATURAL JOIN ' . $this->_table(substr($table, 1));
+		}
+
+		return false;
 	}
 
 
