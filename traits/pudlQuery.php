@@ -880,15 +880,22 @@ trait pudlQuery {
 
 
 
-	public function extractColumns($table, $data, $virtual=true) {
+	public function extractColumns($table, $data, $options=[]) {
+		if (!pudl_array($options))			$options				= [];
+		if (empty($options['primary']))		$options['primary']		= false;
+		if (empty($options['generated']))	$options['generated']	= false;
+
 		$fields = $this->listFields($table);
 
-		if (!$virtual) {
-			foreach ($fields as $key => $field) {
-				if (!empty($field['Extra'])) {
-					if (stripos($field['Extra'], 'GENERATED') !== FALSE) {
-						unset($fields[$key]);
-					}
+		foreach ($fields as $key => $field) {
+			if (!$options['primary']  &&  !empty($field['Key'])) {
+				if (stripos($field['Key'], 'PRI') !== false) {
+					unset($fields[$key]);
+				}
+			}
+			if (!$options['generated']  &&  !empty($field['Extra'])) {
+				if (stripos($field['Extra'], 'GENERATED') !== false) {
+					unset($fields[$key]);
 				}
 			}
 		}

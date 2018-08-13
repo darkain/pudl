@@ -45,7 +45,7 @@ trait pudlUpdate {
 	public function updateExtract($table, $data, $clause, $limit=false, $offset=false) {
 		return $this->update(
 			$table,
-			$this->extractColumns($table, $data, false),
+			$this->extractColumns($table, $data),
 			$clause,
 			$limit,
 			$offset
@@ -57,7 +57,7 @@ trait pudlUpdate {
 	public function updateExtractIn($table, $data, $field, $in, $limit=false, $offset=false) {
 		return $this->updateIn(
 			$table,
-			$this->extractColumns($table, $data, false),
+			$this->extractColumns($table, $data),
 			$field,
 			$in,
 			$limit,
@@ -70,7 +70,7 @@ trait pudlUpdate {
 	public function updateExtractId($table, $data, $column, $id=false, $limit=false, $offset=false) {
 		return $this->update(
 			$table,
-			$this->extractColumns($table, $data, false),
+			$this->extractColumns($table, $data),
 			$this->_clauseId($column, $id),
 			$limit,
 			$offset

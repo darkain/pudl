@@ -87,7 +87,7 @@ trait pudlInsert {
 	public function insertExtract($table, $data, $update=false, $prefix=true) {
 		return $this->insert(
 			$table,
-			$this->extractColumns($table, $data, false),
+			$this->extractColumns($table, $data),
 			$update,
 			$prefix
 		);
@@ -98,7 +98,7 @@ trait pudlInsert {
 	public function upsertExtract($table, $data, $idcol=false) {
 		return $this->upsert(
 			$table,
-			$this->extractColumns($table, $data, false),
+			$this->extractColumns($table, $data),
 			$idcol
 		);
 	}
