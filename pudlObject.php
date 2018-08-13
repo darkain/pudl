@@ -755,6 +755,25 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
+	//GET AN ARRAY FROM THIS OBJECT OF ALL KEYS, EXCLUDING ONES LISTED IN $KEYS
+	////////////////////////////////////////////////////////////////////////////
+	public function exclude($keys) {
+		$return = [];
+
+		if (!pudl_array($keys)) $keys = func_get_args();
+
+		foreach ($this->__array as $key => $value) {
+			if (array_key_exists($key, $keys)) continue;
+			$return[$key] = $value;
+		}
+
+		return $return;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
 	//COPY SOURCE ARRAY INTO OBJECT, BUT ONLY FOR A GIVEN SET OF KEYS
 	////////////////////////////////////////////////////////////////////////////
 	public function extend($source, $keys) {
