@@ -123,23 +123,6 @@ class pudlMySqliResult extends pudlResult {
 
 
 
-	////////////////////////////////////////////////////////////////////////////
-	//DEBUGGING A BUG IN THE PHP PROCESSOR ITSELF
-	//Call to undefined method pudlMySqliResult::fetch_array()
-	//Shows in error logs with invalid backtrace. So let's create it
-	//and hopefully produce a proper backtrace!
-	////////////////////////////////////////////////////////////////////////////
-	public function fetch_array() {
-		throw new pudlException('Serious PHP Processor Error');
-	}
-
-	public function data_seek() {
-		throw new pudlException('Serious PHP Processor Error');
-	}
-
-
-
-
 	private $first	= true;
 	private $json	= [];
 
