@@ -71,7 +71,7 @@ class pudlMySqliResult extends pudlResult {
 	public function row() {
 		if (!is_object($this->result)) return false;
 
-		$this->data = @$this->result->fetch_array();
+		$this->data = @$this->result->fetch_assoc();
 
 		if ($this->data === NULL) return $this->data = false;
 

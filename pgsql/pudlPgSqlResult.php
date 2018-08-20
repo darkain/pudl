@@ -70,7 +70,7 @@ class pudlPgSqlResult extends pudlResult {
 	public function row() {
 		if (!$this->result) return false;
 
-		$this->data = pg_fetch_array($this->result);
+		$this->data = pg_fetch_assoc($this->result);
 
 		if ($this->data !== false) {
 			$this->row = ($this->row === false) ? 0 : $this->row+1;

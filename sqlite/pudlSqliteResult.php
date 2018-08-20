@@ -79,7 +79,7 @@ class pudlSqliteResult extends pudlResult {
 	public function row() {
 		if (!is_object($this->result)) return false;
 
-		$this->data = $this->result->fetchArray();
+		$this->data = $this->result->fetchArray(SQLITE_ASSOC);
 
 		if ($this->data !== false) {
 			$this->row = ($this->row === false) ? 0 : $this->row+1;
