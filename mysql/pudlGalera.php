@@ -208,18 +208,18 @@ class pudlGalera extends pudlMySqli {
 			case 1205: // "LOCK WAIT TIMEOUT EXCEEDED; TRY RESTARTING TRANSACTION"
 			case 1213: // "DEADLOCK FOUND WHEN TRYING TO GET LOCK; TRY RESTARTING TRANSACTION"
 				if ($this->inTransaction()) {
-					usleep(50000);
+					usleep(mt_rand(30000,50000));
 					$result = $this->retryTransaction();
 
 				//IT IS POSSIBLE TO DEADLOCK WITH A SINGLE QUERY
 				//THIS CONDITION IS SIMPLE: JUST RETRY THE QUERY!
 				} else {
-					usleep(25000);
+					usleep(mt_rand(15000,25000));
 					$result = @$this->connection->query($query);
 
 					//IF WE DEADLOCK AGAIN, TRY ONCE MORE BUT WAIT LONGER
 					if ($this->errno() == 1205  ||  $this->errno() == 1213) {
-						usleep(50000);
+						usleep(mt_rand(30000,50000));
 						$result = @$this->connection->query($query);
 					}
 				}
