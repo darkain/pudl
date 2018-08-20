@@ -936,21 +936,13 @@ class	pudlObject
 	////////////////////////////////////////////////////////////////////////////
 	//pudlData - GET THE CURRENT ROW, THEN ADVANCE THE INTERNAL ARRAY POINTER
 	////////////////////////////////////////////////////////////////////////////
-	public function row($type=PUDL_ARRAY) {
+	public function row() {
 		$row = current($this->__array);
 		if ($row === false) return false;
 
 		next($this->__array);
 
-		if ($type === PUDL_ARRAY) return $row;
-
-		$array = ($row instanceof pudlObject)
-				? $row->raw()
-				: (array) $row;
-
-		return ($type === PUDL_NUMBER)
-			? array_values($array)
-			: array_merge(array_values($array), $array);
+		return $row;
 	}
 
 

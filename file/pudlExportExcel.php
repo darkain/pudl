@@ -64,7 +64,9 @@ function pudlExportExcel(pudlData $result, $filename, $headers=false) {
 
 	//EXPORT CELL DATA
 	$x++;
-	while ($data = $result->row(PUDL_NUMBER)) {
+	while ($data = $result->row()) {
+		$data = array_values($data);
+
 		echo "\n\t\t".'<row r="' . $x . '" spans="1:' . $colcount . '">';
 		$y = 0;
 		foreach ($data as $key => $val) {

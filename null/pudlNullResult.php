@@ -9,7 +9,7 @@ class pudlNullResult extends pudlResult {
 	public function fields()					{ return false; }
 	public function getField($column)			{ return false; }
 	public function seek($row)					{}
-	public function row($type=PUDL_ARRAY)		{ return false; }
+	public function row()						{ return false; }
 	public function error()						{ return 0; }
 	public function errormsg()					{ return ''; }
 

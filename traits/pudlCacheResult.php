@@ -59,7 +59,7 @@ class pudlCacheResult extends pudlResult {
 	public function seek($row) { $this->row = (int) $row; }
 
 
-	public function row($type=PUDL_ARRAY) {
+	public function row() {
 		if (isset($this->rows[$this->row])) {
 			return $this->data = $this->rows[$this->row++];
 		}
@@ -68,7 +68,7 @@ class pudlCacheResult extends pudlResult {
 
 
 
-	public function rows($type=PUDL_ARRAY) {
+	public function rows() {
 		return $this->rows;
 	}
 

@@ -62,25 +62,12 @@ class pudlArrayResult extends pudlResult {
 
 
 
-	public function row($type=PUDL_ARRAY) {
+	public function row() {
 		if (!is_array($this->array)) return false;
 
-		if ($this->pos++ === 0) {
-			$data = current($this->array);
-		} else {
-			$data = next($this->array);
-		}
-
-		if ($data === false) return false;
-
-		switch ($type) {
-			case PUDL_INDEX:	break;
-			case PUDL_ARRAY:	break;
-			case PUDL_NUMBER:	return array_values($data);
-			case PUDL_BOTH:		return $data + array_values($data);
-		}
-
-		return $data;
+		return ($this->pos++ === 0)
+			? current($this->array)
+			: next($this->array);
 	}
 
 

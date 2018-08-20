@@ -30,7 +30,7 @@ interface	pudlData
 	public function fields();
 	public function getField($column);
 	public function listFields();
-	public function row($type=PUDL_ARRAY);
+	public function row();
 	public function free();
 
 	//Method to get JSON text string from this object

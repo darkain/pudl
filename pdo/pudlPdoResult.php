@@ -57,20 +57,14 @@ class pudlPdoResult extends pudlResult {
 
 
 /////////////////////////////
-	public function row($type=PUDL_ARRAY) {
+	public function row() {
 		if (!is_object($this->result)) return false;
 
 		$seek = $this->seekzero ? 0 : 1;
 		$this->seekzero = false;
 
-		$this->data = false;
-		switch ($type) {
-			case PUDL_INDEX:	//fall through
-			case PUDL_ARRAY:	$this->data = $this->result->fetch(PDO::FETCH_ASSOC,	FETCH_ORI_REL, $seek);	break;
-			case PUDL_NUMBER:	$this->data = $this->result->fetch(PDO::FETCH_NUM,		FETCH_ORI_REL, $seek);		break;
-			case PUDL_BOTH:		$this->data = $this->result->fetch(PDO::FETCH_BOTH,		FETCH_ORI_REL, $seek);	break;
-			default:			$this->data = $this->result->fetch(PDO::FETCH_BOTH,		FETCH_ORI_REL, $seek);					break;
-		}
+		$this->data = $this->result->fetch(PDO::FETCH_ASSOC, FETCH_ORI_REL, $seek);
+
 		if ($this->data !== false) {
 			$this->row = ($this->row === false) ? 0 : $this->row+1;
 		}

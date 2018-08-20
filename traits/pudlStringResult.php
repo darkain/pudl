@@ -35,14 +35,14 @@ class pudlStringResult extends pudlResult implements pudlValue, pudlHelper {
 	}
 
 
-	public function row($type=PUDL_ARRAY) {
+	public function row() {
 		if ($this->returned) return false;
 		$this->returned = true;
 		return $this->query;
 	}
 
 
-	public function rows($type=PUDL_ARRAY) {
+	public function rows() {
 		if ($this->returned) return false;
 		$this->returned = true;
 		return $this->query;

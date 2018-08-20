@@ -3,16 +3,10 @@
 //Default Behavior
 define('PUDL_DEFAULT',		0x00);
 
-//Array Types
-define('PUDL_ARRAY',		0x01);
-define('PUDL_NUMBER',		0x02);
-define('PUDL_BOTH',			0x03);
-define('PUDL_INDEX',		0x04);
-
 //Escapes
 define('PUDL_START',		0x01);
 define('PUDL_END',			0x02);
-//define('PUDL_BOTH',		0x03);
+define('PUDL_BOTH',			0x03);
 
 //PUDL Object
 define('PUDL_CSV',			0x10);

@@ -274,23 +274,8 @@ trait pudlSelect {
 
 
 
-	public function selectIndexed($col, $table, $clause=false, $order=false, $limit=false, $offset=false, $lock=false) {
-		$result = $this->select($col, $table, $clause, $order, $limit, $offset, $lock);
-		if ($this->inUnion()) return true;
-		if ($result instanceof pudlStringResult) return $result;
-		return $result->complete(PUDL_INDEX);
-	}
-
-
-
 	public function rows($table, $clause=false, $order=false, $lock=false) {
 		return $this->selectRows('*', $table, $clause, $order, false, false, $lock);
-	}
-
-
-
-	public function indexed($table, $clause=false, $order=false, $lock=false) {
-		return $this->selectIndexed('*', $table, $clause, $order, false, false, $lock);
 	}
 
 

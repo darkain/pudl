@@ -51,19 +51,15 @@ class pudlMsSqlResult extends pudlResult {
 	}
 
 
-	public function row($type=PUDL_ARRAY) {
+	public function row() {
 		if (!$this->result) return false;
-		$this->data = false;
-		switch ($type) {
-			case PUDL_INDEX:	//fall through
-			case PUDL_ARRAY:	$this->data = @mssql_fetch_array($this->result, MSSQL_ASSOC);	break;
-			case PUDL_NUMBER:	$this->data = @mssql_fetch_array($this->result, MSSQL_NUM);		break;
-			case PUDL_BOTH:		$this->data = @mssql_fetch_array($this->result, MSSQL_BOTH);	break;
-			default:			$this->data = @mssql_fetch_array($this->result);
-		}
+
+		$this->data = @mssql_fetch_array($this->result);
+
 		if ($this->data !== false) {
 			$this->row = ($this->row === false) ? 0 : $this->row+1;
 		}
+
 		return $this->data;
 	}
 

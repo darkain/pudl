@@ -26,10 +26,15 @@ class pudlMySqliResult extends pudlResult {
 	public function cell($row=0, $column=0) {
 		if (!is_object($this->result)) return false;
 		$this->seek($row);
-		$data = $this->row(PUDL_NUMBER);
 
-		return (pudl_array($data)  &&  array_key_exists($column, $data))
-			? $data[$column] : false;
+		$data = $this->row();
+		if (!pudl_array($data)) return false;
+
+		if (is_int($column)) $data = array_values($data);
+
+		return (array_key_exists($column, $data))
+			? $data[$column]
+			: false;
 	}
 
 
@@ -63,17 +68,11 @@ class pudlMySqliResult extends pudlResult {
 	}
 
 
-	public function row($type=PUDL_ARRAY) {
+	public function row() {
 		if (!is_object($this->result)) return false;
 
-		$this->data = false;
-		switch ($type) {
-			case PUDL_INDEX:	//fall through
-			case PUDL_ARRAY:	$this->data = @$this->result->fetch_array(MYSQLI_ASSOC);	break;
-			case PUDL_NUMBER:	$this->data = @$this->result->fetch_array(MYSQLI_NUM);		break;
-			case PUDL_BOTH:		$this->data = @$this->result->fetch_array(MYSQLI_BOTH);		break;
-			default:			$this->data = @$this->result->fetch_array();
-		}
+		$this->data = @$this->result->fetch_array();
+
 		if ($this->data === NULL) return $this->data = false;
 
 		if ($this->first) {

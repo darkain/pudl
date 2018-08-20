@@ -76,18 +76,15 @@ class pudlSqliteResult extends pudlResult {
 	}
 
 
-	public function row($type=PUDL_ARRAY) {
+	public function row() {
 		if (!is_object($this->result)) return false;
-		$this->data = false;
-		switch ($type) {
-			case PUDL_ARRAY:	$this->data = $this->result->fetchArray(SQLITE3_ASSOC);	break;
-			case PUDL_NUMBER:	$this->data = $this->result->fetchArray(SQLITE3_NUM);	break;
-			case PUDL_BOTH:		$this->data = $this->result->fetchArray(SQLITE3_BOTH);	break;
-			default:			$this->data = $this->result->fetchArray();
-		}
+
+		$this->data = $this->result->fetchArray();
+
 		if ($this->data !== false) {
 			$this->row = ($this->row === false) ? 0 : $this->row+1;
 		}
+
 		return $this->data;
 	}
 

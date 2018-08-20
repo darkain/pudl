@@ -56,7 +56,7 @@ class pudlOdbcResult extends pudlResult {
 	}
 
 
-	public function row($type=PUDL_ARRAY) {
+	public function row() {
 		if (!$this->result) return false;
 
 		$fetch						= @odbc_fetch_row($this->result, $this->row);
@@ -69,16 +69,8 @@ class pudlOdbcResult extends pudlResult {
 		$this->data					= [];
 
 		for ($i=1; $i<=$fields; $i++) {
-			$item					= @odbc_result($this->result, $i);
-
-			if (($type & PUDL_ARRAY)  ||  ($type & PUDL_INDEX)) {
-				$name				= @odbc_field_name($this->result, $i);
-				$this->data[$name]	= $item;
-			}
-
-			if ($type & PUDL_NUMBER) {
-				$this->data[$i]		= $item;
-			}
+			$name				= @odbc_field_name(	$this->result, $i);
+			$this->data[$name]	= @odbc_result(		$this->result, $i);
 		}
 
 		return $this->data;

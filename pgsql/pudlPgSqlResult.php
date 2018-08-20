@@ -67,19 +67,15 @@ class pudlPgSqlResult extends pudlResult {
 
 
 
-	public function row($type=PUDL_ARRAY) {
+	public function row() {
 		if (!$this->result) return false;
-		$this->data = false;
-		switch ($type) {
-			case PUDL_INDEX:	//fall through
-			case PUDL_ARRAY:	$this->data = pg_fetch_array($this->result, NULL, PGSQL_ASSOC);	break;
-			case PUDL_NUMBER:	$this->data = pg_fetch_array($this->result, NULL, PGSQL_NUM);	break;
-			case PUDL_BOTH:		$this->data = pg_fetch_array($this->result, NULL, PGSQL_BOTH);	break;
-			default:			$this->data = pg_fetch_array($this->result);
-		}
+
+		$this->data = pg_fetch_array($this->result);
+
 		if ($this->data !== false) {
 			$this->row = ($this->row === false) ? 0 : $this->row+1;
 		}
+
 		return $this->data;
 	}
 

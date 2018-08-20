@@ -124,7 +124,7 @@ abstract class	pudlResult
 	////////////////////////////////////////////////////////////////////////////
 	//pudlData
 	////////////////////////////////////////////////////////////////////////////
-	abstract public function row($type=PUDL_ARRAY);
+	abstract public function row();
 	abstract public function fields();
 	abstract public function getField($column);
 
@@ -166,23 +166,19 @@ abstract class	pudlResult
 
 
 
-	public function rows($type=PUDL_ARRAY) {
+	public function rows() {
 		if (!$this->result) return false;
 		$rows = [];
-		while ($data = $this->row($type)) {
-			if ($type === PUDL_INDEX) {
-				$rows[ reset($data) ] = $data;
-			} else {
-				$rows[] = $data;
-			}
+		while ($data = $this->row()) {
+			$rows[] = $data;
 		}
 		return $rows;
 	}
 
 
 
-	public function complete($type=PUDL_ARRAY) {
-		$rows = $this->rows($type);
+	public function complete() {
+		$rows = $this->rows();
 		$this->free();
 		return $rows;
 	}
@@ -245,23 +241,6 @@ abstract class	pudlResult
 		$json = $this->json();
 		$this->free();
 		return $json;
-	}
-
-
-
-	public function get() {
-		$data = $this->row(PUDL_NUMBER);
-		if (!$data) return false;
-
-		$fields = $this->fields();
-		for ($i=0; $i<count($fields); $i++) {
-			$name = $fields[$i]->name;
-			if (!isset($data[$name])  ||  is_null($data[$name])) {
-				$data[$name] = &$data[$i];
-			}
-		}
-
-		return $data;
 	}
 
 
