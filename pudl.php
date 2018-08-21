@@ -70,6 +70,7 @@ abstract	class	pudl {
 		if (empty($data['prefix']))		$data['prefix']		= false;
 		if (empty($data['persistent']))	$data['persistent']	= false;
 		if (empty($data['salt']))		$data['salt']		= '';
+		if (empty($data['timeout']))	$data['timeout']	= 10;
 
 		//SET INITIAL DATA
 		$this->microtime	= microtime(true);

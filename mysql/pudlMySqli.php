@@ -37,8 +37,8 @@ class pudlMySqli extends pudl {
 		$auth = $this->auth();
 
 		$this->connection = mysqli_init();
-		$this->connection->options(MYSQLI_OPT_CONNECT_TIMEOUT, 10);
-		$this->connection->options(MYSQLI_OPT_READ_TIMEOUT, 10);
+		$this->connection->options(MYSQLI_OPT_CONNECT_TIMEOUT,	$auth['timeout']);
+		$this->connection->options(MYSQLI_OPT_READ_TIMEOUT,		$auth['timeout']);
 
 		//ATTEMPT TO CREATE A CONNECTION
 		$ok = @$this->connection->real_connect(
