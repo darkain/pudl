@@ -358,3 +358,17 @@ class pudlOr extends pudlAnd {
 		$this->joiner	= ' OR ';
 	}
 }
+
+
+
+class pudlString {
+	public function __construct($value='') {
+		$this->value = (string) $value;
+	}
+
+	public function __toString() {
+		return (string) $this->value;
+	}
+
+	public $value;
+}

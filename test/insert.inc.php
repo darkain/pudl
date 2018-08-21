@@ -339,3 +339,39 @@ pudlTest("INSERT INTO `table` (`column`) VALUES ('{\\\"param\\\":[1,2,3]}') ON D
 //NOT: JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{}'),'$.0',1,'$.1',2,'$.2',3)
 //$db->string()->upsert('table', ['column'=>[1,2,3]]);
 //pudlTest('sss');
+
+
+
+
+$db->string()->insertInto('table1')->select('*', 'table2');
+pudlTest('INSERT INTO `table1` (SELECT * FROM `table2`)');
+
+
+
+
+$db->string()->insertInto('table1')->rows('table2');
+pudlTest('INSERT INTO `table1` (SELECT * FROM `table2`)');
+
+
+
+
+$db->string()->insertInto('table1')->row('table2');
+pudlTest('INSERT INTO `table1` (SELECT * FROM `table2` LIMIT 1)');
+
+
+
+
+$db->string()->replaceInto('table1')->select('*', 'table2');
+pudlTest('REPLACE INTO `table1` (SELECT * FROM `table2`)');
+
+
+
+
+$db->string()->replaceInto('table1')->rows('table2');
+pudlTest('REPLACE INTO `table1` (SELECT * FROM `table2`)');
+
+
+
+
+$db->string()->replaceInto('table1')->row('table2');
+pudlTest('REPLACE INTO `table1` (SELECT * FROM `table2` LIMIT 1)');

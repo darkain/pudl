@@ -145,6 +145,12 @@ abstract	class	pudl {
 			array_pop($this->string);
 
 
+		//EXECUTE SUBQUERY
+		} else if ($string instanceof pudlString) {
+			array_pop($this->string);
+			return $this($string . '(' . $query . ')');
+
+
 		//RETURN A SUBQUERY STRING
 		} else if ($string !== false) {
 			$this->query = '(' . $this->query . ')';
