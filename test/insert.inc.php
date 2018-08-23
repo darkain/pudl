@@ -334,11 +334,13 @@ pudlTest("INSERT INTO `table` (`column`) VALUES ('{\\\"param\\\":[1,2,3]}') ON D
 
 
 
-//TODO: THIS IS BUGGED
-//THIS SHOULD CREATE: JSON_COMPACT('[1,2,3]')
-//NOT: JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{}'),'$.0',1,'$.1',2,'$.2',3)
-//$db->string()->upsert('table', ['column'=>[1,2,3]]);
-//pudlTest('sss');
+$db->string()->upsert('table', ['column'=>[1,2,3]]);
+pudlTest("INSERT INTO `table` (`column`) VALUES ('[1,2,3]') ON DUPLICATE KEY UPDATE `column`='[1,2,3]'");
+
+
+
+$db->string()->upsert('table', ['column'=>['a','b','c']]);
+pudlTest("INSERT INTO `table` (`column`) VALUES ('[\\\"a\\\",\\\"b\\\",\\\"c\\\"]') ON DUPLICATE KEY UPDATE `column`='[\\\"a\\\",\\\"b\\\",\\\"c\\\"]'");
 
 
 

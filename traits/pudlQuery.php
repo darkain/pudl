@@ -831,21 +831,30 @@ trait pudlQuery {
 						.  ',\', \',\'))';
 
 			} else if (pudl_array($value)  &&  count($value)) {
-				$query	.= 'JSON_SET(';
-				$query	.= $this->_value($this->_json_column($column));
-				foreach ($value as $json_path => $json_value) {
-					$query .= ",'$." . $this->jsonPathSafe($json_path) . "',";
-					if (is_string($json_value)) {
-						$query .= $this->_value($json_value);
-					} else {
-						$query .= 'JSON_COMPACT(';
-						$query .= $this->_value(
-							static::jsonEncode($json_value)
-						);
-						$query .= ')';
+				$value	= (array) $value;
+
+				if (array_keys($value) === range(0, count($value) - 1)) {
+					$query	.= $this->_value(
+						static::jsonEncode($value)
+					);
+
+				} else {
+					$query	.= 'JSON_SET(';
+					$query	.= $this->_value($this->_json_column($column));
+					foreach ($value as $json_path => $json_value) {
+						$query .= ",'$." . $this->jsonPathSafe($json_path) . "',";
+						if (is_string($json_value)) {
+							$query .= $this->_value($json_value);
+						} else {
+							$query .= 'JSON_COMPACT(';
+							$query .= $this->_value(
+								static::jsonEncode($json_value)
+							);
+							$query .= ')';
+						}
 					}
+					$query	.= ')';
 				}
-				$query	.= ')';
 
 			} else if (is_array($value)) {
 				$query	.= 'NULL';
