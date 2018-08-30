@@ -1,7 +1,7 @@
 <?php
 
 
-require_once(__DIR__.'/pudlShellResult.php');
+require_once(pudl_file_owner(__DIR__.'/pudlShellResult.php'));
 
 
 class pudlShell extends pudl {

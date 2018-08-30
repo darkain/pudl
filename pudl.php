@@ -1,36 +1,9 @@
 <?php
 
-//CONSTANTS, INTERFACES, HELPER CLASSES AND FUNCTIONS
-require_once(__DIR__.'/pudlConstants.php');
-require_once(__DIR__.'/pudlInterfaces.php');
-require_once(__DIR__.'/pudlHelpers.php');
-require_once(__DIR__.'/pudlOrm.php');
-require_once(__DIR__.'/pudlList.php');
-require_once(__DIR__.'/clone/pudlClone.php');
 
-//INTERNAL USAGE RESULT SETS
-require_once(__DIR__.'/pudlResult.php');
-require_once(__DIR__.'/traits/pudlStringResult.php');
-require_once(__DIR__.'/traits/pudlCacheResult.php');
 
-//TRAITS
-require_once(__DIR__.'/traits/pudlAuth.php');
-require_once(__DIR__.'/traits/pudlJson.php');
-require_once(__DIR__.'/traits/pudlAlias.php');
-require_once(__DIR__.'/traits/pudlRedis.php');
-require_once(__DIR__.'/traits/pudlQuery.php');
-require_once(__DIR__.'/traits/pudlUnion.php');
-require_once(__DIR__.'/traits/pudlTable.php');
-require_once(__DIR__.'/traits/pudlSelect.php');
-require_once(__DIR__.'/traits/pudlInsert.php');
-require_once(__DIR__.'/traits/pudlUpdate.php');
-require_once(__DIR__.'/traits/pudlDelete.php');
-require_once(__DIR__.'/traits/pudlStatic.php');
-require_once(__DIR__.'/traits/pudlCompare.php');
-require_once(__DIR__.'/traits/pudlCounter.php');
-require_once(__DIR__.'/traits/pudlDynamic.php');
-require_once(__DIR__.'/traits/pudlCallback.php');
-require_once(__DIR__.'/traits/pudlTransaction.php');
+require_once(__DIR__.'/pudlOwner.inc.php');
+require_once(pudl_file_owner(__DIR__.'/pudlInclude.inc.php'));
 
 
 
@@ -266,15 +239,42 @@ abstract	class	pudl {
 		}
 
 		switch (strtoupper($data['type'])) {
-			case 'MYSQL':	require_once(__DIR__.'/mysql/pudlMySql.php');	break;
-			case 'MYSQLI':	require_once(__DIR__.'/mysql/pudlMySqli.php');	break;
-			case 'GALERA':	require_once(__DIR__.'/mysql/pudlGalera.php');	break;
-			case 'PGSQL':	require_once(__DIR__.'/pgsql/pudlPgSql.php');	break;
-			case 'MSSQL':	require_once(__DIR__.'/mssql/pudlMsSql.php');	break;
-			case 'SQLITE':	require_once(__DIR__.'/sqlite/pudlSqlite.php');	break;
-			case 'ODBC':	require_once(__DIR__.'/sql/pudlOdbc.php');		break;
-			case 'PDO':		require_once(__DIR__.'/sql/pudlPdo.php');		break;
-			case 'NULL':	require_once(__DIR__.'/null/pudlNull.php');		break;
+			case 'MYSQL':
+				require_once(pudl_file_owner(__DIR__.'/mysql/pudlMySql.php'));
+			break;
+
+			case 'MYSQLI':
+				require_once(pudl_file_owner(__DIR__.'/mysql/pudlMySqli.php'));
+			break;
+
+			case 'GALERA':
+				require_once(pudl_file_owner(__DIR__.'/mysql/pudlGalera.php'));
+			break;
+
+			case 'PGSQL':
+				require_once(pudl_file_owner(__DIR__.'/pgsql/pudlPgSql.php'));
+			break;
+
+			case 'MSSQL':
+				require_once(pudl_file_owner(__DIR__.'/mssql/pudlMsSql.php'));
+			break;
+
+			case 'SQLITE':
+				require_once(pudl_file_owner(__DIR__.'/sqlite/pudlSqlite.php'));
+			break;
+
+			case 'ODBC':
+				require_once(pudl_file_owner(__DIR__.'/sql/pudlOdbc.php'));
+			break;
+
+			case 'PDO':
+				require_once(pudl_file_owner(__DIR__.'/sql/pudlPdo.php'));
+			break;
+
+			case 'NULL':
+				require_once(pudl_file_owner(__DIR__.'/null/pudlNull.php'));
+			break;
+
 
 			default:
 				throw new pudlException(

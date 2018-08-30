@@ -1,8 +1,8 @@
 <?php
 
 
-require_once('pudlMySqliResult.php');
-require_once('pudlMySqlHelper.php');
+require_once(pudl_file_owner(__DIR__.'/pudlMySqliResult.php'));
+require_once(pudl_file_owner(__DIR__.'/pudlMySqlHelper.php'));
 
 
 

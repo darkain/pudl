@@ -2,7 +2,7 @@
 
 
 
-require_once('pudlMySqli.php');
+require_once(pudl_file_owner(__DIR__.'/pudlMySqli.php'));
 
 
 

@@ -1,7 +1,7 @@
 <?php
 
 
-require_once(__DIR__.'/../pudlInterfaces.php');
+require_once(pudl_file_owner(__DIR__.'/../pudlInterfaces.php'));
 
 
 function pudlExportExcel(pudlData $result, $filename, $headers=false) {

@@ -1,7 +1,7 @@
 <?php
 
 
-require_once('pudlImport.php');
+require_once(pudl_file_owner(__DIR__.'/pudlImport.php'));
 
 
 

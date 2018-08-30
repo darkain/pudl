@@ -3,9 +3,10 @@
 
 
 
-require_once(__DIR__.'/pudlData.php');
-require_once(__DIR__.'/pudlInterfaces.php');
-require_once(__DIR__.'/pudlConstants.php');
+require_once(__DIR__.'/pudlOwner.inc.php');
+require_once(pudl_file_owner(__DIR__.'/pudlData.php'));
+require_once(pudl_file_owner(__DIR__.'/pudlInterfaces.php'));
+require_once(pudl_file_owner(__DIR__.'/pudlConstants.php'));
 
 
 

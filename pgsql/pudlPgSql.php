@@ -1,7 +1,7 @@
 <?php
 
 
-require_once('pudlPgSqlResult.php');
+require_once(pudl_file_owner(__DIR__.'/pudlPgSqlResult.php'));
 
 
 class pudlPgSql extends pudl {
