@@ -54,6 +54,9 @@ trait pudlUnion {
 
 
 	protected function _union($type='') {
+		if ($this->union === false) {
+			throw new pudlException('Invalid call to _union()');
+		}
 		$type = strtoupper($type);
 		if ($type !== 'ALL'  &&  $type !== 'DISTINCT') $type = '';
 		return '(' . implode(") UNION $type (", $this->union) . ')';

@@ -65,8 +65,7 @@ class pudlMsSql extends pudl {
 
 	public function disconnect($trigger=true) {
 		parent::disconnect($trigger);
-		if (!$this->connection) return;
-		@mssql_close($this->connection);
+		if ($this->connection) @mssql_close($this->connection);
 		$this->connection = NULL;
 	}
 

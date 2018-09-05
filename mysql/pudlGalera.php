@@ -358,9 +358,18 @@ class pudlGalera extends pudlMySqli {
 
 
 
+	/** @var string[] */
 	private $pool		= [];
+
+	/** @var int|false */
 	private $wait		= false;
+
+	/** @var string|false */
 	private $connected	= false;
+
+	/** @var array */
 	private $state		= [];
+
+	/** @var int|false */
 	private $shmkey		= false;
 }

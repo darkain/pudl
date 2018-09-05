@@ -263,11 +263,25 @@ abstract class	pudlResult
 
 
 
+
+	/** @var pudl */
 	protected $db;
+
+	/** @var resource|false */
 	protected $result;
+
+	/** @var string */
 	protected $query;
+
+	/** @var bool */
 	protected $string;
+
+	/** @var array|false */
 	protected $fields	= false;
+
+	/** @var int|false */
 	protected $row		= false;
+
+	/** @var array|false */
 	protected $data		= false;
 }

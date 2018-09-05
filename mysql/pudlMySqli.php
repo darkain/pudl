@@ -130,14 +130,14 @@ class pudlMySqli extends pudl {
 
 
 	public function errno() {
-		if (!$this->connection) return @mysqli_errno(NULL);
+		if (!$this->connection) return @mysqli_connect_errno();
 		return $this->connection->errno;
 	}
 
 
 
 	public function error() {
-		if (!$this->connection) return @mysqli_error(NULL);
+		if (!$this->connection) return @mysqli_connect_error();
 		return $this->connection->error;
 	}
 

@@ -548,14 +548,35 @@ abstract	class	pudl {
 
 
 
+	////////////////////////////////////////////////////////////////////////////
+	// MEMBER VARIABLES
+	////////////////////////////////////////////////////////////////////////////
+
+	/** @var bool */
 	private			$log			= false;
+
+	/** @var bool */
 	private			$bench			= false;
+
+	/** @var string|false */
 	private			$query			= false;
+
+	/** @var int */
 	private			$time			= 0;
+
+	/** @var float */
 	private			$microtime		= 0.0;
+
+	/** @var array */
 	private			$listcache		= [];
+
+	/** @var resource|object|null */
 	protected		$connection		= NULL;
+
+	/** @var array */
 	protected		$string			= [];
+
+	/** @var string */
 	public static	$version		= 'PUDL 2.9.0';
 
 }
