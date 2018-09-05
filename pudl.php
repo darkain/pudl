@@ -2,6 +2,7 @@
 
 
 if (!function_exists('is_owner')) {
+	/** @suppress PhanRedefineFunction */
 	function is_owner($path) { return $path; }
 }
 
