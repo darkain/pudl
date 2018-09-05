@@ -1,9 +1,13 @@
 <?php
 
 
+if (!function_exists('is_owner')) {
+	function is_owner($path) { return $path; }
+}
 
-require_once(__DIR__.'/pudlOwner.inc.php');
-require_once(pudl_file_owner(__DIR__.'/pudlInclude.inc.php'));
+
+
+require_once(is_owner(__DIR__.'/pudlInclude.inc.php'));
 
 
 
@@ -240,39 +244,39 @@ abstract	class	pudl {
 
 		switch (strtoupper($data['type'])) {
 			case 'MYSQL':
-				require_once(pudl_file_owner(__DIR__.'/mysql/pudlMySql.php'));
+				require_once(is_owner(__DIR__.'/mysql/pudlMySql.php'));
 			break;
 
 			case 'MYSQLI':
-				require_once(pudl_file_owner(__DIR__.'/mysql/pudlMySqli.php'));
+				require_once(is_owner(__DIR__.'/mysql/pudlMySqli.php'));
 			break;
 
 			case 'GALERA':
-				require_once(pudl_file_owner(__DIR__.'/mysql/pudlGalera.php'));
+				require_once(is_owner(__DIR__.'/mysql/pudlGalera.php'));
 			break;
 
 			case 'PGSQL':
-				require_once(pudl_file_owner(__DIR__.'/pgsql/pudlPgSql.php'));
+				require_once(is_owner(__DIR__.'/pgsql/pudlPgSql.php'));
 			break;
 
 			case 'MSSQL':
-				require_once(pudl_file_owner(__DIR__.'/mssql/pudlMsSql.php'));
+				require_once(is_owner(__DIR__.'/mssql/pudlMsSql.php'));
 			break;
 
 			case 'SQLITE':
-				require_once(pudl_file_owner(__DIR__.'/sqlite/pudlSqlite.php'));
+				require_once(is_owner(__DIR__.'/sqlite/pudlSqlite.php'));
 			break;
 
 			case 'ODBC':
-				require_once(pudl_file_owner(__DIR__.'/sql/pudlOdbc.php'));
+				require_once(is_owner(__DIR__.'/sql/pudlOdbc.php'));
 			break;
 
 			case 'PDO':
-				require_once(pudl_file_owner(__DIR__.'/sql/pudlPdo.php'));
+				require_once(is_owner(__DIR__.'/sql/pudlPdo.php'));
 			break;
 
 			case 'NULL':
-				require_once(pudl_file_owner(__DIR__.'/null/pudlNull.php'));
+				require_once(is_owner(__DIR__.'/null/pudlNull.php'));
 			break;
 
 

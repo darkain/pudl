@@ -3,10 +3,16 @@
 
 
 
-require_once(__DIR__.'/pudlOwner.inc.php');
-require_once(pudl_file_owner(__DIR__.'/pudlData.php'));
-require_once(pudl_file_owner(__DIR__.'/pudlInterfaces.php'));
-require_once(pudl_file_owner(__DIR__.'/pudlConstants.php'));
+if (!function_exists('is_owner')) {
+	function is_owner($path) { return $path; }
+}
+
+
+
+
+require_once(is_owner(__DIR__.'/pudlData.php'));
+require_once(is_owner(__DIR__.'/pudlInterfaces.php'));
+require_once(is_owner(__DIR__.'/pudlConstants.php'));
 
 
 

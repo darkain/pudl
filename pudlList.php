@@ -3,7 +3,7 @@
 
 
 
-require_once(pudl_file_owner(__DIR__.'/pudlObject.php'));
+require_once(is_owner(__DIR__.'/pudlObject.php'));
 
 
 
