@@ -36,6 +36,8 @@ class pudlMySqli extends pudl {
 	public function connect() {
 		$auth = $this->auth();
 
+		pudl_require_extension('mysqli');
+
 		$this->connection = mysqli_init();
 		$this->connection->options(MYSQLI_OPT_CONNECT_TIMEOUT,	$auth['timeout']);
 		$this->connection->options(MYSQLI_OPT_READ_TIMEOUT,		$auth['timeout']);

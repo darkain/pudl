@@ -37,7 +37,7 @@ class pudlSqlite extends pudl {
 		$auth = $this->auth();
 
 		pudl_require_extension('sqlite3');
-		
+
 		//Create Sqlite3 object instance
 		$this->connection = new SQLite3($auth['database']);
 

@@ -27,28 +27,31 @@ class			pudlSession
 		$this->name		= $name;
 		$this->domain	= $domain;
 
-		//When the DB disconnects, call our disconnect handler
+		//VERIFY THAT SESSION SUPPORT IS AVAILABLE
+		pudl_require_extension('session');
+
+		//WHEN THE DB DISCONNECTS, CALL OUR DISCONNECT HANDLER
 		$this->db->on('disconnect', [$this, 'disconnect']);
 
-		//Set this instance as PHP's session handler
+		//SET THIS INSTANCE AS PHP'S SESSION HANDLER
 		session_set_save_handler($this, true);
 
-		//Different session name for HTTPS connections
+		//DIFFERENT SESSION NAME FOR HTTPS CONNECTIONS
 		session_name(
 			(empty($this->name) ? 'PUDLSESSID' : $this->name) .
 			($secure ? '-SECURE' : '')
 		);
 
-		//Set parameters for browser session cookie
+		//SET PARAMETERS FOR BROWSER SESSION COOKIE
 		session_set_cookie_params(
-			60*60*24*30,		//Save session for one month
-			'/',				//Session is for entire domain
+			60*60*24*30,		//SAVE SESSION FOR ONE MONTH
+			'/',				//SESSION IS FOR ENTIRE DOMAIN
 			empty($this->domain) ? '' : $this->domain,
-			$secure,			//HTTPS only
-			true				//HTTP(S) only - block JavaScript access
+			$secure,			//HTTPS ONLY
+			true				//HTTP(S) ONLY - BLOCK JAVASCRIPT ACCESS
 		);
 
-		//Start the session
+		//START THE SESSION
 		if (!headers_sent()) {
 			session_start();
 		} else {
@@ -154,7 +157,7 @@ class			pudlSession
 			$address = '';
 		}
 
-		//Create new entity in database
+		//CREATE NEW ENTITY IN DATABASE
 		$this->db->upsert($this->table, [
 			'id'		=> $id,
 			'user'		=> $this->user,
@@ -163,7 +166,7 @@ class			pudlSession
 			'data'		=> $data,
 		]);
 
-		//Purge the cache for this ID
+		//PURGE THE CACHE FOR THIS ID
 		return $this->purge($id);
 	}
 
@@ -175,12 +178,12 @@ class			pudlSession
 	//http://php.net/manual/en/sessionhandlerinterface.destroy.php
 	////////////////////////////////////////////////////////////////////////////
 	public function destroy($id) {
-		//Delete the object
+		//DELETE THE OBJECT
 		if ($this->hash !== false) {
 			$this->db->deleteId($this->table, 'id', $id);
 		}
 
-		//Purge the cache for this ID
+		//PURGE THE CACHE FOR THIS ID
 		return $this->purge($id);
 	}
 

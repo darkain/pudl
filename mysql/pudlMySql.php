@@ -35,6 +35,8 @@ class pudlMySql extends pudl {
 	public function connect() {
 		$auth = $this->auth();
 
+		pudl_require_extension('mysql');
+
 		ini_set('mysql.connect_timeout', $auth['timeout']);
 
 		//ATTEMPT TO CREATE A PERSISTANT CONNECTION
