@@ -7,6 +7,13 @@ function pudl_array($item) {
 
 
 
+function pudl_require_extension($extension) {
+	if (extension_loaded($extension)) return;
+	throw new pudlException('Required PHP extension is missing: ' . $extension);
+}
+
+
+
 class pudlException extends Exception {
 	public function __construct($message=null, $code=0, $previous=null) {
 		parent::__construct($message, $code, $previous);
