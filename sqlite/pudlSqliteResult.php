@@ -26,24 +26,25 @@ class pudlSqliteResult extends pudlResult {
 
 
 	public function cell($row=0, $column=0) {
-		$return = false;
+		if (!is_object($this->result)) return false;
+		
+		if ($row > $this->row) {
+			$this->row = 0;
+			$this->result->reset();
+		}
 
-		if (is_object($this->result)) {
-			if ($row > $this->row) {
-				$this->row = 0;
-				$this->result->reset();
-			}
+		for ($i=$this->row; $i<=$row; $i++) {
+			$data = $this->row();
+		}
 
-			for ($i=$this->row; $i<=$row; $i++) {
-				$data = $this->row(PUDL_NUMBER);
-			}
-
-			if (pudl_array($data)  &&  array_key_exists($column, $data)) {
-				$return = $data[$column];
+		if (pudl_array($data))
+			$data = array_values($data);
+			if (array_key_exists($column, $data)) {
+				return $data[$column];
 			}
 		}
 
-		return $return;
+		return false;
 	}
 
 
@@ -79,7 +80,7 @@ class pudlSqliteResult extends pudlResult {
 	public function row() {
 		if (!is_object($this->result)) return false;
 
-		$this->data = $this->result->fetchArray(SQLITE_ASSOC);
+		$this->data = $this->result->fetchArray(SQLITE3_ASSOC);
 
 		if ($this->data !== false) {
 			$this->row = ($this->row === false) ? 0 : $this->row+1;
