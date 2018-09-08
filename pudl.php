@@ -471,6 +471,10 @@ abstract	class	pudl {
 
 		$this->microtime = $source;
 	}
+	
+	
+	
+	public function timeout($timeout) {}
 
 
 
