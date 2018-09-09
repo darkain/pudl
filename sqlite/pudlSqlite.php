@@ -98,5 +98,11 @@ class pudlSqlite extends pudl {
 		if (!$this->connection) return '';
 		return $this->connection->lastErrorMsg();
 	}
+	
 
+	public function upsert($table, $data, $idcol=false) {
+		return $this->replace($table, $data, $data);
+	}
+
+	
 }
