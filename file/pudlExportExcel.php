@@ -55,7 +55,7 @@ function pudlExportExcel(pudlData $result, $filename, $headers=false) {
 		if ($key < 26) {
 			$cell = chr(65 + $key) . $x;
 		} else {
-			$cell = chr(64 + floor($key / 26)) . chr(65 + ($key % 26)) . $x;
+			$cell = chr(64 + (int)floor($key / 26)) . chr(65 + ($key % 26)) . $x;
 		}
 		echo '<c r="' . $cell . '" s="1" t="s"><v>' . $index . '</v></c>';
 	}
@@ -73,7 +73,7 @@ function pudlExportExcel(pudlData $result, $filename, $headers=false) {
 			if ($key < 26) {
 				$cell = chr(65 + $key) . $x;
 			} else {
-				$cell = chr(64 + floor($key / 26)) . chr(65 + ($key % 26)) . $x;
+				$cell = chr(64 + (int)floor($key / 26)) . chr(65 + ($key % 26)) . $x;
 			}
 
 			if ($val === NULL) {
