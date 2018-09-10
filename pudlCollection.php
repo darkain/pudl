@@ -67,7 +67,7 @@ class		pudlCollection
 	////////////////////////////////////////////////////////////////////////////
 	public function seek($row) {
 		if (!$row) $this->first = true;
-		return pudlObject::seek($row);
+		pudlObject::seek($row);
 	}
 
 

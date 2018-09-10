@@ -25,7 +25,7 @@ trait pudlUnion {
 					$this->_order($order) .
 					$this->_limit($limit, $offset);
 
-		$this->union = false;
+		$this->union = NULL;
 
 		return $this($query);
 	}
@@ -45,7 +45,7 @@ trait pudlUnion {
 					$this->_order($order) .
 					$this->_limit($limit, $offset);
 
-		$this->union = false;
+		$this->union = NULL;
 
 		return $this($query);
 	}
@@ -54,7 +54,7 @@ trait pudlUnion {
 
 
 	protected function _union($type='') {
-		if ($this->union === false) {
+		if ($this->union === NULL) {
 			throw new pudlException('Invalid call to _union()');
 		}
 		$type = strtoupper($type);
@@ -64,6 +64,7 @@ trait pudlUnion {
 
 
 
-	protected $union = false;
+	/** @var ?array */
+	protected $union = NULL;
 
 }

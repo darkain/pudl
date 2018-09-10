@@ -267,7 +267,7 @@ abstract class	pudlResult
 	/** @var pudl */
 	protected $db;
 
-	/** @var resource|false */
+	/** @var mixed */
 	protected $result;
 
 	/** @var string */

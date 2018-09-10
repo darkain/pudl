@@ -9,6 +9,10 @@ class pudlArrayResult extends pudlResult {
 	public function __construct(pudl $db, $array) {
 		parent::__construct($db);
 
+		if ($array instanceof pudlData) {
+			$array = $array->raw();
+		}
+
 		$this->array = $array;
 	}
 
@@ -31,15 +35,14 @@ class pudlArrayResult extends pudlResult {
 	public function fields() {
 		if (!is_array($this->array)) return false;
 		$array = current($this->array);
-		if (!is_array($array)) return false;
-		return count($array);
+		return is_array($array) ? count($array) : false;
 	}
 
 
 	public function listFields() {
 		if (!is_array($this->array)) return false;
 		$keys = array_keys(current($this->array));
-		if ($keys === false) return false;
+		if (!is_array($keys)) return false;
 
 		$out = [];
 		foreach ($keys as $item) {
@@ -51,14 +54,18 @@ class pudlArrayResult extends pudlResult {
 
 
 	public function getField($column) {
-		$fields = $this->fields();
-		if ($fields === false) return false;
+		$fields = $this->listFields();
+		if (!is_array($fields)) return false;
 		if (!array_key_exists($column, $fields)) return false;
 		return $fields[$column];
 	}
 
 
-	public function seek($row) {}
+	public function seek($row) {
+		if (!is_array($this->array)) return;
+		if ($row < 0  ||  $row >= count($this->array)) return;
+		$this->pos = $row;
+	}
 
 
 
@@ -77,6 +84,6 @@ class pudlArrayResult extends pudlResult {
 	public function errormsg()	{ return ''; }
 
 
-	private $array	= false;
-	private $pos	= 0;
+	/** @var array|false */		private $array	= false;
+	/** @var int */				private $pos	= 0;
 }

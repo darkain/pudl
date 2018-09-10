@@ -217,7 +217,7 @@ class			pudlImportExcel
 				strpos($value, 'e') === false  &&
 				strpos($value, '.') > 0) {
 
-				$data[$header] = round($value, $this->precision);
+				$data[$header] = round((float)$value, $this->precision);
 
 
 			//INTEGER VALUE
@@ -241,7 +241,7 @@ class			pudlImportExcel
 	////////////////////////////////////////////////////////////////////////////
 	//LOCAL VARIABLES
 	////////////////////////////////////////////////////////////////////////////
-	protected	$sheet		= [];
-	protected	$strings	= [];
-	public		$precision	= 2;
+	/** @var SimpleXMLElement|false */	protected	$sheet		= false;
+	/** @var SimpleXMLElement|false */	protected	$strings	= false;
+	/** @var int */						public		$precision	= 2;
 }

@@ -112,8 +112,8 @@ trait pudlTransaction {
 
 
 
-	protected		$transaction	= false;
-	private			$locked			= false;
-	private			$_inserted		= 0;
+	/** @var array|false */		protected		$transaction	= false;
+	/** @var bool */			private			$locked			= false;
+	/** @var int */				private			$_inserted		= 0;
 
 }

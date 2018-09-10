@@ -50,7 +50,7 @@ class pudlPdoResult extends pudlResult {
 
 
 	public function seek($row) {
-		if (!is_object($this->result)) return false;
+		if (!is_object($this->result)) return;
 		$this->result->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_ABS, $row);
 		if (!$row) $this->seekzero = true;
 	}
@@ -63,7 +63,7 @@ class pudlPdoResult extends pudlResult {
 		$seek = $this->seekzero ? 0 : 1;
 		$this->seekzero = false;
 
-		$this->data = $this->result->fetch(PDO::FETCH_ASSOC, FETCH_ORI_REL, $seek);
+		$this->data = $this->result->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_REL, $seek);
 
 		if ($this->data !== false) {
 			$this->row = ($this->row === false) ? 0 : $this->row+1;

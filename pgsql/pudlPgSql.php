@@ -65,19 +65,18 @@ class pudlPgSql extends pudl {
 	protected function process($query) {
 		if (!$this->connection) return new pudlPgSqlResult($this);
 		$result = @pg_query($this->connection, $query);
-		$this->numrows = ($result !== false) ? @pg_num_rows($result) : 0;
 		return new pudlPgSqlResult($this, $result);
 	}
 
 
 
 	public function insertId() {
-		if (!$this->connection) return 0;
+		if (!$this->connection) return false;
 		$result = @pg_query($this->connection, 'SELECT lastval()');
 		if ($result === false) return false;
-		$return = @pg_fetch_array($result, NULL, PGSQL_NUM);
+		$return = @pg_fetch_array($result);
 		pg_free_result($result);
-		return $return[0];
+		return is_array($return) ? reset($return) : false;
 	}
 
 

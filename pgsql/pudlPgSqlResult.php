@@ -61,8 +61,7 @@ class pudlPgSqlResult extends pudlResult {
 
 
 	public function seek($row) {
-		if (!$this->result) return false;
-		return @pg_result_seek($row);
+		if ($this->result) @pg_result_seek($this->result, $row);
 	}
 
 

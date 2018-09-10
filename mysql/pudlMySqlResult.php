@@ -46,8 +46,7 @@ class pudlMySqlResult extends pudlResult {
 
 
 	public function seek($row) {
-		if ($this->result) return @mysql_data_seek($this->result, $row);
-		return false;
+		if ($this->result) @mysql_data_seek($this->result, $row);
 	}
 
 

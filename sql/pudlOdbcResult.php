@@ -50,9 +50,7 @@ class pudlOdbcResult extends pudlResult {
 
 
 	public function seek($row) {
-		if (!$this->result) return false;
-		$this->row = (int) $row;
-		return true;
+		if ($this->result) $this->row = (int) $row;
 	}
 
 

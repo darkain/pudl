@@ -27,7 +27,7 @@ class pudlSqliteResult extends pudlResult {
 
 	public function cell($row=0, $column=0) {
 		if (!is_object($this->result)) return false;
-		
+
 		if ($row > $this->row) {
 			$this->row = 0;
 			$this->result->reset();
@@ -49,7 +49,6 @@ class pudlSqliteResult extends pudlResult {
 
 
 	public function seek($row) {
-		return false;
 		//TODO: IMPLEMENT THIS!
 	}
 

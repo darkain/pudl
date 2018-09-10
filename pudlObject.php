@@ -58,7 +58,7 @@ class	pudlObject
 	////////////////////////////////////////////////////////////////////////////
 	public function free() {
 		$this->__array		= [];
-		$this->__snapshot	= false;
+		$this->__snapshot	= NULL;
 		return $this;
 	}
 
@@ -583,7 +583,7 @@ class	pudlObject
 	//REMOVE A PORTION OF THE ARRAY AND REPLACE IT WITH SOMETHING ELSE
 	//http://php.net/manual/en/function.array-splice.php
 	////////////////////////////////////////////////////////////////////////////
-	public function splice($offset, $length=NULL, $replacement) {
+	public function splice($offset, $length=NULL, $replacement=[]) {
 		if (is_null($length)) $length = count($this->__array);
 		return array_splice($this->__array, $offset, $length, $replacement);
 	}
@@ -617,7 +617,7 @@ class	pudlObject
 	//http://php.net/manual/en/function.trim.php
 	////////////////////////////////////////////////////////////////////////////
 	public function trim($mask=" \t\n\r\0\x0B") {
-		$this->__array = trim($this->__array, $mask);
+		foreach ($this->__array as &$item) trim($item, $mask);
 		return $this;
 	}
 
@@ -629,7 +629,7 @@ class	pudlObject
 	//http://php.net/manual/en/function.ltrim.php
 	////////////////////////////////////////////////////////////////////////////
 	public function ltrim($mask=" \t\n\r\0\x0B") {
-		$this->__array = ltrim($this->__array, $mask);
+		foreach ($this->__array as &$item) ltrim($item, $mask);
 		return $this;
 	}
 
@@ -641,7 +641,7 @@ class	pudlObject
 	//http://php.net/manual/en/function.rtrim.php
 	////////////////////////////////////////////////////////////////////////////
 	public function rtrim($mask=" \t\n\r\0\x0B") {
-		$this->__array = rtrim($this->__array, $mask);
+		foreach ($this->__array as &$item) rtrim($item, $mask);
 		return $this;
 	}
 
@@ -1098,6 +1098,8 @@ class	pudlObject
 			return NULL;
 		}
 
+		if ($this->__snapshot === NULL) return NULL;
+
 		return array_key_exists($snapshot, $this->__snapshot)
 			? $this->__snapshot[$snapshot]
 			: NULL;
@@ -1142,7 +1144,7 @@ class	pudlObject
 	////////////////////////////////////////////////////////////////////////////
 	//PRIVATE MEMBER VARIABLES
 	////////////////////////////////////////////////////////////////////////////
-	private $__array	= [];
-	private $__snapshot	= false;
+	/** @var array */	private $__array	= [];
+	/** @var ?array */	private $__snapshot	= NULL;
 
 }

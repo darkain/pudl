@@ -57,6 +57,10 @@ trait pudlQuery {
 
 
 			case is_int($value):
+				$query = $value;
+			break;
+
+
 			case is_float($value):
 				if (is_nan($value)  ||  is_infinite($value)) {
 					$query = $isnull ? ' IS NULL' : 'NULL';
@@ -965,7 +969,7 @@ trait pudlQuery {
 
 
 
-	protected $identifier	= '"';
-	protected $prefix		= false;
+	/** @var string */			protected $identifier	= '"';
+	/** @var string|false */	protected $prefix		= false;
 
 }

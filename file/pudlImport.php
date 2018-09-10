@@ -181,9 +181,9 @@ abstract class	pudlImport
 	////////////////////////////////////////////////////////////////////////////
 	//LOCAL VARIABLES
 	////////////////////////////////////////////////////////////////////////////
-	protected $header		= [];
-	protected $errors		= [];
-	protected $translate	= false;
-	protected $filename		= false;
+	/** @var array */			protected $header		= [];
+	/** @var array */			protected $errors		= [];
+	/** @var array|false */		protected $translate	= false;
+	/** @var string|false */	protected $filename		= false;
 
 }

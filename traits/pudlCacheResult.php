@@ -27,7 +27,7 @@ class pudlCacheResult extends pudlResult {
 
 	public function cell($row=0, $column=0) {
 		$this->seek($row);
-		if (!isset($this->rows[$this->row])) return false;
+		if (!isset($this->rows[$this->row])) return ;
 
 		$this->data = &$this->rows[$row];
 		if (count($this->data) < $column) return false;
@@ -56,7 +56,9 @@ class pudlCacheResult extends pudlResult {
 	}
 
 
-	public function seek($row) { $this->row = (int) $row; }
+	public function seek($row) {
+		$this->row = (int) $row;
+	}
 
 
 	public function row() {

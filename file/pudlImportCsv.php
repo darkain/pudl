@@ -41,7 +41,8 @@ class			pudlImportCsv
 		if (pudl_array($this->translate)) {
 			$this->header = $this->translate;
 		} else if ($this->translate !== true) {
-			$this->header = fgetcsv($handle);
+			$tmp = fgetcsv($handle);
+			$this->header = is_array($tmp) ? $tmp : [];
 		}
 
 

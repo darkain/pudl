@@ -17,14 +17,16 @@ class pudlMySqliResult extends pudlResult {
 
 	public function free() {
 		$return = false;
-		if (is_object($this->result)) $return = @$this->result->free();
+		if ($this->result instanceof mysqli_result) {
+			$return = @$this->result->free();
+		}
 		$this->result = false;
 		return $return;
 	}
 
 
 	public function cell($row=0, $column=0) {
-		if (!is_object($this->result)) return false;
+		if (!($this->result instanceof mysqli_result)) return false;
 		$this->seek($row);
 
 		$data = $this->row();
@@ -40,21 +42,25 @@ class pudlMySqliResult extends pudlResult {
 
 	public function count() {
 		$rows = false;
-		if (is_object($this->result)) $rows = $this->result->num_rows;
+		if ($this->result instanceof mysqli_result) {
+			$rows = $this->result->num_rows;
+		}
 		return ($rows !== false) ? $rows : 0;
 	}
 
 
 	public function fields() {
 		$fields = false;
-		if (is_object($this->result)) $fields = $this->result->field_count;
+		if ($this->result instanceof mysqli_result) {
+			$fields = $this->result->field_count;
+		}
 		return ($fields !== false) ? $fields : 0;
 	}
 
 
 	public function getField($column) {
 		$field = false;
-		if (is_object($this->result)) {
+		if ($this->result instanceof mysqli_result) {
 			@$this->result->field_seek($column);
 			$field = @$this->result->fetch_field();
 		}
@@ -63,13 +69,14 @@ class pudlMySqliResult extends pudlResult {
 
 
 	public function seek($row) {
-		if (!is_object($this->result)) return false;
-		return @$this->result->data_seek($row);
+		if ($this->result instanceof mysqli_result) {
+			@$this->result->data_seek($row);
+		}
 	}
 
 
 	public function row() {
-		if (!is_object($this->result)) return false;
+		if (!($this->result instanceof mysqli_result)) return false;
 
 		$this->data = @$this->result->fetch_assoc();
 
@@ -111,7 +118,7 @@ class pudlMySqliResult extends pudlResult {
 		}
 
 		foreach ($this->json as $key => $new) {
-			$this->data[$new] = pudl::jsonDecode($this->data[$key], true);
+			$this->data[$new] = pudl::jsonDecode($this->data[$key]);
 			if ($this->data[$new] === NULL) $this->data[$new] = [];
 		} unset($new);
 

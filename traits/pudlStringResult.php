@@ -21,12 +21,7 @@ class pudlStringResult extends pudlResult implements pudlValue, pudlHelper {
 	public function fields()			{ return ['QUERY']; }
 	public function getField($column)	{ return false; }
 	public function error()				{ return false; }
-
-
-	public function seek($row) {
-		if ($row) return false;
-		return !($this->returned = false);
-	}
+	public function seek($row)			{}
 
 
 	public function cell($row=0, $column=0) {

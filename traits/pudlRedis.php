@@ -4,7 +4,7 @@
 trait pudlRedis {
 
 
-	public function cache($seconds=0, $key=false) {
+	public function cache($seconds=0, $key=NULL) {
 		$this->cache	= $seconds;
 		$this->cachekey	= $key;
 		return $this;
@@ -12,14 +12,14 @@ trait pudlRedis {
 
 
 
-	public function recache($seconds, $key=false) {
+	public function recache($seconds, $key=NULL) {
 		$this->recache = true;
 		return $this->cache($seconds, $key);
 	}
 
 
 
-	public function uncache($key=false) {
+	public function uncache($key=NULL) {
 		$this->cache	= -1;
 		$this->cachekey	= $key;
 		return $this;
@@ -28,8 +28,8 @@ trait pudlRedis {
 
 
 	public function decache() {
-		$this->cache	= false;
-		$this->cachekey	= false;
+		$this->cache	= NULL;
+		$this->cachekey	= NULL;
 		$this->recache	= false;
 		return $this;
 	}
@@ -53,7 +53,7 @@ trait pudlRedis {
 			$this->redis = $server;
 
 		} else if (is_bool($server)  ||  $server === NULL) {
-			$this->redis = false;
+			$this->redis = NULL;
 
 		} else if (class_exists('Redis')) {
 			try {
@@ -62,11 +62,11 @@ trait pudlRedis {
 				if ($this->redis->connect($server, -1, 0.25)) {
 					$this->redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
 				} else {
-					$this->redis = false;
+					$this->redis = NULL;
 				}
 
 			} catch (RedisException $e) {
-				$this->redis = false;
+				$this->redis = NULL;
 			}
 		}
 
@@ -121,11 +121,12 @@ trait pudlRedis {
 
 
 
-	protected		$cache		= false;
-	protected		$cachekey	= false;
-	protected		$recache	= false;
-	protected		$redis		= false;
+	/** @var ?int */				protected		$cache		= NULL;
+	/** @var ?string */				protected		$cachekey	= NULL;
+	/** @var bool */				protected		$recache	= false;
+	/** @var ?Redis|pudlVoid */		protected		$redis		= NULL;
 
+	/** @var array */
 	protected		$stats		= [
 		'total'					=> 0,
 		'queries'				=> 0,
@@ -143,13 +144,12 @@ trait pudlRedis {
 //PHP7 HACK BECAUSE EVERYTHING IS BROKEN EVERYWHERE!
 ////////////////////////////////////////////////////////////////////////////////
 if (!defined('HHVM_VERSION')  &&  class_exists('Redis')) {
+	/** @suppress PhanRedefineClass */
 	class pudlRedisHack extends Redis {
-		public function connect(	$host, $port=-1, $timeout=0.0,
-									$persistent_id='', $retry_interval=0) {
+		public function connect($host, $port=-1, $timeout=0.0, $persistent_id='') {
 
 			$level	= error_reporting(0);
-			$return	= parent::connect(	$host, $port, $timeout,
-										$persistent_id, $retry_interval);
+			$return	= parent::connect($host, $port, $timeout, $persistent_id);
 			error_reporting($level);
 			return	$return;
 		}
@@ -174,13 +174,17 @@ if (!defined('HHVM_VERSION')  &&  class_exists('Redis')) {
 //HHVM HACK BECAUSE EVERYTHING IS BROKEN EVERYWHERE!
 ////////////////////////////////////////////////////////////////////////////////
 if (defined('HHVM_VERSION')  &&  class_exists('Redis')) {
+	/** @suppress PhanRedefineClass */
 	class pudlRedisHack extends Redis {
 		protected function doConnect(	$host, $port, $timeout, $persistent_id,
 										$retry_interval, $persistent=false) {
 
 			$level	= error_reporting(0);
+
+			/** @suppress PhanUndeclaredStaticMethod */
 			$return	= parent::doConnect($host, $port, $timeout, $persistent_id,
 										$retry_interval, $persistent);
+
 			error_reporting($level);
 			return	$return;
 		}
