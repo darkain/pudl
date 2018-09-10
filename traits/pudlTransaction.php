@@ -20,6 +20,7 @@ trait pudlTransaction {
 
 
 
+	/** @suppress PhanUndeclaredMethod */
 	public function commit($sync=false) {
 		if (!$this->inTransaction()) return $this;
 		$this('COMMIT');
@@ -70,17 +71,20 @@ trait pudlTransaction {
 			$set = [];
 
 			if (isset($table['read'])) {
+				/** @phan-suppress-next-line PhanUndeclaredMethod */
 				$item = $this->_lockTable($table['read'], 'READ');
 				if (!empty($item)) $set[] = $item;
 				unset($table['read']);
 			}
 
 			if (isset($table['write'])) {
+				/** @phan-suppress-next-line PhanUndeclaredMethod */
 				$item = $this->_lockTable($table['write'], 'WRITE');
 				if (!empty($item)) $set[] = $item;
 				unset($table['write']);
 			}
 
+			/** @phan-suppress-next-line PhanUndeclaredMethod */
 			$item = $this->_lockTable($table, 'WRITE');
 			if (!empty($item)) $set[] = $item;
 

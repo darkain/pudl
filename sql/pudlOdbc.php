@@ -52,8 +52,8 @@ class pudlOdbc extends pudl {
 		$result = @odbc_exec($this->connection, 'SELECT @@IDENTITY');
 		if ($result === false) return false;
 		@odbc_fetch_row($result, 0);
-		$return = @odbc_result($this->result, 0);
-		@odbc_free_result($this->result);
+		$return = @odbc_result($result, 0);
+		@odbc_free_result($result);
 		return $return;
 	}
 

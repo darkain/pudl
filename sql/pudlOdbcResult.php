@@ -75,6 +75,7 @@ class pudlOdbcResult extends pudlResult {
 	}
 
 
+	/** @var int|false */
 	private $fieldCount				= false;
 
 }
