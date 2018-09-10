@@ -839,6 +839,7 @@ trait pudlQuery {
 
 				if (array_keys($value) === range(0, count($value) - 1)) {
 					$query	.= $this->_value(
+						/** @suppress PhanUndeclaredStaticMethod */
 						static::jsonEncode($value)
 					);
 

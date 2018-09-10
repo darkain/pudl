@@ -35,7 +35,8 @@ trait pudlInsert {
 			} else $first = false;
 
 			if (pudl_array($value)) {
-				$value = empty($value) ? NULL : $this->jsonEncode($value);
+				/** @suppress PhanUndeclaredStaticMethod */
+				$value = empty($value) ? NULL : static::jsonEncode($value);
 			}
 
 			$cols .= $this->identifiers($column, NULL);
@@ -186,7 +187,10 @@ trait pudlInsert {
 			foreach ($set as $item) {
 				if (!$firstitem) $query .= ',';
 				$firstitem = false;
-				if (pudl_array($item)) $item = $this->jsonEncode($item);
+				if (pudl_array($item)) {
+					/** @suppress PhanUndeclaredStaticMethod */
+					$item = static::jsonEncode($item);
+				}
 				$query .= $this->_value($item);
 			}
 
