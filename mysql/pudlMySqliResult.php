@@ -97,22 +97,6 @@ class pudlMySqliResult extends pudlResult {
 						$new = trim($new, " \t\n\r\0\x0B`");
 						$this->json[$key] = $new;
 					break;
-
-					case substr_compare($key, 'COLUMN_JSON', 0, 11, true):
-						$new = substr($key, 12, -1);
-						$pos = strrpos($new, '.');
-						if ($pos !== false) $new = substr($new, $pos+1);
-						$new = trim($new, " \t\n\r\0\x0B`");
-						$this->json[$key] = $new;
-					break;
-
-					case substr_compare($key, 'JSON_QUERY', 0, 10, true):
-					case substr_compare($key, 'JSON_VALUE', 0, 10, true):
-					case substr_compare($key, 'JSON_EXTRACT', 0, 12, true):
-						preg_match("/(?:(?:\"(?:\\\\\"|[^\"])+\")|(?:'(?:\\\'|[^'])+'))\s*\)\s*$/is", $key, $m);
-						if (empty($m[0])) break;
-						$this->json[$key] = trim($m[0], " \t\n\r\0\x0B`'\"()");
-					break;
 				}
 			}
 		}

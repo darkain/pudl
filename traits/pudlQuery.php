@@ -239,29 +239,6 @@ trait pudlQuery {
 					. ')';
 		}
 
-
-		//PARSE OUT DATA TYPE
-		$parts		= explode(':', $dynamic[1]);
-		if (count($parts) !== 2) throw new pudlException(
-			'Wrong column format for dynamic column'
-		);
-
-		//SEPARATE AND VERIFY LENGTH OF EACH SECTION
-		$items		= explode('.', $parts[0]);
-		foreach ($items as &$item) {
-			$item = trim($item);
-			if (!strlen($item)) throw new pudlException(
-				'Wrong column name for dynamic column'
-			);
-		} unset($item);
-
-		//RECURSIVELY GENERATE COLUMN_GET FUNCTIONS
-		while (count($items)) {
-			$return	= 'COLUMN_GET(' . $return . ', '
-					. $this->_value( array_shift($items) ) . ' AS '
-					. (count($items) ? 'BINARY' : $this->dynamic_type($parts[1])) . ')';
-		}
-
 		return $return;
 	}
 
