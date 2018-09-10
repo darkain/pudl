@@ -853,6 +853,7 @@ trait pudlQuery {
 						} else {
 							$query .= 'JSON_COMPACT(';
 							$query .= $this->_value(
+								/** @suppress PhanUndeclaredStaticMethod */
 								static::jsonEncode($json_value)
 							);
 							$query .= ')';

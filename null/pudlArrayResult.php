@@ -9,8 +9,10 @@ class pudlArrayResult extends pudlResult {
 	public function __construct(pudl $db, $array) {
 		parent::__construct($db);
 
-		if ($array instanceof pudlData) {
+		if ($array instanceof pudlObject) {
 			$array = $array->raw();
+		} else if (!is_array($array)) {
+			$array = (array) $array;
 		}
 
 		$this->array = $array;

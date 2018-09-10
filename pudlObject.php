@@ -32,7 +32,7 @@ class	pudlObject
 	public function __construct(&$data=NULL, $process=false) {
 		switch (true) {
 			case is_string($data)  &&  is_string($process):
-				$x = @explode($process, $data);
+				$x = @explode((string)$process, $data);
 				$x === false ? $this->free() : $this->govern($x);
 			break;
 
@@ -1085,6 +1085,7 @@ class	pudlObject
 	//FALSE:	GET THE CURRENT SNAPSHOT
 	//STRING:	GET ITEM FROM CURRENT SNAPSHOT
 	//INT:		GET INDEX FROM CURRENT SNAPSHOT
+	/** @suppress PhanTypeArraySuspiciousNullable */
 	////////////////////////////////////////////////////////////////////////////
 	public function snapshot($snapshot=true) {
 		if ($snapshot === true) $this->__snapshot = $this->__array;
@@ -1098,7 +1099,7 @@ class	pudlObject
 			return NULL;
 		}
 
-		if ($this->__snapshot === NULL) return NULL;
+		if (is_null($this->__snapshot)) return NULL;
 
 		return array_key_exists($snapshot, $this->__snapshot)
 			? $this->__snapshot[$snapshot]

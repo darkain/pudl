@@ -48,7 +48,9 @@ interface pudlValue {
 ////////////////////////////////////////////////////////////////////////////////
 if (!function_exists('array_diff_assoc_recursive')) {
 	function array_diff_assoc_recursive($array1, $array2) {
-		$difference = [];
+		$array1		= (array) $array1;
+		$array2		= (array) $array2;
+		$difference	= [];
 		foreach($array1 as $key => $value) {
 			if (pudl_array($value)) {
 				if(!array_key_exists($key, $array2)  ||  !pudl_array($array2[$key])) {

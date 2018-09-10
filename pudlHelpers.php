@@ -18,6 +18,7 @@ class pudlFunction implements pudlValue, pudlHelper {
 		install mysql-community-server-tools
 		mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root -p mysql
 	*/
+	/** @suppress PhanNonClassMethodCall */
 	public static function timestamp($time=false) {
 		global $db;
 		return pudl::convert_tz(
