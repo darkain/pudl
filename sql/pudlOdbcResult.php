@@ -39,7 +39,7 @@ class pudlOdbcResult extends pudlResult {
 			$this->fieldCount = @odbc_num_fields($this->result);
 			if ($this->fieldCount < 0) $this->fieldCount = false;
 		}
-		return ($fields !== false) ? $fields : 0;
+		return ($this->fieldCount !== false) ? $this->fieldCount : 0;
 	}
 
 

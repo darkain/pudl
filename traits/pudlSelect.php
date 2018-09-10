@@ -1,6 +1,10 @@
 <?php
 
 
+'@phan-file-suppress PhanUndeclaredMethod';
+
+
+
 trait pudlSelect {
 
 

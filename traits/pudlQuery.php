@@ -1,6 +1,12 @@
 <?php
 
 
+'@phan-file-suppress PhanUndeclaredMethod';
+'@phan-file-suppress PhanUndeclaredStaticMethod';
+'@phan-file-suppress PhanUndeclaredProperty';
+
+
+
 trait pudlQuery {
 
 
