@@ -1,10 +1,6 @@
 <?php
 
 
-/** @var pudl|null */
-$db = NULL;
-
-
 
 if (!function_exists('is_owner')) {
 	/** @suppress PhanRedefineFunction */
