@@ -181,6 +181,9 @@ abstract	class	pudl {
 		} else {
 			$this->stats['total']++;
 			$this->stats['queries']++;
+			if (strpos($query, 0xC0) !== false  ||  strpos($query, 0xC1) !== false) {
+				throw new pudlException('Invalid UTF-8 Code Point');
+			}
 			$result = $this->process($query);
 		}
 
