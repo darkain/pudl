@@ -190,7 +190,7 @@ trait pudlJson {
 	////////////////////////////////////////////////////////////////////////////
 	protected static function _json_path($field) {
 		switch (substr($field, 0, 1)) {
-			case '$':
+			case '$':	//TODO: THIS IS BAD
 				return $field;
 
 			case '[':

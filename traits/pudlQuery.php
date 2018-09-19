@@ -232,6 +232,7 @@ trait pudlQuery {
 
 
 		//JSON COLUMN FORMAT
+		//TODO: THIS IS BAD
 		if (strpos($identifiers, '$') !== false) {
 			if (substr($dynamic[1], 0, 1) !== '.') {
 				$dynamic[1] = '$.' . $dynamic[1];
