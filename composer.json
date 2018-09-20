@@ -1,6 +1,6 @@
 {
 	"name":			"darkain/pudl",
-	"description":	"SQL query generator with support for MySQL, MariaDB, SQLite, Postgresql, MS-SQL, and more",
+	"description":	"SQL query generator with support for MySQL, MariaDB, SQLite, PostgreSQL, MS-SQL, and more",
 	"version":		"2.9.0",
 	"time":			"2018-09-19",
 	"keywords":		["sql", "query", "query generator", "query builder", "mariadb", "mysql", "mssql", "postgresql"],
