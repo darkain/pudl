@@ -94,7 +94,7 @@ abstract class	pudlOrm
 	public static function create($data=false, $update=false, $database=NULL) {
 		global $db;  //TODO: REMOVE GLOBAL REFERENCE
 
-		$$database = (!is_null($database)) ? $database : $db;
+		$database = (!is_null($database)) ? $database : $db;
 
 		return static::get(
 			$database->insertExtract(
