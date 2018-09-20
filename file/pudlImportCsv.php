@@ -32,8 +32,10 @@ class			pudlImportCsv
 
 		//VERIFY FILE IS OKAY
 		if (!is_resource($handle)) {
-			throw new pudlException('CANNOT OPEN CSV FILE - ' . $filename);
-			return;
+			throw new pudlException(
+				NULL,  //TODO: MAKE $DB PASSED INTO CONSTRUCTOR INSTEAD OF GLOBAL
+				'CANNOT OPEN CSV FILE - ' . $filename
+			);
 		}
 
 
@@ -83,15 +85,19 @@ class			pudlImportCsv
 
 		//VERIFY FILE IS OKAY
 		if (!is_resource($zip)) {
-			throw new pudlException('CANNOT OPEN ZIP FILE - ' . $filename);
-			return false;
+			throw new pudlException(
+				NULL,  //TODO: MAKE $DB PASSED INTO CONSTRUCTOR INSTEAD OF GLOBAL
+				'CANNOT OPEN ZIP FILE - ' . $filename
+			);
 		}
 
 		//VERIFY WE CAN READ THE FIRST ENTRY
 		$entry	= zip_read($zip);
 		if (!is_resource($entry)) {
-			throw new pudlException('ZIP FILE IS EMPTY - ' . $filename);
-			return false;
+			throw new pudlException(
+				NULL,  //TODO: MAKE $DB PASSED INTO CONSTRUCTOR INSTEAD OF GLOBAL
+				'ZIP FILE IS EMPTY - ' . $filename
+			);
 		}
 
 		$size	= zip_entry_filesize($entry);

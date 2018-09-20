@@ -45,10 +45,10 @@ abstract class	pudlImport
 
 		if (!empty($this->errors)) {
 			throw new pudlException(
+				NULL,  //TODO: MAKE $DB PASSED INTO CONSTRUCTOR INSTEAD OF GLOBAL
 				"FILE FAILED DATA VALIDATION\n" .
 				implode("\n", $this->errors)
 			);
-			return false;
 		}
 
 		//PROCESS CONTENTS OF FILE
@@ -56,10 +56,10 @@ abstract class	pudlImport
 
 		if (!empty($this->errors)) {
 			throw new pudlException(
+				NULL,  //TODO: MAKE $DB PASSED INTO CONSTRUCTOR INSTEAD OF GLOBAL
 				"FILE FAILED DATA IMPORT\n" .
 				implode("\n", $this->errors)
 			);
-			return false;
 		}
 
 		return $return;
@@ -85,10 +85,10 @@ abstract class	pudlImport
 
 		if (!empty($this->errors)) {
 			throw new pudlException(
+				NULL,  //TODO: MAKE $DB PASSED INTO CONSTRUCTOR INSTEAD OF GLOBAL
 				"FILE FAILED DATA VALIDATION\n" .
 				implode("\n", $this->errors)
 			);
-			return false;
 		}
 
 		//PROCESS CONTENTS OF FILE

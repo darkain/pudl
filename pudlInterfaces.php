@@ -9,18 +9,25 @@ function pudl_array($item) {
 
 function pudl_require_extension($extension) {
 	if (extension_loaded($extension)) return;
-	throw new pudlException('Required PHP extension is missing: ' . $extension);
+	throw new pudlException(
+		NULL,
+		'Required PHP extension is missing: ' . $extension
+	);
 }
 
 
 
 class pudlException extends Exception {
-	public function __construct($message=null, $code=0, $previous=null) {
+	public function __construct($db, $message=null, $code=0, $previous=null) {
 		parent::__construct($message, $code, $previous);
+		$this->db = $db;
 
-		global $db;
-		if (!empty($db)) $db->decache()->destring();
+		if ($db instanceof pudl) {
+			$db->decache()->destring();
+		}
 	}
+
+	public $db;
 }
 
 

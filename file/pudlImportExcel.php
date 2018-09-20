@@ -70,8 +70,10 @@ class			pudlImportExcel
 		$zip = zip_open(realpath($filename));
 
 		if (!is_resource($zip)) {
-			throw new pudlException('CANNOT OPEN XLSX FILE - ' . $filename);
-			return;
+			throw new pudlException(
+				NULL,  //TODO: MAKE $DB PASSED INTO CONSTRUCTOR INSTEAD OF GLOBAL
+				'CANNOT OPEN XLSX FILE - ' . $filename
+			);
 		}
 
 		while ($entry = zip_read($zip)) {
@@ -97,14 +99,18 @@ class			pudlImportExcel
 
 		//VERIFY WE COULD READ THE MAIN SHEET DATA
 		if (empty($this->sheet)) {
-			throw new pudlException('CANNOT READ XLSX SHEET - ' . $filename);
-			return;
+			throw new pudlException(
+				NULL,  //TODO: MAKE $DB PASSED INTO CONSTRUCTOR INSTEAD OF GLOBAL
+				'CANNOT READ XLSX SHEET - ' . $filename
+			);
 		}
 
 		//VERIFY WE COULD READ THE STRINGS LOOKUP TABLE
 		if (empty($strings)  ||  empty($strings->si)) {
-			throw new pudlException('CANNOT READ XLSX STRINGS - ' . $filename);
-			return;
+			throw new pudlException(
+				NULL,  //TODO: MAKE $DB PASSED INTO CONSTRUCTOR INSTEAD OF GLOBAL
+				'CANNOT READ XLSX STRINGS - ' . $filename
+			);
 		}
 
 		//OPTIMIZE STRINGS TABLE
@@ -144,7 +150,10 @@ class			pudlImportExcel
 
 			switch (true) {
 				case $header === false:
-					throw new pudlException('UNKNOWN HEADER: ' . $name);
+					throw new pudlException(
+						NULL,  //TODO: MAKE $DB PASSED INTO CONSTRUCTOR INSTEAD OF GLOBAL
+						'UNKNOWN HEADER: ' . $name
+					);
 				break;
 
 				case $header === true:

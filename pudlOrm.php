@@ -14,7 +14,10 @@ abstract class	pudlOrm
 
 	public function __construct($item=false, $fetch=false) {
 		if (static::classname === __CLASS__) {
-			throw new pudlException('ORM const parameters were not overwritten');
+			throw new pudlException(
+				NULL, //TODO: MAKE $DB PASSED INTO CONSTRUCTOR INSTEAD OF GLOBAL
+				'ORM const parameters were not overwritten'
+			);
 		}
 
 		if (is_array($item)) {
@@ -162,7 +165,10 @@ abstract class	pudlOrm
 		global $db;
 
 		if (static::collector === __CLASS__) {
-			throw new pudlException('ORM const parameters were not overwritten');
+			throw new pudlException(
+				$db,
+				'ORM const parameters were not overwritten'
+			);
 		}
 
 		$args			= func_get_args();

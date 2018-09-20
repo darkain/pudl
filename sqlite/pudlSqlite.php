@@ -44,6 +44,7 @@ class pudlSqlite extends pudl {
 		//Cannot connect - Error out
 		if (empty($this->connection)) {
 			throw new pudlException(
+				$this,
 				'Unable to open Sqlite database file: ' . $auth['database'],
 				PUDL_X_CONNECTION
 			);
@@ -67,6 +68,13 @@ class pudlSqlite extends pudl {
 		if (!$this->connection) return false;
 		return @$this->connection->escapeString($str);
 	}
+
+
+
+	protected function blob($value) {
+		return "x'" . bin2hex($value) . "'";
+	}
+
 
 
 	protected function process($query) {

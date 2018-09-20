@@ -15,6 +15,7 @@ trait pudlCompare {
 	public static function gt(			$v1=false,	$v2=false)	{ return new pudlEquals(	$v1, $v2, '>'  ); }
 	public static function gteq(		$v1=false,	$v2=false)	{ return new pudlEquals(	$v1, $v2, '>=' ); }
 	public static function like(		$v1=false,	$v2=false)	{ return new pudlLike(		$v1, $v2, PUDL_BOTH ); }
+	public static function likeRaw(		$v1=false,	$v2=false)	{ return new pudlLike(		$v1, $v2, PUDL_NONE ); }
 	public static function likeLeft(	$v1=false,	$v2=false)	{ return new pudlLike(		$v1, $v2, PUDL_START); }
 	public static function likeRight(	$v1=false,	$v2=false)	{ return new pudlLike(		$v1, $v2, PUDL_END  ); }
 	public static function notLike(		$v1=false,	$v2=false)	{ return static::like(		$v1, $v2)->not(); }

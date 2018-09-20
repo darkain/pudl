@@ -28,7 +28,14 @@ trait pudlQuery {
 
 
 
-	public function likeEscape($value) {
+	protected function blob($value) {
+		return '0x' . bin2hex($value);
+	}
+
+
+
+	public function likeEscape($value, $raw=false) {
+		if ($raw) return $value;
 		return addcslashes($this->escape($value), '%_');
 	}
 
@@ -51,15 +58,15 @@ trait pudlQuery {
 		$query = false;
 
 		if ($depth++ > 31) {
-			throw new pudlException('Recursion limit reached');
-			return $query;
+			throw new pudlException($this, 'Recursion limit reached');
 		}
 
 		switch (true) {
 
-			//THIS IS FOR AND/OR RECUSION, HANDLED ELSEWHERE
-			//IN THIS CASE, DO NOTHING!
-			case is_array($value): break;
+			case is_array($value):
+				//THIS IS FOR AND/OR RECUSION, HANDLED ELSEWHERE
+				//IN THIS CASE, DO NOTHING!
+			break;
 
 
 			case is_int($value):
@@ -77,7 +84,13 @@ trait pudlQuery {
 
 
 			case is_string($value):
-				$query = $quote ? "'".$this->escape($value)."'" : $value;
+				if (!$quote) {
+					$query = $value;
+				} else if (preg_match('/[\x80-\xFF]/', $value)) {
+					$query = $this->blob($value);
+				} else {
+					$query = "'" . $this->escape($value) . "'";
+				}
 			break;
 
 
@@ -96,10 +109,8 @@ trait pudlQuery {
 			break;
 
 
-			case is_callable([$value, '__toString']):
-				$query = $quote
-					? "'" . $this->escape((string)$value) . "'"
-					: (string)$value;
+			case is_object($value) && is_callable([$value, '__toString']):
+				$query = $this->_value((string)$value, $quote, $isnull);
 			break;
 
 
@@ -194,14 +205,19 @@ trait pudlQuery {
 		$list		= explode('.', $dynamic[0]);
 
 		//VERIFY TOTAL NUMBER OF PARTS
-		if (count($dynamic) > 2) throw new pudlException(
-			'Wrong column format for dynamic or JSON column'
-		);
+		if (count($dynamic) > 2) {
+			throw new pudlException(
+				$this,
+				'Wrong column format for dynamic or JSON column'
+			);
+		}
 
 		//CLEAN UP TABLE AND COLUMN NAMES
 		foreach ($list as &$item) {
 			$item = trim($item);
-			if (!strlen($item)) throw new pudlException('Wrong column name');
+			if (!strlen($item)) {
+				throw new pudlException($this, 'Wrong column name');
+			}
 		} unset($item);
 
 		//PROCESS TABLE NAME
@@ -384,8 +400,7 @@ trait pudlQuery {
 		$query = '';
 
 		if ($depth > 31) {
-			throw new pudlException('Recursion limit reached');
-			return '';
+			throw new pudlException($this, 'Recursion limit reached');
 		}
 
 		if ($clause instanceof pudlAnd) {
@@ -525,9 +540,11 @@ trait pudlQuery {
 				$this->_requireTrue($value, 'Object retuned invalid value from pudlId');
 				return $value;
 			}
-			throw new pudlException(is_object($column)
-				? 'Undefined method: ' . get_class($column) . '::pudlId'
-				: 'Invalid data type for object: ' . gettype($column)
+			throw new pudlException(
+				$this,
+				is_object($column)
+					? 'Undefined method: ' . get_class($column) . '::pudlId'
+					: 'Invalid data type for object: ' . gettype($column)
 			);
 			return false;
 		}
@@ -566,8 +583,7 @@ trait pudlQuery {
 		$parts[1] = trim($parts[1]);
 
 		if ($parts[0]===''  ||  count($parts)>2  ||  ($parts[1]==='' && !empty($equals[0]))) {
-			throw new pudlException('Invalid clause: ' . $clause);
-			return false;
+			throw new pudlException($this, 'Invalid clause: ' . $clause);
 		}
 
 		$query	= is_numeric($parts[0])
@@ -776,7 +792,7 @@ trait pudlQuery {
 
 	protected function _update($data) {
 		if (empty($data)) {
-			throw new pudlException('Update data cannot be empty');
+			throw new pudlException($this, 'Update data cannot be empty');
 		}
 
 		if (!is_array($data)  &&  !is_object($data)) return $data;
@@ -908,6 +924,7 @@ trait pudlQuery {
 		if (!is_object($object)) $this->_invalidType($object, 'object');
 		if (property_exists($object, $property)) return;
 		throw new pudlException(
+			$this,
 			'Undefined property: ' . get_class($object) . '::' . $property
 		);
 	}
@@ -917,14 +934,14 @@ trait pudlQuery {
 	protected function _requireKey($array, $key) {
 		if (!is_array($array)) $this->_invalidType($array, 'array');
 		if (array_key_exists($key, $array)) return;
-		throw new pudlException('Undefined key: ' . $key);
+		throw new pudlException($this, 'Undefined key: ' . $key);
 	}
 
 
 
 	protected function _requireTrue($value, $error) {
 		if ($value) return;
-		throw new pudlException($error);
+		throw new pudlException($this, $error);
 	}
 
 
@@ -948,7 +965,7 @@ trait pudlQuery {
 			break;
 		}
 
-		throw new pudlException($error);
+		throw new pudlException($this, $error);
 
 		return NULL;
 	}

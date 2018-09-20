@@ -4,6 +4,7 @@
 define('PUDL_DEFAULT',		0x00);
 
 //Escapes
+define('PUDL_NONE',			0x00);
 define('PUDL_START',		0x01);
 define('PUDL_END',			0x02);
 define('PUDL_BOTH',			0x03);

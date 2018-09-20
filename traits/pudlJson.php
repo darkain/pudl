@@ -141,7 +141,7 @@ trait pudlJson {
 	////////////////////////////////////////////////////////////////////////////
 	protected static function _json_params($column, $args) {
 		if (!is_string($column)) {
-			throw new pudlException("Invalid JSON Column Name");
+			throw new pudlException($this, 'Invalid JSON Column Name');
 		}
 
 		array_shift($args);
@@ -163,7 +163,7 @@ trait pudlJson {
 			return $return;
 		}
 
-		throw new pudlException("Invalid JSON Key/Value Pairs");
+		throw new pudlException($this, 'Invalid JSON Key/Value Pairs');
 	}
 
 

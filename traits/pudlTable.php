@@ -1,9 +1,14 @@
 <?php
 
 
+'@phan-file-suppress PhanUndeclaredMethod';
+
+
+
 trait pudlTable {
 
 
+	/** @suppress PhanUndeclaredProperty */
 	public function tables() {
 		$tables				= [];
 		$len				= $this->prefix !== false ? strlen($this->prefix) : 0;
@@ -85,6 +90,12 @@ trait pudlTable {
 
 
 
+	public function datatype($type) {
+		return rtrim($type, " \t\n\r\0\x0B,");
+	}
+
+
+
 	public function create($table, $columns, $keys=false, $options=false) {
 		$query  = 'CREATE TABLE IF NOT EXISTS ';
 		$query .= $this->_table($table) . ' (';
@@ -99,11 +110,11 @@ trait pudlTable {
 				if (is_string($key)) {
 					$query .= $this->identifier($key) . ' ';
 				}
-				$query .= rtrim($item, " \t\n\r\0\x0B,");
+				$query .= $this->datatype($item);
 			}
 
 		} else {
-			throw new pudlException('Invalid data type for $columns');
+			throw new pudlException($this, 'Invalid data type for $columns');
 		}
 
 
@@ -118,7 +129,7 @@ trait pudlTable {
 			}
 
 		} else {
-			throw new pudlException('Invalid data type for $keys');
+			throw new pudlException($this, 'Invalid data type for $keys');
 		}
 
 
@@ -140,7 +151,7 @@ trait pudlTable {
 			}
 
 		} else {
-			throw new pudlException('Invalid data type for $options');
+			throw new pudlException($this, 'Invalid data type for $options');
 		}
 
 

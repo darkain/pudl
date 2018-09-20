@@ -47,7 +47,7 @@ class pudlFunction implements pudlValue, pudlHelper {
 			return ltrim($property, '_') . '(' . $query . ')';
 		}
 
-		throw new pudlException('Invalid pudlFunction');
+		throw new pudlException($db, 'Invalid pudlFunction');
 	}
 }
 
@@ -206,12 +206,13 @@ class pudlLike extends pudlEquals {
 		parent::__construct($value, $compare, ' LIKE ');
 		$this->left		= ($side & PUDL_START)	? '%' : '';
 		$this->right	= ($side & PUDL_END)	? '%' : '';
+		$this->raw		= ($side === PUDL_NONE);
 	}
 
 	public function pudlValue($db, $quote=true) {
 		if (!is_object($this->value)) {
 			return "'" . $this->left
-				. $db->likeEscape($this->value)
+				. $db->likeEscape($this->value, $this->raw)
 				. $this->right . "'";
 		}
 
@@ -222,6 +223,7 @@ class pudlLike extends pudlEquals {
 
 	public $left;
 	public $right;
+	public $raw;
 }
 
 

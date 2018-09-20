@@ -86,11 +86,6 @@ trait pudlRedis {
 		$this->stats['queries']++;
 		$this->stats['misses']++;
 		$this->stats['missed'][] = $query;
-
-		if (strpos($query, 0xC0) !== false  ||  strpos($query, 0xC1) !== false) {
-			throw new pudlException('Invalid UTF-8 Code Point');
-		}
-
 		return $this->process($query);
 	}
 

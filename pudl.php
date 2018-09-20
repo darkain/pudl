@@ -81,6 +81,7 @@ abstract	class	pudl {
 		if (is_null($this->log)) {
 			$this->log = false;
 			throw new pudlException(
+				$this,
 				'Cannot run PUDL queries from within logging functions'
 			);
 		}
@@ -181,9 +182,6 @@ abstract	class	pudl {
 		} else {
 			$this->stats['total']++;
 			$this->stats['queries']++;
-			if (strpos($query, 0xC0) !== false  ||  strpos($query, 0xC1) !== false) {
-				throw new pudlException('Invalid UTF-8 Code Point');
-			}
 			$result = $this->process($query);
 		}
 
@@ -216,7 +214,7 @@ abstract	class	pudl {
 				if ($result instanceof pudlResult) {
 					$error .= "\n" . $result->error();
 				}
-				throw new pudlException($error, $errno);
+				throw new pudlException($this, $error, $errno);
 			}
 		}
 
@@ -240,6 +238,7 @@ abstract	class	pudl {
 				$data['type'] = pudl_array($data['server']) ? 'Galera' : 'MySqli';
 			} else {
 				throw new pudlException(
+					$this,
 					'No database type or server specified',
 					PUDL_X_CONNECTION
 				);
@@ -286,6 +285,7 @@ abstract	class	pudl {
 
 			default:
 				throw new pudlException(
+					$this,
 					'Unknown Database Server Type: ' . $data['type'],
 					PUDL_X_CONNECTION
 				);
@@ -337,6 +337,7 @@ abstract	class	pudl {
 		if (is_null($this->log)) {
 			$this->log = false;
 			throw new pudlException(
+				$this,
 				'Cannot change logging status while in log callback'
 			);
 		}

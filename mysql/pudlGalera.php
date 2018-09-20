@@ -17,6 +17,7 @@ class pudlGalera extends pudlMySqli {
 
 		if (!pudl_array($data['server'])) {
 			throw new pudlException(
+				$this,
 				'Not a valid server pool, $data[server] must be ARRAY data type',
 				PUDL_X_CONNECTION
 			);
@@ -134,7 +135,7 @@ class pudlGalera extends pudlMySqli {
 		} else {
 			$error .= 'Error ' . $this->connectErrno() . ': ' . $this->connectError();
 		}
-		throw new pudlException($error, PUDL_X_CONNECTION);
+		throw new pudlException($this, $error, PUDL_X_CONNECTION);
 	}
 
 
@@ -147,6 +148,7 @@ class pudlGalera extends pudlMySqli {
 		if (empty($this->pool)) {
 			if (self::$die) {
 				throw new pudlException(
+					$this,
 					'No more servers available in server pool',
 					PUDL_X_CONNECTION
 				);

@@ -14,11 +14,11 @@ trait pudlCallback {
 	////////////////////////////////////////////////////////////////////////////
 	public function on($action, $callback) {
 		if (!is_string($action)) {
-			throw new pudlException('Not a valid callback action');
+			throw new pudlException($this, 'Not a valid callback action');
 		}
 
 		if (!is_callable($callback)) {
-			throw new pudlException('Not a valid callback function');
+			throw new pudlException($this, 'Not a valid callback function');
 		}
 
 		$this->_callbacks[$action][] = $callback;
