@@ -12,10 +12,15 @@ abstract class	pudlOrm
 
 
 
-	public function __construct($item=false, $fetch=false) {
+	public function __construct($item=false, $fetch=false, $database=NULL) {
+		global $db;
+
+		//SET THE LOCAL INSTANCE OF DATABASE OBJECT
+		$this->__pudl__ = (!is_null($database)) ? $database : $db;
+
 		if (static::classname === __CLASS__) {
 			throw new pudlException(
-				NULL, //TODO: MAKE $DB PASSED INTO CONSTRUCTOR INSTEAD OF GLOBAL
+				$this->__pudl__,
 				'ORM const parameters were not overwritten'
 			);
 		}
@@ -86,11 +91,13 @@ abstract class	pudlOrm
 	//CREATE A NEW INSTANCE OF THIS OBJECT IN THE DATABASE
 	/** @suppress PhanNonClassMethodCall */
 	////////////////////////////////////////////////////////////////////////////
-	public static function create($data=false, $update=false) {
+	public static function create($data=false, $update=false, $database=NULL) {
 		global $db;
 
+		$$database = (!is_null($database)) ? $database : $db;
+
 		return static::get(
-			$db->insertExtract(
+			$database->insertExtract(
 				static::table,
 				$data,
 				($update === false) ? static::column : $update
@@ -291,8 +298,6 @@ abstract class	pudlOrm
 	//UPDATE THE OBJECT IN THE DATABASE
 	////////////////////////////////////////////////////////////////////////////
 	public function update($data) {
-		global $db;
-
 		if (pudl_array($data)) {
 			foreach ($data as $key => $item) {
 				if (is_int($key)) continue;
@@ -300,7 +305,13 @@ abstract class	pudlOrm
 			}
 		}
 
-		return $db->updateExtractId(static::table, $data, $this, false, 1);
+		return $this->__pudl__->updateExtractId(
+			static::table,
+			$data,
+			$this,
+			false,
+			1
+		);
 	}
 
 
@@ -333,8 +344,6 @@ abstract class	pudlOrm
 	//UPDATE OBJECT'S CHANGES BACK INTO DATABASE - REQUIRES AN EXISTING SNAPSHOT
 	////////////////////////////////////////////////////////////////////////////
 	public function snapdate($ignore=[]) {
-		global $db;
-
 		$data = $this->compareData();
 		if (!is_array($data)) return false;
 
@@ -345,7 +354,7 @@ abstract class	pudlOrm
 		}
 
 		return !empty($data)
-			? $db->updateId(static::table, $data, $this, false, 1)
+			? $this->__pudl__->updateId(static::table, $data, $this, false, 1)
 			: true;
 	}
 
@@ -356,8 +365,7 @@ abstract class	pudlOrm
 	//DELETE THIS OBJECT FROM DATABASE
 	////////////////////////////////////////////////////////////////////////////
 	public function delete() {
-		global $db;
-		return $db->deleteId(static::table, $this, false, 1);
+		return $this->__pudl__->deleteId(static::table, $this, false, 1);
 	}
 
 
@@ -419,8 +427,6 @@ abstract class	pudlOrm
 	/** @suppress PhanUndeclaredProperty, PhanTypeArraySuspicious */
 	////////////////////////////////////////////////////////////////////////////
 	protected function fetch($id) {
-		global $db;
-
 		if (pudl_array($id)) {
 			$id = !empty($id[static::column])
 				? $id[static::column]
@@ -438,7 +444,8 @@ abstract class	pudlOrm
 			$clause = [static::prefix.'.'.static::column => $id];
 		}
 
-		$data = $db	->cache($this->_fetchCache())
+		$data = $this->__pudl__
+					->cache($this->_fetchCache())
 					->query(static::schema(), [
 						'clause'	=> $clause,
 						'limit'		=> 1,
@@ -476,6 +483,13 @@ abstract class	pudlOrm
 	public function assert500($text=false) { assert500((string)$this, $text); return $this; }
 	public function assert503($text=false) { assert503((string)$this, $text); return $this; }
 
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//LOCAL METHOD VARIABLES
+	////////////////////////////////////////////////////////////////////////////
+	protected $__pudl__;
 
 
 
