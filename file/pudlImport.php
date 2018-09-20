@@ -13,7 +13,8 @@ abstract class	pudlImport
 	////////////////////////////////////////////////////////////////////////////
 	//CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
-	function __construct($type=false) {
+	function __construct($database, $type=false) {
+		$this->db = $database;
 		if (!empty($type)) $this->translate($type);
 	}
 
@@ -45,7 +46,7 @@ abstract class	pudlImport
 
 		if (!empty($this->errors)) {
 			throw new pudlException(
-				NULL,  //TODO: MAKE $DB PASSED INTO CONSTRUCTOR INSTEAD OF GLOBAL
+				$this->db,
 				"FILE FAILED DATA VALIDATION\n" .
 				implode("\n", $this->errors)
 			);
@@ -56,7 +57,7 @@ abstract class	pudlImport
 
 		if (!empty($this->errors)) {
 			throw new pudlException(
-				NULL,  //TODO: MAKE $DB PASSED INTO CONSTRUCTOR INSTEAD OF GLOBAL
+				$this->db,
 				"FILE FAILED DATA IMPORT\n" .
 				implode("\n", $this->errors)
 			);
@@ -85,7 +86,7 @@ abstract class	pudlImport
 
 		if (!empty($this->errors)) {
 			throw new pudlException(
-				NULL,  //TODO: MAKE $DB PASSED INTO CONSTRUCTOR INSTEAD OF GLOBAL
+				$this->db,
 				"FILE FAILED DATA VALIDATION\n" .
 				implode("\n", $this->errors)
 			);
@@ -112,8 +113,6 @@ abstract class	pudlImport
 	//RETURNS: STRING=NEW NAME - TRUE=IGNORE - FALSE=ERROR
 	////////////////////////////////////////////////////////////////////////////
 	protected function _translate($name) {
-		global $db;
-
 		if ($name instanceof SimpleXMLElement) {
 			$name = (string) $name;
 		}
@@ -130,7 +129,7 @@ abstract class	pudlImport
 			return $this->translate[$name];
 		}
 
-		$item = $db->cell([
+		$item = $this->db->cell([
 			's' => 'pudl_translate',
 			't' => 'pudl_translate_type'
 		], 'string_new', [
@@ -141,7 +140,7 @@ abstract class	pudlImport
 
 		if ($item !== false) return (empty($item)) ? $name : $item;
 
-		return false !== $db->cell([
+		return false !== $this->db->cell([
 			's' => 'pudl_translate',
 			't' => 'pudl_translate_type'
 		], 'string_new', [
@@ -181,6 +180,7 @@ abstract class	pudlImport
 	////////////////////////////////////////////////////////////////////////////
 	//LOCAL VARIABLES
 	////////////////////////////////////////////////////////////////////////////
+	/** @var pudl */			protected $db			= NULL;
 	/** @var array */			protected $header		= [];
 	/** @var array */			protected $errors		= [];
 	/** @var array|false */		protected $translate	= false;

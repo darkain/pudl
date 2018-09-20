@@ -14,8 +14,8 @@ class			pudlImportExcel
 	////////////////////////////////////////////////////////////////////////////
 	//CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
-	function __construct($type=false) {
-		parent::__construct($type);
+	function __construct($database, $type=false) {
+		parent::__construct($database, $type);
 	}
 
 
@@ -71,7 +71,7 @@ class			pudlImportExcel
 
 		if (!is_resource($zip)) {
 			throw new pudlException(
-				NULL,  //TODO: MAKE $DB PASSED INTO CONSTRUCTOR INSTEAD OF GLOBAL
+				$this->db,
 				'CANNOT OPEN XLSX FILE - ' . $filename
 			);
 		}
@@ -100,7 +100,7 @@ class			pudlImportExcel
 		//VERIFY WE COULD READ THE MAIN SHEET DATA
 		if (empty($this->sheet)) {
 			throw new pudlException(
-				NULL,  //TODO: MAKE $DB PASSED INTO CONSTRUCTOR INSTEAD OF GLOBAL
+				$this->db,
 				'CANNOT READ XLSX SHEET - ' . $filename
 			);
 		}
@@ -108,7 +108,7 @@ class			pudlImportExcel
 		//VERIFY WE COULD READ THE STRINGS LOOKUP TABLE
 		if (empty($strings)  ||  empty($strings->si)) {
 			throw new pudlException(
-				NULL,  //TODO: MAKE $DB PASSED INTO CONSTRUCTOR INSTEAD OF GLOBAL
+				$this->db,
 				'CANNOT READ XLSX STRINGS - ' . $filename
 			);
 		}
@@ -151,7 +151,7 @@ class			pudlImportExcel
 			switch (true) {
 				case $header === false:
 					throw new pudlException(
-						NULL,  //TODO: MAKE $DB PASSED INTO CONSTRUCTOR INSTEAD OF GLOBAL
+						$this->db,
 						'UNKNOWN HEADER: ' . $name
 					);
 				break;

@@ -20,7 +20,7 @@ class pudlFunction implements pudlValue, pudlHelper {
 	*/
 	/** @suppress PhanNonClassMethodCall */
 	public static function timestamp($time=false) {
-		global $db;
+		global $db; //TODO: REMOVE GLOBAL REFERENCE
 		return pudl::convert_tz(
 			self::from_unixtime($time !== false ? $time : $db->time()),
 			new pudlGlobal('time_zone'),

@@ -92,7 +92,7 @@ abstract class	pudlOrm
 	/** @suppress PhanNonClassMethodCall */
 	////////////////////////////////////////////////////////////////////////////
 	public static function create($data=false, $update=false, $database=NULL) {
-		global $db;
+		global $db;  //TODO: REMOVE GLOBAL REFERENCE
 
 		$$database = (!is_null($database)) ? $database : $db;
 
@@ -114,8 +114,9 @@ abstract class	pudlOrm
 	public static function get($id=false) {
 		global $get, $afurl;
 
-		if ($id instanceof getvar)	$id = $get->id();
-		if ($id instanceof afUrl)	$id = $afurl->id;
+		if ($id instanceof getvar  ||  $id instanceof afUrl) {
+			$id = $id->id();
+		}
 
 		if (pudl_array($id))	$id = $id[static::column];
 
@@ -125,7 +126,7 @@ abstract class	pudlOrm
 		}
 
 		if ($id === false  &&  $afurl instanceof afUrl) {
-			$id = $afurl->id;
+			$id = $afurl->id();
 		}
 
 
@@ -152,7 +153,7 @@ abstract class	pudlOrm
 	//GET AN INSTANCE OF THIS OBJECT FROM THE DATABASE FOR A GIVEN CLAUSE
 	////////////////////////////////////////////////////////////////////////////
 	public static function select(/* ...$selex */) {
-		global $db;
+		global $db;  //TODO: REMOVE GLOBAL REFERENCE
 
 		$args	= func_get_args();
 		array_unshift($args, ['limit'=>1], static::schema());
@@ -169,7 +170,7 @@ abstract class	pudlOrm
 	//GET A COLLECTION OF OBJECTS
 	////////////////////////////////////////////////////////////////////////////
 	public static function collect(/* ...$selex */) {
-		global $db;
+		global $db;  //TODO: REMOVE GLOBAL REFERENCE
 
 		if (static::collector === __CLASS__) {
 			throw new pudlException(
@@ -202,7 +203,7 @@ abstract class	pudlOrm
 	//GET A COLLECTION OF OBJECTS FROM ID NUMBERS
 	////////////////////////////////////////////////////////////////////////////
 	public static function collection($items /*, ...$selex */) {
-		global $db;
+		global $db;  //TODO: REMOVE GLOBAL REFERENCE
 
 		$args		= func_get_args();
 
