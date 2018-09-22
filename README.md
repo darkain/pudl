@@ -326,7 +326,7 @@ the format ``VALUE` AS `KEY``.
 
 * `object` implementing `ArrayAccess` - Same as `array` listed below.
 
-* All others - throws `pudlException`
+* Anything else - throws `pudlException`
 
 * `array`
 Each element within the array is a different `TABLE` that are `JOIN`ed by
