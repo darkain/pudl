@@ -245,6 +245,162 @@ SELECT * FROM `movies` WHERE (`director`='J.J. Abrams' AND ((`title`='Star Wars'
 ## General API Guide
 
 
+### Method Parameters
+---
+There are a few method parameter variable $names that reoccur frequently within
+PUDL. Except for a few cases specifically notes, wherever you see these $names,
+their values are of MIXED data type, each doing something different depending on
+the data type passed into the method. This can be thought of similarly to
+overloaded methods in C++, but with a significantly more dynamic nature. Listed
+here are the most common parameter names and what each data type represents.
+
+
+#### $value
+
+* `NULL` - Literal `NULL` in SQL.
+
+* `boolean` `true` - Literal `TRUE` in SQL.
+
+* `boolean` `false` - Literal `FALSE` in SQL.
+
+* `integer` - Literal `integer` in SQL.
+
+* `float` `NaN` (not a number) - Same as `NULL`.
+
+* `float` `INF` (infinite) - Same as `NULL`.
+
+* `float` `-INF` (negative infinite) - Same as `NULL`.
+
+* `float` - Literal `float` in SQL, using scientific notation.
+
+* ASCII `string` - escaped and quoted literal `string`.
+
+* Binary `string` - converted to literal hex notation.
+
+* UTF-8 `string` - same as binary `string`.
+
+* `array` - NOOP, no change to SQL query string.
+
+* `object` instaceof `pudlValue` - Calls `$object->pudlValue()`.
+
+* `object` implementing `__toString` - Calls `$object->__toString()`, then
+processes same as `string`.
+
+* Anything else - `pudlException` is thrown.
+
+
+
+#### $column
+
+* `string` value `'*'` - If the string is a `'*'`, no processing happens, and
+it is passed through to the query unmodified. This is used for `SELECT *`
+statements.
+
+* `string` value `''` (empty string) - Same as above.
+
+* `NULL` - Same as above.
+
+* `false` 2.9.0 - Same as above. (deprecated)
+
+* `string` - Either the name of a single column or a comma separated list of
+columns inside of the string. Each column name is automatically escaped and
+wrapped in backticks (or equivalent). Dots are separated out to denote the
+`DATABASE.COLUMN` syntax and are wrapped properly as ``DATABASE`.`COLUMN``.
+(NOTE: comma separated list syntax requires PUDL 2.9.1 or higher)
+
+* `array` - Each element of the array is treated as a single `string` as
+mentioned above. If the `array` index is an `integer`, no further processing
+happens. if the `array` index is a string, it is treated as a column alias in
+the format ``VALUE` AS `KEY``.
+
+* `object` implementing `ArrayAccess` - Same as `array`.
+
+* Anything else - treat the value as a `$value` listed above.
+
+
+
+#### $table
+
+* `string` - The name of a single SQL table or a comma separated list of tables.
+(NOTE: comma separated list syntax requires PUDL 2.9.1 or higher)
+
+* `object` implementing `ArrayAccess` - Same as `array` listed below.
+
+* All others - throws `pudlException`
+
+* `array`
+Each element within the array is a different `TABLE` that are `JOIN`ed by
+default using the `,` (comma) `JOIN` syntax. If `array` keys are `integer`s,
+`table` names are processed as-is. If `array` keys are `string`s, then `table`
+names are aliased using the ``value` AS `key`` SQL syntax.
+
+`TODO: add documentation for complex array/join syntax`
+
+
+
+#### $clause
+
+* `boolean` `false` 2.9.0 - No clause processing happens. (deprecated)
+
+* `NULL` 2.9.1 - No clause processing happens.
+
+* `object` - Same as `array`.
+
+* Nested `array` - Recursive `AND` / `OR` comparison.
+
+* `array` - If key is an `integer`, the value is passed directly to SQL as a
+comparison. If key is a `string`, the key is treated as a column name and the
+value is treated as a `$value` listed above. If value is an `array` however, it
+is treated like an `IN (list)` comparison. If value
+
+
+```php
+$clause = ['column_a = column_b'];
+// SQL: (`column_a`=`column_b`)
+```
+```php
+$clause = ['column_a' => 'value_b'];
+// SQL: (`column_a`='value_b')
+```
+```php
+$clause = ['column_a' => ['1,2,3'];
+// SQL: (`column_a` IN ('1,2,3'))
+```
+```php
+$clause = ['column_a' => ['1', '2', '3'];
+// SQL: (`column_a` IN ('1', '2', '3'))
+```
+```php
+$clause = ['column_a' => NULL];
+// SQL: (`column_a` IS NULL)
+```
+```php
+$clause = [ // AND (only 1 item)
+	[ // OR (2 items)
+		'column_a' => 1,
+		'column_b' => 2,
+	],
+];
+// SQL: ((`column_a`=1) OR (`column_b`=2))
+```
+```php
+$clause = [ // AND (only 1 item)
+	[ // OR (2 items)
+		'column_a' => 1,
+		[ // AND (2 items)
+			'column_b' => 2,
+			'column_c' => 3,
+		],
+	],
+];
+// SQL: ((`column_a`=1) OR ((`column_b`=2) AND (`column_c`=3)))
+```
+
+
+`TODO: add documentation for pudlHelper objects`
+
+
+
 ### SELECT
 ---
 These are the basic long-form methods that closest match raw SQL. Most other
