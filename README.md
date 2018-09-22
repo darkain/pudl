@@ -401,6 +401,18 @@ $clause = [ // AND (only 1 item)
 
 
 
+#### $having
+
+* Same as $clause above
+
+
+
+#### $on
+
+* Same as $clause above
+
+
+
 ### SELECT
 ---
 These are the basic long-form methods that closest match raw SQL. Most other
