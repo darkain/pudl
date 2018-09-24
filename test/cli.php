@@ -95,6 +95,8 @@ require(__DIR__.'/all.php');
 
 
 echo "PHP:\t" . PHP_VERSION . "\n";
+echo "Tests:\t" . $__pudl_test_total__ . "\n";
+
 
 if ($warnings) {
 	echo "Warnings were found! Fix them!\n";

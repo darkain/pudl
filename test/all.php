@@ -25,8 +25,12 @@
 \*****************************************************************************/
 
 
+$__pudl_test_total__ = 0;
+
+
 function pudlTest($expected) {
-	global $db;
+	global $db, $__pudl_test_total__;
+	$__pudl_test_total__++;
 	if (empty($db)) return;
 	if (is_string($expected)	&&	$expected === $db->query()) return;
 	if (is_bool($expected)		&&	$expected) return;
@@ -45,6 +49,8 @@ function pudlTest($expected) {
 
 
 function pudlError($exception, $expected) {
+	global $__pudl_test_total__;
+	$__pudl_test_total__++;
 	if (is_array($expected)) {
 		foreach ($expected as $item) {
 			if ($exception->getMessage() === $item) {
@@ -70,6 +76,8 @@ function pudlError($exception, $expected) {
 
 
 function pudlUnit($result, $expected=true) {
+	global $__pudl_test_total__;
+	$__pudl_test_total__++;
 	if ($result === $expected) return;
 	$trace = debug_backtrace()[0];
 	echo "\n\n";
