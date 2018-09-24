@@ -108,3 +108,39 @@ pudlTest("SELECT COUNT(`table`) FROM `table` LIMIT 1");
 
 $db->string()->cell('table', pudl::_count('table.*'));
 pudlTest("SELECT COUNT(`table`.*) FROM `table` LIMIT 1");
+
+
+
+
+$db->string()->cell('table', [pudl::_count()]);
+pudlTest("SELECT COUNT(*) FROM `table` LIMIT 1");
+
+
+
+
+$db->string()->cell('table', [pudl::_count('table')]);
+pudlTest("SELECT COUNT(`table`) FROM `table` LIMIT 1");
+
+
+
+
+$db->string()->cell('table', [pudl::_count('table.*')]);
+pudlTest("SELECT COUNT(`table`.*) FROM `table` LIMIT 1");
+
+
+
+
+$db->string()->cell('table', ['total' => pudl::_count()]);
+pudlTest("SELECT COUNT(*) AS `total` FROM `table` LIMIT 1");
+
+
+
+
+$db->string()->cell('table', ['total' => pudl::_count('table')]);
+pudlTest("SELECT COUNT(`table`) AS `total` FROM `table` LIMIT 1");
+
+
+
+
+$db->string()->cell('table', ['total' => pudl::_count('table.*')]);
+pudlTest("SELECT COUNT(`table`.*) AS `total` FROM `table` LIMIT 1");
