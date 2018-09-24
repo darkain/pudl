@@ -143,17 +143,26 @@ trait pudlQuery {
 			$column = key( $column->pudlId() );
 		}
 
-		if (!pudl_array($column)) {
-			if (!is_object($column)) {
-				switch ($column) {
-					case '':
-					case '*':
-					case null:
-					case false:
-						return '*';
-				}
+		if (is_object($column)  &&  method_exists($column, '__toString')) {
+			$column = (string) $column;
+		}
+
+		if (is_null($column)) return '*';
+		if ($column === false) return '*'; //DEPRICATED
+
+		if (is_string($column)) {
+			$column = trim($column);
+			if ($column === ''  ||  $column === '*') return '*';
+
+			if (strpos($column, ',') !== false) {
+				$column = array_map('trim', explode(',', $column));
+			} else {
+				return $this->identifiers($column);
 			}
-			return $this->_value($column, false);
+		}
+
+		if (!pudl_array($column)) {
+			return $this->_value($column);
 		}
 
 		$query = '';
@@ -166,10 +175,10 @@ trait pudlQuery {
 					$query .= $this->_value($value, true);
 				}
 				$query .= ' AS ' . $this->identifier($key);
-			} else if (is_array($value)) {
+			} else if (pudl_array($value)) {
 				$query .= $this->_column($value);
 			} else {
-				$query .= $this->_value($value, is_string($key));
+				$query .= $this->identifiers($value);
 			}
 		}
 
@@ -208,7 +217,7 @@ trait pudlQuery {
 		if (count($dynamic) > 2) {
 			throw new pudlException(
 				$this,
-				'Wrong column format for dynamic or JSON column'
+				'Wrong column format for JSON column'
 			);
 		}
 

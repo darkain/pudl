@@ -7,7 +7,7 @@ $db([
 	'clause'	=> ['t1.key=t2.id'],
 	'order'		=> ['t2.sort'],
 ]);
-pudlTest('SELECT one, two FROM `table1` AS `t1`, `table2` AS `t2` WHERE (`t1`.`key`=`t2`.`id`) ORDER BY `t2`.`sort`');
+pudlTest('SELECT `one`, `two` FROM `table1` AS `t1`, `table2` AS `t2` WHERE (`t1`.`key`=`t2`.`id`) ORDER BY `t2`.`sort`');
 
 
 

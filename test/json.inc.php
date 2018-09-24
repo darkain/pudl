@@ -3,59 +3,59 @@
 
 
 $db->string()->select('column', 'table', 'json$param');
-pudlTest("SELECT column FROM `table` WHERE (JSON_VALUE(`json`,'$.param'))");
+pudlTest("SELECT `column` FROM `table` WHERE (JSON_VALUE(`json`,'$.param'))");
 
 
 
 $db->string()->select('column', 'table', ['json$param']);
-pudlTest("SELECT column FROM `table` WHERE (JSON_VALUE(`json`,'$.param'))");
+pudlTest("SELECT `column` FROM `table` WHERE (JSON_VALUE(`json`,'$.param'))");
 
 
 
 $db->string()->select('column', 'table', ['json$param'=>1]);
-pudlTest("SELECT column FROM `table` WHERE (JSON_VALUE(`json`,'$.param')=1)");
+pudlTest("SELECT `column` FROM `table` WHERE (JSON_VALUE(`json`,'$.param')=1)");
 
 
 
 $db->string()->select('column', 'table', 'json$.param');
-pudlTest("SELECT column FROM `table` WHERE (JSON_VALUE(`json`,'$.param'))");
+pudlTest("SELECT `column` FROM `table` WHERE (JSON_VALUE(`json`,'$.param'))");
 
 
 
 $db->string()->select('column', 'table', ['json$.param']);
-pudlTest("SELECT column FROM `table` WHERE (JSON_VALUE(`json`,'$.param'))");
+pudlTest("SELECT `column` FROM `table` WHERE (JSON_VALUE(`json`,'$.param'))");
 
 
 
 
 $db->string()->select('column', 'table', 'alias.json$param');
-pudlTest("SELECT column FROM `table` WHERE (JSON_VALUE(`alias`.`json`,'$.param'))");
+pudlTest("SELECT `column` FROM `table` WHERE (JSON_VALUE(`alias`.`json`,'$.param'))");
 
 
 
 $db->string()->select('column', 'table', ['alias.json$param']);
-pudlTest("SELECT column FROM `table` WHERE (JSON_VALUE(`alias`.`json`,'$.param'))");
+pudlTest("SELECT `column` FROM `table` WHERE (JSON_VALUE(`alias`.`json`,'$.param'))");
 
 
 
 $db->string()->select('column', 'table', ['alias.json$param'=>1]);
-pudlTest("SELECT column FROM `table` WHERE (JSON_VALUE(`alias`.`json`,'$.param')=1)");
+pudlTest("SELECT `column` FROM `table` WHERE (JSON_VALUE(`alias`.`json`,'$.param')=1)");
 
 
 
 $db->string()->select('column', 'table', 'alias.json$.param');
-pudlTest("SELECT column FROM `table` WHERE (JSON_VALUE(`alias`.`json`,'$.param'))");
+pudlTest("SELECT `column` FROM `table` WHERE (JSON_VALUE(`alias`.`json`,'$.param'))");
 
 
 
 $db->string()->select('column', 'table', ['alias.json$.param']);
-pudlTest("SELECT column FROM `table` WHERE (JSON_VALUE(`alias`.`json`,'$.param'))");
+pudlTest("SELECT `column` FROM `table` WHERE (JSON_VALUE(`alias`.`json`,'$.param'))");
 
 
 
 
 $db->string()->select('column', 'table', ['json$.param'=>1]);
-pudlTest("SELECT column FROM `table` WHERE (JSON_VALUE(`json`,'$.param')=1)");
+pudlTest("SELECT `column` FROM `table` WHERE (JSON_VALUE(`json`,'$.param')=1)");
 
 
 
