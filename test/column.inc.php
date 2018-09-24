@@ -1,5 +1,41 @@
 <?php
 
+//SELECT statement, returning all columns
+$db->string()->select(NULL, 'table');
+pudlTest('SELECT * FROM `table`');
+
+
+
+
+//SELECT statement, returning all columns
+//Deprecated
+$db->string()->select(false, 'table');
+pudlTest('SELECT * FROM `table`');
+
+
+
+
+//SELECT statement, returning all columns
+$db->string()->select('', 'table');
+pudlTest('SELECT * FROM `table`');
+
+
+
+
+//SELECT statement, returning all columns
+$db->string()->select('*', 'table');
+pudlTest('SELECT * FROM `table`');
+
+
+
+
+//SELECT statement, returning all columns
+$db->string()->select(['*'], 'table');
+pudlTest('SELECT * FROM `table`');
+
+
+
+
 //SELECT statement, choosing which columns to return
 $db->string()->select('column', 'table');
 pudlTest('SELECT `column` FROM `table`');
@@ -10,6 +46,13 @@ pudlTest('SELECT `column` FROM `table`');
 //SELECT statement, choosing which columns to return
 $db->string()->select('table.column', 'table');
 pudlTest('SELECT `table`.`column` FROM `table`');
+
+
+
+
+//SELECT statement, choosing which columns to return
+$db->string()->select('table.*', 'table');
+pudlTest('SELECT `table`.* FROM `table`');
 
 
 
@@ -29,8 +72,29 @@ pudlTest('SELECT `table`.`column` FROM `table`');
 
 
 //SELECT statement, choosing which columns to return
+$db->string()->select(['table.*'], 'table');
+pudlTest('SELECT `table`.* FROM `table`');
+
+
+
+
+//SELECT statement, choosing which columns to return
 $db->string()->select('column1 , column2', 'table');
 pudlTest('SELECT `column1`, `column2` FROM `table`');
+
+
+
+
+//SELECT statement, choosing which columns to return
+$db->string()->select('table.* , column2', 'table');
+pudlTest('SELECT `table`.*, `column2` FROM `table`');
+
+
+
+
+//SELECT statement, choosing which columns to return
+$db->string()->select('column1 , table.*', 'table');
+pudlTest('SELECT `column1`, `table`.* FROM `table`');
 
 
 
@@ -45,6 +109,20 @@ pudlTest('SELECT `table`.`column1`, `table`.`column2` FROM `table`');
 //SELECT statement, choosing which columns to return
 $db->string()->select(['column1', 'column2'], 'table');
 pudlTest('SELECT `column1`, `column2` FROM `table`');
+
+
+
+
+//SELECT statement, choosing which columns to return
+$db->string()->select(['table.column1', 'table.column2'], 'table');
+pudlTest('SELECT `table`.`column1`, `table`.`column2` FROM `table`');
+
+
+
+
+//SELECT statement, choosing which columns to return
+$db->string()->select(['column1', 'table.*'], 'table');
+pudlTest('SELECT `column1`, `table`.* FROM `table`');
 
 
 
