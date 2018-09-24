@@ -90,3 +90,21 @@ pudlTest("SELECT COUNT(*) FROM `table` WHERE (`cell`!=1) LIMIT 1");
 
 $db->string()->count('table', 'cell <=> 1');
 pudlTest("SELECT COUNT(*) FROM `table` WHERE (`cell`<=>1) LIMIT 1");
+
+
+
+
+$db->string()->cell('table', pudl::_count());
+pudlTest("SELECT COUNT(*) FROM `table` LIMIT 1");
+
+
+
+
+$db->string()->cell('table', pudl::_count('table'));
+pudlTest("SELECT COUNT(`table`) FROM `table` LIMIT 1");
+
+
+
+
+$db->string()->cell('table', pudl::_count('table.*'));
+pudlTest("SELECT COUNT(`table`.*) FROM `table` LIMIT 1");

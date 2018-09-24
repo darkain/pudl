@@ -8,7 +8,7 @@ trait pudlCounter {
 	//COUNT THE NUMBER OF ROWS IN A TABLE
 	////////////////////////////////////////////////////////////////////////////
 	public function count($table, $clause=false) {
-		$return = $this->cell($table, static::raw('COUNT(*)'), $clause);
+		$return = $this->cell($table, static::_count(), $clause);
 		if ($return instanceof pudlStringResult) return $return;
 		return $return === false ? $return : (int) $return;
 	}

@@ -143,8 +143,12 @@ trait pudlQuery {
 			$column = key( $column->pudlId() );
 		}
 
-		if (is_object($column)  &&  method_exists($column, '__toString')) {
-			$column = (string) $column;
+		if (is_object($column)) {
+			if ($column instanceof pudlValue) {
+				return $column->pudlValue($this);
+			} elseif (method_exists($column, '__toString')) {
+				$column = (string) $column;
+			}
 		}
 
 		if (is_null($column)) return '*';
