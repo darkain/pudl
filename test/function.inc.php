@@ -269,6 +269,24 @@ pudlTest("SELECT FROM_UNIXTIME('123'),`stuff`");
 
 
 
+$db->string()->select(pudl::hex('DEADBEEF'));
+pudlTest("SELECT HEX('DEADBEEF')");
+
+
+
+
+$db->string()->select(pudl::hex('0defaced'));
+pudlTest("SELECT HEX('0defaced')");
+
+
+
+
+$db->string()->select(pudl::hex(pudl::column('test')));
+pudlTest("SELECT HEX(`test`)");
+
+
+
+
 $db->string()->select(pudl::text());
 pudlTest("SELECT ");
 
