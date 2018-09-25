@@ -40,10 +40,11 @@ foreach (['PDO', 'mysql', 'mysqli', 'sqlite3', 'pgsql', 'mssql', 'odbc'] as $ite
 if (!$found) throw new Exception('No supported database PHP extensions found');
 
 
-//REQUIRE ALL VERSIONS EVEN THOUGH WE ONLY USE SQL
+//REQUIRE ALL VERSIONS EVEN THOUGH WE ONLY USE "NULL"
 //THIS ENSURES THEY CAN AT LEAST BE PARSED BY PHP/HHVM!
 
 require_once(__DIR__.'/../pudl.php');
+require_once(__DIR__.'/../clone/pudlClone.php');
 require_once(__DIR__.'/../file/pudlExportExcel.php');
 require_once(__DIR__.'/../file/pudlImportCsv.php');
 require_once(__DIR__.'/../file/pudlImportExcel.php');
@@ -60,6 +61,7 @@ require_once(__DIR__.'/../sql/pudlOdbc.php');
 require_once(__DIR__.'/../sql/pudlShell.php');
 require_once(__DIR__.'/../sql/pudlWeb.php');
 require_once(__DIR__.'/../sqlite/pudlSqlite.php');
+require_once(__DIR__.'/../pudlSession.php');
 
 
 //TEST TO ENSURE EACH CLASS CAN INSTANTIATE PROPERLY
@@ -77,31 +79,11 @@ new pudlWeb(	[], false);
 $db = new pudlNull(['identifier' => '`']);
 
 
-$warnings = false;
-$db->on('warning', function($action, $db, $value, $clause) use (&$warnings) {
-
-	echo "\nWARNING: deprecated syntax: " . print_r($value,true) . "\n";
-
-	$trace = debug_backtrace();
-	$count = count($trace);
-
-	echo $trace[$count-3]['line'] . ' : ' . $trace[$count-3]['file'] . "\n\n";
-
-	$warnings = true;
-});
-
 
 require(__DIR__.'/all.php');
 
 
+
 echo "PHP:\t" . PHP_VERSION . "\n";
 echo "Tests:\t" . $__pudl_test_total__ . "\n";
-
-
-if ($warnings) {
-	echo "Warnings were found! Fix them!\n";
-	exit(1);
-}
-
-
 echo "ALL GOOD!!\n";
