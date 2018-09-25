@@ -15,6 +15,8 @@ FLOAT
 	-1.2
 	1e50
 	-1e50
+	2.3e+30
+	-2.3e+30
 	INF
 	-INF
 	NAN
@@ -47,5 +49,11 @@ ARRAY
 OBJECT
 
 OBJECT with ArrayAccess
+
+OBJECT with __toString
+
+OBJECT with pudlHelper
+
+OBJECT with pudlValue
 
 RESOURCE (always throw exceptions)
