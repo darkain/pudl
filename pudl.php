@@ -245,51 +245,30 @@ abstract	class	pudl {
 			}
 		}
 
+		$file = NULL;
+
 		switch (strtoupper($data['type'])) {
-			case 'MYSQL':
-				require_once(is_owner(__DIR__.'/mysql/pudlMySql.php'));
-			break;
-
-			case 'MYSQLI':
-				require_once(is_owner(__DIR__.'/mysql/pudlMySqli.php'));
-			break;
-
-			case 'GALERA':
-				require_once(is_owner(__DIR__.'/mysql/pudlGalera.php'));
-			break;
-
-			case 'PGSQL':
-				require_once(is_owner(__DIR__.'/pgsql/pudlPgSql.php'));
-			break;
-
-			case 'MSSQL':
-				require_once(is_owner(__DIR__.'/mssql/pudlMsSql.php'));
-			break;
-
-			case 'SQLITE':
-				require_once(is_owner(__DIR__.'/sqlite/pudlSqlite.php'));
-			break;
-
-			case 'ODBC':
-				require_once(is_owner(__DIR__.'/sql/pudlOdbc.php'));
-			break;
-
-			case 'PDO':
-				require_once(is_owner(__DIR__.'/sql/pudlPdo.php'));
-			break;
-
-			case 'NULL':
-				require_once(is_owner(__DIR__.'/null/pudlNull.php'));
-			break;
-
-
-			default:
-				throw new pudlException(
-					$this,
-					'Unknown Database Server Type: ' . $data['type'],
-					PUDL_X_CONNECTION
-				);
+			case 'MYSQL':	$file = '/mysql/pudlMySql.php';		break;
+			case 'MYSQLI':	$file = '/mysql/pudlMySqli.php';	break;
+			case 'GALERA':	$file = '/mysql/pudlGalera.php';	break;
+			case 'PGSQL':	$file = '/pgsql/pudlPgSql.php';		break;
+			case 'MSSQL':	$file = '/mssql/pudlMsSql.php';		break;
+			case 'SQLSRV':	$file = '/mssql/pudlSqlSrv.php';	break;
+			case 'SQLITE':	$file = '/sqlite/pudlSqlite.php';	break;
+			case 'ODBC':	$file = '/sql/pudlOdbc.php';		break;
+			case 'PDO':		$file = '/sql/pudlPdo.php';			break;
+			case 'NULL':	$file = '/null/pudlNull.php';		break;
 		}
+
+		if (empty($file)) {
+			throw new pudlException(
+				$this,
+				'Unknown Database Server Type: ' . $data['type'],
+				PUDL_X_CONNECTION
+			);
+		}
+
+		require_once(is_owner(__DIR__ . $file));
 
 		return call_user_func(
 			['pudl'.$data['type'], 'instance'],

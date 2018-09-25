@@ -1,24 +1,13 @@
 <?php
 
 
+require_once(is_owner(__DIR__.'/pudlMsHelper.php'));
 require_once(is_owner(__DIR__.'/pudlMsSqlResult.php'));
 
 
-class pudlMsSql extends pudl {
-
-	public function __construct($data, $autoconnect=true) {
-		//SET INITIAL VALUES
-		$this->identifier = ']';
-
-		parent::__construct($data, $autoconnect);
-	}
-
-
-
-	public function __destruct() {
-		$this->disconnect();
-		parent::__destruct();
-	}
+class		pudlMsSql
+	extends	pudl {
+	use		pudlMsHelper;
 
 
 
@@ -79,18 +68,8 @@ class pudlMsSql extends pudl {
 
 
 
-	public function identifier($identifier) {
-		return	'[' . str_replace(
-			$this->identifier,
-			$this->identifier.$this->identifier,
-			$identifier
-		) . ']';
-	}
-
-
-
 	public function insertId() {
-		if (!$this->connection) return 0;
+		if (!$this->connection) return false;
 		$result = @mssql_query('SELECT @@IDENTITY', $this->connection);
 		if ($result === false) return false;
 		$return = @mssql_result($result, 0, 0);
@@ -101,7 +80,7 @@ class pudlMsSql extends pudl {
 
 
 	public function updated() {
-		if (!$this->connection) return 0;
+		if (!$this->connection) return false;
 		$result = @mssql_query('SELECT @@ROWCOUNT', $this->connection);
 		if ($result === false) return false;
 		$return = @mssql_result($result, 0, 0);
@@ -120,25 +99,6 @@ class pudlMsSql extends pudl {
 
 	public function error() {
 		return @mssql_get_last_message();
-	}
-
-
-
-	protected function _limit($limit, $offset=false) {
-		if (pudl_array($limit)) {
-			$offset	= count($limit) > 1 ? end($limit) : false;
-			$limit	= reset($limit);
-		}
-
-		$query = '';
-
-		if ($offset !== false)
-			$query .= ' OFFSET ' . ((int)$offset) . ' ROWS';
-
-		if ($limit !== false)
-			$query .= ' FETCH NEXT ' . ((int)$limit) . ' ROWS ONLY';
-
-		return $query;
 	}
 
 }

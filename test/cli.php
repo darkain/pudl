@@ -49,6 +49,7 @@ require_once(__DIR__.'/../file/pudlExportExcel.php');
 require_once(__DIR__.'/../file/pudlImportCsv.php');
 require_once(__DIR__.'/../file/pudlImportExcel.php');
 require_once(__DIR__.'/../mssql/pudlMsSql.php');
+require_once(__DIR__.'/../mssql/pudlSqlSrv.php');
 require_once(__DIR__.'/../mysql/pudlGalera.php');
 require_once(__DIR__.'/../mysql/pudlMySql.php');
 require_once(__DIR__.'/../mysql/pudlMySqli.php');
