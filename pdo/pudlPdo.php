@@ -72,8 +72,6 @@ class pudlPdo extends pudl {
 
 
 	public function identifier($identifier) {
-		if (!$this->connection) return parent::identifier($identifier);
-
 		if ($this->identifier === ']') {
 			return '[' . str_replace(']', ']]', $identifier) . ']';
 		}
