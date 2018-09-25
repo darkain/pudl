@@ -30,8 +30,106 @@ pudlTest('SELECT * FROM `table`');
 
 
 //SELECT statement, returning all columns
+$db->string()->select(NULL, 'table');
+pudlTest('SELECT * FROM `table`');
+
+
+
+
+//SELECT statement, returning all columns
+$db->string()->select(1, 'table');
+pudlTest('SELECT 1 FROM `table`');
+
+
+
+
+//SELECT statement, returning all columns
+$db->string()->select(2.3, 'table');
+pudlTest('SELECT 2.3 FROM `table`');
+
+
+
+
+//SELECT statement, returning all columns
+$db->string()->select(1.2e+31, 'table');
+pudlTest('SELECT 1.2E+31 FROM `table`');
+
+
+
+
+//SELECT statement, returning all columns
+$db->string()->select(NAN, 'table');
+pudlTest('SELECT NULL FROM `table`');
+
+
+
+
+//SELECT statement, returning all columns
+$db->string()->select(INF, 'table');
+pudlTest('SELECT NULL FROM `table`');
+
+
+
+
+//SELECT statement, returning all columns
+$db->string()->select(-INF, 'table');
+pudlTest('SELECT NULL FROM `table`');
+
+
+
+
+//SELECT statement, returning all columns
 $db->string()->select(['*'], 'table');
 pudlTest('SELECT * FROM `table`');
+
+
+
+
+//SELECT statement, returning all columns
+$db->string()->select([NULL], 'table');
+pudlTest('SELECT NULL FROM `table`');
+
+
+
+
+//SELECT statement, returning all columns
+$db->string()->select([1], 'table');
+pudlTest('SELECT 1 FROM `table`');
+
+
+
+
+//SELECT statement, returning all columns
+$db->string()->select([2.3], 'table');
+pudlTest('SELECT 2.3 FROM `table`');
+
+
+
+
+//SELECT statement, returning all columns
+$db->string()->select([1.2e+31], 'table');
+pudlTest('SELECT 1.2E+31 FROM `table`');
+
+
+
+
+//SELECT statement, returning all columns
+$db->string()->select([NAN], 'table');
+pudlTest('SELECT NULL FROM `table`');
+
+
+
+
+//SELECT statement, returning all columns
+$db->string()->select([INF], 'table');
+pudlTest('SELECT NULL FROM `table`');
+
+
+
+
+//SELECT statement, returning all columns
+$db->string()->select([-INF], 'table');
+pudlTest('SELECT NULL FROM `table`');
 
 
 
