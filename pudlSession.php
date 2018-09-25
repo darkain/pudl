@@ -1,8 +1,10 @@
 <?php
 
 //SET THE NUMBER OF BITS PER CHARACTER TO MAX
-ini_set('session.hash_bits_per_character', 6);
-ini_set('session.gc_maxlifetime', 60*60*24*30);
+if (!headers_sent()) {
+	ini_set('session.hash_bits_per_character', 6);
+	ini_set('session.gc_maxlifetime', 60*60*24*30);
+}
 
 
 
