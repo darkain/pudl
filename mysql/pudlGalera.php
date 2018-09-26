@@ -7,7 +7,6 @@ require_once(is_owner(__DIR__.'/pudlMySqli.php'));
 
 
 class pudlGalera extends pudlMySqli {
-	use pudlMySqlHelper;
 
 
 

@@ -1,35 +1,18 @@
 <?php
 
 
+require_once(is_owner(__DIR__.'/pudlMyShared.php'));
 require_once(is_owner(__DIR__.'/pudlMySqliResult.php'));
-require_once(is_owner(__DIR__.'/pudlMySqlHelper.php'));
 
 
 
-class pudlMySqli extends pudl {
-	use pudlMySqlHelper;
-
-
-	public function __construct($data, $autoconnect=true) {
-		//SET INITIAL VALUES
-		$this->identifier = '`';
-
-		parent::__construct($data, $autoconnect);
-	}
-
-
-
-	public function __destruct() {
-		$this->disconnect();
-		parent::__destruct();
-	}
+class pudlMySqli extends pudlMyShared {
 
 
 
 	public static function instance($data, $autoconnect=true) {
 		return new pudlMySqli($data, $autoconnect);
 	}
-
 
 
 
@@ -110,7 +93,7 @@ class pudlMySqli extends pudl {
 
 
 
-	public function _query($query) {
+	protected function _query($query) {
 		if (!$this->connection) return false;
 		return $this->connection->query($query);
 	}
