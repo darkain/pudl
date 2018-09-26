@@ -1,13 +1,12 @@
 <?php
 
 
-require_once(is_owner(__DIR__.'/pudlMsHelper.php'));
+require_once(is_owner(__DIR__.'/pudlMsShared.php'));
 require_once(is_owner(__DIR__.'/pudlMsSqlResult.php'));
 
 
 class		pudlMsSql
-	extends	pudl {
-	use		pudlMsHelper;
+	extends	pudlMsShared {
 
 
 

@@ -1,7 +1,8 @@
 <?php
 
 
-trait pudlMsHelper {
+abstract class	pudlMsShared
+	extends		pudl {
 
 
 	public function __construct($data, $autoconnect=true) {
@@ -31,26 +32,30 @@ trait pudlMsHelper {
 
 
 	public function tables() {
-		$auth	 = $this->auth();
+		$tables	= [];
+		$auth	= $this->auth();
+		$len	= $this->prefix !== false ? strlen($this->prefix) : 0;
 
-		$query	 = 'SELECT * FROM [INFORMATION_SCHEMA].[TABLES] WHERE [TABLE_CATALOG]=';
-		$query	.= $this->_value($auth['database']);
-		$list	 = $this->process($query)->complete();
+		$list	= $this->rows(
+			'INFORMATION_SCHEMA.TABLES',
+			['TABLE_CATALOG' => $auth['database']]
+		);
 
-		$len	 = $this->prefix !== false ? strlen($this->prefix) : 0;
-		$tables	 = [];
+		if ($list instanceof pudlStringResult) {
+			return (string) $list;
+		}
 
 		foreach ($list as $item) {
 			if (!empty($item['TABLE_NAME'])) {
-				$table		= $item['TABLE_NAME'];
+				$table = $item['TABLE_NAME'];
 
 				if ($this->prefix !== false) {
 					if (substr($table, 0, $len) === $this->prefix) {
-						$table	= 'pudl_' . substr($table, $len);
+						$table = 'pudl_' . substr($table, $len);
 					}
 				}
 
-				$tables[]	= $table;
+				$tables[] = $table;
 			}
 		}
 
@@ -67,11 +72,13 @@ trait pudlMsHelper {
 
 		$query = '';
 
-		if ($offset !== false)
+		if ($offset !== false) {
 			$query .= ' OFFSET ' . ((int)$offset) . ' ROWS';
+		}
 
-		if ($limit !== false)
+		if ($limit !== false) {
 			$query .= ' FETCH NEXT ' . ((int)$limit) . ' ROWS ONLY';
+		}
 
 		return $query;
 	}
