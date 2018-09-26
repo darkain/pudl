@@ -14,6 +14,10 @@ trait pudlTable {
 		$len				= $this->prefix !== false ? strlen($this->prefix) : 0;
 		$list				= $this('SHOW TABLES')->complete();
 
+		if ($list instanceof pudlStringResult) {
+			return (string) $list;
+		}
+
 		foreach ($list as $item) {
 			$table			= reset($item);
 
@@ -25,6 +29,7 @@ trait pudlTable {
 
 			$tables[]		= $table;
 		}
+
 		return $tables;
 	}
 
@@ -57,7 +62,11 @@ trait pudlTable {
 
 
 	public function swapTables($table1, $table2) {
-		$temp = 'TABLE_SWAP_' . sha1(microtime().rand());
+		$temp = 'TABLE_SWAP_' . (
+			function_exists('random_bytes')
+				? bin2hex(random_bytes(20))
+				: sha1(microtime() . rand() . uniqid('',TRUE))
+		);
 
 		return $this->rename([
 			$table1	=> $temp,
