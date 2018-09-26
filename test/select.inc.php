@@ -8,7 +8,7 @@ $db->string()->select(
 	'a=b',			//clause
 	'sorted',		//order
 	10,				//limit
-	20,				//offset
+	20				//offset
 );
 pudlTest('SELECT `column` FROM `table` WHERE (`a`=`b`) ORDER BY sorted LIMIT 10 OFFSET 20');
 
@@ -22,7 +22,7 @@ $db->string()->having(
 	'x=y',			//having
 	'sorted',		//order
 	10,				//limit
-	20,				//offset
+	20				//offset
 );
 pudlTest('SELECT `column` FROM `table` WHERE (`a`=`b`) HAVING (`x`=`y`) ORDER BY sorted LIMIT 10 OFFSET 20');
 
@@ -36,7 +36,7 @@ $db->string()->group(
 	'grouped',		//group
 	'sorted',		//order
 	10,				//limit
-	20,				//offset
+	20				//offset
 );
 pudlTest('SELECT `column` FROM `table` WHERE (`a`=`b`) GROUP BY grouped ORDER BY sorted LIMIT 10 OFFSET 20');
 
@@ -51,7 +51,7 @@ $db->string()->groupHaving(
 	'x=y',			//having
 	'sorted',		//order
 	10,				//limit
-	20,				//offset
+	20				//offset
 );
 pudlTest('SELECT `column` FROM `table` WHERE (`a`=`b`) GROUP BY grouped HAVING (`x`=`y`) ORDER BY sorted LIMIT 10 OFFSET 20');
 
@@ -65,7 +65,7 @@ $db->string()->orderGroup(
 	'grouped',		//group
 	'sorted',		//order
 	10,				//limit
-	20,				//offset
+	20				//offset
 );
 pudlTest('SELECT *, COUNT(*) FROM (SELECT `column` FROM `table` WHERE (`a`=`b`) ORDER BY sorted) `x_pudl_alias_1` GROUP BY grouped ORDER BY sorted LIMIT 10 OFFSET 20');
 
@@ -80,7 +80,7 @@ $db->string()->orderGroupEx(
 	'outside',		//outer_group
 	'sorted',		//order
 	10,				//limit
-	20,				//offset
+	20				//offset
 );
 pudlTest('SELECT *, COUNT(*) FROM (SELECT `column` FROM `table` WHERE (`a`=`b`) GROUP BY inside ORDER BY sorted) `x_pudl_alias_2` GROUP BY outside ORDER BY sorted LIMIT 10 OFFSET 20');
 
@@ -93,7 +93,7 @@ $db->string()->distinct(
 	'a=b',			//clause
 	'sorted',		//order
 	10,				//limit
-	20,				//offset
+	20				//offset
 );
 pudlTest('SELECT DISTINCT `column` FROM `table` WHERE (`a`=`b`) ORDER BY sorted LIMIT 10 OFFSET 20');
 
@@ -107,21 +107,6 @@ $db->string()->distinctGroup(
 	'grouped',		//group
 	'sorted',		//order
 	10,				//limit
-	20,				//offset
+	20				//offset
 );
 pudlTest('SELECT DISTINCT * FROM (SELECT `column` FROM `table` WHERE (`a`=`b`) ORDER BY sorted) `x_pudl_alias_3` GROUP BY grouped ORDER BY sorted LIMIT 10 OFFSET 20');
-
-
-
-
-$db->string()->distinctJoin(
-	'column',		//col
-	'table1',		//table
-	'table2',		//join_table
-	'x=y',			//join_clause
-	'a=b',			//clause
-	'sorted',		//order
-	10,				//limit
-	20,				//offset
-);
-pudlTest('SELECT DISTINCT `column` FROM `table1` LEFT JOIN (`table2`) ON (`x`=`y`) WHERE (`a`=`b`) ORDER BY sorted LIMIT 10 OFFSET 20');
