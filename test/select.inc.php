@@ -9,9 +9,8 @@ $db->string()->select(
 	'sorted',		//order
 	10,				//limit
 	20,				//offset
-	true			//lock
 );
-pudlTest('SELECT `column` FROM `table` WHERE (`a`=`b`) ORDER BY sorted LIMIT 10 OFFSET 20 FOR UPDATE');
+pudlTest('SELECT `column` FROM `table` WHERE (`a`=`b`) ORDER BY sorted LIMIT 10 OFFSET 20');
 
 
 
@@ -24,9 +23,8 @@ $db->string()->having(
 	'sorted',		//order
 	10,				//limit
 	20,				//offset
-	true			//lock
 );
-pudlTest('SELECT `column` FROM `table` WHERE (`a`=`b`) HAVING (`x`=`y`) ORDER BY sorted LIMIT 10 OFFSET 20 FOR UPDATE');
+pudlTest('SELECT `column` FROM `table` WHERE (`a`=`b`) HAVING (`x`=`y`) ORDER BY sorted LIMIT 10 OFFSET 20');
 
 
 
@@ -39,9 +37,8 @@ $db->string()->group(
 	'sorted',		//order
 	10,				//limit
 	20,				//offset
-	true			//lock
 );
-pudlTest('SELECT `column` FROM `table` WHERE (`a`=`b`) GROUP BY grouped ORDER BY sorted LIMIT 10 OFFSET 20 FOR UPDATE');
+pudlTest('SELECT `column` FROM `table` WHERE (`a`=`b`) GROUP BY grouped ORDER BY sorted LIMIT 10 OFFSET 20');
 
 
 
@@ -55,9 +52,8 @@ $db->string()->groupHaving(
 	'sorted',		//order
 	10,				//limit
 	20,				//offset
-	true			//lock
 );
-pudlTest('SELECT `column` FROM `table` WHERE (`a`=`b`) GROUP BY grouped HAVING (`x`=`y`) ORDER BY sorted LIMIT 10 OFFSET 20 FOR UPDATE');
+pudlTest('SELECT `column` FROM `table` WHERE (`a`=`b`) GROUP BY grouped HAVING (`x`=`y`) ORDER BY sorted LIMIT 10 OFFSET 20');
 
 
 
@@ -70,9 +66,8 @@ $db->string()->orderGroup(
 	'sorted',		//order
 	10,				//limit
 	20,				//offset
-	true			//lock
 );
-pudlTest('SELECT *, COUNT(*) FROM (SELECT `column` FROM `table` WHERE (`a`=`b`) ORDER BY sorted) `x_pudl_alias_1` GROUP BY grouped ORDER BY sorted LIMIT 10 OFFSET 20 FOR UPDATE');
+pudlTest('SELECT *, COUNT(*) FROM (SELECT `column` FROM `table` WHERE (`a`=`b`) ORDER BY sorted) `x_pudl_alias_1` GROUP BY grouped ORDER BY sorted LIMIT 10 OFFSET 20');
 
 
 
@@ -86,25 +81,8 @@ $db->string()->orderGroupEx(
 	'sorted',		//order
 	10,				//limit
 	20,				//offset
-	true			//lock
 );
-pudlTest('SELECT *, COUNT(*) FROM (SELECT `column` FROM `table` WHERE (`a`=`b`) GROUP BY inside ORDER BY sorted) `x_pudl_alias_2` GROUP BY outside ORDER BY sorted LIMIT 10 OFFSET 20 FOR UPDATE');
-
-
-
-
-$db->string()->selectJoin(
-	'column',		//col
-	'table1',		//table
-	'table2',		//join_table
-	'x=y',			//join_clause
-	'a=b',			//clause
-	'sorted',		//order
-	10,				//limit
-	20,				//offset
-	true			//lock
-);
-pudlTest('SELECT `column` FROM `table1` LEFT JOIN (`table2`) ON (`x`=`y`) WHERE (`a`=`b`) ORDER BY sorted LIMIT 10 OFFSET 20 FOR UPDATE');
+pudlTest('SELECT *, COUNT(*) FROM (SELECT `column` FROM `table` WHERE (`a`=`b`) GROUP BY inside ORDER BY sorted) `x_pudl_alias_2` GROUP BY outside ORDER BY sorted LIMIT 10 OFFSET 20');
 
 
 
@@ -116,9 +94,8 @@ $db->string()->distinct(
 	'sorted',		//order
 	10,				//limit
 	20,				//offset
-	true			//lock
 );
-pudlTest('SELECT DISTINCT `column` FROM `table` WHERE (`a`=`b`) ORDER BY sorted LIMIT 10 OFFSET 20 FOR UPDATE');
+pudlTest('SELECT DISTINCT `column` FROM `table` WHERE (`a`=`b`) ORDER BY sorted LIMIT 10 OFFSET 20');
 
 
 
@@ -131,9 +108,8 @@ $db->string()->distinctGroup(
 	'sorted',		//order
 	10,				//limit
 	20,				//offset
-	true			//lock
 );
-pudlTest('SELECT DISTINCT * FROM (SELECT `column` FROM `table` WHERE (`a`=`b`) ORDER BY sorted) `x_pudl_alias_3` GROUP BY grouped ORDER BY sorted LIMIT 10 OFFSET 20 FOR UPDATE');
+pudlTest('SELECT DISTINCT * FROM (SELECT `column` FROM `table` WHERE (`a`=`b`) ORDER BY sorted) `x_pudl_alias_3` GROUP BY grouped ORDER BY sorted LIMIT 10 OFFSET 20');
 
 
 
@@ -147,6 +123,5 @@ $db->string()->distinctJoin(
 	'sorted',		//order
 	10,				//limit
 	20,				//offset
-	true			//lock
 );
-pudlTest('SELECT DISTINCT `column` FROM `table1` LEFT JOIN (`table2`) ON (`x`=`y`) WHERE (`a`=`b`) ORDER BY sorted LIMIT 10 OFFSET 20 FOR UPDATE');
+pudlTest('SELECT DISTINCT `column` FROM `table1` LEFT JOIN (`table2`) ON (`x`=`y`) WHERE (`a`=`b`) ORDER BY sorted LIMIT 10 OFFSET 20');

@@ -201,3 +201,23 @@ $db([
 	'having'	=> ['column' => 'value'],
 ]);
 pudlTest("SELECT * FROM `table` HAVING (`column`='value')");
+
+
+
+
+$db->string();
+$db([
+	'explain'	=> true,
+	'table'		=> 'table',
+]);
+pudlTest("EXPLAIN SELECT * FROM `table`");
+
+
+
+
+$db->string();
+$db([
+	'distinct'	=> true,
+	'table'		=> 'table',
+]);
+pudlTest("SELECT DISTINCT * FROM `table`");

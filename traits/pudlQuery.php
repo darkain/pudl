@@ -669,15 +669,6 @@ trait pudlQuery {
 
 
 
-	protected function _lock($lock) {
-		if ($lock === 'SHARE')	return ' LOCK IN SHARE MODE';
-		if ($lock === 'UPDATE')	return ' FOR UPDATE';
-		if ($lock === true)		return ' FOR UPDATE';
-		return '';
-	}
-
-
-
 	protected function _lockTable($table, $lock) {
 		if (!pudl_array($table)) return $this->_table($table) . ' ' . $lock;
 
