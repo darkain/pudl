@@ -19,6 +19,8 @@ class		pudlSqlSrv
 	public function connect() {
 		$auth = $this->auth();
 
+		pudl_require_extension('sqlsrv');
+
 		$this->connection = @sqlsrv_connect(
 			$auth['server'],
 			[

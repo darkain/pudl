@@ -19,6 +19,8 @@ class		pudlMsSql
 	public function connect() {
 		$auth = $this->auth();
 
+		pudl_require_extension('mssql');
+
 		$this->connection = @mssql_pconnect(
 			$auth['server'],
 			$auth['username'],
