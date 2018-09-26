@@ -36,11 +36,16 @@ STRING
 	' TE`ST '
 	' TE"ST '
 	" TE'ST "
+	" TE%ST "
+	" TE_ST "
+	" T[ES]T "
+	" T]ES[T "
 	'KEY.VALUE'
 	' KEY . VALUE '
 	' `KEY` . VALUE '
 	' KEY . `VALUE` '
 	' `KEY` . `VALUE` '
+	hex2bin('abcdef1230')
 
 NULL
 
