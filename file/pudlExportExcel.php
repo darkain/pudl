@@ -120,7 +120,7 @@ function pudlExportExcel(pudlData $result, $filename, $headers=false) {
 	foreach ($strings as $string) {
 		$string = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', $string);
 		$string = @iconv('UTF-8', 'UTF-8//TRANSLIT', $string);
-		$string = htmlspecialchars($string, ENT_XML1|ENT_SUBSTITUTE, 'UTF-8');
+		$string = htmlspecialchars($string, ENT_XML1|ENT_SUBSTITUTE, 'UTF-8', true);
 		echo "\n\t<si><t>" . $string . '</t></si>';
 	}
 	echo "\n</sst>";
