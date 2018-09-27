@@ -20,21 +20,21 @@ designed for beyond what is documented on this page.
 
 
 ## Supported Database Engines
-Engine | Support
--------|--------
-MySQL | *Officially Supported*
-PerconaDB | *Officially Supported*
-MariaDB | *Officially Supported*
-Galera Clustering | *Officially Supported*
-NULL | *Officially Supported*
-Microsoft SQL | *Experimental Support*
-SQLite | *Experimental Support*
-ODBC | *Experimental Support*
-Pervasive | *Experimental Support*
-PostgreSQL | *Experimental Support*
-PDO | *Experimental Support*
-Shell | *Experimental Hack*
-Web | *Experimental Hack*
+Engine | Support | Info
+-------|---------|-----
+MySQL | *Officially Supported* | Both modern php-mysqli and legacy php-mysql available
+PerconaDB | *Officially Supported* | Same as MySQL
+MariaDB | *Officially Supported* | Same as MySQL
+Galera Clustering | *Officially Supported* | Uses php-mysqli with additional cluster features
+NULL | *Officially Supported* | Essentially /dev/null the database
+Microsoft SQL | *Experimental Support* | Both modern php-sqlsrv and legacy php-mssql available
+SQLite | *Experimental Support* | Uses the php-sqlite3 interface
+ODBC | *Experimental Support* | Uses the php-odbc interface
+Pervasive | *Experimental Support* | Supported through ODBC
+PostgreSQL | *Experimental Support* | Uses the php-pgsql interface
+PDO | *Experimental Support* | Uses the php-pdo interface
+Shell | *Experimental Hack* | Custom JSON proxy interface over shell commands
+Web | *Experimental Hack* | Custom JSON proxy interface over HTTP
 
 
 ## License
