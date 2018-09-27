@@ -279,7 +279,8 @@ here are the most common parameter names and what each data type represents.
 
 * UTF-8 `string` - same as binary `string`.
 
-* `array` - NOOP, no change to SQL query string.
+* `array` - Each method handles this differently. Please see each method's
+documentation. Example: $clause (recursive AND/OR) vs $insert (JSON data).
 
 * `object` instaceof `pudlValue` - Calls `$object->pudlValue()`.
 
