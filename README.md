@@ -22,17 +22,17 @@ designed for beyond what is documented on this page.
 ## Supported Database Engines
 Engine | Support | Info
 -------|---------|-----
-MySQL | *Officially Supported* | Both modern php-mysqli and legacy php-mysql available
-PerconaDB | *Officially Supported* | Same as MySQL
-MariaDB | *Officially Supported* | Same as MySQL
-Galera Clustering | *Officially Supported* | Uses php-mysqli with additional cluster features
-NULL | *Officially Supported* | Essentially /dev/null the database
-Microsoft SQL | *Experimental Support* | Both modern php-sqlsrv and legacy php-mssql available
-SQLite | *Experimental Support* | Uses the php-sqlite3 interface
-ODBC | *Experimental Support* | Uses the php-odbc interface
-Pervasive | *Experimental Support* | Supported through ODBC
-PostgreSQL | *Experimental Support* | Uses the php-pgsql interface
-PDO | *Experimental Support* | Uses the php-pdo interface
+[MySQL](https://www.mysql.com) | *Officially Supported* | Both modern [php-mysqli](http://php.net/manual/en/book.mysqli.php) and legacy [php-mysql](http://php.net/manual/en/mysql.php) available
+[Percona](https://www.percona.com/software/mysql-database/percona-server) | *Officially Supported* | Same as MySQL
+[MariaDB](https://mariadb.org) | *Officially Supported* | Same as MySQL
+[Galera Clustering](http://galeracluster.com/products/) | *Officially Supported* | Uses [php-mysqli](http://php.net/manual/en/book.mysqli.php) with additional cluster features
+[NULL](https://en.wikipedia.org/wiki/Null_device) | *Officially Supported* | Essentially /dev/null the database
+[Microsoft SQL](https://www.microsoft.com/en-us/sql-server/) | *Experimental Support* | Both modern [php-sqlsrv](http://php.net/manual/en/book.sqlsrv.php) and legacy [php-mssql](http://php.net/manual/en/book.mssql.php) available
+[SQLite](https://www.sqlite.org/index.html) | *Experimental Support* | Uses the [php-sqlite3](http://php.net/manual/en/book.sqlite3.php) interface
+[ODBC](https://en.wikipedia.org/wiki/Open_Database_Connectivity) | *Experimental Support* | Uses the [php-odbc](http://php.net/manual/en/book.uodbc.php) interface
+[Actian PSQL](http://www.pervasive.com/database/Home/Products/PSQLv11.aspx) | *Experimental Support* | Supported through ODBC
+[PostgreSQL](https://www.postgresql.org) | *Experimental Support* | Uses the [php-pgsql](http://php.net/manual/en/book.pgsql.php) interface
+[PDO](http://php.net/manual/en/book.pdo.php) | *Experimental Support* | Uses the [php-pdo](http://php.net/manual/en/book.pdo.php) interface
 Shell | *Experimental Hack* | Custom JSON proxy interface over shell commands
 Web | *Experimental Hack* | Custom JSON proxy interface over HTTP
 
