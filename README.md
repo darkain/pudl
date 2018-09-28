@@ -20,21 +20,21 @@ designed for beyond what is documented on this page.
 
 
 ## Supported Database Engines
-Engine | Support
--------|--------
-MySQL | *Officially Supported*
-PerconaDB | *Officially Supported*
-MariaDB | *Officially Supported*
-Galera Clustering | *Officially Supported*
-NULL | *Officially Supported*
-Microsoft SQL | *Experimental Support*
-SQLite | *Experimental Support*
-ODBC | *Experimental Support*
-Pervasive | *Experimental Support*
-PostgreSQL | *Experimental Support*
-PDO | *Experimental Support*
-Shell | *Experimental Hack*
-Web | *Experimental Hack*
+Engine | Support | Info
+-------|---------|-----
+[MySQL](https://www.mysql.com) | *Officially Supported* | Both modern [php-mysqli](http://php.net/manual/en/book.mysqli.php) and legacy [php-mysql](http://php.net/manual/en/mysql.php) available
+[Percona](https://www.percona.com/software/mysql-database/percona-server) | *Officially Supported* | Same as MySQL
+[MariaDB](https://mariadb.org) | *Officially Supported* | Same as MySQL
+[Galera Clustering](http://galeracluster.com/products/) | *Officially Supported* | Uses [php-mysqli](http://php.net/manual/en/book.mysqli.php) with additional cluster features
+[NULL](https://en.wikipedia.org/wiki/Null_device) | *Officially Supported* | Essentially /dev/null the database
+[Microsoft SQL](https://www.microsoft.com/en-us/sql-server/) | *Experimental Support* | Both modern [php-sqlsrv](http://php.net/manual/en/book.sqlsrv.php) and legacy [php-mssql](http://php.net/manual/en/book.mssql.php) available
+[SQLite](https://www.sqlite.org/index.html) | *Experimental Support* | Uses the [php-sqlite3](http://php.net/manual/en/book.sqlite3.php) interface
+[ODBC](https://en.wikipedia.org/wiki/Open_Database_Connectivity) | *Experimental Support* | Uses the [php-odbc](http://php.net/manual/en/book.uodbc.php) interface
+[Actian PSQL](http://www.pervasive.com/database/Home/Products/PSQLv11.aspx) | *Experimental Support* | Supported through ODBC
+[PostgreSQL](https://www.postgresql.org) | *Experimental Support* | Uses the [php-pgsql](http://php.net/manual/en/book.pgsql.php) interface
+[PDO](http://php.net/manual/en/book.pdo.php) | *Experimental Support* | Uses the [php-pdo](http://php.net/manual/en/book.pdo.php) interface
+Shell | *Experimental Hack* | Custom JSON proxy interface over shell commands
+Web | *Experimental Hack* | Custom JSON proxy interface over HTTP
 
 
 ## License
@@ -279,7 +279,8 @@ here are the most common parameter names and what each data type represents.
 
 * UTF-8 `string` - same as binary `string`.
 
-* `array` - NOOP, no change to SQL query string.
+* `array` - Each method handles this differently. Please see each method's
+documentation. Example: $clause (recursive AND/OR) vs $insert (JSON data).
 
 * `object` instaceof `pudlValue` - Calls `$object->pudlValue()`.
 
