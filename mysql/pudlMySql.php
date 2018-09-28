@@ -42,7 +42,7 @@ class pudlMySql extends pudlMyShared {
 		//ATTEMPT TO SELECT THE DATABASE AND SET UTF8 CHARACTER SET
 		if ($this->connection) {
 			if (@mysql_select_db($auth['database'], $this->connection)) {
-				$ok = @mysql_set_charset('utf8', $this->connection);
+				$ok = @mysql_set_charset('utf8mb4', $this->connection);
 			}
 		}
 
