@@ -1,9 +1,5 @@
 <?php
 
-if (!defined('JSON_PARTIAL_OUTPUT_ON_ERROR')) {
-	define('JSON_PARTIAL_OUTPUT_ON_ERROR', 512);
-}
-
 
 
 class pudlFunction implements pudlValue, pudlHelper {

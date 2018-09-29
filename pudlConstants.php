@@ -72,3 +72,7 @@ define('PUDL_X_CONNECTION',	0x01);
 if (!defined('MYSQLI_OPT_READ_TIMEOUT')) {
 	define ('MYSQLI_OPT_READ_TIMEOUT', 11);
 }
+
+if (!defined('JSON_PARTIAL_OUTPUT_ON_ERROR')) {
+	define('JSON_PARTIAL_OUTPUT_ON_ERROR', 512);
+}
