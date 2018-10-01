@@ -28,11 +28,12 @@
 $__pudl_test_total__ = 0;
 
 
-function pudlTest($expected) {
+function pudlTest($expected, $database=NULL) {
 	global $db, $__pudl_test_total__;
 	$__pudl_test_total__++;
-	if (empty($db)) return;
-	if (is_string($expected)	&&	$expected === $db->query()) return;
+	if (empty($database)) $database = $db;
+	if (empty($database)) return;
+	if (is_string($expected)	&&	$expected === $database->query()) return;
 	if (is_bool($expected)		&&	$expected) return;
 	$trace = debug_backtrace()[0];
 	echo "\n\n";
@@ -43,7 +44,7 @@ function pudlTest($expected) {
 	echo "EXPECTED:\n";
 	echo "'" . (is_bool($expected) ? 'TRUE' : $expected) . "'\n\n";
 	echo "QUERY:\n";
-	echo "'" . $db->query() . "'\n\n";
+	echo "'" . $database->query() . "'\n\n";
 	exit(1);
 }
 

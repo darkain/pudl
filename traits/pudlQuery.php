@@ -236,12 +236,8 @@ trait pudlQuery {
 		} unset($item);
 
 		//PROCESS TABLE NAME
-		if ($prefix !== false  &&  $this->prefix !== false) {
-			$table = array_pop($list);
-			if (substr($table, 0, 5) === 'pudl_') {
-				$table = $this->prefix . substr($table, 5);
-			}
-			$list[] = $table;
+		if ($prefix !== false) {
+			$list[] = $this->_prefix(array_pop($list));
 		}
 
 		//CLEAN UP EACH PART OF THE IDENTIFIER
@@ -357,7 +353,8 @@ trait pudlQuery {
 		$suffix = empty($type) ? '' : ')';
 
 
-		if ($clause === false) return '';
+		if ($clause === false)	return '';
+		if ($clause === NULL)	return '';
 
 
 		if ($clause instanceof pudlStringResult) {
@@ -681,6 +678,14 @@ trait pudlQuery {
 			$query .= ' ' . $lock;
 		}
 		return $query;
+	}
+
+
+
+	protected function _wait($wait=NULL) {
+		if ($wait === NULL)		return '';
+		if ($wait === false)	return ' NOWAIT';
+		return ' WAIT ' . ((int)$wait);
 	}
 
 

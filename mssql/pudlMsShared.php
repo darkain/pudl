@@ -31,14 +31,16 @@ abstract class	pudlMsShared
 
 
 
-	public function tables() {
+	public function tables($clause=NULL) {
 		$tables	= [];
 		$auth	= $this->auth();
-		$len	= $this->prefix !== false ? strlen($this->prefix) : 0;
+
+		if ($this->isString()) $clause = [$clause];
+		if (!pudl_array($clause)) $clause = [];
 
 		$list	= $this->rows(
 			'INFORMATION_SCHEMA.TABLES',
-			['TABLE_CATALOG' => $auth['database']]
+			$clause + ['TABLE_CATALOG' => $auth['database']]
 		);
 
 		if ($list instanceof pudlStringResult) {
@@ -47,15 +49,7 @@ abstract class	pudlMsShared
 
 		foreach ($list as $item) {
 			if (!empty($item['TABLE_NAME'])) {
-				$table = $item['TABLE_NAME'];
-
-				if ($this->prefix !== false) {
-					if (substr($table, 0, $len) === $this->prefix) {
-						$table = 'pudl_' . substr($table, $len);
-					}
-				}
-
-				$tables[] = $table;
+				$tables[] = $item['TABLE_NAME'];
 			}
 		}
 

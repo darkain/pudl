@@ -45,7 +45,7 @@ abstract	class	pudl {
 		if (empty($data['password']))	$data['password']	= '';
 		if (empty($data['database']))	$data['database']	= '';
 		if (empty($data['server']))		$data['server']		= 'localhost';
-		if (empty($data['prefix']))		$data['prefix']		= false;
+		if (empty($data['prefix']))		$data['prefix']		= [];
 		if (empty($data['persistent']))	$data['persistent']	= false;
 		if (empty($data['salt']))		$data['salt']		= '';
 		if (empty($data['timeout']))	$data['timeout']	= 10;
@@ -54,6 +54,10 @@ abstract	class	pudl {
 		$this->microtime	= microtime(true);
 		$this->time			= (int) $this->microtime;
 		$this->prefix		= $data['prefix'];
+
+		if (is_string($this->prefix)) {
+			$this->prefix = ['pudl_' => $this->prefix];
+		}
 
 		//STORE CREDENTIALS IN SECURED AREA HIDDEN FROM VAR_DUMP/VAR_EXPORT
 		$this->_auth($data);

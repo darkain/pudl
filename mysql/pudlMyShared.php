@@ -59,15 +59,11 @@ abstract class pudlMyShared extends pudl {
 	// GET FIELD TYPE INFORMATION FOR A PARITUCLAR COLUMN IN A TABLE
 	////////////////////////////////////////////////////////////////////////////
 	public function fieldType($table, $column) {
-		if (substr($table, 0, 5) === 'pudl_') {
-			$table = $this->prefix . substr($table, 5);
-		}
-
 		$auth = $this->auth();
 
 		$return = $this->cell('INFORMATION_SCHEMA.COLUMNS', 'COLUMN_TYPE', [
 			'TABLE_SCHEMA'	=> $auth['database'],
-			'TABLE_NAME'	=> $table,
+			'TABLE_NAME'	=> $this->_prefix($table),
 			'COLUMN_NAME'	=> $column,
 		]);
 
