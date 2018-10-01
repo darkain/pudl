@@ -1,6 +1,9 @@
 <?php
 
 
+if (!class_exists('pudl',false)) require_once(__DIR__.'/../pudl.php');
+
+
 
 ////////////////////////////////////////////////////////////////////////////////
 //CUSTOMIZABLE INTERFACE TO FORWARD CALLS TO AN EXISTING PUDL INSTANCE

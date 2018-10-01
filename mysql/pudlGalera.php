@@ -1,7 +1,7 @@
 <?php
 
 
-
+if (!class_exists('pudl',false)) require_once(__DIR__.'/../pudl.php');
 require_once(is_owner(__DIR__.'/pudlMySqli.php'));
 
 
