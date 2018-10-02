@@ -241,4 +241,209 @@ trait pudlTable {
 			. $this->_wait($wait)
 		);
 	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// GET A SQL ESCAPED TABLE NAME
+	////////////////////////////////////////////////////////////////////////////
+	protected function _table($table) {
+		return $this->identifiers($table, true);
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// PROCESS A LIST OF TABLES
+	////////////////////////////////////////////////////////////////////////////
+	protected function _tables($table) {
+		if ($table === false)		return;
+		if ($table === NULL)		return;
+		if (is_string($table))		return ' FROM ' . $this->_table($table);
+		if (!pudl_array($table))	return $this->_invalidType($table, 'table');
+
+		$query = '';
+		foreach ($table as $key => $value) {
+			if (!pudl_array($value)) {
+
+				// SUBQUERY
+				if ($value instanceof pudlStringResult) {
+					if (strlen($query)) $query .= ', ';
+					$query	.= (string) $value;
+					$query	.= $this->_as($key);
+
+				// MODERN JOIN SYNTAX
+				} else {
+					$join	 = $this->_join($value, $key);
+					if ($join !== false) {
+						$query	.= $join;
+					} else {
+						if (strlen($query)) $query .= ', ';
+						$query	.= $this->_table($value);
+						$query	.= $this->_as($key);
+					}
+				}
+
+			// LEGACY JOIN SYNTAX
+			} else {
+				if (strlen($query)) $query .= ', ';
+				$query .= $this->_table(reset($value));
+				$query .= $this->_as($key);
+
+				foreach ($value as $join) {
+					if (!empty($join['join'])) {
+						$query .= $this->_joinTable($join['join'], false);
+					} else if (!empty($join['cross'])) {
+						$query .= $this->_joinTable($join['cross'], 'CROSS');
+					} else if (!empty($join['left'])) {
+						$query .= $this->_joinTable($join['left'], 'LEFT');
+					} else if (!empty($join['right'])) {
+						$query .= $this->_joinTable($join['right'], 'RIGHT');
+					} else if (!empty($join['natural'])) {
+						$query .= $this->_joinTable($join['natural'], 'NATURAL');
+					} else if (!empty($join['inner'])) {
+						$query .= $this->_joinTable($join['inner'], 'INNER');
+					} else if (!empty($join['outer'])) {
+						$query .= $this->_joinTable($join['outer'], 'OUTER');
+					} else if (!empty($join['hack'])) {
+						$query .= ' LEFT JOIN (' . $join['hack'] . ')';
+					}
+
+					if (!empty($join['clause'])) {
+						$query .= $this->_clause($join['clause'], 'ON');
+					} else if (!empty($join['on'])) {
+						$query .= $this->_clause($join['on'], 'ON');
+					} else if (!empty($join['using'])) {
+						$query .= $this->_joinUsing($join['using']);
+					}
+				}
+			}
+		}
+
+		return ' FROM ' . $query;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// MODERN JOIN SYNTAX PARSER
+	////////////////////////////////////////////////////////////////////////////
+	protected function _join($table, $alias=false) {
+		$table = Ltrim($table);
+		if (strlen($table) < 2) return false;
+
+		$query	= false;
+		$pos	= strpos($table, '(');
+
+		if ($pos === false) $pos = strlen($table);
+
+		switch ($table[0]) {
+			case '<':
+				$query = ($table[1] === '>')
+					? (' OUTER JOIN ' . $this->_table(substr($table, 2, $pos-2)))
+					: (' LEFT JOIN '  . $this->_table(substr($table, 1, $pos-1)));
+			break;
+
+
+			case '>':
+				$query = ($table[1] === '<')
+					? (' INNER JOIN ' . $this->_table(substr($table, 2, $pos-2)))
+					: (' RIGHT JOIN ' . $this->_table(substr($table, 1, $pos-1)));
+			break;
+
+
+			case '~':
+				$query	= ' JOIN '
+						. $this->_table(substr($table, 1, $pos-1));
+			break;
+
+
+			case '+':
+				$query	= ' CROSS JOIN '
+						. $this->_table(substr($table, 1, $pos-1));
+			break;
+
+
+			case '=':
+				if ($table[1] === '<') {
+					$query	= ' NATURAL LEFT JOIN '
+							. $this->_table(substr($table, 2, $pos-2));
+
+				} else if ($table[1] === '>') {
+					$query	= ' NATURAL RIGHT JOIN '
+							. $this->_table(substr($table, 2, $pos-2));
+
+				} else {
+					$query	= ' NATURAL JOIN '
+							. $this->_table(substr($table, 1, $pos-1));
+				}
+			break;
+		}
+
+
+		if ($query !== false) {
+			$query .= $this->_as($alias);
+
+			if ($pos < strlen($table)) {
+				$end = strpos($table, ')', $pos+1);
+				if ($end === false) {
+					return $this->_invalidType($table, 'table');
+				}
+				$query .= $this->_joinUsing(substr($table, $pos+1, $end-$pos-1));
+			}
+		}
+
+
+		return $query;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// JOIN USING SYNTAX PARSER
+	// TODO: SUPPORT MORE COMPLEX "ON" QUERIES AUTOMATICALLY WITH THIS
+	////////////////////////////////////////////////////////////////////////////
+	protected function _joinUsing($using) {
+		if ($using === false)		return '';
+		if (!pudl_array($using))	return ' USING (' . $this->identifiers($using) . ')';
+		if (!count($using))			return '';
+
+		$query = '';
+		foreach ($using as $item) {
+			if (strlen($query)) $query .= ', ';
+			$query .= $this->identifiers($item);
+		}
+		return ' USING (' . $query . ')';
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// LEGACY JOIN TABLE PARSER
+	////////////////////////////////////////////////////////////////////////////
+	protected function _joinTable($join, $type='LEFT') {
+		$query = (empty($type) ? '' : ' '.$type) . ' JOIN ';
+
+		if (is_string($join)) {
+			return $query . '(' . $this->_table($join) . ')';
+
+		} else if (pudl_array($join)) {
+			$value = reset($join);
+			if ($value instanceof pudlStringResult) {
+				$query .= (string)$value;
+			} else {
+				$query .= $this->_table($value);
+			}
+
+			return $query . $this->_as(key($join));
+		}
+
+		return $this->_invalidType($join, 'join');
+	}
+
 }

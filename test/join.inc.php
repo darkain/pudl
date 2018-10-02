@@ -158,7 +158,7 @@ pudlTest('SELECT * FROM `tbl1` RIGHT JOIN `tbl2` USING (`col`)');
 
 
 $db->string()->select('*', ['tbl1', 'x'=>' < tbl2 ( col )  ']);
-pudlTest('SELECT * FROM `tbl1` LEFT JOIN `tbl2` USING (`col`) AS `x`');
+pudlTest('SELECT * FROM `tbl1` LEFT JOIN `tbl2` AS `x` USING (`col`)');
 
 
 
@@ -179,3 +179,9 @@ pudlTest('SELECT * FROM `tbl1` RIGHT JOIN `tbl2`');
 
 $db->string()->select('*', ['tbl1', " ~ \t tbl2"]);
 pudlTest('SELECT * FROM `tbl1` JOIN `tbl2`');
+
+
+
+//TODO: this is next on the list
+//$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(t1.col1=t2.col2)']);
+//pudlTest('SELECT * FROM `tbl1` JOIN `tbl2` ON (`col1`=`col2`)');
