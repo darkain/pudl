@@ -28,7 +28,8 @@ class pudlPgSql extends pudl {
 			' host='		. $auth['server'] .
 			' dbname='		. $auth['database'] .
 			' user='		. $auth['username'] .
-			' password='	. $auth['password']
+			' password='	. $auth['password'] .
+			" options='--client_encoding=UTF8'"
 		);
 
 		if ($this->connection === false) {
