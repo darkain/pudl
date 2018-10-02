@@ -92,13 +92,14 @@ class pudlPgSql extends pudl {
 
 
 	public function errno() {
-		return $this->error() === '' ? 0 : 1;
+		$error = $this->error();
+		return empty($error) ? 0 : 1;
 	}
 
 
 
 	public function error() {
-		if (!$this->connection) return pg_last_error();
+		if (!$this->connection) return @pg_last_error();
 		return pg_last_error($this->connection);
 	}
 
