@@ -52,15 +52,17 @@ class pudlPgSql extends pudl {
 
 
 	public function identifier($identifier) {
-		if (!$this->connection) return false;
-		return pg_escape_identifier($this->connection, $identifier);
+		return ($this->connection)
+			? pg_escape_identifier($this->connection, $identifier)
+			: pg_escape_identifier($identifier);
 	}
 
 
 
 	public function escape($value) {
-		if (!$this->connection) return false;
-		return pg_escape_string($this->connection, $value);
+		return ($this->connection)
+			? pg_escape_string($this->connection, $value)
+			: pg_escape_string($value);
 	}
 
 
