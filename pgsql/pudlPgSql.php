@@ -34,9 +34,10 @@ class pudlPgSql extends pudl {
 		);
 
 		if ($this->connection === false) {
+			$error = error_get_last();
 			throw new pudlException(
 				$this,
-				'ERROR CONNECTING TO POSTGRESQL: ' . $this->error(),
+				'ERROR CONNECTING TO POSTGRESQL: ' . $error['message'],
 				PUDL_X_CONNECTION
 			);
 		}
