@@ -91,7 +91,7 @@ class pudlGalera extends pudlMySqli {
 			if ($ok) $ok = @$this->connection->set_charset('utf8mb4');
 
 			//VERIFY WE'RE NOT IN A READ-ONLY STATE
-			if ($ok  &&  !self::$die) $ok = !$this->readonly();
+			if ($ok) $ok = !$this->readonly();
 
 			//ATTEMPT TO GET THE CLUSTER SYNC STATE OF THIS NODE
 			$this->state = $ok ? $this->globals('wsrep_local_state') : [];
@@ -115,8 +115,6 @@ class pudlGalera extends pudlMySqli {
 			$this->offlineServer($server);
 		}
 
-		//CANNOT CONNECT, BUT BAILING OUT OF SCRIPT IS DISABLED
-		if (!self::$die) return false;
 
 		//CANNOT CONNECT - ERROR OUT
 		$error  = "<br />\n";
@@ -145,14 +143,11 @@ class pudlGalera extends pudlMySqli {
 		array_shift($this->pool);
 
 		if (empty($this->pool)) {
-			if (self::$die) {
-				throw new pudlException(
-					$this,
-					'No more servers available in server pool',
-					PUDL_X_CONNECTION
-				);
-			}
-			return false;
+			throw new pudlException(
+				$this,
+				'No more servers available in server pool',
+				PUDL_X_CONNECTION
+			);
 		}
 
 		return $this->connect();
@@ -250,17 +245,17 @@ class pudlGalera extends pudlMySqli {
 
 
 	public function sync() {
-		$die		= self::$die;
-		self::$die	= false;
 		foreach ($this->pool as $server) {
 			if ($server == $this->connected) continue;
 
-			$sync	= new pudlGalera([$this, 'server'=>[$server]]);
-			if ($sync->server() === false) continue;
+			try {
+				$sync	= new pudlGalera([$this, 'server'=>[$server]]);
+				if ($sync->server() === false) continue;
 
-			$sync->wait()->row('information_schema.SESSION_VARIABLES');
+				$sync->wait()->row('information_schema.SESSION_VARIABLES');
+			} catch (pudlException $e) {}
 		}
-		self::$die	= $die;
+
 		return $this;
 	}
 

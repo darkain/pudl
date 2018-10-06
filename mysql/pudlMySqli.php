@@ -52,8 +52,6 @@ class pudlMySqli extends pudlMyShared {
 			return true;
 		}
 
-		//CANNOT CONNECT, BUT BAILING OUT OF SCRIPT IS DISABLED
-		if (!self::$die) return false;
 
 		//CANNOT CONNECT - ERROR OUT
 		$error  = "<br />\n";

@@ -47,16 +47,17 @@ class pudlMySql extends pudlMyShared {
 			}
 		}
 
-		//CANNOT CONNECT - ERROR OUT
-		if (empty($ok)) {
-			$error  = "<br />\n";
-			$error .= 'Unable to connect to database server "' . $auth['server'];
-			$error .= '" with the username: "' . $auth['username'];
-			$error .= "\"<br />\nError " . $this->errno() . ': ' . $this->error();
-			if (self::$die) throw new pudlException($this, $error, PUDL_X_CONNECTION);
-		} else {
+		if (!empty($ok)) {
 			$this->strict()->timeout($auth);
+			return;
 		}
+
+		//CANNOT CONNECT - ERROR OUT
+		$error  = "<br />\n";
+		$error .= 'Unable to connect to database server "' . $auth['server'];
+		$error .= '" with the username: "' . $auth['username'];
+		$error .= "\"<br />\nError " . $this->errno() . ': ' . $this->error();
+		throw new pudlException($this, $error, PUDL_X_CONNECTION);
 	}
 
 
