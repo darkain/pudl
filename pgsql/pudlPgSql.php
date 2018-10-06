@@ -25,11 +25,11 @@ class pudlPgSql extends pudl {
 		$auth = $this->auth();
 
 		$this->connection = @pg_connect(
-			' host='			. $auth['server'] .
-			' dbname='			. $auth['database'] .
-			' user='			. $auth['username'] .
-			' password='		. $auth['password'] .
-			' connect_timeout='	. $auth['timeout'] .
+			" host='"				. $auth['server']	. "'" .
+			" dbname='"				. $auth['database']	. "'" .
+			" user='"				. $auth['username']	. "'" .
+			" password='"			. $auth['password']	. "'" .
+			" connect_timeout='"	. $auth['timeout']	. "'" .
 			" options='--client_encoding=UTF8'"
 		);
 
