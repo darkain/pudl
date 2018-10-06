@@ -848,7 +848,7 @@ class	pudlObject
 	//RETURNS JSON SERIALIZABLE DATA
 	//http://php.net/manual/en/jsonserializable.jsonserialize.php
 	////////////////////////////////////////////////////////////////////////////
-	public function jsonSerialize();
+	public function jsonSerialize() {
 		return $this->__array;
 	}
 
