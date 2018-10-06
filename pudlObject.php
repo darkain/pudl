@@ -845,11 +845,22 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//RETURNS THE JSON REPRESENTATION OF A VALUE
+	//RETURNS JSON SERIALIZABLE DATA
+	//http://php.net/manual/en/jsonserializable.jsonserialize.php
+	////////////////////////////////////////////////////////////////////////////
+	public function jsonSerialize();
+		return $this->__array;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	//RETURNS THE JSON REPRESENTATION OF THIS OBJECT
 	//http://php.net/manual/en/function.json-encode.php
 	////////////////////////////////////////////////////////////////////////////
 	public function json() {
-		return pudl::jsonEncode($this->__array);
+		return pudl::jsonEncode($this);
 	}
 
 

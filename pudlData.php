@@ -4,14 +4,16 @@
 
 
 ////////////////////////////////////////////////////////////////////////////////
-//Used by both pudlResult and pudlObject
-//http://php.net/manual/en/class.countable.php
-//http://php.net/manual/en/class.seekableiterator.php
+// Used by both pudlResult and pudlObject
+// http://php.net/manual/en/class.countable.php
+// http://php.net/manual/en/class.seekableiterator.php
+// http://php.net/manual/en/class.jsonserializable.php
 ////////////////////////////////////////////////////////////////////////////////
 interface	pudlData
 	extends
 			Countable,
-			SeekableIterator {
+			SeekableIterator,
+			JsonSerializable {
 
 	//Pulled from PHPs built in Countable interface
 	public function count();
@@ -32,6 +34,9 @@ interface	pudlData
 	public function listFields();
 	public function row();
 	public function free();
+
+	//Pulled from PHP's built in JsonSerializable interface
+	public function jsonSerialize();
 
 	//Method to get JSON text string from this object
 	public function json();
