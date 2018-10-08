@@ -51,14 +51,22 @@ pudlTest("INSERT INTO `table` (`column`) VALUES (' `value` ')");
 
 //INSERT statement - using associative array - string
 $db->string()->insert('table', ['column'=>' va"lue ']);
-pudlTest("INSERT INTO `table` (`column`) VALUES (' va\\\"lue ')");
+if ($db instanceof pudlSqlite) {
+	pudlTest("INSERT INTO `table` (`column`) VALUES (' va\"lue ')");
+} else {
+	pudlTest("INSERT INTO `table` (`column`) VALUES (' va\\\"lue ')");
+}
 
 
 
 
 //INSERT statement - using associative array - string
 $db->string()->insert('table', ['column'=>" va'lue "]);
-pudlTest('INSERT INTO `table` (`column`) VALUES (\' va\\\'lue \')');
+if ($db instanceof pudlSqlite) {
+	pudlTest('INSERT INTO `table` (`column`) VALUES (\' va\'\'lue \')');
+} else {
+	pudlTest('INSERT INTO `table` (`column`) VALUES (\' va\\\'lue \')');
+}
 
 
 
@@ -212,21 +220,33 @@ pudlTest('INSERT INTO `table` (`column`) VALUES (\'{\"dynamic1\":\"item1\",\"dyn
 
 //INSERT statement - using associative array, duplicate key update
 $db->string()->insert('table', ['column'=>'value'], true);
-pudlTest("INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE KEY UPDATE `column`='value'");
+if ($db instanceof pudlMyShared) {
+	pudlTest("INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE KEY UPDATE `column`='value'");
+} else {
+	pudlTest("INSERT INTO `table` (`column`) VALUES ('value') UPDATE `column`='value'");
+}
 
 
 
 
 //INSERT statement - using associative array, custom duplicate key update
 $db->string()->insert('table', ['column'=>'value'], 'x=x+1');
-pudlTest("INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE KEY UPDATE x=x+1");
+if ($db instanceof pudlMyShared) {
+	pudlTest("INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE KEY UPDATE x=x+1");
+} else {
+	pudlTest("INSERT INTO `table` (`column`) VALUES ('value') UPDATE x=x+1");
+}
 
 
 
 
 //INSERT statement - using associative array, custom duplicate key update using UPDATE syntax
 $db->string()->insert('table', ['column'=>'value'], ['y'=>2]);
-pudlTest("INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE KEY UPDATE `y`=2");
+if ($db instanceof pudlMyShared) {
+	pudlTest("INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE KEY UPDATE `y`=2");
+} else {
+	pudlTest("INSERT INTO `table` (`column`) VALUES ('value') UPDATE `y`=2");
+}
 
 
 
@@ -237,7 +257,11 @@ $db->string()->insertUpdate('table', [
 	'column2' => 2,
 ], 'column1');
 
-pudlTest('INSERT INTO `table` (`column1`, `column2`) VALUES (1, 2) ON DUPLICATE KEY UPDATE `column1`=LAST_INSERT_ID(`column1`)');
+if ($db instanceof pudlMyShared) {
+	pudlTest('INSERT INTO `table` (`column1`, `column2`) VALUES (1, 2) ON DUPLICATE KEY UPDATE `column1`=LAST_INSERT_ID(`column1`)');
+} else {
+	pudlTest("INSERT INTO `table` (`column1`, `column2`) VALUES (1, 2) UPDATE `column1`=LAST_INSERT_ID(`column1`)");
+}
 
 
 
@@ -249,7 +273,11 @@ $db->string()->insertUpdate(
 	['column3' => 3]
 );
 
-pudlTest('INSERT INTO `table` (`column1`, `column2`) VALUES (1, 2) ON DUPLICATE KEY UPDATE `column3`=3, `column1`=LAST_INSERT_ID(`column1`)');
+if ($db instanceof pudlMyShared) {
+	pudlTest('INSERT INTO `table` (`column1`, `column2`) VALUES (1, 2) ON DUPLICATE KEY UPDATE `column3`=3, `column1`=LAST_INSERT_ID(`column1`)');
+} else {
+	pudlTest("INSERT INTO `table` (`column1`, `column2`) VALUES (1, 2) UPDATE `column3`=3, `column1`=LAST_INSERT_ID(`column1`)");
+}
 
 
 
@@ -264,7 +292,12 @@ $db->string()->insert('table', [
 	'column1' => 1,
 	'column2' => 2,
 ], 'column1', false);
-pudlTest('INSERT INTO `table` VALUES (1, 2) ON DUPLICATE KEY UPDATE `column1`=LAST_INSERT_ID(`column1`)');
+
+if ($db instanceof pudlMyShared) {
+	pudlTest('INSERT INTO `table` VALUES (1, 2) ON DUPLICATE KEY UPDATE `column1`=LAST_INSERT_ID(`column1`)');
+} else {
+	pudlTest("INSERT INTO `table` VALUES (1, 2) UPDATE `column1`=LAST_INSERT_ID(`column1`)");
+}
 
 
 
@@ -273,7 +306,12 @@ $db->string()->insert('table', [
 	'column1' => 1,
 	'column2' => 2,
 ], 'column1', true);
-pudlTest('INSERT INTO `table` (`column1`, `column2`) VALUES (1, 2) ON DUPLICATE KEY UPDATE `column1`=LAST_INSERT_ID(`column1`)');
+
+if ($db instanceof pudlMyShared) {
+	pudlTest('INSERT INTO `table` (`column1`, `column2`) VALUES (1, 2) ON DUPLICATE KEY UPDATE `column1`=LAST_INSERT_ID(`column1`)');
+} else {
+	pudlTest("INSERT INTO `table` (`column1`, `column2`) VALUES (1, 2) UPDATE `column1`=LAST_INSERT_ID(`column1`)");
+}
 
 
 
@@ -317,30 +355,56 @@ pudlTest("INSERT INTO `table` (`column`) VALUES ('test')");
 
 //UPSERT statement
 $db->string()->upsert('table', ['column'=>'value']);
-pudlTest("INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE KEY UPDATE `column`='value'");
 
+if ($db instanceof pudlMyShared) {
+	pudlTest("INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE KEY UPDATE `column`='value'");
+} else {
+	pudlTest("INSERT INTO `table` (`column`) VALUES ('value') UPDATE `column`='value'");
+}
 
 
 
 //UPSERT statement
 $db->string()->upsert('table', ['column'=>'value'], 'id');
-pudlTest("INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE KEY UPDATE `column`='value', `id`=LAST_INSERT_ID(`id`)");
+
+if ($db instanceof pudlMyShared) {
+	pudlTest("INSERT INTO `table` (`column`) VALUES ('value') ON DUPLICATE KEY UPDATE `column`='value', `id`=LAST_INSERT_ID(`id`)");
+} else {
+	pudlTest("INSERT INTO `table` (`column`) VALUES ('value') UPDATE `column`='value', `id`=LAST_INSERT_ID(`id`)");
+}
 
 
 
 
 $db->string()->upsert('table', ['column'=>['param'=>[1,2,3]]]);
-pudlTest("INSERT INTO `table` (`column`) VALUES ('{\\\"param\\\":[1,2,3]}') ON DUPLICATE KEY UPDATE `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{}'),'$.param',JSON_COMPACT('[1,2,3]'))");
+
+if ($db instanceof pudlMyShared) {
+	pudlTest("INSERT INTO `table` (`column`) VALUES ('{\\\"param\\\":[1,2,3]}') ON DUPLICATE KEY UPDATE `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{}'),'$.param',JSON_COMPACT('[1,2,3]'))");
+} else {
+	pudlTest("INSERT INTO `table` (`column`) VALUES ('{\\\"param\\\":[1,2,3]}') UPDATE `column`=JSON_SET(IFNULL(NULLIF(TRIM(`column`), ''), '{}'),'$.param',JSON_COMPACT('[1,2,3]'))");
+}
+
 
 
 
 $db->string()->upsert('table', ['column'=>[1,2,3]]);
-pudlTest("INSERT INTO `table` (`column`) VALUES ('[1,2,3]') ON DUPLICATE KEY UPDATE `column`='[1,2,3]'");
+
+if ($db instanceof pudlMyShared) {
+	pudlTest("INSERT INTO `table` (`column`) VALUES ('[1,2,3]') ON DUPLICATE KEY UPDATE `column`='[1,2,3]'");
+} else {
+	pudlTest("INSERT INTO `table` (`column`) VALUES ('[1,2,3]') UPDATE `column`='[1,2,3]'");
+}
+
 
 
 
 $db->string()->upsert('table', ['column'=>['a','b','c']]);
-pudlTest("INSERT INTO `table` (`column`) VALUES ('[\\\"a\\\",\\\"b\\\",\\\"c\\\"]') ON DUPLICATE KEY UPDATE `column`='[\\\"a\\\",\\\"b\\\",\\\"c\\\"]'");
+
+if ($db instanceof pudlMyShared) {
+	pudlTest("INSERT INTO `table` (`column`) VALUES ('[\\\"a\\\",\\\"b\\\",\\\"c\\\"]') ON DUPLICATE KEY UPDATE `column`='[\\\"a\\\",\\\"b\\\",\\\"c\\\"]'");
+} else {
+	pudlTest("INSERT INTO `table` (`column`) VALUES ('[\\\"a\\\",\\\"b\\\",\\\"c\\\"]') UPDATE `column`='[\\\"a\\\",\\\"b\\\",\\\"c\\\"]'");
+}
 
 
 
