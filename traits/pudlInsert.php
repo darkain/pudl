@@ -67,14 +67,24 @@ trait pudlInsert {
 			}
 
 			if ($update !== false) {
-				$query .= ' ON DUPLICATE KEY UPDATE ';
-				$query .= $this->_update($update);
+				$query .= $this->_upsert($update);
 			}
 		}
 
 		$result = $this($query);
 		if ($result instanceof pudlStringResult) return $result;
 		return $this->insertId();
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// GENERATE THE UPSERT PART OF THE QUERY
+	////////////////////////////////////////////////////////////////////////////
+	protected function _upsert($data) {
+		return	' UPDATE ' .
+				$this->_update($data);
 	}
 
 
