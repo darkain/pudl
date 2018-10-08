@@ -42,9 +42,9 @@ function pudlTest($expected, $database=NULL) {
 	echo "FILE:\t$trace[file]\n";
 	echo "LINE:\t$trace[line]\n\n";
 	echo "EXPECTED:\n";
-	echo "'" . (is_bool($expected) ? 'TRUE' : $expected) . "'\n\n";
+	echo (is_bool($expected) ? '[TRUE]' : $expected) . "\n\n";
 	echo "QUERY:\n";
-	echo "'" . $database->query() . "'\n\n";
+	echo $database->query() . "\n\n";
 	exit(1);
 }
 
@@ -70,7 +70,7 @@ function pudlError($exception, $expected) {
 	echo "EXPECTED:\n";
 	echo json_encode($expected) . "\n\n";
 	echo "ERROR:\n";
-	echo '"' . $exception->getMessage() . "\"\n\n";
+	echo $exception->getMessage() . "\n\n";
 	echo "\n\n";
 	exit(1);
 }
