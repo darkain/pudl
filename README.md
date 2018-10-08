@@ -20,21 +20,22 @@ designed for beyond what is documented on this page.
 
 
 ## Supported Database Engines
-Engine | Support | Info
--------|---------|-----
-[MySQL](https://www.mysql.com) | *Officially Supported* | Both modern [php-mysqli](http://php.net/manual/en/book.mysqli.php) and legacy [php-mysql](http://php.net/manual/en/mysql.php) available
-[Percona](https://www.percona.com/software/mysql-database/percona-server) | *Officially Supported* | Same as MySQL
-[MariaDB](https://mariadb.org) | *Officially Supported* | Same as MySQL
-[Galera Clustering](http://galeracluster.com/products/) | *Officially Supported* | Uses [php-mysqli](http://php.net/manual/en/book.mysqli.php) with additional cluster features
-[NULL](https://en.wikipedia.org/wiki/Null_device) | *Officially Supported* | Essentially /dev/null the database
-[Microsoft SQL](https://www.microsoft.com/en-us/sql-server/) | *Experimental Support* | Both modern [php-sqlsrv](http://php.net/manual/en/book.sqlsrv.php) and legacy [php-mssql](http://php.net/manual/en/book.mssql.php) available
-[SQLite](https://www.sqlite.org/index.html) | *Experimental Support* | Uses the [php-sqlite3](http://php.net/manual/en/book.sqlite3.php) interface
-[ODBC](https://en.wikipedia.org/wiki/Open_Database_Connectivity) | *Experimental Support* | Uses the [php-odbc](http://php.net/manual/en/book.uodbc.php) interface
-[Actian PSQL](http://www.pervasive.com/database/Home/Products/PSQLv11.aspx) | *Experimental Support* | Supported through ODBC
-[PostgreSQL](https://www.postgresql.org) | *Experimental Support* | Uses the [php-pgsql](http://php.net/manual/en/book.pgsql.php) interface
-[PDO](http://php.net/manual/en/book.pdo.php) | *Experimental Support* | Uses the [php-pdo](http://php.net/manual/en/book.pdo.php) interface
-Shell | *Experimental Hack* | Custom JSON proxy interface over shell commands
-Web | *Experimental Hack* | Custom JSON proxy interface over HTTP
+Engine | Class | Support | Info
+-------|-------|---------|-----
+[MySQL](https://www.mysql.com) | [pudlMySqli](https://github.com/darkain/pudl/blob/master/mysql/pudlMySqli.php) <br> [pudlMySql](https://github.com/darkain/pudl/blob/master/mysql/pudlMySql.php) | *Officially Supported* | Both modern [php-mysqli](http://php.net/manual/en/book.mysqli.php) and legacy [php-mysql](http://php.net/manual/en/mysql.php) available
+[Percona](https://www.percona.com/software/mysql-database/percona-server) | [pudlMySqli](https://github.com/darkain/pudl/blob/master/mysql/pudlMySqli.php) <br> [pudlMySql](https://github.com/darkain/pudl/blob/master/mysql/pudlMySql.php) | *Officially Supported* | Same as MySQL
+[MariaDB](https://mariadb.org) | [pudlMySqli](https://github.com/darkain/pudl/blob/master/mysql/pudlMySqli.php) <br> [pudlMySql](https://github.com/darkain/pudl/blob/master/mysql/pudlMySql.php) | *Officially Supported* | Same as MySQL
+[Galera Clustering](http://galeracluster.com/products/) | [pudlGalera](https://github.com/darkain/pudl/blob/master/mysql/pudlGalera.php) | *Officially Supported* | Uses [php-mysqli](http://php.net/manual/en/book.mysqli.php) with additional cluster features
+[NULL](https://en.wikipedia.org/wiki/Null_device) | [pudlNull](https://github.com/darkain/pudl/blob/master/null/pudlNull.php) | *Officially Supported* | Essentially /dev/null the database
+[Microsoft SQL](https://www.microsoft.com/en-us/sql-server/) | [pudlSqlSrv](https://github.com/darkain/pudl/blob/master/mssql/pudlSqlSrv.php) <br> [pudlMsSql](https://github.com/darkain/pudl/blob/master/mssql/pudlMsSql.php) | *Experimental Support* | Both modern [php-sqlsrv](http://php.net/manual/en/book.sqlsrv.php) and legacy [php-mssql](http://php.net/manual/en/book.mssql.php) available
+[SQLite](https://www.sqlite.org/index.html) | [pudlSqlite](https://github.com/darkain/pudl/blob/master/sqlite/pudlSqlite.php) | *Experimental Support* | Uses the [php-sqlite3](http://php.net/manual/en/book.sqlite3.php) driver
+[ODBC](https://en.wikipedia.org/wiki/Open_Database_Connectivity) | [pudlOdbc](https://github.com/darkain/pudl/blob/master/sql/pudlOdbc.php) | *Experimental Support* | Uses the [php-odbc](http://php.net/manual/en/book.uodbc.php) driver
+[Actian PSQL](http://www.pervasive.com/database/Home/Products/PSQLv11.aspx) | [pudlOdbc](https://github.com/darkain/pudl/blob/master/sql/pudlOdbc.php) | *Experimental Support* | Supported through ODBC
+[PostgreSQL](https://www.postgresql.org) | [pudlPgSql](https://github.com/darkain/pudl/blob/master/pgsql/pudlPgSql.php) | *Experimental Support* | Uses the [php-pgsql](http://php.net/manual/en/book.pgsql.php) driver
+[PDO](http://php.net/manual/en/book.pdo.php) | [pudlPdo](https://github.com/darkain/pudl/blob/master/pdo/pudlPdo.php) | *Experimental Support* | Uses the [php-pdo](http://php.net/manual/en/book.pdo.php) driver
+Shell | [pudlShell](https://github.com/darkain/pudl/blob/master/sql/pudlShell.php) | *Experimental Hack* | Custom JSON proxy interface over shell commands
+Web | [pudlWeb](https://github.com/darkain/pudl/blob/master/sql/pudlWeb.php) | *Experimental Hack* | Custom JSON proxy interface over HTTP(s)
+Clone | [pudlClone](https://github.com/darkain/pudl/blob/master/clone/pudlClone.php) | *Experimental Hack* | Cloned interface forwarding calls to another PUDL instance
 
 
 ## License
