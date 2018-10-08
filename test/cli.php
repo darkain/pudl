@@ -70,6 +70,7 @@ new pudlMsSql(	[], false);
 new pudlGalera(	['server'=>['localhost']], false);
 new pudlMySql(	[], false);
 new pudlMySqli(	[], false);
+new pudlSqlite(	[], false);
 new pudlNull(	[], false);
 new pudlPdo(	['server'=>'localhost'], false);
 new pudlOdbc(	[], false);
