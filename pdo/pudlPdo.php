@@ -17,12 +17,18 @@ class pudlPdo extends pudl {
 			);
 		}
 
-		if (empty($data['options'])) $data['options'] = [];
+
+		//DEFAULT OPTIONS
+		if (empty($data['options'])  ||  !pudl_array($data['options'])) {
+			$data['options'] = [];
+		}
+
 
 		//DEFAULT TO ANSI STYLE IDENTIFIERS, BUT CAN BE OVERWRITTEN
 		$this->identifier	= !empty($data['identifier'])
 							? $data['identifier']
 							: '"';
+
 
 		parent::__construct($data, $autoconnect);
 	}
@@ -45,12 +51,22 @@ class pudlPdo extends pudl {
 	public function connect() {
 		$auth = $this->auth();
 
+		pudl_require_extension('pdo');
+
+
+		//PERSISTENT CONNECTION
+		if (!empty($data['persistent'])) {
+			$data['options'][PDO::ATTR_PERSISTENT] = true;
+		}
+
+
 		try {
+			//ATTEMPT TO CONNECT
 			$this->connection = new PDO(
 				$auth['server'],
 				$auth['username'],
 				$auth['password'],
-				$auth['otions']
+				$auth['options']
 			);
 
 			$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
@@ -58,7 +74,7 @@ class pudlPdo extends pudl {
 		} catch (PDOException $e) {
 			throw new pudlException(
 				$this,
-				'ERROR CONNECTING THROUGH PDO: ' . $this->error(),
+				'ERROR CONNECTING THROUGH PDO: ' . $e->getMessage(),
 				PUDL_X_CONNECTION
 			);
 		}
