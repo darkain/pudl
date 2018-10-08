@@ -408,9 +408,15 @@ trait pudlTable {
 	// TODO: SUPPORT MORE COMPLEX "ON" QUERIES AUTOMATICALLY WITH THIS
 	////////////////////////////////////////////////////////////////////////////
 	protected function _joinUsing($using) {
-		if ($using === false)		return '';
-		if (!pudl_array($using))	return ' USING (' . $this->identifiers($using) . ')';
-		if (!count($using))			return '';
+		if ($using === false  ||  $using === NULL) return '';
+
+		if (!pudl_array($using)) {
+			return preg_match('/(<=?>|[<|>|!]?=|[><])/', $using)
+				? (' ON (' . $this->_compare($using) . ')')
+				: (' USING (' . $this->identifiers($using) . ')');
+		}
+
+		if (!count($using)) return '';
 
 		$query = '';
 		foreach ($using as $item) {

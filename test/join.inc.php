@@ -182,6 +182,30 @@ pudlTest('SELECT * FROM `tbl1` JOIN `tbl2`');
 
 
 
-//TODO: this is next on the list
-//$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(t1.col1=t2.col2)']);
-//pudlTest('SELECT * FROM `tbl1` JOIN `tbl2` ON (`col1`=`col2`)');
+$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(col1=col2)']);
+pudlTest('SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (`col1`=`col2`)');
+
+
+
+$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(t1.col1=t2.col2)']);
+pudlTest('SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (`t1`.`col1`=`t2`.`col2`)');
+
+
+
+$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(col1!=col2)']);
+pudlTest('SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (`col1`!=`col2`)');
+
+
+
+$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(col1<col2)']);
+pudlTest('SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (`col1`<`col2`)');
+
+
+
+$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(col1>col2)']);
+pudlTest('SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (`col1`>`col2`)');
+
+
+
+$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(col1<>col2)']);
+pudlTest('SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (`col1`<>`col2`)');
