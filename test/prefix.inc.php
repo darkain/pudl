@@ -31,6 +31,12 @@ pudlTest("SELECT * FROM `replace_table`", $prefix1);
 
 
 
+$prefix1->string()->rows('replace_table');
+pudlTest("SELECT * FROM `replace_table`", $prefix1);
+
+
+
+
 $prefix1->string()->rows('test_table');
 pudlTest("SELECT * FROM `test_table`", $prefix1);
 
@@ -76,6 +82,12 @@ pudlTest("SELECT * FROM `replace_table`", $prefix2);
 
 $prefix2->string()->rows('pudl_table');
 pudlTest("SELECT * FROM `replace_pudl_table`", $prefix2);
+
+
+
+
+$prefix2->string()->rows('replace_table');
+pudlTest("SELECT * FROM `replace_table`", $prefix2);
 
 
 
@@ -129,6 +141,12 @@ pudlTest("SELECT * FROM `pudl_table`", $prefix3);
 
 
 
+$prefix3->string()->rows('replace_table');
+pudlTest("SELECT * FROM `replace_table`", $prefix3);
+
+
+
+
 $prefix3->string()->rows('test_table');
 pudlTest("SELECT * FROM `test_table`", $prefix3);
 
@@ -178,6 +196,12 @@ pudlTest("SELECT * FROM `default_table`", $prefix4);
 
 $prefix4->string()->rows('pudl_table');
 pudlTest("SELECT * FROM `prefix_table`", $prefix4);
+
+
+
+
+$prefix4->string()->rows('replace_table');
+pudlTest("SELECT * FROM `default_replace_table`", $prefix4);
 
 
 

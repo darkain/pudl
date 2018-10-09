@@ -43,9 +43,13 @@ trait pudlTable {
 			}
 		}
 
-		return (isset($this->prefix[0]))
-			? $this->prefix[0] . $table
-			: $table;
+		if (!isset($this->prefix[0])) return $table;
+
+		if (substr($table, 0, strlen($this->prefix[0])) === $this->prefix[0]) {
+			return $table;
+		}
+
+		return $this->prefix[0] . $table;
 	}
 
 
