@@ -57,8 +57,10 @@ trait pudlQuery {
 		static $depth = 0;
 		$query = false;
 
-		if ($depth++ > 31) {
-			throw new pudlException($this, 'Recursion limit reached');
+		if ($depth++ > PUDL_RECURSION) {
+			throw new pudlException($this,
+				'Recursion limit reached for value expression'
+			);
 		}
 
 		switch (true) {
@@ -236,7 +238,7 @@ trait pudlQuery {
 		} unset($item);
 
 		//PROCESS TABLE NAME
-		if ($prefix !== false) {
+		if ($prefix !== false  &&  $prefix !== NULL) {
 			$list[] = $this->_prefix(array_pop($list));
 		}
 
@@ -325,32 +327,60 @@ trait pudlQuery {
 
 
 
+	////////////////////////////////////////////////////////////////////////////
+	// GENERATE THE 'ORDER BY' SECTION OF THE SQL QUERY
+	////////////////////////////////////////////////////////////////////////////
 	protected function _order($order, $prefix=false) {
-		if (is_string($order)) return ' ORDER BY ' . $order;
-		if (!is_array($order)  &&  !is_object($order)) return '';
-		if ($order instanceof pudlStringResult) return (string) $order;
+		//TODO: (string) should escape identifier
 		if (empty($order)) return '';
+		if (is_string($order)) return ' ORDER BY ' . $order;
+
+		if (!pudl_array($order)  &&  !($order instanceof pudlHelper)) {
+			throw new pudlException($this,
+				'Invalid data type for $order: ' . gettype($order)
+			);
+		}
+
+		if ($order instanceof pudlStringResult) return (string) $order;
 		return ' ORDER BY ' . $this->_clauseRecurse($order, ', ', $prefix);
 	}
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// GENERATE THE 'GROUP BY' SECTION OF THE SQL QUERY
+	////////////////////////////////////////////////////////////////////////////
 	protected function _group($group, $prefix=false) {
-		if ($group === false)	return '';
+		//TODO: (string) should escape identifier
+		if (empty($group)) return '';
+		if (is_string($group)) return ' GROUP BY ' . $group;
+
+		if (!pudl_array($group)  &&  !($group instanceof pudlHelper)) {
+			throw new pudlException($this,
+				'Invalid data type for $group: ' . gettype($group)
+			);
+		}
+
 		if ($group instanceof pudlStringResult) return (string) $group;
-		if (is_array($group))	return ' GROUP BY ' . $this->_clauseRecurse($group, ', ', $prefix);
-		if (is_object($group))	return ' GROUP BY ' . $this->_clauseRecurse($group, ', ', $prefix);
-		return ' GROUP BY ' . $group;
+		return ' GROUP BY ' . $this->_clauseRecurse($group, ', ', $prefix);
 	}
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// GENERATE A RECUSIVE CLAUSE
+	// THIS IS USED BY 'WHERE', 'ON', 'HAVING', 'GROUP BY', 'ORDER BY'
+	////////////////////////////////////////////////////////////////////////////
 	private function _clauseRecurse($clause, $joiner=' AND ', $prefix=false) {
 		static $depth = 0;
 		$query = '';
 
-		if ($depth > 31) {
-			throw new pudlException($this, 'Recursion limit reached');
+		if ($depth > PUDL_RECURSION) {
+			throw new pudlException($this,
+				'Recursion limit reached in recursive clause'
+			);
 		}
 
 		if ($clause instanceof pudlAnd) {

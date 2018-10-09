@@ -149,6 +149,10 @@ trait pudlSelect {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// SELEX - COMPLEX SELECT STATEMENT USING ARRAY(S)
+	////////////////////////////////////////////////////////////////////////////
 	public function selex(/* ...$selex */) {
 		$query		= '';
 		$params		= [];
@@ -157,47 +161,91 @@ trait pudlSelect {
 			$params	= array_merge_recursive($params, $arg);
 		}
 
+
+		//	ARE WE IN OUR CUSTOM (GROUP BY) + (ORDER BY) SUBQUERY?
+		$subquery = (isset($params['group'])  &&  isset($params['order']));
+
+
 		if (!empty($params['explain']))		$query .= 'EXPLAIN ';
 
+
+		//	SELECT
 		$query .= 'SELECT ';
+
+
+		//	(NO) CACHE
 		$query .= $this->_cache();
 
+
+		//	DISTICT
 		if (!empty($params['distinct']))	$query .= 'DISTINCT ';
 
-		if (isset($params['group'])  &&  isset($params['order'])) {
-			$query .= ' *, COUNT(*) FROM (SELECT ';
+
+		//	(GROUP BY + ORDER BY) SUBQUERY
+		if ($subquery) {
+			$query .= '*, COUNT(*) FROM (SELECT ';
 		}
 
-		if ( isset($params['column']))	$query .= $this->_column($params['column']);
-		if (!isset($params['column']))	$query .= '*';
-		if ( isset($params['table']))	$query .= $this->_tables($params['table']);
-		if ( isset($params['clause']))	$query .= $this->_clause($params['clause']);
 
-		if (isset($params['group'])  &&  isset($params['order'])) {
-			$query .= $this->_order($params['order']);
-			$query .= ') ';
-			$query .= $this->_alias();
-		}
-
-		if (isset($params['order'])  &&  isset($params['group'])) {
-			$query .= $this->_group($params['group'], NULL);
-			if (isset($params['having'])) {
-				$query .= $this->_clause($params['having'], 'HAVING');
-			}
-			$query .= $this->_order($params['order'], NULL);
-
+		//	COLUMNS
+		if (!empty($params['column'])) {
+			$query .= $this->_column($params['column']);
 		} else {
-			if (isset($params['group']))	$query .= $this->_group($params['group']);
-			if (isset($params['having']))	$query .= $this->_clause($params['having'], 'HAVING');
-			if (isset($params['order']))	$query .= $this->_order($params['order']);
+			$query .= '*';
 		}
 
+
+		//	FROM
+		if (isset($params['table'])) {
+			$query .= $this->_tables($params['table']);
+		}
+
+
+		//	WHERE
+		if (!empty($params['where'])) {
+			$query .= $this->_clause($params['where']);
+		} else if (!empty($params['clause'])) {
+			$query .= $this->_clause($params['clause']);
+		}
+
+
+		//	(GROUP BY + ORDER BY) SUBQUERY
+		if ($subquery) {
+			//	ORDER BY
+			$query .= $this->_order($params['order']);
+
+			//	SUBQUERY ALIAS
+			$query .= ') ' . $this->_alias();
+		}
+
+
+		//	GROUP BY
+		if (isset($params['group'])) {
+			$query .= $this->_group($params['group'], $subquery?NULL:false);
+		}
+
+
+		//	HAVING
+		if (isset($params['having'])) {
+			$query .= $this->_clause($params['having'], 'HAVING');
+		}
+
+
+		//	ORDER BY
+		if (isset($params['order'])) {
+			$query .= $this->_order($params['order'], $subquery?NULL:false);
+		}
+
+
+		//	LIMIT AND OFFSET
 		$limit	= isset($params['limit'])	? $params['limit']	: false;
 		$offset	= isset($params['offset'])	? $params['offset']	: false;
 		$query .= $this->_limit($limit, $offset);
 
+
 		return $this($query);
 	}
+
 
 
 

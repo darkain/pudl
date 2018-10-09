@@ -1,5 +1,9 @@
 <?php
 
+
+define('PUDL_RECURSION',	0x1F);
+
+
 //Default Behavior
 define('PUDL_DEFAULT',		0x00);
 
