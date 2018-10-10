@@ -249,7 +249,12 @@ class pudlGalera extends pudlMySqli {
 			if ($server == $this->connected) continue;
 
 			try {
-				$sync	= new pudlGalera([$this, 'server'=>[$server]]);
+				$sync	= new pudlGalera([
+					$this,
+					'server'	=> [$server],
+					'timeout'	=> 1,
+				]);
+
 				if ($sync->server() === false) continue;
 
 				$sync->wait()->row('information_schema.SESSION_VARIABLES');
