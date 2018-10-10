@@ -25,14 +25,15 @@ class pudlMySql extends pudlMyShared {
 		ini_set('mysql.connect_timeout', $auth['timeout']);
 
 		//ATTEMPT TO CREATE A PERSISTANT CONNECTION
-		$this->connection = @mysql_pconnect(
-			$auth['server'],
-			$auth['username'],
-			$auth['password']
-		);
+		if ($auth['persistent']) {
+			$this->connection = @mysql_pconnect(
+				$auth['server'],
+				$auth['username'],
+				$auth['password']
+			);
 
 		//ATTEMPT TO CREATE A NON-PERSISTANT CONNECTION
-		if (empty($this->connection)) {
+		} else {
 			$this->connection = @mysql_connect(
 				$auth['server'],
 				$auth['username'],
