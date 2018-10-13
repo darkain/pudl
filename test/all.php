@@ -103,6 +103,11 @@ if (!defined('PHP_FLOAT_EPSILON'))	define('PHP_FLOAT_EPSILON',	2.2204460492503E-
 
 
 
+//ENSURE WE HAVE PUDL NULL, SINCE SOME TESTS USE THIS INSTEAD OF DEFAULT $DB OBJECT
+require_once(__DIR__.'/../null/pudlNull.php');
+
+
+
 //PREP THE DIRECTORY
 $parent	= dirname(dirname(__DIR__));
 $dir	= substr(__DIR__, strlen($parent)-strlen(__DIR__)+1);

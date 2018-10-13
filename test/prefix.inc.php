@@ -1,15 +1,6 @@
 <?php
 
 
-require_once(__DIR__.'/../null/pudlNull.php');
-
-
-
-
-////////////////////////////////////////////////////////////////////////////////
-
-
-
 
 $prefix1 = new pudlNull([
 	'identifier'	=> '`',
