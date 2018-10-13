@@ -233,7 +233,7 @@ trait pudlQuery {
 		foreach ($list as &$item) {
 			$item = trim($item);
 			if (!strlen($item)) {
-				throw new pudlException($this, 'Wrong column name');
+				throw new pudlValueException($this, 'Wrong column name');
 			}
 		} unset($item);
 
@@ -336,7 +336,7 @@ trait pudlQuery {
 		if (is_string($order)) return ' ORDER BY ' . $order;
 
 		if (!pudl_array($order)  &&  !($order instanceof pudlHelper)) {
-			throw new pudlException($this,
+			throw new pudlTypeException($this,
 				'Invalid data type for $order: ' . gettype($order)
 			);
 		}
@@ -357,7 +357,7 @@ trait pudlQuery {
 		if (is_string($group)) return ' GROUP BY ' . $group;
 
 		if (!pudl_array($group)  &&  !($group instanceof pudlHelper)) {
-			throw new pudlException($this,
+			throw new pudlTypeException($this,
 				'Invalid data type for $group: ' . gettype($group)
 			);
 		}
@@ -520,7 +520,7 @@ trait pudlQuery {
 				$this->_requireTrue($value, 'Object retuned invalid value from pudlId');
 				return $value;
 			}
-			throw new pudlException(
+			throw new pudlTypeException(
 				$this,
 				is_object($column)
 					? 'Undefined method: ' . get_class($column) . '::pudlId'

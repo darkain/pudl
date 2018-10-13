@@ -25,7 +25,7 @@ trait pudlInsert {
 		if ($data === false) $data = [];
 
 		if (!is_array($data)  &&  !is_object($data)) {
-			throw new pudlException($this, 'Invalid data type for pudl::insert');
+			throw new pudlTypeException($this, 'Invalid data type for pudl::insert');
 		}
 
 		$cols	= ' (';
@@ -177,7 +177,7 @@ trait pudlInsert {
 		if ($data === false) $data = [];
 
 		if (!is_array($data)  &&  !is_object($data)) {
-			throw new pudlException(
+			throw new pudlTypeException(
 				$this,
 				'Invalid data type for pudl::insertEx'
 			);

@@ -10,10 +10,9 @@ class pudlPdo extends pudl {
 
 	public function __construct($data, $autoconnect=true) {
 		if (empty($data['server'])) {
-			throw new pudlException(
+			throw new pudlValueException(
 				$this,
-				'No DSN provided for PDO',
-				PUDL_X_CONNECTION
+				'No DSN provided for PDO'
 			);
 		}
 
@@ -72,10 +71,9 @@ class pudlPdo extends pudl {
 			$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
 
 		} catch (PDOException $e) {
-			throw new pudlException(
+			throw new pudlConnectionException(
 				$this,
-				'ERROR CONNECTING THROUGH PDO: ' . $e->getMessage(),
-				PUDL_X_CONNECTION
+				'ERROR CONNECTING THROUGH PDO: ' . $e->getMessage()
 			);
 		}
 	}

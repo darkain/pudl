@@ -47,10 +47,9 @@ class pudlPgSql extends pudl {
 
 		if ($this->connection === false) {
 			$error = error_get_last();
-			throw new pudlException(
+			throw new pudlConnectionException(
 				$this,
-				'ERROR CONNECTING TO POSTGRESQL: ' . $error['message'],
-				PUDL_X_CONNECTION
+				'ERROR CONNECTING TO POSTGRESQL: ' . $error['message']
 			);
 		}
 	}
@@ -176,5 +175,5 @@ class pudlPgSql extends pudl {
 	protected function blob($value) {
 		return "E'x\\\\" . bin2hex($value) . "'";
 	}
-	
+
 }

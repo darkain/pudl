@@ -163,7 +163,7 @@ trait pudlJson {
 			return $return;
 		}
 
-		throw new pudlException($this, 'Invalid JSON Key/Value Pairs');
+		throw new pudlValueException($this, 'Invalid JSON Key/Value Pairs');
 	}
 
 

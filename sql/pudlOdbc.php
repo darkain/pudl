@@ -31,10 +31,9 @@ class pudlOdbc extends pudl {
 		);
 
 		if ($this->connection === false) {
-			throw new pudlException(
+			throw new pudlConnectionException(
 				$this,
-				'ERROR CONNECTING TO ODBC: ' . $this->errno() . ' - ' . $this->error(),
-				PUDL_X_CONNECTION
+				'ERROR CONNECTING TO ODBC: ' . $this->errno() . ' - ' . $this->error()
 			);
 		}
 	}

@@ -43,7 +43,7 @@ class pudlFunction implements pudlValue, pudlHelper {
 			return ltrim($property, '_') . '(' . $query . ')';
 		}
 
-		throw new pudlException($db, 'Invalid pudlFunction');
+		throw new pudlFunctionException($db, 'Invalid pudlFunction');
 	}
 }
 

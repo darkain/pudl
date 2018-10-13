@@ -288,7 +288,7 @@ documentation. Example: $clause (recursive AND/OR) vs $insert (JSON data).
 * `object` implementing `__toString` - Calls `$object->__toString()`, then
 processes same as `string`.
 
-* Anything else - `pudlException` is thrown.
+* Anything else - throws a `pudlValueException`
 
 
 
@@ -328,7 +328,7 @@ the format ``VALUE` AS `KEY``.
 
 * `object` implementing `ArrayAccess` - Same as `array` listed below.
 
-* Anything else - throws `pudlException`
+* Anything else - throws a `pudlValueException`
 
 * `array`
 Each element within the array is a different `TABLE` that are `JOIN`ed by

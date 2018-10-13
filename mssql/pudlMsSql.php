@@ -41,14 +41,14 @@ class		pudlMsSql
 			$error .= 'Unable to connect to database server: "' . $auth['server'];
 			$error .= '" with the username: "' . $auth['username'];
 			$error .= "\"<br />\nError " . $this->errno() . ': ' . $this->error();
-			throw new pudlException($this, $error, PUDL_X_CONNECTION);
+			throw new pudlConnectionException($this, $error);
 		}
 
 		if (!@mssql_select_db($auth['database'], $this->connection)) {
 			$error  = "<br />\n";
 			$error .= 'Unable to select database : "' . $auth['database'];
 			$error .= "\"<br />\nError " . $this->errno() . ': ' . $this->error();
-			throw new pudlException($this, $error, PUDL_X_CONNECTION);
+			throw new pudlConnectionException($this, $error);
 		}
 	}
 

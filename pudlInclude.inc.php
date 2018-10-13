@@ -7,6 +7,7 @@
 //CONSTANTS, INTERFACES, HELPER CLASSES AND FUNCTIONS
 ////////////////////////////////////////////////////////////////////////////////
 require_once(is_owner(__DIR__.'/pudlConstants.php'));
+require_once(is_owner(__DIR__.'/pudlException.php'));
 require_once(is_owner(__DIR__.'/pudlInterfaces.php'));
 require_once(is_owner(__DIR__.'/pudlHelpers.php'));
 require_once(is_owner(__DIR__.'/pudlOrm.php'));
