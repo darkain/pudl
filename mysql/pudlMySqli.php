@@ -152,6 +152,29 @@ class pudlMySqli extends pudlMyShared {
 
 
 	////////////////////////////////////////////////////////////////////////////
+	// RETRIEVES INFORMATION ABOUT THE MOST RECENTLY EXECUTED QUERY
+	// http://php.net/manual/en/mysqli.info.php
+	////////////////////////////////////////////////////////////////////////////
+	public function info() {
+		if (!$this->connection) return [];
+
+		$info	= explode('  ', $this->connection->info);
+		$array	= [];
+
+		foreach ($info as $item) {
+			$parts = explode(': ', $item);
+			if (count($parts) < 2) continue;
+			$parts[0] = str_replace(' ', '_', strtolower($parts[0]));
+			$array[$parts[0]] = (int)$parts[1];
+		}
+
+		return $array;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
 	// RETURNS THE ERROR CODE FOR THE MOST RECENT FUNCTION CALL
 	// http://php.net/manual/en/mysqli.errno.php
 	////////////////////////////////////////////////////////////////////////////
