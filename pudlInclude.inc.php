@@ -44,5 +44,6 @@ require_once(is_owner(__DIR__.'/traits/pudlDelete.php'));
 require_once(is_owner(__DIR__.'/traits/pudlStatic.php'));
 require_once(is_owner(__DIR__.'/traits/pudlCompare.php'));
 require_once(is_owner(__DIR__.'/traits/pudlCounter.php'));
+require_once(is_owner(__DIR__.'/traits/pudlRequire.php'));
 require_once(is_owner(__DIR__.'/traits/pudlCallback.php'));
 require_once(is_owner(__DIR__.'/traits/pudlTransaction.php'));

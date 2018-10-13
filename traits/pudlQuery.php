@@ -787,58 +787,6 @@ trait pudlQuery {
 
 
 
-	protected function _requireProperty($object, $property) {
-		if (!is_object($object)) $this->_invalidType($object, 'object');
-		if (property_exists($object, $property)) return;
-		throw new pudlException(
-			$this,
-			'Undefined property: ' . get_class($object) . '::' . $property
-		);
-	}
-
-
-
-	protected function _requireKey($array, $key) {
-		if (!is_array($array)) $this->_invalidType($array, 'array');
-		if (array_key_exists($key, $array)) return;
-		throw new pudlException($this, 'Undefined key: ' . $key);
-	}
-
-
-
-	protected function _requireTrue($value, $error) {
-		if ($value) return;
-		throw new pudlValueException($this, $error);
-	}
-
-
-
-	protected function _invalidType($item, $thing=false) {
-		switch (true) {
-			case ($thing !== false)  &&  is_object($item):
-				$error = 'Invalid object type for ' . $thing . ': ' . get_class($item);
-			break;
-
-			case ($thing !== false):
-				$error = 'Invalid data type for ' . $thing . ': ' . gettype($item);
-			break;
-
-			case is_object($item):
-				$error = 'Invalid object type: ' . get_class($item);
-			break;
-
-			default:
-				$error = 'Invalid data type: ' . gettype($item);
-			break;
-		}
-
-		throw new pudlTypeException($this, $error);
-
-		return NULL;
-	}
-
-
-
 	/** @var string */			protected $identifier	= '"';
 	/** @var string|false */	protected $prefix		= false;
 

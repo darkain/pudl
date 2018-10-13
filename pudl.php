@@ -28,6 +28,7 @@ abstract	class	pudl {
 			use		pudlStatic;
 			use		pudlCompare;
 			use		pudlCounter;
+			use		pudlRequire;
 			use		pudlCallback;
 			use		pudlTransaction;
 
