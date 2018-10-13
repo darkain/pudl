@@ -11,12 +11,19 @@ class pudlMySqli extends pudlMyShared {
 
 
 
+	////////////////////////////////////////////////////////////////////////////
+	// CREATE AN INSTANCE OF THE PUDLMYSQLI OBJECT
+	////////////////////////////////////////////////////////////////////////////
 	public static function instance($data, $autoconnect=true) {
 		return new pudlMySqli($data, $autoconnect);
 	}
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// OPENS A CONNECTION TO A MYSQL SERVER
+	////////////////////////////////////////////////////////////////////////////
 	public function connect() {
 		$auth = $this->auth();
 
@@ -63,6 +70,11 @@ class pudlMySqli extends pudlMyShared {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// CLOSES THE DATABASE CONNECTION
+	// http://php.net/manual/en/mysqli.close.php
+	////////////////////////////////////////////////////////////////////////////
 	public function disconnect($trigger=true) {
 		parent::disconnect($trigger);
 		if (!$this->connection) return;
@@ -72,6 +84,11 @@ class pudlMySqli extends pudlMyShared {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// ESCAPES SPECIAL CHARACTERS IN A STRING FOR USE IN AN SQL STATEMENT
+	// http://php.net/manual/en/mysqli.real-escape-string.php
+	////////////////////////////////////////////////////////////////////////////
 	public function escape($value) {
 		if (!$this->connection) return false;
 		return @$this->connection->real_escape_string($value);
@@ -79,6 +96,11 @@ class pudlMySqli extends pudlMyShared {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// PERFORMS A QUERY ON THE DATABASE AND RETURNS A PUDLRESULT
+	// http://php.net/manual/en/mysqli.query.php
+	////////////////////////////////////////////////////////////////////////////
 	protected function process($query) {
 		if (!$this->connection) return new pudlMySqliResult($this);
 
@@ -92,6 +114,11 @@ class pudlMySqli extends pudlMyShared {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// PERFORMS A QUERY ON THE DATABASE BYPASSING PUDL CALLS
+	// http://php.net/manual/en/mysqli.query.php
+	////////////////////////////////////////////////////////////////////////////
 	protected function _query($query) {
 		if (!$this->connection) return false;
 		return $this->connection->query($query);
@@ -99,6 +126,11 @@ class pudlMySqli extends pudlMyShared {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// RETURNS THE AUTO GENERATED ID USED IN THE LATEST QUERY
+	// http://php.net/manual/en/mysqli.insert-id.php
+	////////////////////////////////////////////////////////////////////////////
 	public function insertId() {
 		if (!$this->connection) return 0;
 		return $this->connection->insert_id;
@@ -106,6 +138,11 @@ class pudlMySqli extends pudlMyShared {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// GETS THE NUMBER OF AFFECTED ROWS IN A PREVIOUS MYSQL OPERATION
+	// http://php.net/manual/en/mysqli.affected-rows.php
+	////////////////////////////////////////////////////////////////////////////
 	public function updated() {
 		if (!$this->connection) return 0;
 		return $this->connection->affected_rows;
@@ -113,6 +150,11 @@ class pudlMySqli extends pudlMyShared {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// RETURNS THE ERROR CODE FOR THE MOST RECENT FUNCTION CALL
+	// http://php.net/manual/en/mysqli.errno.php
+	////////////////////////////////////////////////////////////////////////////
 	public function errno() {
 		if (!$this->connection) return @mysqli_connect_errno();
 		return $this->connection->errno;
@@ -120,6 +162,11 @@ class pudlMySqli extends pudlMyShared {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// RETURNS A STRING DESCRIPTION OF THE LAST ERROR
+	// http://php.net/manual/en/mysqli.error.php
+	////////////////////////////////////////////////////////////////////////////
 	public function error() {
 		if (!$this->connection) return @mysqli_connect_error();
 		return $this->connection->error;
@@ -127,6 +174,11 @@ class pudlMySqli extends pudlMyShared {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// RETURNS THE ERROR CODE FROM LAST CONNECT CALL
+	// http://php.net/manual/en/mysqli.connect-errno.php
+	////////////////////////////////////////////////////////////////////////////
 	public function connectErrno() {
 		if (!$this->connection) return @mysqli_connect_errno();
 		return $this->connection->connect_errno;
@@ -134,8 +186,14 @@ class pudlMySqli extends pudlMyShared {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// RETURNS A STRING DESCRIPTION OF THE LAST CONNECT ERROR
+	// http://php.net/manual/en/mysqli.connect-error.php
+	////////////////////////////////////////////////////////////////////////////
 	public function connectError() {
 		if (!$this->connection) return @mysqli_connect_error();
 		return $this->connection->connect_error;
 	}
+
 }
