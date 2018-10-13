@@ -16,7 +16,7 @@ trait pudlDelete {
 		return $this(
 			'DELETE FROM ' .
 			$this->_table($table) .
-			$this->_clause($clause) .
+			$this->_where($clause) .
 			$this->_limit($limit, $offset)
 		);
 	}

@@ -14,7 +14,7 @@ trait pudlTable {
 	////////////////////////////////////////////////////////////////////////////
 	public function tables($clause=NULL) {
 		$tables				= [];
-		$query				= 'SHOW TABLES' . $this->_clause($clause);
+		$query				= 'SHOW TABLES' . $this->_where($clause);
 		$list				= $this($query)->complete();
 
 		if (is_string($list)  ||  $list instanceof pudlStringResult) {
@@ -316,9 +316,9 @@ trait pudlTable {
 					}
 
 					if (!empty($join['clause'])) {
-						$query .= $this->_clause($join['clause'], 'ON');
+						$query .= $this->_on($join['clause']);
 					} else if (!empty($join['on'])) {
-						$query .= $this->_clause($join['on'], 'ON');
+						$query .= $this->_on($join['on']);
 					} else if (!empty($join['using'])) {
 						$query .= $this->_joinUsing($join['using']);
 					}

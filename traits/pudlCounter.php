@@ -38,7 +38,7 @@ trait pudlCounter {
 					'SELECT ' .
 					$this->_column($col) .
 					$this->_tables($table) .
-					$this->_clause($clause) .
+					$this->_where($clause) .
 					$this->_group($group) .
 					') ' .
 					$this->_alias();

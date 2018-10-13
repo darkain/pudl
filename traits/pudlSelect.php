@@ -13,7 +13,7 @@ trait pudlSelect {
 		$query .= $this->_cache();
 		$query .= $this->_column($column);
 		$query .= $this->_tables($table);
-		$query .= $this->_clause($clause);
+		$query .= $this->_where($clause);
 		$query .= $this->_order($order);
 		$query .= $this->_limit($limit, $offset);
 		return $this($query);
@@ -26,8 +26,8 @@ trait pudlSelect {
 		$query .= $this->_cache();
 		$query .= $this->_column($column);
 		$query .= $this->_tables($table);
-		$query .= $this->_clause($clause);
-		$query .= $this->_clause($having, 'HAVING');
+		$query .= $this->_where($clause);
+		$query .= $this->_having($having);
 		$query .= $this->_order($order);
 		$query .= $this->_limit($limit, $offset);
 		return $this($query);
@@ -40,7 +40,7 @@ trait pudlSelect {
 		$query .= $this->_cache();
 		$query .= $this->_column($column);
 		$query .= $this->_tables($table);
-		$query .= $this->_clause($clause);
+		$query .= $this->_where($clause);
 		$query .= $this->_group($group);
 		$query .= $this->_order($order);
 		$query .= $this->_limit($limit, $offset);
@@ -54,9 +54,9 @@ trait pudlSelect {
 		$query .= $this->_cache();
 		$query .= $this->_column($column);
 		$query .= $this->_tables($table);
-		$query .= $this->_clause($clause);
+		$query .= $this->_where($clause);
 		$query .= $this->_group($group);
-		$query .= $this->_clause($having, 'HAVING');
+		$query .= $this->_having($having);
 		$query .= $this->_order($order);
 		$query .= $this->_limit($limit, $offset);
 		return $this($query);
@@ -70,7 +70,7 @@ trait pudlSelect {
 		$query .= '*, COUNT(*) FROM (SELECT ';
 		$query .= $this->_column($column);
 		$query .= $this->_tables($table);
-		$query .= $this->_clause($clause);
+		$query .= $this->_where($clause);
 		$query .= $this->_order($order);
 		if (pudl_array($limit)) $query .= $this->_limit($limit[0]);
 		$query .= ') ';
@@ -90,7 +90,7 @@ trait pudlSelect {
 		$query .= '*, COUNT(*) FROM (SELECT ';
 		$query .= $this->_column($column);
 		$query .= $this->_tables($table);
-		$query .= $this->_clause($clause);
+		$query .= $this->_where($clause);
 		$query .= $this->_group($inner_group);
 		$query .= $this->_order($order);
 		if (pudl_array($limit)) $query .= $this->_limit($limit[0]);
@@ -111,7 +111,7 @@ trait pudlSelect {
 		$query .= 'DISTINCT ';
 		$query .= $this->_column($column);
 		$query .= $this->_tables($table);
-		$query .= $this->_clause($clause);
+		$query .= $this->_where($clause);
 		$query .= $this->_order($order);
 		$query .= $this->_limit($limit, $offset);
 		return $this($query);
@@ -125,7 +125,7 @@ trait pudlSelect {
 		$query .= 'DISTINCT * FROM (SELECT ';
 		$query .= $this->_column($column);
 		$query .= $this->_tables($table);
-		$query .= $this->_clause($clause);
+		$query .= $this->_where($clause);
 		$query .= $this->_order($order);
 		$query .= ') ';
 		$query .= $this->_alias();
@@ -141,7 +141,7 @@ trait pudlSelect {
 		$query  = 'SELECT ';
 		$query .= $this->_column($column);
 		$query .= $this->_tables($table);
-		$query .= $this->_clause($clause);
+		$query .= $this->_where($clause);
 		$query .= $this->_order($order);
 		$query .= $this->_limit($limit, $offset);
 		return $this->explain($query);
@@ -203,9 +203,9 @@ trait pudlSelect {
 
 		//	WHERE
 		if (!empty($params['where'])) {
-			$query .= $this->_clause($params['where']);
+			$query .= $this->_where($params['where']);
 		} else if (!empty($params['clause'])) {
-			$query .= $this->_clause($params['clause']);
+			$query .= $this->_where($params['clause']);
 		}
 
 
@@ -227,7 +227,7 @@ trait pudlSelect {
 
 		//	HAVING
 		if (isset($params['having'])) {
-			$query .= $this->_clause($params['having'], 'HAVING');
+			$query .= $this->_having($params['having']);
 		}
 
 

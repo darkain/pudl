@@ -17,7 +17,7 @@ trait pudlUpdate {
 		$query .= $this->_table($table);
 		$query .= ' SET ';
 		$query .= $this->_update($data);
-		$query .= $this->_clause($clause);
+		$query .= $this->_where($clause);
 		$query .= $this->_limit($limit, $offset);
 		return $this($query);
 	}
@@ -129,7 +129,7 @@ trait pudlUpdate {
 			. ' SET '	. $this->identifiers($col)
 			. '='		. $this->identifiers($col)
 			. $value
-			. $this->_clause($clause)
+			. $this->_where($clause)
 			. $this->_limit($limit, $offset)
 		);
 	}

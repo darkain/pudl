@@ -289,7 +289,25 @@ trait pudlQuery {
 
 
 
-	protected function _clause($clause, $type='WHERE') {
+	protected function _where($clause) {
+		return $this->_clause($clause, 'WHERE');
+	}
+
+
+
+	protected function _having($clause) {
+		return $this->_clause($clause, 'HAVING');
+	}
+
+
+
+	protected function _on($clause) {
+		return $this->_clause($clause, 'ON');
+	}
+
+
+
+	protected function _clause($clause, $type='') {
 		$prefix = empty($type) ? '' : (' ' . $type . ' (');
 		$suffix = empty($type) ? '' : ')';
 
@@ -677,7 +695,7 @@ trait pudlQuery {
 
 			if (is_int($column)) {
 				$query	.= ($value instanceof pudlValue)
-							? trim($this->_clause($value, ''))
+							? trim($this->_clause($value))
 							: $value;
 				continue;
 			}
