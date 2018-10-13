@@ -58,7 +58,9 @@ trait pudlQuery {
 		$query = false;
 
 		if ($depth++ > PUDL_RECURSION) {
-			throw new pudlException($this,
+			//TODO:	reset query depth upon ANY pudlException
+			//		this means it'll have to no longer be a local scope static variable
+			throw new pudlRecursionException($this,
 				'Recursion limit reached for value expression'
 			);
 		}
@@ -378,7 +380,7 @@ trait pudlQuery {
 		$query = '';
 
 		if ($depth > PUDL_RECURSION) {
-			throw new pudlException($this,
+			throw new pudlRecursionException($this,
 				'Recursion limit reached in recursive clause'
 			);
 		}
