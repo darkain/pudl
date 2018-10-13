@@ -563,7 +563,7 @@ trait pudlQuery {
 		$parts[1] = trim($parts[1]);
 
 		if ($parts[0]===''  ||  count($parts)>2  ||  ($parts[1]==='' && !empty($equals[0]))) {
-			throw new pudlException($this, 'Invalid clause: ' . $clause);
+			throw new pudlValueException($this, 'Invalid clause: ' . $clause);
 		}
 
 		$query	= is_numeric($parts[0])
@@ -659,7 +659,7 @@ trait pudlQuery {
 
 	protected function _update($data) {
 		if (empty($data)) {
-			throw new pudlException($this, 'Update data cannot be empty');
+			throw new pudlValueException($this, 'Update data cannot be empty');
 		}
 
 		if (!is_array($data)  &&  !is_object($data)) return $data;
@@ -808,7 +808,7 @@ trait pudlQuery {
 
 	protected function _requireTrue($value, $error) {
 		if ($value) return;
-		throw new pudlException($this, $error);
+		throw new pudlValueException($this, $error);
 	}
 
 
@@ -832,7 +832,7 @@ trait pudlQuery {
 			break;
 		}
 
-		throw new pudlException($this, $error);
+		throw new pudlTypeException($this, $error);
 
 		return NULL;
 	}

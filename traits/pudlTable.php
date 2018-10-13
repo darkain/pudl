@@ -186,7 +186,7 @@ trait pudlTable {
 			}
 
 		} else {
-			throw new pudlException($this, 'Invalid data type for $columns');
+			throw new pudlTypeException($this, 'Invalid data type for $columns');
 		}
 
 
@@ -201,7 +201,7 @@ trait pudlTable {
 			}
 
 		} else {
-			throw new pudlException($this, 'Invalid data type for $keys');
+			throw new pudlTypeException($this, 'Invalid data type for $keys');
 		}
 
 
@@ -223,7 +223,7 @@ trait pudlTable {
 			}
 
 		} else {
-			throw new pudlException($this, 'Invalid data type for $options');
+			throw new pudlTypeException($this, 'Invalid data type for $options');
 		}
 
 
