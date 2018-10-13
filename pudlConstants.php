@@ -1,19 +1,16 @@
 <?php
 
 
-define('PUDL_RECURSION',	0x1F);
+//DEFINE THE RECURSION LIMIT
+define('PUDL_RECURSION',	  32);
 
-
-//Default Behavior
-define('PUDL_DEFAULT',		0x00);
-
-//Escapes
+//"LIKE '%VALUE%'"
 define('PUDL_NONE',			0x00);
 define('PUDL_START',		0x01);
 define('PUDL_END',			0x02);
 define('PUDL_BOTH',			0x03);
 
-//PUDL Object
+//PUDL OBJECT DATA IMPORT PROCESSING
 define('PUDL_CSV',			0x10);
 
 
