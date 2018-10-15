@@ -10,7 +10,7 @@ $db->string()->select(
 	10,				//limit
 	20				//offset
 );
-pudlTest('SELECT `column` FROM `table` WHERE (`a`=`b`) ORDER BY sorted LIMIT 10 OFFSET 20');
+pudlTest($db, 'SELECT `column` FROM `table` WHERE (`a`=`b`) ORDER BY sorted LIMIT 10 OFFSET 20');
 
 
 
@@ -24,7 +24,7 @@ $db->string()->having(
 	10,				//limit
 	20				//offset
 );
-pudlTest('SELECT `column` FROM `table` WHERE (`a`=`b`) HAVING (`x`=`y`) ORDER BY sorted LIMIT 10 OFFSET 20');
+pudlTest($db, 'SELECT `column` FROM `table` WHERE (`a`=`b`) HAVING (`x`=`y`) ORDER BY sorted LIMIT 10 OFFSET 20');
 
 
 
@@ -38,7 +38,7 @@ $db->string()->group(
 	10,				//limit
 	20				//offset
 );
-pudlTest('SELECT `column` FROM `table` WHERE (`a`=`b`) GROUP BY grouped ORDER BY sorted LIMIT 10 OFFSET 20');
+pudlTest($db, 'SELECT `column` FROM `table` WHERE (`a`=`b`) GROUP BY grouped ORDER BY sorted LIMIT 10 OFFSET 20');
 
 
 
@@ -53,7 +53,7 @@ $db->string()->groupHaving(
 	10,				//limit
 	20				//offset
 );
-pudlTest('SELECT `column` FROM `table` WHERE (`a`=`b`) GROUP BY grouped HAVING (`x`=`y`) ORDER BY sorted LIMIT 10 OFFSET 20');
+pudlTest($db, 'SELECT `column` FROM `table` WHERE (`a`=`b`) GROUP BY grouped HAVING (`x`=`y`) ORDER BY sorted LIMIT 10 OFFSET 20');
 
 
 
@@ -66,4 +66,4 @@ $db->string()->distinct(
 	10,				//limit
 	20				//offset
 );
-pudlTest('SELECT DISTINCT `column` FROM `table` WHERE (`a`=`b`) ORDER BY sorted LIMIT 10 OFFSET 20');
+pudlTest($db, 'SELECT DISTINCT `column` FROM `table` WHERE (`a`=`b`) ORDER BY sorted LIMIT 10 OFFSET 20');

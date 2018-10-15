@@ -2,7 +2,7 @@
 
 try {
 	$db->string()->rowId('table', 'error');
-	pudlTest('pudlException');
+	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
 	pudlError($error, 'Invalid data type for object: string');
 }
@@ -12,7 +12,7 @@ try {
 
 try {
 	$db->string()->rowId('table', false);
-	pudlTest('pudlException');
+	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
 	pudlError($error, 'Invalid data type for object: boolean');
 }
@@ -22,7 +22,7 @@ try {
 
 try {
 	$db->string()->rowId('table', 3);
-	pudlTest('pudlException');
+	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
 	pudlError($error, 'Invalid data type for object: integer');
 }
@@ -32,7 +32,7 @@ try {
 
 try {
 	$db->string()->rowId('table', true);
-	pudlTest('pudlException');
+	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
 	pudlError($error, 'Invalid data type for object: boolean');
 }
@@ -42,7 +42,7 @@ try {
 
 try {
 	$db->string()->rowId('table', 5.5);
-	pudlTest('pudlException');
+	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
 	pudlError($error, 'Invalid data type for object: double');
 }
@@ -52,7 +52,7 @@ try {
 
 try {
 	$db->string()->rowId('table', INF);
-	pudlTest('pudlException');
+	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
 	pudlError($error, 'Invalid data type for object: double');
 }
@@ -62,7 +62,7 @@ try {
 
 try {
 	$db->string()->rowId('table', -INF);
-	pudlTest('pudlException');
+	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
 	pudlError($error, 'Invalid data type for object: double');
 }
@@ -72,7 +72,7 @@ try {
 
 try {
 	$db->string()->rowId('table', NAN);
-	pudlTest('pudlException');
+	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
 	pudlError($error, 'Invalid data type for object: double');
 }
@@ -82,7 +82,7 @@ try {
 
 try {
 	$db->string()->rowId('table', 'column', new stdClass);
-	pudlTest('pudlException');
+	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
 	pudlError($error, 'Undefined property: stdClass::column');
 }
@@ -92,7 +92,7 @@ try {
 
 try {
 	$db->string()->rowId('table', new stdClass);
-	pudlTest('pudlException');
+	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
 	pudlError($error, 'Undefined method: stdClass::pudlId');
 }
@@ -105,7 +105,7 @@ try {
 		public function pudlId() { return false; }
 	}
 	$db->string()->rowId('table', new test_pudlId_1);
-	pudlTest('pudlException');
+	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
 	pudlError($error, 'Object retuned invalid value from pudlId');
 }
@@ -115,7 +115,7 @@ try {
 
 try {
 	$db->string()->rowId('table', 'error', fopen(__FILE__, 'r'));
-	pudlTest('pudlException');
+	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
 	pudlError($error, 'Invalid data type: resource');
 }
@@ -125,7 +125,7 @@ try {
 
 try {
 	$db->string()->update('table', '', 'column=1');
-	pudlTest('pudlException');
+	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
 	pudlError($error, 'Update data cannot be empty');
 }
@@ -135,7 +135,7 @@ try {
 
 try {
 	$db->string()->update('table', [], 'column=1');
-	pudlTest('pudlException');
+	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
 	pudlError($error, 'Update data cannot be empty');
 }
@@ -146,7 +146,7 @@ try {
 
 try {
 	$db->string()->row('table', ['x=']);
-	pudlTest('pudlException');
+	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
 	pudlError($error, 'Invalid clause: x=');
 }
@@ -157,7 +157,7 @@ try {
 
 try {
 	$db->string()->row('table', ['=x']);
-	pudlTest('pudlException');
+	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
 	pudlError($error, 'Invalid clause: =x');
 }
@@ -168,7 +168,7 @@ try {
 
 try {
 	$db->string()->row('table', ['x=y=']);
-	pudlTest('pudlException');
+	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
 	pudlError($error, 'Invalid clause: x=y=');
 }
@@ -179,7 +179,7 @@ try {
 
 try {
 	$db->string()->row('table', ['x=y=z']);
-	pudlTest('pudlException');
+	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
 	pudlError($error, 'Invalid clause: x=y=z');
 }
@@ -190,7 +190,7 @@ try {
 
 try {
 	$db->string()->row('table', ['x<<1']);
-	pudlTest('pudlException');
+	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
 	pudlError($error, 'Invalid clause: x<<1');
 }
@@ -201,7 +201,7 @@ try {
 
 try {
 	$db->string()->row('table', ['x><1']);
-	pudlTest('pudlException');
+	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
 	pudlError($error, 'Invalid clause: x><1');
 }

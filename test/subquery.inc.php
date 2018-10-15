@@ -4,7 +4,7 @@
 $db->string()->select('column', [
 	't1' => $db->in()->select('column', 'table'),
 ]);
-pudlTest('SELECT `column` FROM (SELECT `column` FROM `table`) AS `t1`');
+pudlTest($db, 'SELECT `column` FROM (SELECT `column` FROM `table`) AS `t1`');
 
 
 
@@ -14,7 +14,7 @@ $db->string()->select(['column1', 'column2'], [
 	't1' => $db->in()->select('column1', 'table1'),
 	't2' => $db->in()->select('column2', 'table2'),
 ]);
-pudlTest('SELECT `column1`, `column2` FROM (SELECT `column1` FROM `table1`) AS `t1`, (SELECT `column2` FROM `table2`) AS `t2`');
+pudlTest($db, 'SELECT `column1`, `column2` FROM (SELECT `column1` FROM `table1`) AS `t1`, (SELECT `column2` FROM `table2`) AS `t2`');
 
 
 
@@ -28,7 +28,7 @@ $db->string()->select('column', [
 		]
 	]
 ]);
-pudlTest('SELECT `column` FROM `parent` AS `t1` LEFT JOIN (SELECT `column` FROM `table`) AS `t2` USING (`column`)');
+pudlTest($db, 'SELECT `column` FROM `parent` AS `t1` LEFT JOIN (SELECT `column` FROM `table`) AS `t2` USING (`column`)');
 
 
 
@@ -37,4 +37,4 @@ pudlTest('SELECT `column` FROM `parent` AS `t1` LEFT JOIN (SELECT `column` FROM 
 $db->string()->select('column', 'table', [
 	'column' => $db->in()->select('column', 'table'),
 ]);
-pudlTest('SELECT `column` FROM `table` WHERE (`column` IN (SELECT `column` FROM `table`))');
+pudlTest($db, 'SELECT `column` FROM `table` WHERE (`column` IN (SELECT `column` FROM `table`))');

@@ -28,8 +28,8 @@
 $__pudl_test_total__ = 0;
 
 
-function pudlTest($expected, $database=NULL) {
-	global $db, $__pudl_test_total__;
+function pudlTest($db, $expected, $database=NULL) {
+	global $__pudl_test_total__;
 	$__pudl_test_total__++;
 	if (empty($database)) $database = $db;
 	if (empty($database)) return;
