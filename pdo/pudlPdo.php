@@ -132,14 +132,20 @@ class pudlPdo extends pudl {
 
 	public function errno() {
 		if (!$this->connection) return 0;
-		return $this->connection->errorCode();
+		$error = $this->connection->errorCode();
+		$error = ltrim($error, '0');
+		return ($error === '') ? 0 : $error;
 	}
 
 
 
 	public function error() {
 		if (!$this->connection) return false;
-		return $this->connection->errorInfo();
+		$error = $this->connection->errorInfo();
+		if (pudl_array($error)) $error = implode(' - ', $error);
+		$error = ltrim($error, '0');
+		$error = rtrim($error, ' -');
+		return ($error === '') ? false : $error;
 	}
 
 
