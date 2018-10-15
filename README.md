@@ -2,6 +2,21 @@
 [![Build Status](https://travis-ci.org/darkain/pudl.svg?branch=master)](https://travis-ci.org/darkain/pudl)
 
 
+* [Documentation (work in progress)](https://github.com/darkain/pudl-docs/blob/master/README.md)
+* [About](#about)
+* [Supported Database Engines](#supported-database-engines)
+* [License](#license)
+* [Usage](#usage)
+	* [Getting Started](#getting-started)
+	* [INSERT](#insert)
+	* [UPDATE](#update)
+	* [SELECT](#select)
+* [General API Guide](#general-api-guide)
+	* [Method Parameters](#method-parameters)
+	* [SELECT](#select)
+	* [pudlResult](#pudlresult)
+
+
 
 ## About
 The primary function of this library is to provide a common interface for
