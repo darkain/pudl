@@ -44,11 +44,11 @@ pudlTest($db, 'SELECT * FROM `pudl` WHERE (`x`=1) LIMIT 10');
 
 
 $db->string();
-test_orm::collection([1,2,3,4,5]);
+test_orm::collection($db, [1,2,3,4,5]);
 pudlTest($db, 'SELECT * FROM `pudl` WHERE (`id` IN (1, 2, 3, 4, 5))');
 
 
 
 $db->string();
-test_orm::collection([1,2,3,4,5], ['limit'=>[1,2]]);
+test_orm::collection($db, [1,2,3,4,5], ['limit'=>[1,2]]);
 pudlTest($db, 'SELECT * FROM `pudl` WHERE (`id` IN (1, 2, 3, 4, 5)) LIMIT 1 OFFSET 2');

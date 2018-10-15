@@ -202,9 +202,7 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	//GET A COLLECTION OF OBJECTS FROM ID NUMBERS
 	////////////////////////////////////////////////////////////////////////////
-	public static function collection($items /*, ...$selex */) {
-		global $db;  //TODO: REMOVE GLOBAL REFERENCE
-
+	public static function collection($db, $items /*, ...$selex */) {
 		$args		= func_get_args();
 
 		if ($items instanceof pudlStringResult) {
