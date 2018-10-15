@@ -15,10 +15,11 @@ class pudlFunction implements pudlValue, pudlHelper {
 		mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root -p mysql
 	*/
 	/** @suppress PhanNonClassMethodCall */
-	public static function timestamp($time=false) {
-		global $db; //TODO: REMOVE GLOBAL REFERENCE
+	public static function timestamp($time) {
 		return pudl::convert_tz(
-			self::from_unixtime($time !== false ? $time : $db->time()),
+			self::from_unixtime(
+				is_object($time) ? $time->time() : ((int)$time)
+			),
 			new pudlGlobal('time_zone'),
 			'UTC'
 		);
