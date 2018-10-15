@@ -282,13 +282,6 @@ trait pudlQuery {
 
 
 
-	protected function _as($name) {
-		if (!is_string($name)) return '';
-		return ' AS ' . $this->identifier($name);
-	}
-
-
-
 	protected function _where($clause) {
 		return $this->_clause($clause, 'WHERE');
 	}
