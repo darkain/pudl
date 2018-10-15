@@ -68,12 +68,15 @@ class pudlPdo extends pudl {
 				$auth['options']
 			);
 
-			$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+			$this->connection->setAttribute(PDO::ATTR_ERRMODE,		PDO::ERRMODE_SILENT);
+			$this->connection->setAttribute(PDO::ATTR_CASE,			PDO::CASE_NATURAL);
+			$this->connection->setAttribute(PDO::ATTR_ORACLE_NULLS,	PDO::NULL_NATURAL);
+			$this->connection->setAttribute(PDO::ATTR_TIMEOUT,		$auth['timeout']);
 
 		} catch (PDOException $e) {
 			throw new pudlConnectionException(
 				$this,
-				'ERROR CONNECTING THROUGH PDO: ' . $e->getMessage()
+				'Error connecting to database through PDO: ' . $e->getMessage()
 			);
 		}
 	}
