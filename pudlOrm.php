@@ -152,10 +152,9 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	//GET AN INSTANCE OF THIS OBJECT FROM THE DATABASE FOR A GIVEN CLAUSE
 	////////////////////////////////////////////////////////////////////////////
-	public static function select(/* ...$selex */) {
-		global $db;  //TODO: REMOVE GLOBAL REFERENCE
-
+	public static function select($db /*, ...$selex */) {
 		$args	= func_get_args();
+		array_shift($args);
 		array_unshift($args, ['limit'=>1], static::schema());
 
 		$data	= call_user_func_array([$db,'selex'], $args)->complete();

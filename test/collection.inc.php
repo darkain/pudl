@@ -20,13 +20,13 @@ class test_orm extends pudlOrm {
 
 
 $db->string();
-test_orm::select();
+test_orm::select($db);
 pudlTest($db, 'SELECT * FROM `pudl` LIMIT 1');
 
 
 
 $db->string();
-test_orm::select(['clause'=>['id'=>1]]);
+test_orm::select($db, ['clause'=>['id'=>1]]);
 pudlTest($db, 'SELECT * FROM `pudl` WHERE (`id`=1) LIMIT 1');
 
 
