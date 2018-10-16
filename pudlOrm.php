@@ -105,26 +105,28 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	//GET AN INSTANCE OF THIS OBJECT FROM THE DATABASE
 	////////////////////////////////////////////////////////////////////////////
-	public static function get($db, $id=false) {
-		global $get, $afurl;
-
-		if ($id instanceof getvar  ||  $id instanceof afUrl) {
-			$id = $id->id();
+	public static function get($db, $id) {
+		if (pudl_array($id)) {
+			if (isset($id[static::column])) {
+				$id = $id[static::column];
+			}
 		}
 
-		if (pudl_array($id))	$id = $id[static::column];
-
-		if ($id === false  &&  $get instanceof getvar) {
-			$id = $get->id();
-			if ($id === 0) $id = false;
+		if (is_object($id)) {
+			if (method_exists($id, 'id')) {
+				$id = $id->id();
+			} else if (method_exists($id, '__toString')) {
+				$id = (string) $id;
+			}
 		}
 
-		if ($id === false  &&  $afurl instanceof afUrl) {
-			$id = $afurl->id();
+		if (!is_numeric($id)  &&  !is_string($id)) {
+			throw new pudlValueException($db,
+				'Invalid ID for ' . __METHOD__ .
+				': ' . gettype($id) .
+				': ' . print_r($id, true)
+			);
 		}
-
-
-		$id = (int) $id;
 
 		return static::instance($db, $id, true);
 	}
