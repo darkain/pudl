@@ -12,11 +12,9 @@ abstract class	pudlOrm
 
 
 
-	public function __construct($item=false, $fetch=false, $database=NULL) {
-		global $db;
-
+	public function __construct($db, $item=false, $fetch=false) {
 		//SET THE LOCAL INSTANCE OF DATABASE OBJECT
-		$this->__pudl__ = (!is_null($database)) ? $database : $db;
+		$this->__pudl__ = $db;
 
 		if (static::classname === __CLASS__) {
 			throw new pudlException(
@@ -128,7 +126,7 @@ abstract class	pudlOrm
 
 		$id = (int) $id;
 
-		return static::instance($id, true);
+		return static::instance($db, $id, true);
 	}
 
 
@@ -137,9 +135,9 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	//CREATE AN INSTANCE OF THIS CLASS, USING LATE STATIC BINDING
 	////////////////////////////////////////////////////////////////////////////
-	public static function instance($item=false, $fetch=false) {
+	public static function instance($db, $item=false, $fetch=false) {
 		$class = static::classname;
-		return new $class($item, $fetch);
+		return new $class($db, $item, $fetch);
 	}
 
 
@@ -155,7 +153,7 @@ abstract class	pudlOrm
 
 		$data	= call_user_func_array([$db,'selex'], $args)->complete();
 
-		return pudl_array($data) ? static::instance(reset($data)) : $data;
+		return pudl_array($data) ? static::instance($db, reset($data)) : $data;
 	}
 
 
@@ -182,7 +180,7 @@ abstract class	pudlOrm
 		$result			= call_user_func_array([$db,'selex'], $args);
 
 		while ($data	= $result()) {
-			$return[]	= new $class($data);
+			$return[]	= new $class($db, $data);
 		}
 
 		$result->free();
