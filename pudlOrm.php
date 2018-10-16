@@ -96,7 +96,7 @@ abstract class	pudlOrm
 
 		$database = (!is_null($database)) ? $database : $db;
 
-		return static::get(
+		return static::get($database,
 			$database->insertExtract(
 				static::table,
 				$data,
@@ -111,7 +111,7 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	//GET AN INSTANCE OF THIS OBJECT FROM THE DATABASE
 	////////////////////////////////////////////////////////////////////////////
-	public static function get($id=false) {
+	public static function get($db, $id=false) {
 		global $get, $afurl;
 
 		if ($id instanceof getvar  ||  $id instanceof afUrl) {
