@@ -91,13 +91,9 @@ abstract class	pudlOrm
 	//CREATE A NEW INSTANCE OF THIS OBJECT IN THE DATABASE
 	/** @suppress PhanNonClassMethodCall */
 	////////////////////////////////////////////////////////////////////////////
-	public static function create($data=false, $update=false, $database=NULL) {
-		global $db;  //TODO: REMOVE GLOBAL REFERENCE
-
-		$database = (!is_null($database)) ? $database : $db;
-
-		return static::get($database,
-			$database->insertExtract(
+	public static function create($db, $data=false, $update=false) {
+		return static::get($db,
+			$db->insertExtract(
 				static::table,
 				$data,
 				($update === false) ? static::column : $update
