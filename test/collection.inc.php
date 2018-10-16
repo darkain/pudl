@@ -32,13 +32,13 @@ pudlTest($db, 'SELECT * FROM `pudl` WHERE (`id`=1) LIMIT 1');
 
 
 $db->string();
-test_orm::collect();
+test_orm::collect($db);
 pudlTest($db, 'SELECT * FROM `pudl`');
 
 
 
 $db->string();
-test_orm::collect(['clause'=>['x'=>1], 'limit'=>10]);
+test_orm::collect($db, ['clause'=>['x'=>1], 'limit'=>10]);
 pudlTest($db, 'SELECT * FROM `pudl` WHERE (`x`=1) LIMIT 10');
 
 

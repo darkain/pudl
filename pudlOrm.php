@@ -169,9 +169,7 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	//GET A COLLECTION OF OBJECTS
 	////////////////////////////////////////////////////////////////////////////
-	public static function collect(/* ...$selex */) {
-		global $db;  //TODO: REMOVE GLOBAL REFERENCE
-
+	public static function collect($db /*, ...$selex */) {
 		if (static::collector === __CLASS__) {
 			throw new pudlException(
 				$db,
@@ -180,6 +178,7 @@ abstract class	pudlOrm
 		}
 
 		$args			= func_get_args();
+		array_shift($args);
 		array_unshift($args, static::schema());
 
 		$collector		= static::collector;
@@ -221,7 +220,7 @@ abstract class	pudlOrm
 			}
 		}
 
-		$args[0]	= ['clause' => [pudl::column(
+		$args[1]	= ['clause' => [pudl::column(
 			[static::prefix, static::column],
 			$items
 		)]];
