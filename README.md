@@ -274,7 +274,7 @@ here are the most common parameter names and what each data type represents.
 #### $value
 
 This section has been migrated to:
-https://github.com/darkain/pudl-docs/blob/master/value.md
+https://github.com/darkain/pudl-docs/blob/master/parameters/value.md
 
 
 
