@@ -90,7 +90,7 @@ trait pudlQuery {
 			case is_string($value):
 				if (!$quote) {
 					$query = $value;
-				} else if (preg_match('/[\x80-\xFF]/', $value)) {
+				} else if (preg_match('/[\x00-\x1F\x80-\xFF]/', $value)) {
 					$query = $this->blob($value);
 				} else {
 					$query = "'" . $this->escape($value) . "'";
