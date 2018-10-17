@@ -278,365 +278,54 @@ https://github.com/darkain/pudl-docs/blob/master/parameters/value.md
 
 
 
-#### $column
+#### $columns
 
-* `string` value `'*'` - If the string is a `'*'`, no processing happens, and
-it is passed through to the query unmodified. This is used for `SELECT *`
-statements.
-
-* `string` value `''` (empty string) - Same as `'*'`.
-
-* `NULL` - Same as `'*'`.
-
-* `false` 2.9.0 - Same as `'*'`. (deprecated)
-
-* `string` - Either the name of a single column or a comma separated list of
-columns inside of the string. Each column name is automatically escaped and
-wrapped in backticks (or equivalent). Dots are separated out to denote the
-`DATABASE.COLUMN` syntax and are wrapped properly as ``DATABASE`.`COLUMN``.
-(NOTE: comma separated list syntax requires PUDL 2.9.1 or higher)
-
-* `array` - Each element of the array is treated as a single `string` as
-mentioned above. If the `array` index is an `integer`, no further processing
-happens. if the `array` index is a string, it is treated as a column alias in
-the format ``VALUE` AS `KEY``.
-
-* `object` implementing `ArrayAccess` - Same as `array`.
-
-* Anything else - treat the value as a `$value` listed above.
+This section has been migrated to:
+https://github.com/darkain/pudl-docs/blob/master/parameters/columns.md
 
 
 
-#### $table
+#### $tables
 
-* `string` - The name of a single SQL table or a comma separated list of tables.
-(NOTE: comma separated list syntax requires PUDL 2.9.1 or higher)
+This section has been migrated to:
+https://github.com/darkain/pudl-docs/blob/master/parameters/tables.md
 
-* `object` implementing `ArrayAccess` - Same as `array` listed below.
-
-* Anything else - throws a `pudlValueException`
-
-* `array`
-Each element within the array is a different `TABLE` that are `JOIN`ed by
-default using the `,` (comma) `JOIN` syntax. If `array` keys are `integer`s,
-`table` names are processed as-is. If `array` keys are `string`s, then `table`
-names are aliased using the ``value` AS `key`` SQL syntax.
-
-`TODO: add documentation for complex array/join syntax`
 
 
 
 #### $clause
 
-* `boolean` `false` 2.9.0 - No clause processing happens. (deprecated)
-
-* `NULL` 2.9.1 - No clause processing happens.
-
-* `object` - Same as `array`.
-
-* Nested `array` - Recursive `AND` / `OR` comparison.
-
-* `array` - If key is an `integer`, the value is passed directly to SQL as a
-comparison. If key is a `string`, the key is treated as a column name and the
-value is treated as a `$value` listed above. If value is an `array` however, it
-is treated like an `IN (list)` comparison. If value
-
-
-```php
-$clause = ['column_a = column_b'];
-// SQL: (`column_a`=`column_b`)
-```
-```php
-$clause = ['column_a' => 'value_b'];
-// SQL: (`column_a`='value_b')
-```
-```php
-$clause = ['column_a' => ['1,2,3'];
-// SQL: (`column_a` IN ('1,2,3'))
-```
-```php
-$clause = ['column_a' => ['1', '2', '3'];
-// SQL: (`column_a` IN ('1', '2', '3'))
-```
-```php
-$clause = ['column_a' => NULL];
-// SQL: (`column_a` IS NULL)
-```
-```php
-$clause = [ // AND (only 1 item)
-	[ // OR (2 items)
-		'column_a' => 1,
-		'column_b' => 2,
-	],
-];
-// SQL: ((`column_a`=1) OR (`column_b`=2))
-```
-```php
-$clause = [ // AND (only 1 item)
-	[ // OR (2 items)
-		'column_a' => 1,
-		[ // AND (2 items)
-			'column_b' => 2,
-			'column_c' => 3,
-		],
-	],
-];
-// SQL: ((`column_a`=1) OR ((`column_b`=2) AND (`column_c`=3)))
-```
-
-
-`TODO: add documentation for pudlHelper objects`
+This section has been migrated to:
+https://github.com/darkain/pudl-docs/blob/master/parameters/clause.md
 
 
 
 #### $having
 
-* Same as $clause above
+This section has been migrated to:
+https://github.com/darkain/pudl-docs/blob/master/parameters/having.md
 
 
 
 #### $on
 
-* Same as $clause above
+This section has been migrated to:
+https://github.com/darkain/pudl-docs/blob/master/parameters/on.md
+
 
 
 
 ### SELECT
 ---
-These are the basic long-form methods that closest match raw SQL. Most other
-methods rely heavily upon these, but can also be called directly from the
-application layer.
 
-```php
-$result = $db->select($column [,$table=false] [,$clause=false] [,$order=false] [,$limit=false] [,$offset=false]);
-// SELECT {$column} [FROM {$table}] [WHERE ($clause)] [ORDER BY {$order}] [LIMIT {$limit}{,$offset}]
-// returns a pudlResult instance
-```
-```php
-$result = $db->having($column, $table [,$clause=false] [,$having=false] [,$order=false] [,$limit=false] [,$offset=false]);
-// SELECT {$column} FROM {$table} [WHERE ($clause)] [HAVING ($having)] [ORDER BY {$order}] [LIMIT {$limit}{,$offset}]
-// returns a pudlResult instance
-```
-```php
-$result = $db->group($column, $table [,$clause=false] [,$group=false] [,$order=false] [,$limit=false] [,$offset=false]);
-// SELECT {$column} FROM {$table} [WHERE ($clause)] [GROUP BY ($group)] [ORDER BY {$order}] [LIMIT {$limit}{,$offset}]
-// returns a pudlResult instance
-```
-```php
-$result = $db->groupHaving($column, $table [,$clause=false] [,$group=false] [,$having=false] [,$order=false] [,$limit=false] [,$offset=false]);
-// SELECT {$column} FROM {$table} [WHERE ($clause)] [GROUP BY ($group)] [HAVING ($having)] [ORDER BY {$order}] [LIMIT {$limit}
-// returns a pudlResult instance
-```
-```php
-$result = $db->distinct($column, $table [,$clause=false] [,$order=false] [,$limit=false] [,$offset=false]);
-// SELECT DISTINCT {$column} FROM {$table} [WHERE ($clause)] [ORDER BY {$order}] [LIMIT {$limit}{,$offset}]
-// returns a pudlResult instance
-```
-```php
-$row = $db->selectRow($column, $table [,$clause=false] [,$order=false], $limit=1 [,$offset=false]);
-// SELECT {$column} FROM {$table} [WHERE ($clause)] [ORDER BY {$order}] [LIMIT {$limit}{,$offset}]
-// returns an (array) of the given row
-```
-```php
-$row = $db->row($table [,$clause=false] [,$order=false]);
-// SELECT * FROM {$table} [WHERE ($clause)] [ORDER BY {$order}] LIMIT 1
-// returns an (array) of the given row
-```
-```php
-$row = $db->rowEx($column, $table [,$clause=false] [,$order=false]);
-// SELECT {$column} FROM {$table} [WHERE ($clause)] [ORDER BY {$order}] LIMIT 1
-// returns an (array) of the given row
-```
-```php
-$row = $db->rowId($table, $column [,$id=false]);
-// SELECT * FROM {$table} WHERE ({$column}={$id}) LIMIT 1
-// returns an (array) of the given row
-```
-```php
-$rows = $db->selectRows($col, $table [,$clause=false] [,$order=false] [,$limit=false] [,$offset=false]);
-// SELECT {$column} FROM {$table} [WHERE ($clause)] [ORDER BY {$order}] [LIMIT {$limit}{,$offset}]
-// returns an (array) of multiple row (arrays)
-```
-```php
-$rows = $db->rows($table [,$clause=false] [,$order=false]);
-// SELECT * FROM {$table} [WHERE ($clause)] [ORDER BY {$order}]
-// returns an (array) of multiple row (arrays)
-```
-```php
-$rows = $db->rowId($table, $column [,$id=false]);
-// SELECT * FROM {$table} WHERE ({$column}={$id})
-// returns an (array) of multiple row (arrays)
-```
-
-There is also the more complex `selex` method which is also used by `pudlOrm`
-and other internal features. The `selex` method takes in an associative (array)
-with each of the query sections being optional. Parameters that are omitted from
-the (array) will not appear in the generated SQL query. Each of the (array) keys
-listed below are all optional. The `selex` method returns an instance of
-`pudlQuery`.
-
-```php
-$result = $db->selex([
-	// [SELECT {column}]
-	// if omitted or empty becomes [SELECT *]
-	'column'	= '',
-
-	// [FROM {table}]
-	// if omitted, SQL error may be generated
-	'table'		= '',
-
-	// [WHERE (clause)]
-	'clause'	= '',
-
-	// [GROUP BY {group}]
-	'group'		= '',
-
-	// [HAVING (having)]
-	'having'	= '',
-
-	// [ORDER BY (order)]
-	'order'		= '',
-
-	// [LIMIT {$limit}{,$offset}]
-	'limit'		= '',
-	'offset'	= '',
-]);
-```
-
+This section has been migrated to:
+https://github.com/darkain/pudl-docs/blob/master/pudl/select.md
 
 
 
 
 ### pudlResult
 ---
-The `pudlResult` is the main object instance returned by most `pudl` API calls.
-This object supports most common and standard features found in other SQL
-drivers, with a few additional features geared specifically for `pudl`. Various
-PHP language features are also supported by the `pudlResult` object as
-demonstrated below.
 
-```php
-// Get rows using variable-function syntax
-while ($data = $result()) {
-	var_dump($data);
-}
-
-
-// Get rows using foreach syntax
-foreach ($result as $data) {
-	var_dump($data);
-}
-
-
-// Get rows using object-method syntax
-while ($data = $result->row()) {
-	var_dump($row);
-}
-
-
-// Get all rows at once
-$rows = $result->rows();
-
-
-// Get all rows as a JSON string
-$json = $result->json();
-```
-
-Once usage of the result is finished, it is a good idea to call `free()` on the
-`pudlObject` instance so that way it no longer holds on to the resource
-allocation. If this isn't called manually, resources will be freed at the end
-of the current running PHP script automatically. However, if there are many
-`pudl` calls without freeing resources, there is a chance of hitting PHP's
-defined memory limit. Luckily, there are also shortcut functions to get the row
-data and free the `pudlObject` resource within a single call to make this
-process more elegant.
-
-```php
-// Same as calling $result->rows(); $result->free();
-$rows = $result->complete();
-
-
-// Same as calling $result->complete(), for key/value pairs (2 column SQL result sets)
-$rows = $result->collection();
-
-
-// Same as calling $result->json(); $result->free();
-$json = $result->completeJson();
-
-
-// Can also be used on pudl calls that return a $result
-$rows = $db->select('*', 'table')->complete();
-
-
-// Oh, and of course JSON too!
-$json = $db->select('*', 'table')->completeJson();
-```
-
-There are a few more helpful methods for `pudlObject` as well.
-
-```php
-// Get the query that generated this $result set
-$query = $result->query();
-```
-```php
-// Check if there was an error code with this query
-$error = $result->error();
-```
-```php
-// Get the number of rows in the $result set
-$int = $result->count();
-// or
-$int = count($result);
-```
-```php
-// Get if there are rows in the $result set
-$bool = $result->hasRows();
-```
-```php
-// Move the internal row pointer to the 10th row in the $result set
-$result->seek(10);
-```
-```php
-// Move the internal row pointer to the first row in the $result set
-$result->rewind();
-// or
-rewind($result);
-```
-```php
-// Check if the internal row pointer is point to a valid row
-$bool = $result->valid();
-```
-```php
-// Get the internal row pointer
-$int = $result->key();
-// or
-$int = key($result);
-```
-```php
-// Get the current row in the $result set without moving the internal row pointer
-$row = $result->current();
-// or
-$row = current($result);
-```
-```php
-// Move the internal row pointer to the next row and return that row
-$row = $result->next();
-// or
-$row = next($result);
-// or
-$row = $result();
-// or
-$row = $result->row();
-```
-```php
-// Get the number of column fields in the $result set
-$int = $result->fields();
-```
-```php
-// Get information on a particular column field in the $result set
-$data = $result->getField($column);
-```
-```php
-// Get information on all column fields in the $result set
-$data = $result->listFields();
-```
+This section has been migrated to:
+https://github.com/darkain/pudl-docs/blob/master/pudl/pudlResult.md
