@@ -42,6 +42,8 @@ abstract	class	pudl {
 		}
 
 		//SANITIZE DATA
+		//TODO:	create a method to parse and validate every possible $data item
+		//TODO: rename $data to $parameters or $options or $connection or $settings
 		if (empty($data['username']))	$data['username']	= '';
 		if (empty($data['password']))	$data['password']	= '';
 		if (empty($data['database']))	$data['database']	= '';
