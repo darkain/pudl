@@ -273,37 +273,8 @@ here are the most common parameter names and what each data type represents.
 
 #### $value
 
-* `NULL` - Literal `NULL` in SQL.
-
-* `boolean` `true` - Literal `TRUE` in SQL.
-
-* `boolean` `false` - Literal `FALSE` in SQL.
-
-* `integer` - Literal `integer` in SQL.
-
-* `float` `NaN` (not a number) - Same as `NULL`.
-
-* `float` `INF` (infinite) - Same as `NULL`.
-
-* `float` `-INF` (negative infinite) - Same as `NULL`.
-
-* `float` - Literal `float` in SQL, using scientific notation.
-
-* ASCII `string` - escaped and quoted literal `string`.
-
-* Binary `string` - converted to literal hex notation.
-
-* UTF-8 `string` - same as binary `string`.
-
-* `array` - Each method handles this differently. Please see each method's
-documentation. Example: $clause (recursive AND/OR) vs $insert (JSON data).
-
-* `object` instaceof `pudlValue` - Calls `$object->pudlValue()`.
-
-* `object` implementing `__toString` - Calls `$object->__toString()`, then
-processes same as `string`.
-
-* Anything else - throws a `pudlValueException`
+This section has been migrated to:
+https://github.com/darkain/pudl-docs/blob/master/value.md
 
 
 
@@ -313,11 +284,11 @@ processes same as `string`.
 it is passed through to the query unmodified. This is used for `SELECT *`
 statements.
 
-* `string` value `''` (empty string) - Same as above.
+* `string` value `''` (empty string) - Same as `'*'`.
 
-* `NULL` - Same as above.
+* `NULL` - Same as `'*'`.
 
-* `false` 2.9.0 - Same as above. (deprecated)
+* `false` 2.9.0 - Same as `'*'`. (deprecated)
 
 * `string` - Either the name of a single column or a comma separated list of
 columns inside of the string. Each column name is automatically escaped and
