@@ -98,7 +98,7 @@ trait pudlUpdate {
 	public function updateCount($table_update, $field, $clause_update, $table_select, $clause_select=true, $limit=false, $offset=false) {
 		if ($clause_select === true) $clause_select = $clause_update;
 		return $this->update($table_update, [
-			$field => $this->string()->count($table_select, $clause_select)
+			$field => $this->string()->total($table_select, $clause_select)
 		], $clause_update, $limit, $offset);
 	}
 

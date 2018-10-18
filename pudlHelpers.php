@@ -17,7 +17,7 @@ class pudlFunction implements pudlValue, pudlHelper {
 	/** @suppress PhanNonClassMethodCall */
 	public static function timestamp($time) {
 		return pudl::convert_tz(
-			self::from_unixtime(
+			static::from_unixtime(
 				is_object($time) ? $time->time() : ((int)$time)
 			),
 			new pudlGlobal('time_zone'),
@@ -146,7 +146,7 @@ class pudlColumn extends pudlEquals {
 
 
 class pudlCount extends pudlColumn {
-	public function __construct($column) {
+	public function __construct($column='*') {
 		parent::__construct($column);
 	}
 

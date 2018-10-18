@@ -2,7 +2,7 @@
 
 
 ////////////////////////////////////////////////////////////////////////////////
-//STATIC API CALLS
+// STATIC API CALLS
 ////////////////////////////////////////////////////////////////////////////////
 trait pudlStatic {
 
@@ -10,9 +10,29 @@ trait pudlStatic {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//UNKNOWN STATIC METHODS ARE CONVERTED INTO PUDLFUNCTION CALLS
+	// UNKNOWN METHODS
+	////////////////////////////////////////////////////////////////////////////
+	public function __call($name, $arguments) {
+		if ($name === 'count') {
+			return call_user_func_array([$this, 'total'], $arguments);
+		}
+
+		throw new pudlMethodException($this,
+			'Invalid method call: ' . get_class($this) . '->' . $name . '()'
+		);
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// UNKNOWN STATIC METHODS ARE CONVERTED INTO PUDLFUNCTION CALLS
 	////////////////////////////////////////////////////////////////////////////
 	public static function __callStatic($name, $arguments) {
+		if ($name === 'count') {
+			return static::_count(reset($arguments));
+		}
+
 		$value	= new pudlFunction();
 		$name	= '_' . strtoupper($name);
 		$value->$name = $arguments;
@@ -23,7 +43,7 @@ trait pudlStatic {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//SAFELY PASS A COLUMN INTO A QUERY
+	// SAFELY PASS A COLUMN INTO A QUERY
 	////////////////////////////////////////////////////////////////////////////
 	public static function column($column, $value=false) {
 		return (func_num_args() < 2)
@@ -35,7 +55,7 @@ trait pudlStatic {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//COMPARE A VALUE AGAINST MULTIPLE COLUMNS
+	// COMPARE A VALUE AGAINST MULTIPLE COLUMNS
 	////////////////////////////////////////////////////////////////////////////
 	public static function bravo($value, $columns /* ... */) {
 		if (!pudl_array($columns)) {
@@ -55,7 +75,7 @@ trait pudlStatic {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//UNSAFE - PASS RAW SQL INTO A QUERY - USE CAUTION WITH THIS METHOD!
+	// UNSAFE - PASS RAW SQL INTO A QUERY - USE CAUTION WITH THIS METHOD!
 	////////////////////////////////////////////////////////////////////////////
 	public static function raw(/* ...$values */) {
 		return (new ReflectionClass('pudlRaw'))
@@ -66,7 +86,7 @@ trait pudlStatic {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//FORCE DATATYPE INTO STRING WHEN INSERTING INTO SQL QUERY
+	// FORCE DATATYPE INTO STRING WHEN INSERTING INTO SQL QUERY
 	////////////////////////////////////////////////////////////////////////////
 	public static function text(/* ...$values */) {
 		return (new ReflectionClass('pudlText'))
@@ -77,7 +97,7 @@ trait pudlStatic {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//CONVERT A UNIX TIMESTAMP INTO A DATETIME
+	// CONVERT A UNIX TIMESTAMP INTO A DATETIME
 	////////////////////////////////////////////////////////////////////////////
 	public static function date($timestamp=false) {
 		return ($timestamp === false)
@@ -89,7 +109,7 @@ trait pudlStatic {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//HELPER FUNCTION FOR DATE RANGES FROM UNIX TIMESTAMPS
+	// HELPER FUNCTION FOR DATE RANGES FROM UNIX TIMESTAMPS
 	////////////////////////////////////////////////////////////////////////////
 	public static function daterange($begin, $end) {
 		return static::between(static::date($begin), static::date($end));
@@ -99,7 +119,7 @@ trait pudlStatic {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//FIND IN SET
+	// FIND IN SET
 	////////////////////////////////////////////////////////////////////////////
 	public static function find($column, $values) {
 		if (!pudl_array($values)) $values = explode(',', $values);
@@ -114,7 +134,7 @@ trait pudlStatic {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//-NOT- FIND IN SET
+	// -NOT- FIND IN SET
 	////////////////////////////////////////////////////////////////////////////
 	public static function notFind($column, $values) {
 		if (!pudl_array($values)) $values = explode(',', $values);
@@ -129,7 +149,7 @@ trait pudlStatic {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//EXTRACT KEYS FROM A GIVEN ARRAY
+	// EXTRACT KEYS FROM A GIVEN ARRAY
 	////////////////////////////////////////////////////////////////////////////
 	public static function extract($array, $keys) {
 		if ($array instanceof pudlObject) {

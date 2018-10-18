@@ -5,10 +5,11 @@ trait pudlCounter {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//COUNT THE NUMBER OF ROWS IN A TABLE
+	// COUNT THE NUMBER OF ROWS IN A TABLE
+	// $db->count('table') is a virtual alias of $db->total('table')
 	////////////////////////////////////////////////////////////////////////////
-	public function count($table, $clause=false) {
-		$return = $this->cell($table, static::_count(), $clause);
+	public function total($table, $clause=NULL) {
+		$return = $this->cell($table, new pudlCount(), $clause);
 		if ($return instanceof pudlStringResult) return $return;
 		return $return === false ? $return : (int) $return;
 	}
@@ -17,17 +18,17 @@ trait pudlCounter {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//COUNT THE NUMBER OF TIMES AN ID EXISTS
+	// COUNT THE NUMBER OF TIMES AN ID EXISTS
 	////////////////////////////////////////////////////////////////////////////
 	public function countId($table, $column, $id=false) {
-		return $this->count($table, $this->_clauseId($column,$id));
+		return $this->total($table, $this->_clauseId($column,$id));
 	}
 
 
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//COUNT THE NUMBER OF TIMES A PARTICULAR GROUP EXISTS
+	// COUNT THE NUMBER OF TIMES A PARTICULAR GROUP EXISTS
 	////////////////////////////////////////////////////////////////////////////
 	public function countGroup($table, $clause, $group, $col=false) {
 		if ($col === false) $col = $group;
@@ -53,9 +54,10 @@ trait pudlCounter {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//RETURNS THE SPECIAL FUNCTION TO COUNT A PARITCULAR COLUMN
+	// RETURNS THE SPECIAL FUNCTION TO COUNT A PARITCULAR COLUMN
 	////////////////////////////////////////////////////////////////////////////
 	public static function _count($column='*') {
+		if ($column === false) $column = '*';
 		return new pudlCount($column);
 	}
 

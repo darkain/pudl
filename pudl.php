@@ -514,7 +514,7 @@ abstract	class	pudl {
 										? ((int) $time)
 										: strtotime($time);
 
-		return self::from_unixtime($time);
+		return pudlFunction::from_unixtime($time);
 	}
 
 

@@ -110,53 +110,53 @@ pudlTest($db, "SELECT COUNT(*) FROM `table` WHERE (`cell`<=>1) LIMIT 1");
 
 
 
-$db->string()->cell('table', pudl::_count());
+$db->string()->cell('table', pudl::count());
 pudlTest($db, "SELECT COUNT(*) FROM `table` LIMIT 1");
 
 
 
 
-$db->string()->cell('table', pudl::_count('table'));
+$db->string()->cell('table', pudl::count('table'));
 pudlTest($db, "SELECT COUNT(`table`) FROM `table` LIMIT 1");
 
 
 
 
-$db->string()->cell('table', pudl::_count('table.*'));
+$db->string()->cell('table', pudl::count('table.*'));
 pudlTest($db, "SELECT COUNT(`table`.*) FROM `table` LIMIT 1");
 
 
 
 
-$db->string()->cell('table', [pudl::_count()]);
+$db->string()->cell('table', [pudl::count()]);
 pudlTest($db, "SELECT COUNT(*) FROM `table` LIMIT 1");
 
 
 
 
-$db->string()->cell('table', [pudl::_count('table')]);
+$db->string()->cell('table', [pudl::count('table')]);
 pudlTest($db, "SELECT COUNT(`table`) FROM `table` LIMIT 1");
 
 
 
 
-$db->string()->cell('table', [pudl::_count('table.*')]);
+$db->string()->cell('table', [pudl::count('table.*')]);
 pudlTest($db, "SELECT COUNT(`table`.*) FROM `table` LIMIT 1");
 
 
 
 
-$db->string()->cell('table', ['total' => pudl::_count()]);
+$db->string()->cell('table', ['total' => pudl::count()]);
 pudlTest($db, "SELECT COUNT(*) AS `total` FROM `table` LIMIT 1");
 
 
 
 
-$db->string()->cell('table', ['total' => pudl::_count('table')]);
+$db->string()->cell('table', ['total' => pudl::count('table')]);
 pudlTest($db, "SELECT COUNT(`table`) AS `total` FROM `table` LIMIT 1");
 
 
 
 
-$db->string()->cell('table', ['total' => pudl::_count('table.*')]);
+$db->string()->cell('table', ['total' => pudl::count('table.*')]);
 pudlTest($db, "SELECT COUNT(`table`.*) AS `total` FROM `table` LIMIT 1");

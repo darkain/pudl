@@ -25,7 +25,9 @@ trait pudlInsert {
 		if ($data === false) $data = [];
 
 		if (!is_array($data)  &&  !is_object($data)) {
-			throw new pudlTypeException($this, 'Invalid data type for pudl::insert');
+			throw new pudlTypeException($this,
+				'Invalid data type for ' . get_class($this) . '->insert()'
+			);
 		}
 
 		$cols	= ' (';
@@ -60,7 +62,7 @@ trait pudlInsert {
 			if (is_string($update)  &&  strpos($update,'=') === false) {
 				$update = static::column(
 					$update,
-					static::last_insert_id(
+					pudlFunction::last_insert_id(
 						static::column($update)
 					)
 				);
@@ -96,8 +98,8 @@ trait pudlInsert {
 	public function upsert($table, $data, $idcol=false) {
 		$update = $data;
 		if (!is_bool($idcol)) {
-			$update[$idcol] = pudl::last_insert_id(
-				pudl::column($idcol)
+			$update[$idcol] = pudlFunction::last_insert_id(
+				static::column($idcol)
 			);
 		}
 		return $this->insert($table, $data, $update);
@@ -177,9 +179,8 @@ trait pudlInsert {
 		if ($data === false) $data = [];
 
 		if (!is_array($data)  &&  !is_object($data)) {
-			throw new pudlTypeException(
-				$this,
-				'Invalid data type for pudl::insertEx'
+			throw new pudlTypeException($this,
+				'Invalid data type for ' . get_class($this) . '->insertEx()'
 			);
 		}
 
