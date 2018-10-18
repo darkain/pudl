@@ -30,6 +30,7 @@ abstract	class	pudl {
 			use		pudlCounter;
 			use		pudlRequire;
 			use		pudlCallback;
+			use		pudlInternal;
 			use		pudlTransaction;
 
 
@@ -251,20 +252,8 @@ abstract	class	pudl {
 			}
 		}
 
-		$file = NULL;
-
-		switch (strtoupper($data['type'])) {
-			case 'MYSQL':	$file = '/mysql/pudlMySql.php';		break;
-			case 'MYSQLI':	$file = '/mysql/pudlMySqli.php';	break;
-			case 'GALERA':	$file = '/mysql/pudlGalera.php';	break;
-			case 'PGSQL':	$file = '/pgsql/pudlPgSql.php';		break;
-			case 'MSSQL':	$file = '/mssql/pudlMsSql.php';		break;
-			case 'SQLSRV':	$file = '/mssql/pudlSqlSrv.php';	break;
-			case 'SQLITE':	$file = '/sqlite/pudlSqlite.php';	break;
-			case 'ODBC':	$file = '/sql/pudlOdbc.php';		break;
-			case 'PDO':		$file = '/sql/pudlPdo.php';			break;
-			case 'NULL':	$file = '/null/pudlNull.php';		break;
-		}
+		// GET THE ENGINE TYPE PHP PATH/FILE
+		$file = static::_engine($data['type']);
 
 		if (empty($file)) {
 			throw new pudlValueException(
