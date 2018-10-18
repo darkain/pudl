@@ -21,6 +21,9 @@ trait pudlInternal {
 			// MODERN MYSQLI_ FUNCTIONS
 			case 'MYSQL':
 			case 'MYSQLI':
+			case 'MARIA':
+			case 'MARIADB':
+			case 'PERCONA':
 				return '/mysql/pudlMySqli.php';
 			break;
 
