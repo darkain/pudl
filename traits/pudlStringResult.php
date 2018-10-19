@@ -4,16 +4,16 @@
 class pudlStringResult extends pudlResult implements pudlValue, pudlHelper {
 
 
-	public function __construct(pudl $db, $type) {
-		parent::__construct($db);
+	public function __construct(pudl $pudl, $type) {
+		parent::__construct($pudl);
 		$this->type = $type;
 	}
 
 
 	public function __toString()		{ return $this->query; }
 
-	public function pudlValue($db, $quote=true) {
-		return $this->query();
+	public function pudlValue(pudl $pudl, $quote=true) {
+		return $this->query;
 	}
 
 	public function free()				{ return false; }

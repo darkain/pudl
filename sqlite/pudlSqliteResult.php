@@ -2,8 +2,8 @@
 
 
 class pudlSqliteResult extends pudlResult {
-	public function __construct(pudl $db, $result=NULL) {
-		parent::__construct($db, $result);
+	public function __construct(pudl $pudl, $result=NULL) {
+		parent::__construct($pudl, $result);
 
 		$this->row = 0;
 	}

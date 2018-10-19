@@ -5,16 +5,16 @@
 // GENERIC PUDL EXCEPTION - ALL OTHER EXCEPTIONS INHERIT THIS CLASS
 ////////////////////////////////////////////////////////////////////////////////
 class pudlException extends Exception {
-	public function __construct($db, $message=null, $code=0, $previous=null) {
+	public function __construct($pudl, $message=null, $code=0, $previous=null) {
 		parent::__construct($message, $code, $previous);
-		$this->db = $db;
+		$this->pudl = $pudl;
 
-		if ($db instanceof pudl) {
-			$db->decache()->destring();
+		if ($pudl instanceof pudl) {
+			$pudl->decache()->destring();
 		}
 	}
 
-	public $db;
+	public $pudl;
 }
 
 

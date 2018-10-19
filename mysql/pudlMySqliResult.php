@@ -4,8 +4,8 @@
 class pudlMySqliResult extends pudlResult {
 
 
-	public function __construct(pudl $db, mysqli_result $result=NULL) {
-		parent::__construct($db, $result);
+	public function __construct(pudl $pudl, mysqli_result $result=NULL) {
+		parent::__construct($pudl, $result);
 	}
 
 

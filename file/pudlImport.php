@@ -13,8 +13,8 @@ abstract class	pudlImport
 	////////////////////////////////////////////////////////////////////////////
 	//CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
-	function __construct($database, $type=false) {
-		$this->db = $database;
+	function __construct(pudl $pudl, $type=false) {
+		$this->pudl = $pudl;
 		if (!empty($type)) $this->translate($type);
 	}
 
@@ -46,7 +46,7 @@ abstract class	pudlImport
 
 		if (!empty($this->errors)) {
 			throw new pudlException(
-				$this->db,
+				$this->pudl,
 				"FILE FAILED DATA VALIDATION\n" .
 				implode("\n", $this->errors)
 			);
@@ -57,7 +57,7 @@ abstract class	pudlImport
 
 		if (!empty($this->errors)) {
 			throw new pudlException(
-				$this->db,
+				$this->pudl,
 				"FILE FAILED DATA IMPORT\n" .
 				implode("\n", $this->errors)
 			);
@@ -86,7 +86,7 @@ abstract class	pudlImport
 
 		if (!empty($this->errors)) {
 			throw new pudlException(
-				$this->db,
+				$this->pudl,
 				"FILE FAILED DATA VALIDATION\n" .
 				implode("\n", $this->errors)
 			);
@@ -129,7 +129,7 @@ abstract class	pudlImport
 			return $this->translate[$name];
 		}
 
-		$item = $this->db->cell([
+		$item = $this->pudl->cell([
 			's' => 'pudl_translate',
 			't' => 'pudl_translate_type'
 		], 'string_new', [
@@ -140,7 +140,7 @@ abstract class	pudlImport
 
 		if ($item !== false) return (empty($item)) ? $name : $item;
 
-		return false !== $this->db->cell([
+		return false !== $this->pudl->cell([
 			's' => 'pudl_translate',
 			't' => 'pudl_translate_type'
 		], 'string_new', [
@@ -180,7 +180,7 @@ abstract class	pudlImport
 	////////////////////////////////////////////////////////////////////////////
 	//LOCAL VARIABLES
 	////////////////////////////////////////////////////////////////////////////
-	/** @var pudl */			protected $db			= NULL;
+	/** @var pudl */			protected $pudl			= NULL;
 	/** @var array */			protected $header		= [];
 	/** @var array */			protected $errors		= [];
 	/** @var array|false */		protected $translate	= false;

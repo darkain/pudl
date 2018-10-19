@@ -54,7 +54,7 @@ $prefix->string()->selex([
 	'group' => ['column'],
 	'order' => ['tbl.vendor_id'	=> 'value'],
 ]);
-pudlTest($db, "SELECT *, COUNT(*) FROM (SELECT * FROM `default_table` AS `tbl` ORDER BY `tbl`.`vendor_id`='value') `x_pudl_alias_4` GROUP BY `column` ORDER BY `vendor_id`='value'", $prefix);
+pudlTest($prefix, "SELECT *, COUNT(*) FROM (SELECT * FROM `default_table` AS `tbl` ORDER BY `tbl`.`vendor_id`='value') `x_pudl_alias_4` GROUP BY `column` ORDER BY `vendor_id`='value'");
 
 
 

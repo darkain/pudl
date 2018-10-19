@@ -34,17 +34,17 @@ class pudlFunction implements pudlValue, pudlHelper {
 	}
 
 
-	public function pudlValue($db, $quote=true) {
+	public function pudlValue(pudl $pudl, $quote=true) {
 		foreach ($this as $property => $value) {
 			$query	= '';
 			foreach ($value as $item) {
 				if (strlen($query)) $query .= ', ';
-				$query .= $db->_value($item);
+				$query .= $pudl->_value($item);
 			}
 			return ltrim($property, '_') . '(' . $query . ')';
 		}
 
-		throw new pudlFunctionException($db, 'Invalid pudlFunction');
+		throw new pudlFunctionException($pudl, 'Invalid pudlFunction');
 	}
 }
 
@@ -85,11 +85,11 @@ class pudlEquals implements pudlValue, pudlHelper {
 		return $this;
 	}
 
-	public function pudlValue($db, $quote=true) {
+	public function pudlValue(pudl $pudl, $quote=true) {
 		if (pudl_array($this->value)) {
-			return '(' . $db->_inSet($this->value) . ')';
+			return '(' . $pudl->_inSet($this->value) . ')';
 		}
-		return $db->_value($this->value, $quote);
+		return $pudl->_value($this->value, $quote);
 	}
 
 	public	$value;
@@ -109,9 +109,9 @@ class pudlFloat extends pudlEquals {
 		}
 	}
 
-	public function pudlValue($db, $quote=true) {
-		return 'ABS(' . $db->identifier($this->column)
-			. '-' . $db->_value($this->value, $quote)
+	public function pudlValue(pudl $pudl, $quote=true) {
+		return 'ABS(' . $pudl->identifier($this->column)
+			. '-' . $pudl->_value($this->value, $quote)
 			. ')<' . $this->precision;
 	}
 
@@ -135,8 +135,8 @@ class pudlColumn extends pudlEquals {
 		}
 	}
 
-	public function pudlValue($db, $quote=true) {
-		return $db->identifiers($this->column);
+	public function pudlValue(pudl $pudl, $quote=true) {
+		return $pudl->identifiers($this->column);
 	}
 
 	public	$column;
@@ -150,8 +150,8 @@ class pudlCount extends pudlColumn {
 		parent::__construct($column);
 	}
 
-	public function pudlValue($db, $quote=true) {
-		return 'COUNT(' . $db->identifiers($this->column) . ')';
+	public function pudlValue(pudl $pudl, $quote=true) {
+		return 'COUNT(' . $pudl->identifiers($this->column) . ')';
 	}
 }
 
@@ -164,9 +164,9 @@ class pudlAs extends pudlColumn {
 		$this->length	= $length;
 	}
 
-	public function pudlValue($db, $quote=true) {
-		return $db->_value($this->column) .
-			' AS ' . $db->identifier($this->alias) .
+	public function pudlValue(pudl $pudl, $quote=true) {
+		return $pudl->_value($this->column) .
+			' AS ' . $pudl->identifier($this->alias) .
 			($this->length === false ? '' : ('('.$this->length.')'));
 	}
 
@@ -189,10 +189,10 @@ class pudlBetween extends pudlEquals {
 		return (string) $this->value[0] . ', ' . $this->value[1];
 	}
 
-	public function pudlValue($db, $quote=true) {
-		return $db->_value($this->value[0], $quote)
+	public function pudlValue(pudl $pudl, $quote=true) {
+		return $pudl->_value($this->value[0], $quote)
 			. ' AND '
-			. $db->_value($this->value[1], $quote);
+			. $pudl->_value($this->value[1], $quote);
 	}
 }
 
@@ -206,15 +206,15 @@ class pudlLike extends pudlEquals {
 		$this->raw		= ($side === PUDL_NONE);
 	}
 
-	public function pudlValue($db, $quote=true) {
+	public function pudlValue(pudl $pudl, $quote=true) {
 		if (!is_object($this->value)) {
 			return "'" . $this->left
-				. $db->likeEscape($this->value, $this->raw)
+				. $pudl->likeEscape($this->value, $this->raw)
 				. $this->right . "'";
 		}
 
 		return "CONCAT('" . $this->left . "',"
-			. $db->_value($this->value)
+			. $pudl->_value($this->value)
 			. ",'" . $this->right . "')";
 	}
 
@@ -233,13 +233,13 @@ class pudlRegexp extends pudlEquals {
 		);
 	}
 
-	public function pudlValue($db, $quote=true) {
+	public function pudlValue(pudl $pudl, $quote=true) {
 		$query = '';
 		if (!pudl_array($this->value)) $this->value = [$this->value];
 		foreach ($this->value as $item) {
 			$query .= is_string($item) ?
-				$db->escape(preg_quote($item)) :
-				$db->_value($item, false);
+				$pudl->escape(preg_quote($item)) :
+				$pudl->_value($item, false);
 		}
 		return "'" . $query . "'";
 	}
@@ -253,8 +253,8 @@ class pudlSet extends pudlEquals {
 		parent::__construct($value, false, ' IN ');
 	}
 
-	public function pudlValue($db, $quote=true) {
-		return '(' . $db->_inSet($this->value) . ')';
+	public function pudlValue(pudl $pudl, $quote=true) {
+		return '(' . $pudl->_inSet($this->value) . ')';
 	}
 }
 
@@ -271,7 +271,7 @@ class pudlSort extends pudlEquals {
 		$this->column = $column;
 	}
 
-	public function pudlValue($db, $quote=true) {
+	public function pudlValue(pudl $pudl, $quote=true) {
 		return $this->value;
 	}
 
@@ -285,13 +285,13 @@ class pudlRaw implements pudlValue, pudlHelper {
 		$this->value = func_get_args();
 	}
 
-	public function pudlValue($db, $quote=true) {
+	public function pudlValue(pudl $pudl, $quote=true) {
 		$query = '';
 		foreach ($this->value as $item) {
 			if (strlen($query)) $query .= $this->joiner;
 
 			if ($item instanceof pudlValue) {
-				$query .= $db->_value($item);
+				$query .= $pudl->_value($item);
 			} else {
 				$query .= $item;
 			}
@@ -306,11 +306,11 @@ class pudlRaw implements pudlValue, pudlHelper {
 
 
 class pudlText extends pudlRaw {
-	public function pudlValue($db, $quote=true) {
+	public function pudlValue(pudl $pudl, $quote=true) {
 		$query = '';
 		foreach ($this->value as $item) {
 			if (strlen($query)) $query .= $this->joiner;
-			$query .= $db->_value($item);
+			$query .= $pudl->_value($item);
 		}
 		return $query;
 	}

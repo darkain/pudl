@@ -14,8 +14,8 @@ class			pudlImportCsv
 	////////////////////////////////////////////////////////////////////////////
 	//CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
-	function __construct($database, $type=false) {
-		parent::__construct($database, $type);
+	function __construct(pudl $pudl, $type=false) {
+		parent::__construct($pudl, $type);
 	}
 
 
@@ -33,7 +33,7 @@ class			pudlImportCsv
 		//VERIFY FILE IS OKAY
 		if (!is_resource($handle)) {
 			throw new pudlException(
-				$this->db,
+				$this->pudl,
 				'CANNOT OPEN CSV FILE - ' . $filename
 			);
 		}
@@ -86,7 +86,7 @@ class			pudlImportCsv
 		//VERIFY FILE IS OKAY
 		if (!is_resource($zip)) {
 			throw new pudlException(
-				$this->db,
+				$this->pudl,
 				'CANNOT OPEN ZIP FILE - ' . $filename
 			);
 		}
@@ -95,7 +95,7 @@ class			pudlImportCsv
 		$entry	= zip_read($zip);
 		if (!is_resource($entry)) {
 			throw new pudlException(
-				$this->db,
+				$this->pudl,
 				'ZIP FILE IS EMPTY - ' . $filename
 			);
 		}

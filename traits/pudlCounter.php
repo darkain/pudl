@@ -6,7 +6,7 @@ trait pudlCounter {
 
 	////////////////////////////////////////////////////////////////////////////
 	// COUNT THE NUMBER OF ROWS IN A TABLE
-	// $db->count('table') is a virtual alias of $db->total('table')
+	// $pudl->count('table') is a virtual alias of $pudl->total('table')
 	////////////////////////////////////////////////////////////////////////////
 	public function total($table, $clause=NULL) {
 		$return = $this->cell($table, new pudlCount(), $clause);

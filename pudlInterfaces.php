@@ -29,7 +29,7 @@ interface pudlId {
 
 
 interface pudlValue {
-	public function pudlValue($db, $quote=true);
+	public function pudlValue(pudl $pudl, $quote=true);
 }
 
 

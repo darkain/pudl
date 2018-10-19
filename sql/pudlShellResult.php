@@ -7,11 +7,11 @@
 
 class pudlShellResult extends pudlResult {
 
-	public function __construct(pudl $db, $result) {
-		parent::__construct($db, $result);
+	public function __construct(pudl $pudl, $result) {
+		parent::__construct($pudl, $result);
 
 		$this->row			= 0;
-		$this->json			= $db->jsonDecode($result);
+		$this->json			= $pudl->jsonDecode($result);
 
 		if (!is_array($this->json)) {
 			$this->result	= false;
@@ -122,7 +122,7 @@ class pudlShellResult extends pudlResult {
 		} else if ($this->error) {
 			return $this->error;
 		}
-		return $this->db->errno();
+		return $this->pudl->errno();
 	}
 
 
@@ -130,7 +130,7 @@ class pudlShellResult extends pudlResult {
 		if (isset($this->json['error'][1])) {
 			return $this->json['error'][1];
 		}
-		return $this->db->error();
+		return $this->pudl->error();
 	}
 
 

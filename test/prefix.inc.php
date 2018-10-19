@@ -11,43 +11,43 @@ $prefix1 = new pudlNull([
 
 
 $prefix1->string()->rows('table');
-pudlTest($db, "SELECT * FROM `table`", $prefix1);
+pudlTest($prefix1, "SELECT * FROM `table`");
 
 
 
 
 $prefix1->string()->rows('pudl_table');
-pudlTest($db, "SELECT * FROM `replace_table`", $prefix1);
+pudlTest($prefix1, "SELECT * FROM `replace_table`");
 
 
 
 
 $prefix1->string()->rows('replace_table');
-pudlTest($db, "SELECT * FROM `replace_table`", $prefix1);
+pudlTest($prefix1, "SELECT * FROM `replace_table`");
 
 
 
 
 $prefix1->string()->rows('test_table');
-pudlTest($db, "SELECT * FROM `test_table`", $prefix1);
+pudlTest($prefix1, "SELECT * FROM `test_table`");
 
 
 
 
 $prefix1->string()->rows('search_table');
-pudlTest($db, "SELECT * FROM `search_table`", $prefix1);
+pudlTest($prefix1, "SELECT * FROM `search_table`");
 
 
 
 
 $prefix1->string()->rows('table', false, ['column']);
-pudlTest($db, "SELECT * FROM `table` ORDER BY `column`", $prefix1);
+pudlTest($prefix1, "SELECT * FROM `table` ORDER BY `column`");
 
 
 
 
 $prefix1->string()->rows('table', false, ['table.column']);
-pudlTest($db, "SELECT * FROM `table` ORDER BY `table`.`column`", $prefix1);
+pudlTest($prefix1, "SELECT * FROM `table` ORDER BY `table`.`column`");
 
 
 
@@ -66,43 +66,43 @@ $prefix2 = new pudlNull([
 
 
 $prefix2->string()->rows('table');
-pudlTest($db, "SELECT * FROM `replace_table`", $prefix2);
+pudlTest($prefix2, "SELECT * FROM `replace_table`");
 
 
 
 
 $prefix2->string()->rows('pudl_table');
-pudlTest($db, "SELECT * FROM `replace_pudl_table`", $prefix2);
+pudlTest($prefix2, "SELECT * FROM `replace_pudl_table`");
 
 
 
 
 $prefix2->string()->rows('replace_table');
-pudlTest($db, "SELECT * FROM `replace_table`", $prefix2);
+pudlTest($prefix2, "SELECT * FROM `replace_table`");
 
 
 
 
 $prefix2->string()->rows('test_table');
-pudlTest($db, "SELECT * FROM `replace_test_table`", $prefix2);
+pudlTest($prefix2, "SELECT * FROM `replace_test_table`");
 
 
 
 
 $prefix2->string()->rows('search_table');
-pudlTest($db, "SELECT * FROM `replace_search_table`", $prefix2);
+pudlTest($prefix2, "SELECT * FROM `replace_search_table`");
 
 
 
 
 $prefix2->string()->rows('table', false, ['column']);
-pudlTest($db, "SELECT * FROM `replace_table` ORDER BY `column`", $prefix2);
+pudlTest($prefix2, "SELECT * FROM `replace_table` ORDER BY `column`");
 
 
 
 
 $prefix2->string()->rows('table', false, ['table.column']);
-pudlTest($db, "SELECT * FROM `replace_table` ORDER BY `table`.`column`", $prefix2);
+pudlTest($prefix2, "SELECT * FROM `replace_table` ORDER BY `table`.`column`");
 
 
 
@@ -121,43 +121,43 @@ $prefix3 = new pudlNull([
 
 
 $prefix3->string()->rows('table');
-pudlTest($db, "SELECT * FROM `table`", $prefix3);
+pudlTest($prefix3, "SELECT * FROM `table`");
 
 
 
 
 $prefix3->string()->rows('pudl_table');
-pudlTest($db, "SELECT * FROM `pudl_table`", $prefix3);
+pudlTest($prefix3, "SELECT * FROM `pudl_table`");
 
 
 
 
 $prefix3->string()->rows('replace_table');
-pudlTest($db, "SELECT * FROM `replace_table`", $prefix3);
+pudlTest($prefix3, "SELECT * FROM `replace_table`");
 
 
 
 
 $prefix3->string()->rows('test_table');
-pudlTest($db, "SELECT * FROM `test_table`", $prefix3);
+pudlTest($prefix3, "SELECT * FROM `test_table`");
 
 
 
 
 $prefix3->string()->rows('search_table');
-pudlTest($db, "SELECT * FROM `replace_table`", $prefix3);
+pudlTest($prefix3, "SELECT * FROM `replace_table`");
 
 
 
 
 $prefix3->string()->rows('table', false, ['column']);
-pudlTest($db, "SELECT * FROM `table` ORDER BY `column`", $prefix3);
+pudlTest($prefix3, "SELECT * FROM `table` ORDER BY `column`");
 
 
 
 
 $prefix3->string()->rows('table', false, ['table.column']);
-pudlTest($db, "SELECT * FROM `table` ORDER BY `table`.`column`", $prefix3);
+pudlTest($prefix3, "SELECT * FROM `table` ORDER BY `table`.`column`");
 
 
 
@@ -180,40 +180,40 @@ $prefix4 = new pudlNull([
 
 
 $prefix4->string()->rows('table');
-pudlTest($db, "SELECT * FROM `default_table`", $prefix4);
+pudlTest($prefix4, "SELECT * FROM `default_table`");
 
 
 
 
 $prefix4->string()->rows('pudl_table');
-pudlTest($db, "SELECT * FROM `prefix_table`", $prefix4);
+pudlTest($prefix4, "SELECT * FROM `prefix_table`");
 
 
 
 
 $prefix4->string()->rows('replace_table');
-pudlTest($db, "SELECT * FROM `default_replace_table`", $prefix4);
+pudlTest($prefix4, "SELECT * FROM `default_replace_table`");
 
 
 
 
 $prefix4->string()->rows('test_table');
-pudlTest($db, "SELECT * FROM `default_test_table`", $prefix4);
+pudlTest($prefix4, "SELECT * FROM `default_test_table`");
 
 
 
 
 $prefix4->string()->rows('search_table');
-pudlTest($db, "SELECT * FROM `replace_table`", $prefix4);
+pudlTest($prefix4, "SELECT * FROM `replace_table`");
 
 
 
 
 $prefix4->string()->rows('table', false, ['column']);
-pudlTest($db, "SELECT * FROM `default_table` ORDER BY `column`", $prefix4);
+pudlTest($prefix4, "SELECT * FROM `default_table` ORDER BY `column`");
 
 
 
 
 $prefix4->string()->rows('table', false, ['table.column']);
-pudlTest($db, "SELECT * FROM `default_table` ORDER BY `table`.`column`", $prefix4);
+pudlTest($prefix4, "SELECT * FROM `default_table` ORDER BY `table`.`column`");

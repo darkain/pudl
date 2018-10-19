@@ -6,12 +6,12 @@ require_once(is_owner(__DIR__.'/pudlNullResult.php'));
 
 class pudlFakeResult extends pudlNullResult {
 
-	public function __construct($db, $fake) {
+	public function __construct(pudl $pudl, $fake) {
 		foreach ($fake as $item) {
 			$this->fake[] = (object)['name' => $item];
 		}
 
-		parent::__construct($db);
+		parent::__construct($pudl);
 	}
 
 

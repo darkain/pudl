@@ -16,23 +16,17 @@ class		pudlCollection
 	////////////////////////////////////////////////////////////////////////////
 	//CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
-	public function __construct($pudl, $classname, $list=NULL) {
-
-		// VALIDATE WE'RE DEALING WITH A PUDL INSTANCE
-		if (!($pudl instanceof pudl)) {
-			throw new pudlTypeException(NULL,
-				__CLASS__ . ' method parameter $pudl is not of type: class pudl'
-			);
-		}
-
+	public function __construct(pudl $pudl, $classname, $list=NULL) {
 
 		// INIT PUDLOBJECT
 		parent::__construct();
 
+		// SET OUR LOCAL VARIABLES
 		$this->pudl			= $pudl;
 		$this->classname	= $classname;
 		$this->first		= true;
 
+		// PROCESS THE LIST OF DATA
 		if ($list instanceof pudlResult) {
 			$list = $list->complete();
 		}

@@ -4,8 +4,8 @@
 class pudlCacheResult extends pudlResult {
 
 
-	public function __construct(pudl $db, $data, $key) {
-		parent::__construct($db, count($data));
+	public function __construct(pudl $pudl, $data, $key) {
+		parent::__construct($pudl, count($data));
 		$this->rows	= $data;
 		$this->key	= $key;
 		$this->row	= 0;
@@ -14,7 +14,7 @@ class pudlCacheResult extends pudlResult {
 
 
 	public function purge() {
-		$this->db->purge($this->key);
+		$this->pudl->purge($this->key);
 	}
 
 

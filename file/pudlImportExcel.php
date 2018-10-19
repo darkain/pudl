@@ -14,8 +14,8 @@ class			pudlImportExcel
 	////////////////////////////////////////////////////////////////////////////
 	//CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
-	function __construct($database, $type=false) {
-		parent::__construct($database, $type);
+	function __construct(pudl $pudl, $type=false) {
+		parent::__construct($pudl, $type);
 	}
 
 
@@ -71,7 +71,7 @@ class			pudlImportExcel
 
 		if (!is_resource($zip)) {
 			throw new pudlException(
-				$this->db,
+				$this->pudl,
 				'CANNOT OPEN XLSX FILE - ' . $filename
 			);
 		}
@@ -100,7 +100,7 @@ class			pudlImportExcel
 		//VERIFY WE COULD READ THE MAIN SHEET DATA
 		if (empty($this->sheet)) {
 			throw new pudlException(
-				$this->db,
+				$this->pudl,
 				'CANNOT READ XLSX SHEET - ' . $filename
 			);
 		}
@@ -108,7 +108,7 @@ class			pudlImportExcel
 		//VERIFY WE COULD READ THE STRINGS LOOKUP TABLE
 		if (empty($strings)  ||  empty($strings->si)) {
 			throw new pudlException(
-				$this->db,
+				$this->pudl,
 				'CANNOT READ XLSX STRINGS - ' . $filename
 			);
 		}
@@ -151,7 +151,7 @@ class			pudlImportExcel
 			switch (true) {
 				case $header === false:
 					throw new pudlException(
-						$this->db,
+						$this->pudl,
 						'UNKNOWN HEADER: ' . $name
 					);
 				break;

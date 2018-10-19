@@ -15,13 +15,13 @@ abstract class	pudlResult
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// CONSTRUCTOR. PASS IN REFERENCE TO PUDL AS $DB, AND THE $RESULT IF AVAIL
+	// CONSTRUCTOR. PASS IN A $PUDL OBJECT, AND THE $RESULT IF AVAIL
 	////////////////////////////////////////////////////////////////////////////
-	public function __construct(pudl $db, $result=false) {
+	public function __construct(pudl $pudl, $result=false) {
 		$this->result	= $result;
-		$this->db		= $db;
-		$this->query	= $db->query();
-		$this->string	= $db->isString();
+		$this->pudl		= $pudl;
+		$this->query	= $pudl->query();
+		$this->string	= $pudl->isString();
 	}
 
 
@@ -354,7 +354,7 @@ abstract class	pudlResult
 	////////////////////////////////////////////////////////////////////////////
 	// MEMBER VARIABLES
 	////////////////////////////////////////////////////////////////////////////
-	/** @var pudl */			protected $db;
+	/** @var pudl */			protected $pudl;
 	/** @var mixed */			protected $result;
 	/** @var string */			protected $query;
 	/** @var bool */			protected $string;

@@ -21,10 +21,10 @@ class			pudlSession
 	////////////////////////////////////////////////////////////////////////////
 	//CONSTRUCTOR, PASS IN SOME PUDL AND SESSION CONFIGURATIONS
 	////////////////////////////////////////////////////////////////////////////
-	public function __construct(pudl $database, $table, $name=false,
+	public function __construct(pudl $pudl, $table, $name=false,
 		$domain=false, $secure=false) {
 
-		$this->db		= $database;
+		$this->pudl		= $pudl;
 		$this->table	= $table;
 		$this->name		= $name;
 		$this->domain	= $domain;
@@ -33,7 +33,7 @@ class			pudlSession
 		pudl_require_extension('session');
 
 		//WHEN THE DB DISCONNECTS, CALL OUR DISCONNECT HANDLER
-		$this->db->on('disconnect', [$this, 'disconnect']);
+		$this->pudl->on('disconnect', [$this, 'disconnect']);
 
 		//SET THIS INSTANCE AS PHP'S SESSION HANDLER
 		session_set_save_handler($this, true);
@@ -78,7 +78,7 @@ class			pudlSession
 	//PURGE SESSION DATA FROM REDIS CACHE
 	////////////////////////////////////////////////////////////////////////////
 	private function purge($id) {
-		$this->db->purge( $this->cache($id) );
+		$this->pudl->purge( $this->cache($id) );
 		return true;
 	}
 
@@ -122,7 +122,7 @@ class			pudlSession
 	//http://php.net/manual/en/sessionhandlerinterface.read.php
 	////////////////////////////////////////////////////////////////////////////
 	public function read($id) {
-		$data = $this->db->cache(60*60, $this->cache($id))->selectRow(
+		$data = $this->pudl->cache(60*60, $this->cache($id))->selectRow(
 			['user', 'data'],
 			$this->table,
 			['id' => $id]
@@ -133,7 +133,7 @@ class			pudlSession
 		}
 
 		$this->user = $data['user'];
-		$this->hash = $this->db->hash($data['data']);
+		$this->hash = $this->pudl->hash($data['data']);
 
 		return (string) $data['data'];
 	}
@@ -146,7 +146,7 @@ class			pudlSession
 	//http://php.net/manual/en/sessionhandlerinterface.write.php
 	////////////////////////////////////////////////////////////////////////////
 	public function write($id, $data) {
-		if (is_string($data)  &&  $this->hash === $this->db->hash($data)) return true;
+		if (is_string($data)  &&  $this->hash === $this->pudl->hash($data)) return true;
 
 		if (empty($data)) return $this->destroy($id);
 
@@ -159,10 +159,10 @@ class			pudlSession
 		}
 
 		//CREATE NEW ENTITY IN DATABASE
-		$this->db->upsert($this->table, [
+		$this->pudl->upsert($this->table, [
 			'id'		=> $id,
 			'user'		=> $this->user,
-			'access'	=> $this->db->time(),
+			'access'	=> $this->pudl->time(),
 			'address'	=> $address,
 			'data'		=> $data,
 		]);
@@ -181,7 +181,7 @@ class			pudlSession
 	public function destroy($id) {
 		//DELETE THE OBJECT
 		if ($this->hash !== false) {
-			$this->db->deleteId($this->table, 'id', $id);
+			$this->pudl->deleteId($this->table, 'id', $id);
 		}
 
 		//PURGE THE CACHE FOR THIS ID
@@ -196,8 +196,8 @@ class			pudlSession
 	//http://php.net/manual/en/sessionhandlerinterface.gc.php
 	////////////////////////////////////////////////////////////////////////////
 	public function gc($max) {
-		$expire = $this->db->time() - (int) $max;
-		$this->db->delete($this->table, ['access'=>pudl::lt($expire)]);
+		$expire = $this->pudl->time() - (int) $max;
+		$this->pudl->delete($this->table, ['access'=>pudl::lt($expire)]);
 		return true;
 	}
 
@@ -235,7 +235,7 @@ class			pudlSession
 	////////////////////////////////////////////////////////////////////////////
 	//PRIVATE LOCAL VARIABLES
 	////////////////////////////////////////////////////////////////////////////
-	private $db;
+	private $pudl;
 	private $table;
 	private $name;
 	private $domain;
