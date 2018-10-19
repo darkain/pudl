@@ -13,16 +13,12 @@ abstract class	pudlOrm
 
 
 	public function __construct($db, $item=false, $fetch=false) {
+
 		//SET THE LOCAL INSTANCE OF DATABASE OBJECT
 		$this->__pudl__ = $db;
 
-		if (get_called_class() === __CLASS__) {
-			throw new pudlException(
-				$this->__pudl__,
-				'ORM const parameters were not overwritten'
-			);
-		}
 
+		//LOAD IN DATA
 		if (is_array($item)) {
 			$fetch ? $this->fetch($item)		: $this->govern($item);
 
