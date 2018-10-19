@@ -25,17 +25,14 @@ abstract class	pudlOrm
 		if (is_array($item)) {
 			$fetch ? $this->fetch($item)	: $this->govern($item);
 
-		} else if ($item instanceof afUrl) {
-			$this->fetch($item->id);
-
-		} else if ($item instanceof getvar) {
-			$this->fetch($item->id());
-
 		} else if ($item instanceof pudlResult) {
 			$fetch ? $this->fetch($item())	: $this->copy($item());
 
 		} else if ($item instanceof Traversable) {
 			$fetch ? $this->fetch($item)	: $this->copy($item);
+
+		} else if (is_object($item)  &&  method_exists($item, 'id')) {
+			$this->fetch($item->id());
 
 		} else if ($fetch  &&  (is_int($item)  ||  ctype_digit($item))) {
 			$this->fetch($item);
