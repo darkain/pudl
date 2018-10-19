@@ -15,10 +15,18 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	// CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
-	public function __construct($db, $item=false, $fetch=false) {
+	public function __construct($pudl, $item=false, $fetch=false) {
+
+		// VALIDATE WE'RE DEALING WITH A PUDL INSTANCE
+		if (!($pudl instanceof pudl)) {
+			throw new pudlTypeException(NULL,
+				__CLASS__ . ' method parameter $pudl is not of type: class pudl'
+			);
+		}
+
 
 		// SET THE LOCAL INSTANCE OF DATABASE OBJECT
-		$this->__pudl__ = $db;
+		$this->__pudl__ = $pudl;
 
 
 		// LOAD IN DATA
