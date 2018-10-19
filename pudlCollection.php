@@ -16,9 +16,20 @@ class		pudlCollection
 	////////////////////////////////////////////////////////////////////////////
 	//CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
-	public function __construct($classname, $list=NULL) {
+	public function __construct($pudl, $classname, $list=NULL) {
+
+		// VALIDATE WE'RE DEALING WITH A PUDL INSTANCE
+		if (!($pudl instanceof pudl)) {
+			throw new pudlTypeException(NULL,
+				__CLASS__ . ' method parameter $pudl is not of type: class pudl'
+			);
+		}
+
+
+		// INIT PUDLOBJECT
 		parent::__construct();
 
+		$this->pudl			= $pudl;
 		$this->classname	= $classname;
 		$this->first		= true;
 
@@ -31,7 +42,7 @@ class		pudlCollection
 		foreach ($list as $item) {
 			$this[]	= ($item instanceof $classname)
 					? $item
-					: new $classname($item);
+					: new $classname($pudl, $item);
 		}
 	}
 
@@ -173,6 +184,14 @@ class		pudlCollection
 	public function getInnerIterator() {
 		return $this->current();
 	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// LOCAL METHOD VARIABLES
+	////////////////////////////////////////////////////////////////////////////
+	protected $pudl;
 
 
 

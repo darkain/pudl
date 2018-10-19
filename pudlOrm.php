@@ -77,6 +77,16 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
+	// GET THE PUDL INSTANCE THIS OBJECT IS TIED TO
+	////////////////////////////////////////////////////////////////////////////
+	public function pudl() {
+		return $this->__pudl__;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
 	// RETURN THE CURRENT OBJECT ID NUMBER
 	////////////////////////////////////////////////////////////////////////////
 	public function id($default=0) {
@@ -93,9 +103,9 @@ abstract class	pudlOrm
 	// CREATE A NEW INSTANCE OF THIS OBJECT IN THE DATABASE
 	/** @suppress PhanNonClassMethodCall */
 	////////////////////////////////////////////////////////////////////////////
-	public static function create($db, $data=false, $update=false) {
-		return static::get($db,
-			$db->insertExtract(
+	public static function create($pudl, $data=false, $update=false) {
+		return static::get($pudl,
+			$pudl->insertExtract(
 				static::table,
 				$data,
 				($update === false) ? static::column : $update
@@ -109,7 +119,7 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	// GET AN INSTANCE OF THIS OBJECT FROM THE DATABASE
 	////////////////////////////////////////////////////////////////////////////
-	public static function get($db, $id) {
+	public static function get($pudl, $id) {
 		if (pudl_array($id)) {
 			if (isset($id[static::column])) {
 				$id = $id[static::column];
@@ -125,14 +135,14 @@ abstract class	pudlOrm
 		}
 
 		if (!is_numeric($id)  &&  !is_string($id)) {
-			throw new pudlValueException($db,
+			throw new pudlValueException($pudl,
 				'Invalid ID for ' . __METHOD__ .
 				': ' . gettype($id) .
 				': ' . print_r($id, true)
 			);
 		}
 
-		return static::instance($db, $id, true);
+		return static::instance($pudl, $id, true);
 	}
 
 
@@ -141,8 +151,8 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	// CREATE AN INSTANCE OF THIS CLASS, USING LATE STATIC BINDING
 	////////////////////////////////////////////////////////////////////////////
-	public static function instance($db, $item=false, $fetch=false) {
-		return new static($db, $item, $fetch);
+	public static function instance($pudl, $item=false, $fetch=false) {
+		return new static($pudl, $item, $fetch);
 	}
 
 
@@ -151,14 +161,14 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	// GET AN INSTANCE OF THIS OBJECT FROM THE DATABASE FOR A GIVEN CLAUSE
 	////////////////////////////////////////////////////////////////////////////
-	public static function select($db /*, ...$selex */) {
+	public static function select($pudl /*, ...$selex */) {
 		$args	= func_get_args();
 		array_shift($args);
 		array_unshift($args, ['limit'=>1], static::schema());
 
-		$data	= call_user_func_array([$db,'selex'], $args)->complete();
+		$data	= call_user_func_array([$pudl,'selex'], $args)->complete();
 
-		return pudl_array($data) ? static::instance($db, reset($data)) : $data;
+		return pudl_array($data) ? static::instance($pudl, reset($data)) : $data;
 	}
 
 
@@ -167,24 +177,17 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	// GET A COLLECTION OF OBJECTS
 	////////////////////////////////////////////////////////////////////////////
-	public static function collect($db /*, ...$selex */) {
-		if (static::collector === __CLASS__) {
-			throw new pudlException(
-				$db,
-				'ORM const parameters were not overwritten'
-			);
-		}
-
+	public static function collect($pudl /*, ...$selex */) {
 		$args			= func_get_args();
 		array_shift($args);
 		array_unshift($args, static::schema());
 
 		$collector		= static::collector;
-		$return			= new $collector(get_called_class());
-		$result			= call_user_func_array([$db,'selex'], $args);
+		$return			= new $collector($pudl, get_called_class());
+		$result			= call_user_func_array([$pudl,'selex'], $args);
 
 		while ($data	= $result()) {
-			$return[]	= new static($db, $data);
+			$return[]	= new static($pudl, $data);
 		}
 
 		$result->free();
@@ -198,7 +201,7 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	// GET A COLLECTION OF OBJECTS FROM ID NUMBERS
 	////////////////////////////////////////////////////////////////////////////
-	public static function collection($db, $items /*, ...$selex */) {
+	public static function collection($pudl, $items /*, ...$selex */) {
 		$args		= func_get_args();
 
 		if ($items instanceof pudlStringResult) {
@@ -206,7 +209,7 @@ abstract class	pudlOrm
 		}
 
 		if (is_string($items)) {
-			$items	= $db($items);
+			$items	= $pudl($items);
 		}
 
 		if ($items instanceof pudlResult) {
@@ -234,9 +237,9 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	// CREATE A COLLECTOR FOR EXISTING LIST OF ITEMS
 	////////////////////////////////////////////////////////////////////////////
-	public static function manage($items) {
+	public static function manage($pudl, $items) {
 		$collector = static::collector;
-		return new $collector(get_called_class(), $items);
+		return new $collector($pudl, get_called_class(), $items);
 	}
 
 
