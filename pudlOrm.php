@@ -12,15 +12,18 @@ abstract class	pudlOrm
 
 
 
+	////////////////////////////////////////////////////////////////////////////
+	// CONSTRUCTOR
+	////////////////////////////////////////////////////////////////////////////
 	public function __construct($db, $item=false, $fetch=false) {
 
-		//SET THE LOCAL INSTANCE OF DATABASE OBJECT
+		// SET THE LOCAL INSTANCE OF DATABASE OBJECT
 		$this->__pudl__ = $db;
 
 
-		//LOAD IN DATA
+		// LOAD IN DATA
 		if (is_array($item)) {
-			$fetch ? $this->fetch($item)		: $this->govern($item);
+			$fetch ? $this->fetch($item)	: $this->govern($item);
 
 		} else if ($item instanceof afUrl) {
 			$this->fetch($item->id);
@@ -29,10 +32,10 @@ abstract class	pudlOrm
 			$this->fetch($item->id());
 
 		} else if ($item instanceof pudlResult) {
-			$fetch ? $this->fetch($item())		: $this->copy($item());
+			$fetch ? $this->fetch($item())	: $this->copy($item());
 
 		} else if ($item instanceof Traversable) {
-			$fetch ? $this->fetch($item)		: $this->copy($item);
+			$fetch ? $this->fetch($item)	: $this->copy($item);
 
 		} else if ($fetch  &&  (is_int($item)  ||  ctype_digit($item))) {
 			$this->fetch($item);
@@ -42,7 +45,7 @@ abstract class	pudlOrm
 		}
 
 
-		//SET DEFAULT OBJECT ID AND FORCE INTEGER
+		// SET DEFAULT OBJECT ID AND FORCE INTEGER
 		if (static::hash) {
 			if (empty($this->{static::column})) {
 				$this->{static::column} = '';
@@ -59,7 +62,7 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//IF CONVERTING CLASS TO STRING, RETURNS THE CURRENT OBJECT ID NUMBER
+	// IF CONVERTING CLASS TO STRING, RETURNS THE CURRENT OBJECT ID NUMBER
 	////////////////////////////////////////////////////////////////////////////
 	public function __toString() {
 		return (string) $this->{static::column};
@@ -69,7 +72,7 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//RETURN THE CURRENT OBJECT ID NUMBER
+	// RETURN THE CURRENT OBJECT ID NUMBER
 	////////////////////////////////////////////////////////////////////////////
 	public function id($default=0) {
 		if (static::hash) return $this->{static::column};
@@ -82,7 +85,7 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//CREATE A NEW INSTANCE OF THIS OBJECT IN THE DATABASE
+	// CREATE A NEW INSTANCE OF THIS OBJECT IN THE DATABASE
 	/** @suppress PhanNonClassMethodCall */
 	////////////////////////////////////////////////////////////////////////////
 	public static function create($db, $data=false, $update=false) {
@@ -99,7 +102,7 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//GET AN INSTANCE OF THIS OBJECT FROM THE DATABASE
+	// GET AN INSTANCE OF THIS OBJECT FROM THE DATABASE
 	////////////////////////////////////////////////////////////////////////////
 	public static function get($db, $id) {
 		if (pudl_array($id)) {
@@ -131,7 +134,7 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//CREATE AN INSTANCE OF THIS CLASS, USING LATE STATIC BINDING
+	// CREATE AN INSTANCE OF THIS CLASS, USING LATE STATIC BINDING
 	////////////////////////////////////////////////////////////////////////////
 	public static function instance($db, $item=false, $fetch=false) {
 		return new static($db, $item, $fetch);
@@ -141,7 +144,7 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//GET AN INSTANCE OF THIS OBJECT FROM THE DATABASE FOR A GIVEN CLAUSE
+	// GET AN INSTANCE OF THIS OBJECT FROM THE DATABASE FOR A GIVEN CLAUSE
 	////////////////////////////////////////////////////////////////////////////
 	public static function select($db /*, ...$selex */) {
 		$args	= func_get_args();
@@ -157,7 +160,7 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//GET A COLLECTION OF OBJECTS
+	// GET A COLLECTION OF OBJECTS
 	////////////////////////////////////////////////////////////////////////////
 	public static function collect($db /*, ...$selex */) {
 		if (static::collector === __CLASS__) {
@@ -188,7 +191,7 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//GET A COLLECTION OF OBJECTS FROM ID NUMBERS
+	// GET A COLLECTION OF OBJECTS FROM ID NUMBERS
 	////////////////////////////////////////////////////////////////////////////
 	public static function collection($db, $items /*, ...$selex */) {
 		$args		= func_get_args();
@@ -224,7 +227,7 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//CREATE A COLLECTOR FOR EXISTING LIST OF ITEMS
+	// CREATE A COLLECTOR FOR EXISTING LIST OF ITEMS
 	////////////////////////////////////////////////////////////////////////////
 	public static function manage($items) {
 		$collector = static::collector;
@@ -235,7 +238,7 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//OVERWRITE THE PUDL PARAMETERS FOR PULLING A COLLECTION
+	// OVERWRITE THE PUDL PARAMETERS FOR PULLING A COLLECTION
 	////////////////////////////////////////////////////////////////////////////
 	protected static function schema() {
 		return ['table' => [static::prefix => static::table]];
@@ -245,7 +248,7 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//COMPARE ITEM TO SEE IF IT IS THE CURRENT OBJECT INSTANCE
+	// COMPARE ITEM TO SEE IF IT IS THE CURRENT OBJECT INSTANCE
 	////////////////////////////////////////////////////////////////////////////
 	public function is($item=true) {
 		$id = $this->id();
@@ -276,7 +279,7 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//COMPARE ITEM TO SEE IF IT IS *NOT* THE CURRENT OBJECT INSTANCE
+	// COMPARE ITEM TO SEE IF IT IS *NOT* THE CURRENT OBJECT INSTANCE
 	////////////////////////////////////////////////////////////////////////////
 	public function isnt( $item=true)	{ return !$this->is($item); }
 	public function isnot($item=true)	{ return !$this->is($item); }
@@ -285,7 +288,7 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//UPDATE THE OBJECT IN THE DATABASE
+	// UPDATE THE OBJECT IN THE DATABASE
 	////////////////////////////////////////////////////////////////////////////
 	public function update($data) {
 		if (pudl_array($data)) {
@@ -308,7 +311,7 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//UPDATE JSON VALUE IN THE DATABASE
+	// UPDATE JSON VALUE IN THE DATABASE
 	////////////////////////////////////////////////////////////////////////////
 	public function updateJson(/* ...$keys, $values OR [$keys => $values]*/) {
 		$args		= func_get_args();
@@ -331,7 +334,7 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//UPDATE OBJECT'S CHANGES BACK INTO DATABASE - REQUIRES AN EXISTING SNAPSHOT
+	// UPDATE OBJECT'S CHANGES BACK INTO DATABASE - REQUIRES AN EXISTING SNAPSHOT
 	////////////////////////////////////////////////////////////////////////////
 	public function snapdate($ignore=[]) {
 		$data = $this->compareData();
@@ -352,7 +355,7 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//DELETE THIS OBJECT FROM DATABASE
+	// DELETE THIS OBJECT FROM DATABASE
 	////////////////////////////////////////////////////////////////////////////
 	public function delete() {
 		return $this->__pudl__->deleteId(static::table, $this, false, 1);
@@ -362,7 +365,7 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PUDL INTEGRATION
+	// PUDL INTEGRATION
 	////////////////////////////////////////////////////////////////////////////
 	public function pudlId() {
 		return [static::column => $this->id()];
@@ -372,7 +375,7 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//GET THE COLUMN NAME WITH THE TABLE ALIAS PREFIX ATTACHED
+	// GET THE COLUMN NAME WITH THE TABLE ALIAS PREFIX ATTACHED
 	////////////////////////////////////////////////////////////////////////////
 	public static function prefixed() {
 		return implode('.', [static::prefix, static::column]);
@@ -382,7 +385,7 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//GET THE TABLE DEFINITION FOR ICON (SPECIFIC TO ALTAFORM)
+	// GET THE TABLE DEFINITION FOR ICON (SPECIFIC TO ALTAFORM)
 	////////////////////////////////////////////////////////////////////////////
 	public static function icon($type=200) {
 		if (!static::icon) return NULL;
@@ -413,7 +416,7 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//FETCH DATA FROM DATABASE
+	// FETCH DATA FROM DATABASE
 	/** @suppress PhanUndeclaredProperty, PhanTypeArraySuspicious */
 	////////////////////////////////////////////////////////////////////////////
 	protected function fetch($id) {
@@ -451,7 +454,7 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//HOW LONG SHOULD THE FETCHED DATA BE CACHED FOR (IN SECONDS)
+	// HOW LONG SHOULD THE FETCHED DATA BE CACHED FOR (IN SECONDS)
 	////////////////////////////////////////////////////////////////////////////
 	protected function _fetchCache() { return 0; }
 
@@ -459,9 +462,9 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//SHORTCUT FUNCTIONS FOR ERROR CHECKING
-	//THESE ARE RELATED TO ALTAFORM. IF YOU'RE NOT USING THAT LIBRARY, THESE
-	//ARE THEN WORTHLESS
+	// SHORTCUT FUNCTIONS FOR ERROR CHECKING
+	// THESE ARE RELATED TO ALTAFORM. IF YOU'RE NOT USING THAT LIBRARY, THESE
+	// ARE THEN WORTHLESS
 	////////////////////////////////////////////////////////////////////////////
 	public function assert400($text=false) { assert400((string)$this, $text); return $this; }
 	public function assert401($text=false) { assert401((string)$this, $text); return $this; }
@@ -477,14 +480,14 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//LOCAL METHOD VARIABLES
+	// LOCAL METHOD VARIABLES
 	////////////////////////////////////////////////////////////////////////////
 	protected $__pudl__;
 
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//LATE STATIC BINDING VARIABLES, OVERWRITE THESE IN YOUR CLASS
+	// LATE STATIC BINDING VARIABLES, OVERWRITE THESE IN YOUR CLASS
 	////////////////////////////////////////////////////////////////////////////
 	const	collector	= 'pudlCollection';
 	const	column		= 'id';
