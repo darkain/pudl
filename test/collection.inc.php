@@ -13,9 +13,7 @@ pudlTest($db, 'SELECT `key`, `value` FROM `table`');
 
 
 //A BASIC ORM USED FOR SEVERAL UNIT TESTS
-class test_orm extends pudlOrm {
-	const classname = __CLASS__;
-}
+class test_orm extends pudlOrm {}
 
 
 

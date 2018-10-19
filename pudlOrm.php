@@ -16,7 +16,7 @@ abstract class	pudlOrm
 		//SET THE LOCAL INSTANCE OF DATABASE OBJECT
 		$this->__pudl__ = $db;
 
-		if (static::classname === __CLASS__) {
+		if (get_called_class() === __CLASS__) {
 			throw new pudlException(
 				$this->__pudl__,
 				'ORM const parameters were not overwritten'
@@ -138,8 +138,7 @@ abstract class	pudlOrm
 	//CREATE AN INSTANCE OF THIS CLASS, USING LATE STATIC BINDING
 	////////////////////////////////////////////////////////////////////////////
 	public static function instance($db, $item=false, $fetch=false) {
-		$class = static::classname;
-		return new $class($db, $item, $fetch);
+		return new static($db, $item, $fetch);
 	}
 
 
@@ -177,12 +176,11 @@ abstract class	pudlOrm
 		array_unshift($args, static::schema());
 
 		$collector		= static::collector;
-		$class			= static::classname;
-		$return			= new $collector($class);
+		$return			= new $collector(get_called_class());
 		$result			= call_user_func_array([$db,'selex'], $args);
 
 		while ($data	= $result()) {
-			$return[]	= new $class($db, $data);
+			$return[]	= new static($db, $data);
 		}
 
 		$result->free();
@@ -220,7 +218,10 @@ abstract class	pudlOrm
 			$items
 		)]];
 
-		return call_user_func_array([static::classname,'collect'], $args);
+		return call_user_func_array(
+			[get_called_class(), 'collect'],
+			$args
+		);
 	}
 
 
@@ -231,7 +232,7 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	public static function manage($items) {
 		$collector = static::collector;
-		return new $collector(static::classname, $items);
+		return new $collector(get_called_class(), $items);
 	}
 
 
@@ -490,7 +491,6 @@ abstract class	pudlOrm
 	//LATE STATIC BINDING VARIABLES, OVERWRITE THESE IN YOUR CLASS
 	////////////////////////////////////////////////////////////////////////////
 	const	collector	= 'pudlCollection';
-	const	classname	= __CLASS__;
 	const	column		= 'id';
 	const	table		= 'pudl';
 	const	prefix		= -1;
