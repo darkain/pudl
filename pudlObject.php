@@ -1092,7 +1092,7 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//TRUE:		TAKE A NEW SNAPSHOT
+	//TRUE:		TAKE A NEW SNAPSHOT AND GET IT
 	//FALSE:	GET THE CURRENT SNAPSHOT
 	//STRING:	GET ITEM FROM CURRENT SNAPSHOT
 	//INT:		GET INDEX FROM CURRENT SNAPSHOT
@@ -1102,8 +1102,7 @@ class	pudlObject
 		if ($snapshot === true) $this->__snapshot = $this->__array;
 
 		if (is_bool($snapshot)) {
-			$class = get_class($this);
-			return new $class($this->__snapshot);
+			return $this->_snapclone($this->__snapshot);
 		}
 
 		if (!is_string($snapshot)  &&  !is_int($snapshot)) {
@@ -1115,6 +1114,16 @@ class	pudlObject
 		return array_key_exists($snapshot, $this->__snapshot)
 			? $this->__snapshot[$snapshot]
 			: NULL;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// GET A NEW INSTANCE OF THIS OBJECT WITH VALUES FROM THE CURRENT SNAPSHOT
+	////////////////////////////////////////////////////////////////////////////
+	protected function _snapclone($snapshot) {
+		return new static($snapshot);
 	}
 
 
