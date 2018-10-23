@@ -111,11 +111,11 @@ trait pudlRedis {
 
 		foreach ($algs as $algo) {
 			if (in_array($algo, $list)) {
-				return hash_hmac($algo,	$data, $this->salt(), true);
+				return hash_hmac($algo,	$data, $this->salt());
 			}
 		}
 
-		return sha1($this->salt().$data, true);
+		return sha1($this->salt().$data);
 	}
 
 
