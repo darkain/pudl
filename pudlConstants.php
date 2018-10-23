@@ -1,16 +1,16 @@
 <?php
 
 
-//DEFINE THE RECURSION LIMIT
+// DEFINE THE RECURSION LIMIT
 define('PUDL_RECURSION',	  32);
 
-//"LIKE '%VALUE%'"
+// "LIKE '%VALUE%'"
 define('PUDL_NONE',			0x00);
 define('PUDL_START',		0x01);
 define('PUDL_END',			0x02);
 define('PUDL_BOTH',			0x03);
 
-//PUDL OBJECT DATA IMPORT PROCESSING
+// PUDL OBJECT DATA IMPORT PROCESSING
 define('PUDL_CSV',			0x10);
 
 
@@ -60,7 +60,7 @@ define('GALERA_ALL',		0x0F);
 
 
 ////////////////////////////////////////////////////////////////////////////////
-//COMPATIBILITY WITH OLDER PHP VERSIONS
+// COMPATIBILITY WITH OLDER PHP VERSIONS
 ////////////////////////////////////////////////////////////////////////////////
 if (!defined('MYSQLI_OPT_READ_TIMEOUT')) {
 	define ('MYSQLI_OPT_READ_TIMEOUT', 11);
