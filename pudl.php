@@ -170,7 +170,12 @@ abstract	class	pudl {
 						$result = $this->missed($query);
 						if (!$this->error()  &&  !$result->error()) {
 							$data = $result->complete();
-							$this->redis->set("pudl:$hash", $data, $this->cache);
+
+							// DONT CACHE EMPTY RESULT SETS
+							if (!empty($data)) {
+								$this->redis->set("pudl:$hash", $data, $this->cache);
+							}
+
 							$result = new pudlCacheResult($this, $data, $hash);
 						}
 

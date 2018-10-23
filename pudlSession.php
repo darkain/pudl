@@ -147,7 +147,7 @@ class			pudlSession
 	////////////////////////////////////////////////////////////////////////////
 	public function write($id, $data) {
 
-		//  IF CONTENT UNCHANGED, NOP
+		// IF CONTENT UNCHANGED, NOP
 		if (is_string($data)) {
 			if ($this->hash === $this->pudl->hash($data)) {
 				return true;
@@ -155,12 +155,11 @@ class			pudlSession
 		}
 
 
-		//  IF NOTHING TO SAVE, JUST REMOVE THE DATA
-		if (empty($data))		return $this->destroy($id);
-		if ($data === 'a:0:{}')	return $this->destroy($id);
+		// IF NOTHING TO SAVE, JUST REMOVE THE DATA
+		if (empty($data)) return $this->destroy($id);
 
 
-		//  GET REMOTE IP THE ADDRESS TO STORE
+		// GET REMOTE IP THE ADDRESS TO STORE
 		if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 			$address = $_SERVER['HTTP_X_FORWARDED_FOR'];
 		} else if (!empty($_SERVER['REMOTE_ADDR'])) {
@@ -170,7 +169,7 @@ class			pudlSession
 		}
 
 
-		//  CREATE NEW ENTITY IN DATABASE
+		// CREATE NEW ENTITY IN DATABASE
 		$this->pudl->upsert($this->table, [
 			'id'		=> $id,
 			'user'		=> $this->user,
@@ -180,7 +179,7 @@ class			pudlSession
 		]);
 
 
-		//  PURGE THE CACHE FOR THIS ID
+		// PURGE THE CACHE FOR THIS ID
 		return $this->purge($id);
 	}
 
