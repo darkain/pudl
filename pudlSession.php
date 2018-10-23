@@ -1,6 +1,6 @@
 <?php
 
-//SET THE NUMBER OF BITS PER CHARACTER TO MAX
+// SET THE NUMBER OF BITS PER CHARACTER TO MAX
 if (!headers_sent()) {
 	ini_set('session.hash_bits_per_character', 6);
 	ini_set('session.gc_maxlifetime', 60*60*24*30);
@@ -10,7 +10,7 @@ if (!headers_sent()) {
 
 
 ////////////////////////////////////////////////////////////////////////////////
-//PUDL CUSTOM SESSION HANDLER
+// PUDL CUSTOM SESSION HANDLER
 ////////////////////////////////////////////////////////////////////////////////
 class			pudlSession
 	implements	SessionHandlerInterface {
@@ -19,41 +19,41 @@ class			pudlSession
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//CONSTRUCTOR, PASS IN SOME PUDL AND SESSION CONFIGURATIONS
+	// CONSTRUCTOR, PASS IN SOME PUDL AND SESSION CONFIGURATIONS
 	////////////////////////////////////////////////////////////////////////////
 	public function __construct(pudl $pudl, $table, $name=false,
-		$domain=false, $secure=false) {
+								$domain=false, $secure=false) {
 
 		$this->pudl		= $pudl;
 		$this->table	= $table;
 		$this->name		= $name;
 		$this->domain	= $domain;
 
-		//VERIFY THAT SESSION SUPPORT IS AVAILABLE
+		// VERIFY THAT SESSION SUPPORT IS AVAILABLE
 		pudl_require_extension('session');
 
-		//WHEN THE DB DISCONNECTS, CALL OUR DISCONNECT HANDLER
+		// WHEN THE DB DISCONNECTS, CALL OUR DISCONNECT HANDLER
 		$this->pudl->on('disconnect', [$this, 'disconnect']);
 
-		//SET THIS INSTANCE AS PHP'S SESSION HANDLER
+		// SET THIS INSTANCE AS PHP'S SESSION HANDLER
 		session_set_save_handler($this, true);
 
-		//DIFFERENT SESSION NAME FOR HTTPS CONNECTIONS
+		// DIFFERENT SESSION NAME FOR HTTPS CONNECTIONS
 		session_name(
 			(empty($this->name) ? 'PUDLSESSID' : $this->name) .
 			($secure ? '-SECURE' : '')
 		);
 
-		//SET PARAMETERS FOR BROWSER SESSION COOKIE
+		// SET PARAMETERS FOR BROWSER SESSION COOKIE
 		session_set_cookie_params(
-			60*60*24*30,		//SAVE SESSION FOR ONE MONTH
-			'/',				//SESSION IS FOR ENTIRE DOMAIN
+			60*60*24*30,		// SAVE SESSION FOR ONE MONTH
+			'/',				// SESSION IS FOR ENTIRE DOMAIN
 			empty($this->domain) ? '' : $this->domain,
-			$secure,			//HTTPS ONLY
-			true				//HTTP(S) ONLY - BLOCK JAVASCRIPT ACCESS
+			$secure,			// HTTPS ONLY
+			true				// HTTP(S) ONLY - BLOCK JAVASCRIPT ACCESS
 		);
 
-		//START THE SESSION
+		// START THE SESSION
 		if (!headers_sent()) {
 			session_start();
 		} else {
@@ -65,7 +65,7 @@ class			pudlSession
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//GET THE REDIS CACHE ID FOR THIS SESSION ID
+	// GET THE REDIS CACHE ID FOR THIS SESSION ID
 	////////////////////////////////////////////////////////////////////////////
 	private function cache($id) {
 		return 'session-' . $this->name . '-' . $this->domain . '-' . $id;
@@ -75,7 +75,7 @@ class			pudlSession
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PURGE SESSION DATA FROM REDIS CACHE
+	// PURGE SESSION DATA FROM REDIS CACHE
 	////////////////////////////////////////////////////////////////////////////
 	private function purge($id) {
 		$this->pudl->purge( $this->cache($id) );
@@ -86,7 +86,7 @@ class			pudlSession
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//FINALIZE SESSION
+	// FINALIZE SESSION
 	////////////////////////////////////////////////////////////////////////////
 	public function disconnect() {
 		session_write_close();
@@ -96,8 +96,8 @@ class			pudlSession
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//INITIALIZE SESSION
-	//http://php.net/manual/en/sessionhandlerinterface.open.php
+	// INITIALIZE SESSION
+	// http://php.net/manual/en/sessionhandlerinterface.open.php
 	////////////////////////////////////////////////////////////////////////////
 	public function open($path, $name) {
 		return true;
@@ -107,8 +107,8 @@ class			pudlSession
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//CLOSE THE SESSION
-	//http://php.net/manual/en/sessionhandlerinterface.close.php
+	// CLOSE THE SESSION
+	// http://php.net/manual/en/sessionhandlerinterface.close.php
 	////////////////////////////////////////////////////////////////////////////
 	public function close() {
 		return true;
@@ -118,8 +118,8 @@ class			pudlSession
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//READ SESSION DATA
-	//http://php.net/manual/en/sessionhandlerinterface.read.php
+	// READ SESSION DATA
+	// http://php.net/manual/en/sessionhandlerinterface.read.php
 	////////////////////////////////////////////////////////////////////////////
 	public function read($id) {
 		$data = $this->pudl->cache(60*60, $this->cache($id))->selectRow(
@@ -142,14 +142,25 @@ class			pudlSession
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//WRITE SESSION DATA
-	//http://php.net/manual/en/sessionhandlerinterface.write.php
+	// WRITE SESSION DATA
+	// http://php.net/manual/en/sessionhandlerinterface.write.php
 	////////////////////////////////////////////////////////////////////////////
 	public function write($id, $data) {
-		if (is_string($data)  &&  $this->hash === $this->pudl->hash($data)) return true;
 
-		if (empty($data)) return $this->destroy($id);
+		//  IF CONTENT UNCHANGED, NOP
+		if (is_string($data)) {
+			if ($this->hash === $this->pudl->hash($data)) {
+				return true;
+			}
+		}
 
+
+		//  IF NOTHING TO SAVE, JUST REMOVE THE DATA
+		if (empty($data))		return $this->destroy($id);
+		if ($data === 'a:0:{}')	return $this->destroy($id);
+
+
+		//  GET REMOTE IP THE ADDRESS TO STORE
 		if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 			$address = $_SERVER['HTTP_X_FORWARDED_FOR'];
 		} else if (!empty($_SERVER['REMOTE_ADDR'])) {
@@ -158,7 +169,8 @@ class			pudlSession
 			$address = '';
 		}
 
-		//CREATE NEW ENTITY IN DATABASE
+
+		//  CREATE NEW ENTITY IN DATABASE
 		$this->pudl->upsert($this->table, [
 			'id'		=> $id,
 			'user'		=> $this->user,
@@ -167,7 +179,8 @@ class			pudlSession
 			'data'		=> $data,
 		]);
 
-		//PURGE THE CACHE FOR THIS ID
+
+		//  PURGE THE CACHE FOR THIS ID
 		return $this->purge($id);
 	}
 
@@ -175,16 +188,16 @@ class			pudlSession
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//DESTROY A SESSION
-	//http://php.net/manual/en/sessionhandlerinterface.destroy.php
+	// DESTROY A SESSION
+	// http://php.net/manual/en/sessionhandlerinterface.destroy.php
 	////////////////////////////////////////////////////////////////////////////
 	public function destroy($id) {
-		//DELETE THE OBJECT
+		// DELETE THE OBJECT
 		if ($this->hash !== false) {
 			$this->pudl->deleteId($this->table, 'id', $id);
 		}
 
-		//PURGE THE CACHE FOR THIS ID
+		// PURGE THE CACHE FOR THIS ID
 		return $this->purge($id);
 	}
 
@@ -192,8 +205,8 @@ class			pudlSession
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//CLEANUP OLD SESSIONS
-	//http://php.net/manual/en/sessionhandlerinterface.gc.php
+	// CLEANUP OLD SESSIONS
+	// http://php.net/manual/en/sessionhandlerinterface.gc.php
 	////////////////////////////////////////////////////////////////////////////
 	public function gc($max) {
 		$expire = $this->pudl->time() - (int) $max;
@@ -205,7 +218,7 @@ class			pudlSession
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//SET OR GET USER INFORMATION
+	// SET OR GET USER INFORMATION
 	////////////////////////////////////////////////////////////////////////////
 	public function user($user=false, $name=false) {
 		if ($user === false) return $this->user;
@@ -225,7 +238,7 @@ class			pudlSession
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//GET THE DATABASE TABLE THIS SESSION IS ASSOCIATED WITH
+	// GET THE DATABASE TABLE THIS SESSION IS ASSOCIATED WITH
 	////////////////////////////////////////////////////////////////////////////
 	public function table() { return $this->table; }
 
@@ -233,7 +246,7 @@ class			pudlSession
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PRIVATE LOCAL VARIABLES
+	// PRIVATE LOCAL VARIABLES
 	////////////////////////////////////////////////////////////////////////////
 	private $pudl;
 	private $table;
