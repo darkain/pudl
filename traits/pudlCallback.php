@@ -2,7 +2,7 @@
 
 
 ////////////////////////////////////////////////////////////////////////////////
-//SUPPORT FOR CALLBACK TRACKING AND TRIGGERING
+// SUPPORT FOR EVENT CALLBACK TRACKING AND TRIGGERING
 ////////////////////////////////////////////////////////////////////////////////
 trait pudlCallback {
 
@@ -10,33 +10,32 @@ trait pudlCallback {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//REGISTER A CALLBACK FOR A PARTICULAR ACTION
+	// REGISTER A CALLBACK FOR A PARTICULAR EVENT
 	////////////////////////////////////////////////////////////////////////////
-	public function on($action, $callback) {
-		if (!is_string($action)) {
-			throw new pudlException($this, 'Not a valid callback action');
+	public function on($event, callable $callback) {
+		if (!is_string($event)) {
+			throw new pudlException($this, 'Not a valid callback event');
 		}
 
-		if (!is_callable($callback)) {
-			throw new pudlException($this, 'Not a valid callback function');
-		}
-
-		$this->_callbacks[$action][] = $callback;
+		$this->_callbacks[$event][] = $callback;
 	}
 
 
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//NOTIFY CALLBACKS OF A PARTICULAR ACTION
+	// NOTIFY CALLBACKS OF A PARTICULAR EVENT
 	////////////////////////////////////////////////////////////////////////////
-	protected function trigger($action) {
-		if (empty($this->_callbacks[$action])) return NULL;
+	protected function trigger($event) {
+		if (empty($this->_callbacks[$event])) return NULL;
+
 		$args	= func_get_args();
 		$return	= [];
-		foreach ($this->_callbacks[$action] as $item) {
+
+		foreach ($this->_callbacks[$event] as $item) {
 			$return[] = call_user_func_array($item, $args);
 		}
+
 		return $return;
 	}
 
@@ -44,7 +43,7 @@ trait pudlCallback {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PRIVATE VARIABLES - LIST OF REGISTERED CALLBACKS
+	// PRIVATE VARIABLES - LIST OF REGISTERED CALLBACKS
 	////////////////////////////////////////////////////////////////////////////
 	private $_callbacks = [];
 

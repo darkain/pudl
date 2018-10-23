@@ -14,19 +14,19 @@ class		pudlCollection
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//CONSTRUCTOR
+	// CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
 	public function __construct(pudl $pudl, $classname, $list=NULL) {
 
-		// INIT PUDLOBJECT
+		//  INIT PUDLOBJECT
 		parent::__construct();
 
-		// SET OUR LOCAL VARIABLES
+		//  SET OUR LOCAL VARIABLES
 		$this->pudl			= $pudl;
 		$this->classname	= $classname;
 		$this->first		= true;
 
-		// PROCESS THE LIST OF DATA
+		//  PROCESS THE LIST OF DATA
 		if ($list instanceof pudlResult) {
 			$list = $list->complete();
 		}
@@ -44,7 +44,7 @@ class		pudlCollection
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//INVOKE, ALIAS FOR NEXT ITEM IN COLLECTION. EASY WAY TO WALK THE LIST
+	// INVOKE, ALIAS FOR NEXT ITEM IN COLLECTION. EASY WAY TO WALK THE LIST
 	////////////////////////////////////////////////////////////////////////////
 	public function __invoke() {
 		if (!$this->first) return $this->next();
@@ -57,7 +57,7 @@ class		pudlCollection
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//RESET INTERNAL POINTER TO FIRST OBJECT IN COLLECTION
+	// RESET INTERNAL POINTER TO FIRST OBJECT IN COLLECTION
 	////////////////////////////////////////////////////////////////////////////
 	public function rewind() {
 		$this->first = true;
@@ -68,7 +68,7 @@ class		pudlCollection
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//MOVE INTERNAL POINTER TO SPECIFIC ITEM WITHIN COLLECTION
+	// MOVE INTERNAL POINTER TO SPECIFIC ITEM WITHIN COLLECTION
 	////////////////////////////////////////////////////////////////////////////
 	public function seek($row) {
 		if (!$row) $this->first = true;
@@ -79,7 +79,7 @@ class		pudlCollection
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//NAME OF CLASS WE'RE COLLECTING
+	// NAME OF CLASS WE'RE COLLECTING
 	////////////////////////////////////////////////////////////////////////////
 	public function classname() {
 		return $this->classname;
@@ -89,13 +89,13 @@ class		pudlCollection
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//FORWARD METHOD CALL TO ALL OBJECTS WITHIN COLLECTION
+	// FORWARD METHOD CALL TO ALL OBJECTS WITHIN COLLECTION
 	////////////////////////////////////////////////////////////////////////////
 	public function __call($name, $arguments) {
 		if (empty($name)) return;
 
 
-		//ALLOW FORWARDING CALLS TO PUDLOBJECT METHEDS BY UNDERSCORE PREFIXING
+		// ALLOW FORWARDING CALLS TO PUDLOBJECT METHEDS BY UNDERSCORE PREFIXING
 		if ($name[0] === '_') {
 			$newname = substr($name, 1);
 			if (method_exists($this->classname, $newname)) {
@@ -104,8 +104,8 @@ class		pudlCollection
 		}
 
 
-		//ALLOW FORWARDING TO STATIC FUNCTION, ONLY CALLED ONCE PER COLLECTION
-		//INSTEAD OF ONCE PER OBJECT INSTANCE
+		// ALLOW FORWARDING TO STATIC FUNCTION, ONLY CALLED ONCE PER COLLECTION
+		// INSTEAD OF ONCE PER OBJECT INSTANCE
 		$method = new ReflectionMethod($this->classname, $name);
 		if ($method->isStatic()) {
 			return call_user_func_array(
@@ -115,7 +115,7 @@ class		pudlCollection
 		}
 
 
-		//FORWARD CALL TO ALL OBJECTS WITHIN COLLECTION
+		// FORWARD CALL TO ALL OBJECTS WITHIN COLLECTION
 		$return	= [];
 		$list	= $this->raw();
 
@@ -135,15 +135,19 @@ class		pudlCollection
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//CLOSURE STYLE PROCESSING
+	// CLOSURE STYLE PROCESSING
 	////////////////////////////////////////////////////////////////////////////
-	public function each($callback) {
+	public function each(callable $callback) {
 		$return	= [];
 		$list	= $this->raw();
 
 		foreach ($list as $key => &$item) {
 			if (!($item instanceof pudlOrm)) continue;
-			$return[$key] = call_user_func_array($callback, [&$item, $key]);
+
+			$return[$key] = call_user_func_array(
+				$callback,
+				[&$item, $key, $this]
+			);
 		} unset($item);
 
 		return $return;
@@ -153,7 +157,7 @@ class		pudlCollection
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PULL ALL INSTANCES OF A PARTICULAR COLUMN
+	// PULL ALL INSTANCES OF A PARTICULAR COLUMN
 	////////////////////////////////////////////////////////////////////////////
 	public function column($column) {
 		$return	= [];
@@ -172,8 +176,8 @@ class		pudlCollection
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//RETURNS THE INNER ITERATOR FOR THE CURRENT ENTRY.
-	//http://php.net/manual/en/outeriterator.getinneriterator.php
+	// RETURNS THE INNER ITERATOR FOR THE CURRENT ENTRY.
+	// http://php.net/manual/en/outeriterator.getinneriterator.php
 	////////////////////////////////////////////////////////////////////////////
 	public function getInnerIterator() {
 		return $this->current();
@@ -183,7 +187,7 @@ class		pudlCollection
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// LOCAL METHOD VARIABLES
+	//  LOCAL METHOD VARIABLES
 	////////////////////////////////////////////////////////////////////////////
 	protected $pudl;
 
@@ -191,7 +195,7 @@ class		pudlCollection
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PRIVATE MEMBER VARIABLES
+	// PRIVATE MEMBER VARIABLES
 	////////////////////////////////////////////////////////////////////////////
 	private $classname;
 	private $first;

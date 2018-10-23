@@ -27,7 +27,7 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//CONSTRUCTOR
+	// CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
 	public function __construct(&$data=NULL, $process=false) {
 		switch (true) {
@@ -54,7 +54,7 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//CLEARS ALL DATA WITHIN OBJECT - RESETTING BACK TO DEFAULTS
+	// CLEARS ALL DATA WITHIN OBJECT - RESETTING BACK TO DEFAULTS
 	////////////////////////////////////////////////////////////////////////////
 	public function free() {
 		$this->__array		= [];
@@ -66,7 +66,7 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//MANAGE THE GIVEN ARRAY
+	// MANAGE THE GIVEN ARRAY
 	////////////////////////////////////////////////////////////////////////////
 	public function govern(&$data) {
 		$this->free();
@@ -84,7 +84,7 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//CLEARS THE OBJECT'S ARRAY, AND THEN COPIES THE GIVEN ARRAY
+	// CLEARS THE OBJECT'S ARRAY, AND THEN COPIES THE GIVEN ARRAY
 	////////////////////////////////////////////////////////////////////////////
 	public function copy($data) {
 		return $this->free()->merge($data);
@@ -94,8 +94,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//MERGE THE GIVEN ARRAY VALUES INTO THIS OBJECT
-	//http://php.net/manual/en/function.array-merge.php
+	// MERGE THE GIVEN ARRAY VALUES INTO THIS OBJECT
+	// http://php.net/manual/en/function.array-merge.php
 	////////////////////////////////////////////////////////////////////////////
 	public function merge($array, $nulls=true) {
 		if ($array instanceof pudlObject) $array = $array->raw();
@@ -123,8 +123,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//MERGE THE GIVEN ARRAY VALUES INTO THIS OBJECT, RECUSIVELY
-	//http://php.net/manual/en/function.array-merge-recursive.php
+	// MERGE THE GIVEN ARRAY VALUES INTO THIS OBJECT, RECUSIVELY
+	// http://php.net/manual/en/function.array-merge-recursive.php
 	////////////////////////////////////////////////////////////////////////////
 	public function mergeRecursive($array) {
 		if ($array instanceof pudlObject) $array = $array->raw();
@@ -137,7 +137,7 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//MERGE THIS OBJECT INTO THE GIVEN ARRAY
+	// MERGE THIS OBJECT INTO THE GIVEN ARRAY
 	////////////////////////////////////////////////////////////////////////////
 	public function mergeInto(&$array, $nulls=true) {
 		if ($array instanceof pudlObject) {
@@ -169,8 +169,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//REPLACE THE GIVEN ARRAY VALUES INTO THIS OBJECT
-	//http://php.net/manual/en/function.array-replace.php
+	// REPLACE THE GIVEN ARRAY VALUES INTO THIS OBJECT
+	// http://php.net/manual/en/function.array-replace.php
 	////////////////////////////////////////////////////////////////////////////
 	public function replace($array) {
 		if ($array instanceof pudlObject) $array = $array->raw();
@@ -183,8 +183,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//REPLACE THE GIVEN ARRAY VALUES INTO THIS OBJECT, RECUSIVELY
-	//http://php.net/manual/en/function.array-replace-recursive.php
+	// REPLACE THE GIVEN ARRAY VALUES INTO THIS OBJECT, RECUSIVELY
+	// http://php.net/manual/en/function.array-replace-recursive.php
 	////////////////////////////////////////////////////////////////////////////
 	public function replaceRecursive($array) {
 		if ($array instanceof pudlObject) $array = $array->raw();
@@ -197,7 +197,7 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//COPY THE GIVEN ARRAY INTO THIS OBJECT, ONLY FOR KEYS THAT ARE MISSING
+	// COPY THE GIVEN ARRAY INTO THIS OBJECT, ONLY FOR KEYS THAT ARE MISSING
 	////////////////////////////////////////////////////////////////////////////
 	public function append($array) {
 		if (empty($array)  ||  !pudl_array($array)) return $this;
@@ -212,7 +212,7 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//COPIES THIS OBJECT INTO THE GIVEN ARRAY, ONLY FOR KEYS THAT ARE MISSING
+	// COPIES THIS OBJECT INTO THE GIVEN ARRAY, ONLY FOR KEYS THAT ARE MISSING
 	////////////////////////////////////////////////////////////////////////////
 	public function appendInto(&$array) {
 		if (empty($array)  ||  !pudl_array($array)) return $this;
@@ -227,7 +227,7 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//GET THE RAW ARRAY FOR THIS OBJECT
+	// GET THE RAW ARRAY FOR THIS OBJECT
 	////////////////////////////////////////////////////////////////////////////
 	public function &raw() {
 		return $this->__array;
@@ -237,8 +237,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//COUNT ALL ELEMENTS IN AN ARRAY, OR SOMETHING IN AN OBJECT
-	//http://php.net/manual/en/function.count.php
+	// COUNT ALL ELEMENTS IN AN ARRAY, OR SOMETHING IN AN OBJECT
+	// http://php.net/manual/en/function.count.php
 	////////////////////////////////////////////////////////////////////////////
 	public function count() {
 		return count($this->__array);
@@ -248,8 +248,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//JOIN ARRAY ELEMENTS WITH A STRING
-	//http://php.net/manual/en/function.implode.php
+	// JOIN ARRAY ELEMENTS WITH A STRING
+	// http://php.net/manual/en/function.implode.php
 	////////////////////////////////////////////////////////////////////////////
 	public function implode($glue=',') {
 		return implode($glue, $this->__array);
@@ -259,8 +259,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//CHECKS IF A VALUE EXISTS IN AN ARRAY
-	//http://php.net/manual/en/function.in-array.php
+	// CHECKS IF A VALUE EXISTS IN AN ARRAY
+	// http://php.net/manual/en/function.in-array.php
 	////////////////////////////////////////////////////////////////////////////
 	public function in($value, $strict=false) {
 		return in_array($value, $this->__array, $strict);
@@ -270,8 +270,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PUSH ONE OR MORE ELEMENTS ONTO THE END OF ARRAY
-	//http://php.net/manual/en/function.array-push.php
+	// PUSH ONE OR MORE ELEMENTS ONTO THE END OF ARRAY
+	// http://php.net/manual/en/function.array-push.php
 	////////////////////////////////////////////////////////////////////////////
 	public function push() {
 		$args = func_get_args();
@@ -284,8 +284,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//POP THE ELEMENT OFF THE END OF ARRAY
-	//http://php.net/manual/en/function.array-pop.php
+	// POP THE ELEMENT OFF THE END OF ARRAY
+	// http://php.net/manual/en/function.array-pop.php
 	////////////////////////////////////////////////////////////////////////////
 	public function pop() {
 		$args = func_get_args();
@@ -298,8 +298,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//POP ITEMS OUT OF THE END OF THIS OBJECT
-	//http://php.net/manual/en/function.array-shift.php
+	// POP ITEMS OUT OF THE END OF THIS OBJECT
+	// http://php.net/manual/en/function.array-shift.php
 	////////////////////////////////////////////////////////////////////////////
 	public function shift() {
 		$args = func_get_args();
@@ -312,8 +312,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PREPEND ONE OR MORE ELEMENTS TO THE BEGINNING OF AN ARRAY
-	//http://php.net/manual/en/function.array-unshift.php
+	// PREPEND ONE OR MORE ELEMENTS TO THE BEGINNING OF AN ARRAY
+	// http://php.net/manual/en/function.array-unshift.php
 	////////////////////////////////////////////////////////////////////////////
 	public function unshift() {
 		$args = func_get_args();
@@ -326,8 +326,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//EXCHANGES ALL KEYS WITH THEIR ASSOCIATED VALUES IN AN ARRAY
-	//http://php.net/manual/en/function.array-flip.php
+	// EXCHANGES ALL KEYS WITH THEIR ASSOCIATED VALUES IN AN ARRAY
+	// http://php.net/manual/en/function.array-flip.php
 	////////////////////////////////////////////////////////////////////////////
 	public function flip() {
 		$this->__array = array_flip($this->__array);
@@ -338,8 +338,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//RETURN AN ARRAY WITH ELEMENTS IN REVERSE ORDER
-	//http://php.net/manual/en/function.array-reverse.php
+	// RETURN AN ARRAY WITH ELEMENTS IN REVERSE ORDER
+	// http://php.net/manual/en/function.array-reverse.php
 	////////////////////////////////////////////////////////////////////////////
 	public function reverse($preserve_keys=true) {
 		$this->__array = array_reverse($this->__array, $preserve_keys);
@@ -350,8 +350,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//SORT AN ARRAY
-	//http://php.net/manual/en/function.sort.php
+	// SORT AN ARRAY
+	// http://php.net/manual/en/function.sort.php
 	////////////////////////////////////////////////////////////////////////////
 	public function sort($sort_flags=SORT_REGULAR) {
 		sort($this->__array, $sort_flags);
@@ -362,8 +362,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//SORT AN ARRAY IN REVERSE ORDER
-	//http://php.net/manual/en/function.rsort.php
+	// SORT AN ARRAY IN REVERSE ORDER
+	// http://php.net/manual/en/function.rsort.php
 	////////////////////////////////////////////////////////////////////////////
 	public function rsort($sort_flags=SORT_REGULAR) {
 		rsort($this->__array, $sort_flags);
@@ -374,8 +374,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//SORT AN ARRAY AND MAINTAIN INDEX ASSOCIATION
-	//http://php.net/manual/en/function.asort.php
+	// SORT AN ARRAY AND MAINTAIN INDEX ASSOCIATION
+	// http://php.net/manual/en/function.asort.php
 	////////////////////////////////////////////////////////////////////////////
 	public function asort($sort_flags=SORT_REGULAR) {
 		asort($this->__array, $sort_flags);
@@ -386,8 +386,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//SORT AN ARRAY IN REVERSE ORDER AND MAINTAIN INDEX ASSOCIATION
-	//http://php.net/manual/en/function.arsort.php
+	// SORT AN ARRAY IN REVERSE ORDER AND MAINTAIN INDEX ASSOCIATION
+	// http://php.net/manual/en/function.arsort.php
 	////////////////////////////////////////////////////////////////////////////
 	public function arsort($sort_flags=SORT_REGULAR) {
 		arsort($this->__array, $sort_flags);
@@ -398,8 +398,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//SORT AN ARRAY BY KEY
-	//http://php.net/manual/en/function.ksort.php
+	// SORT AN ARRAY BY KEY
+	// http://php.net/manual/en/function.ksort.php
 	////////////////////////////////////////////////////////////////////////////
 	public function ksort($sort_flags=SORT_REGULAR) {
 		ksort($this->__array, $sort_flags);
@@ -410,8 +410,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//SORT AN ARRAY BY KEY IN REVERSE ORDER
-	//http://php.net/manual/en/function.krsort.php
+	// SORT AN ARRAY BY KEY IN REVERSE ORDER
+	// http://php.net/manual/en/function.krsort.php
 	////////////////////////////////////////////////////////////////////////////
 	public function krsort($sort_flags=SORT_REGULAR) {
 		krsort($this->__array, $sort_flags);
@@ -422,8 +422,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//SHUFFLE AN ARRAY
-	//http://php.net/manual/en/function.shuffle.php
+	// SHUFFLE AN ARRAY
+	// http://php.net/manual/en/function.shuffle.php
 	////////////////////////////////////////////////////////////////////////////
 	public function shuffle() {
 		shuffle($this->__array);
@@ -434,8 +434,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//COMPUTES THE DIFFERENCE OF ARRAYS
-	//http://php.net/manual/en/function.array-diff.php
+	// COMPUTES THE DIFFERENCE OF ARRAYS
+	// http://php.net/manual/en/function.array-diff.php
 	////////////////////////////////////////////////////////////////////////////
 	public function diff() {
 		$args = func_get_args();
@@ -447,8 +447,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//COMPUTES THE DIFFERENCE OF ARRAYS WITH ADDITIONAL INDEX CHECK
-	//http://php.net/manual/en/function.array-diff-assoc.php
+	// COMPUTES THE DIFFERENCE OF ARRAYS WITH ADDITIONAL INDEX CHECK
+	// http://php.net/manual/en/function.array-diff-assoc.php
 	////////////////////////////////////////////////////////////////////////////
 	public function diff_assoc() {
 		$args = func_get_args();
@@ -460,8 +460,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//COMPUTES THE DIFFERENCE OF ARRAYS WITH ADDITIONAL INDEX CHECK RECURSIVELY
-	//http://php.net/manual/en/function.array-diff-assoc.php#111675
+	// COMPUTES THE DIFFERENCE OF ARRAYS WITH ADDITIONAL INDEX CHECK RECURSIVELY
+	// http://php.net/manual/en/function.array-diff-assoc.php#111675
 	////////////////////////////////////////////////////////////////////////////
 	public function diff_assoc_recursive() {
 		$args = func_get_args();
@@ -473,8 +473,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//COMPUTES THE DIFFERENCE OF ARRAYS USING KEYS FOR COMPARISON
-	//http://php.net/manual/en/function.array-diff-key.php
+	// COMPUTES THE DIFFERENCE OF ARRAYS USING KEYS FOR COMPARISON
+	// http://php.net/manual/en/function.array-diff-key.php
 	////////////////////////////////////////////////////////////////////////////
 	public function diff_key() {
 		$args = func_get_args();
@@ -486,8 +486,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//COMPUTES THE INTERSECTION OF ARRAYS
-	//http://php.net/manual/en/function.array-intersect.php
+	// COMPUTES THE INTERSECTION OF ARRAYS
+	// http://php.net/manual/en/function.array-intersect.php
 	////////////////////////////////////////////////////////////////////////////
 	public function intersect() {
 		$args = func_get_args();
@@ -499,8 +499,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//COMPUTES THE INTERSECTION OF ARRAYS WITH ADDITIONAL INDEX CHECK
-	//http://php.net/manual/en/function.array-intersect-assoc.php
+	// COMPUTES THE INTERSECTION OF ARRAYS WITH ADDITIONAL INDEX CHECK
+	// http://php.net/manual/en/function.array-intersect-assoc.php
 	////////////////////////////////////////////////////////////////////////////
 	public function intersect_assoc() {
 		$args = func_get_args();
@@ -512,8 +512,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//COMPUTES THE INTERSECTION OF ARRAYS USING KEYS FOR COMPARISON
-	//http://php.net/manual/en/function.array-intersect-key.php
+	// COMPUTES THE INTERSECTION OF ARRAYS USING KEYS FOR COMPARISON
+	// http://php.net/manual/en/function.array-intersect-key.php
 	////////////////////////////////////////////////////////////////////////////
 	public function intersect_key() {
 		$args = func_get_args();
@@ -525,8 +525,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//RETURN ALL THE KEYS OR A SUBSET OF THE KEYS OF AN ARRAY
-	//http://php.net/manual/en/function.array-keys.php
+	// RETURN ALL THE KEYS OR A SUBSET OF THE KEYS OF AN ARRAY
+	// http://php.net/manual/en/function.array-keys.php
 	////////////////////////////////////////////////////////////////////////////
 	public function keys($search_value=null, $strict=false) {
 		return array_keys($this->__array, $search_value, $strict);
@@ -536,8 +536,9 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//SEARCHES THE ARRAY FOR A GIVEN VALUE AND RETURNS THE FIRST CORRESPONDING KEY
-	//http://php.net/manual/en/function.array-search.php
+	// SEARCHES THE ARRAY FOR A GIVEN VALUE
+	// AND RETURNS THE FIRST CORRESPONDING KEY
+	// http://php.net/manual/en/function.array-search.php
 	////////////////////////////////////////////////////////////////////////////
 	public function search($needle, $strict=false) {
 		return array_search($needle, $this->__array, $strict);
@@ -547,8 +548,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PICK ONE OR MORE RANDOM KEYS OUT OF AN ARRAY
-	//http://php.net/manual/en/function.array-rand.php
+	// PICK ONE OR MORE RANDOM KEYS OUT OF AN ARRAY
+	// http://php.net/manual/en/function.array-rand.php
 	////////////////////////////////////////////////////////////////////////////
 	public function random($num=-1) {
 		return array_rand($this->__array, $num);
@@ -558,10 +559,10 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//APPLIES THE CALLBACK TO THE ELEMENTS OF THE GIVEN ARRAYS
-	//http://php.net/manual/en/function.array-map.php
+	// APPLIES THE CALLBACK TO THE ELEMENTS OF THE GIVEN ARRAYS
+	// http://php.net/manual/en/function.array-map.php
 	////////////////////////////////////////////////////////////////////////////
-	public function map($callback) {
+	public function map(callable $callback) {
 		return array_map($callback, $this->__array);
 	}
 
@@ -569,8 +570,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//EXTRACT A SLICE OF THE ARRAY
-	//http://php.net/manual/en/function.array-slice.php
+	// EXTRACT A SLICE OF THE ARRAY
+	// http://php.net/manual/en/function.array-slice.php
 	////////////////////////////////////////////////////////////////////////////
 	public function slice($offset, $length=NULL, $preserve_keys=false) {
 		return array_slice($this->__array, $offset, $length, $preserve_keys);
@@ -580,8 +581,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//REMOVE A PORTION OF THE ARRAY AND REPLACE IT WITH SOMETHING ELSE
-	//http://php.net/manual/en/function.array-splice.php
+	// REMOVE A PORTION OF THE ARRAY AND REPLACE IT WITH SOMETHING ELSE
+	// http://php.net/manual/en/function.array-splice.php
 	////////////////////////////////////////////////////////////////////////////
 	public function splice($offset, $length=NULL, $replacement=[]) {
 		if (is_null($length)) $length = count($this->__array);
@@ -592,7 +593,7 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//INJECT AN ITEM INTO THE MIDDLE OF THE ARRAY
+	// INJECT AN ITEM INTO THE MIDDLE OF THE ARRAY
 	////////////////////////////////////////////////////////////////////////////
 	public function inject($offset, $items) {
 		return array_splice($this->__array, $offset, 0, $items);
@@ -602,8 +603,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//RETURN ALL THE VALUES OF AN ARRAY
-	//http://php.net/manual/en/function.array-values.php
+	// RETURN ALL THE VALUES OF AN ARRAY
+	// http://php.net/manual/en/function.array-values.php
 	////////////////////////////////////////////////////////////////////////////
 	public function values() {
 		return array_values($this->__array);
@@ -613,8 +614,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//STRIP WHITESPACE FROM THE BEGINNING AND END OF A STRING
-	//http://php.net/manual/en/function.trim.php
+	// STRIP WHITESPACE FROM THE BEGINNING AND END OF A STRING
+	// http://php.net/manual/en/function.trim.php
 	////////////////////////////////////////////////////////////////////////////
 	public function trim($mask=" \t\n\r\0\x0B") {
 		foreach ($this->__array as &$item) trim($item, $mask);
@@ -625,8 +626,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//STRIP WHITESPACE FROM THE BEGINNING OF A STRING
-	//http://php.net/manual/en/function.ltrim.php
+	// STRIP WHITESPACE FROM THE BEGINNING OF A STRING
+	// http://php.net/manual/en/function.ltrim.php
 	////////////////////////////////////////////////////////////////////////////
 	public function ltrim($mask=" \t\n\r\0\x0B") {
 		foreach ($this->__array as &$item) ltrim($item, $mask);
@@ -637,8 +638,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//STRIP WHITESPACE FROM THE END OF A STRING
-	//http://php.net/manual/en/function.rtrim.php
+	// STRIP WHITESPACE FROM THE END OF A STRING
+	// http://php.net/manual/en/function.rtrim.php
 	////////////////////////////////////////////////////////////////////////////
 	public function rtrim($mask=" \t\n\r\0\x0B") {
 		foreach ($this->__array as &$item) rtrim($item, $mask);
@@ -649,8 +650,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//CALCULATE THE SUM OF VALUES IN AN ARRAY
-	//http://php.net/manual/en/function.array-sum.php
+	// CALCULATE THE SUM OF VALUES IN AN ARRAY
+	// http://php.net/manual/en/function.array-sum.php
 	////////////////////////////////////////////////////////////////////////////
 	public function sum() {
 		return array_sum($this->__array);
@@ -660,8 +661,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//FIND LOWEST VALUE
-	//http://php.net/manual/en/function.min.php
+	// FIND LOWEST VALUE
+	// http://php.net/manual/en/function.min.php
 	////////////////////////////////////////////////////////////////////////////
 	public function min() {
 		return min($this->__array);
@@ -671,8 +672,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//FIND HIGHEST VALUE
-	//http://php.net/manual/en/function.max.php
+	// FIND HIGHEST VALUE
+	// http://php.net/manual/en/function.max.php
 	////////////////////////////////////////////////////////////////////////////
 	public function max() {
 		return max($this->__array);
@@ -682,8 +683,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//MAGIC METHOD - RUN WHEN WRITING DATA TO INACCESSIBLE PROPERTIES
-	//http://php.net/manual/en/language.oop5.magic.php
+	// MAGIC METHOD - RUN WHEN WRITING DATA TO INACCESSIBLE PROPERTIES
+	// http://php.net/manual/en/language.oop5.magic.php
 	////////////////////////////////////////////////////////////////////////////
 	public function __set($key, $value) {
 		$this->__array[$key]		= $value;
@@ -692,9 +693,9 @@ class	pudlObject
 
 
 
-	////////////////////////////////////////////////////////////////////////
-	//ARRAY ACCESS - ASSIGN A VALUE TO THE SPECIFIED OFFSET
-	//http://php.net/manual/en/arrayaccess.offsetset.php
+	////////////////////////////////////////////////////////////////////////////
+	// ARRAY ACCESS - ASSIGN A VALUE TO THE SPECIFIED OFFSET
+	// http://php.net/manual/en/arrayaccess.offsetset.php
 	////////////////////////////////////////////////////////////////////////////
 	public function offsetSet($key, $value) {
 		if (is_null($key)) {
@@ -708,8 +709,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//MAGIC METHOD - UTILIZED FOR READING DATA FROM INACCESSIBLE PROPERTIES
-	//http://php.net/manual/en/language.oop5.magic.php
+	// MAGIC METHOD - UTILIZED FOR READING DATA FROM INACCESSIBLE PROPERTIES
+	// http://php.net/manual/en/language.oop5.magic.php
 	////////////////////////////////////////////////////////////////////////////
 	public function &__get($key) {
 		return $this->__array[$key];
@@ -719,8 +720,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//ARRAY ACCESS - OFFSET TO RETRIEVE
-	//http://php.net/manual/en/arrayaccess.offsetget.php
+	// ARRAY ACCESS - OFFSET TO RETRIEVE
+	// http://php.net/manual/en/arrayaccess.offsetget.php
 	////////////////////////////////////////////////////////////////////////////
 	public function &offsetGet($key) {
 		return $this->__array[$key];
@@ -730,8 +731,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//MAGIC METHOD - CALLING ISSET() OR EMPTY() ON INACCESSIBLE PROPERTIES
-	//http://php.net/manual/en/language.oop5.magic.php
+	// MAGIC METHOD - CALLING ISSET() OR EMPTY() ON INACCESSIBLE PROPERTIES
+	// http://php.net/manual/en/language.oop5.magic.php
 	////////////////////////////////////////////////////////////////////////////
 	public function __isset($key) {
 		return isset($this->__array[$key]);
@@ -741,8 +742,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//ARRAY ACCESS - WHETHER AN OFFSET EXISTS
-	//http://php.net/manual/en/arrayaccess.offsetexists.php
+	// ARRAY ACCESS - WHETHER AN OFFSET EXISTS
+	// http://php.net/manual/en/arrayaccess.offsetexists.php
 	////////////////////////////////////////////////////////////////////////////
 	public function offsetExists($key, $isset=true) {
 		return $isset
@@ -754,8 +755,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//MAGIC METHOD - INVOKED WHEN UNSET() IS USED ON INACCESSIBLE PROPERTIES
-	//http://php.net/manual/en/language.oop5.magic.php
+	// MAGIC METHOD - INVOKED WHEN UNSET() IS USED ON INACCESSIBLE PROPERTIES
+	// http://php.net/manual/en/language.oop5.magic.php
 	////////////////////////////////////////////////////////////////////////////
 	public function __unset($key) {
 		unset($this->__array[$key]);
@@ -765,8 +766,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//ARRAY ACCESS - UNSET AN OFFSET
-	//http://php.net/manual/en/arrayaccess.offsetunset.php
+	// ARRAY ACCESS - UNSET AN OFFSET
+	// http://php.net/manual/en/arrayaccess.offsetunset.php
 	////////////////////////////////////////////////////////////////////////////
 	public function offsetUnset($key) {
 		unset($this->__array[$key]);
@@ -776,8 +777,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//SEEKABLE ITERATOR - MOVE THE ARRAY POINTER TO THE GIVEN ROW NUMBER
-	//http://php.net/manual/en/seekableiterator.seek.php
+	// SEEKABLE ITERATOR - MOVE THE ARRAY POINTER TO THE GIVEN ROW NUMBER
+	// http://php.net/manual/en/seekableiterator.seek.php
 	////////////////////////////////////////////////////////////////////////////
 	public function seek($row) {
 		$row = (int) $row;
@@ -789,8 +790,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//ITERATOR - REWIND THE ITERATOR TO THE FIRST ELEMENT
-	//http://php.net/manual/en/iterator.rewind.php
+	// ITERATOR - REWIND THE ITERATOR TO THE FIRST ELEMENT
+	// http://php.net/manual/en/iterator.rewind.php
 	////////////////////////////////////////////////////////////////////////////
 	public function rewind() {
 		reset($this->__array);
@@ -800,8 +801,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//ITERATOR - RETURN THE CURRENT ELEMENT
-	//http://php.net/manual/en/iterator.current.php
+	// ITERATOR - RETURN THE CURRENT ELEMENT
+	// http://php.net/manual/en/iterator.current.php
 	////////////////////////////////////////////////////////////////////////////
 	public function current() {
 		return current($this->__array);
@@ -811,8 +812,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//ITERATOR - RETURN THE KEY OF THE CURRENT ELEMENT
-	//http://php.net/manual/en/iterator.key.php
+	// ITERATOR - RETURN THE KEY OF THE CURRENT ELEMENT
+	// http://php.net/manual/en/iterator.key.php
 	////////////////////////////////////////////////////////////////////////////
 	public function key() {
 		return key($this->__array);
@@ -822,8 +823,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//ITERATOR - MOVE FORWARD TO NEXT ELEMENT
-	//http://php.net/manual/en/iterator.next.php
+	// ITERATOR - MOVE FORWARD TO NEXT ELEMENT
+	// http://php.net/manual/en/iterator.next.php
 	////////////////////////////////////////////////////////////////////////////
 	public function next() {
 		return next($this->__array);
@@ -833,8 +834,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//ITERATOR - CHECKS IF CURRENT POSITION IS VALID
-	//http://php.net/manual/en/iterator.valid.php
+	// ITERATOR - CHECKS IF CURRENT POSITION IS VALID
+	// http://php.net/manual/en/iterator.valid.php
 	////////////////////////////////////////////////////////////////////////////
 	public function valid() {
 		$key = key($this->__array);
@@ -845,8 +846,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//RETURNS JSON SERIALIZABLE DATA
-	//http://php.net/manual/en/jsonserializable.jsonserialize.php
+	// RETURNS JSON SERIALIZABLE DATA
+	// http://php.net/manual/en/jsonserializable.jsonserialize.php
 	////////////////////////////////////////////////////////////////////////////
 	public function jsonSerialize() {
 		return $this->__array;
@@ -856,8 +857,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//RETURNS THE JSON REPRESENTATION OF THIS OBJECT
-	//http://php.net/manual/en/function.json-encode.php
+	// RETURNS THE JSON REPRESENTATION OF THIS OBJECT
+	// http://php.net/manual/en/function.json-encode.php
 	////////////////////////////////////////////////////////////////////////////
 	public function json() {
 		return pudl::jsonEncode($this);
@@ -867,7 +868,7 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//GET AN ARRAY FROM THIS OBJECT OF THE GIVEN KEYS ONLY
+	// GET AN ARRAY FROM THIS OBJECT OF THE GIVEN KEYS ONLY
 	////////////////////////////////////////////////////////////////////////////
 	public function extract($keys) {
 		$return = [];
@@ -887,7 +888,7 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//GET AN ARRAY FROM THIS OBJECT OF ALL KEYS, EXCLUDING ONES LISTED IN $KEYS
+	// GET AN ARRAY FROM THIS OBJECT OF ALL KEYS, EXCLUDING ONES LISTED IN $KEYS
 	////////////////////////////////////////////////////////////////////////////
 	public function exclude($keys) {
 		$return = [];
@@ -906,7 +907,7 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//COPY SOURCE ARRAY INTO OBJECT, BUT ONLY FOR A GIVEN SET OF KEYS
+	// COPY SOURCE ARRAY INTO OBJECT, BUT ONLY FOR A GIVEN SET OF KEYS
 	////////////////////////////////////////////////////////////////////////////
 	public function extend($source, $keys) {
 		if ($source instanceof pudlObject) $source = $source->raw();
@@ -929,13 +930,16 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//RUN A CALLBACK FUNCTION FOR EVERY ITEM
+	// RUN A CALLBACK FUNCTION FOR EVERY ITEM
 	////////////////////////////////////////////////////////////////////////////
-	public function each($callback) {
+	public function each(callable $callback) {
 		$return	= [];
 
 		foreach ($this->__array as $key => &$item) {
-			$return[$key] = call_user_func_array($callback, [&$item, $key]);
+			$return[$key] = call_user_func_array(
+				$callback,
+				[&$item, $key, $this]
+			);
 		} unset($item);
 
 		return $return;
@@ -945,9 +949,9 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//TRUE		CHECK TO SEE IF THE KEY EXISTS
-	//FALSE		CHECK TO SEE IF THE KEY DOESN'T EXIST
-	//OTHER		CHECK TO SEE IF THE KEY'S VALUE === GIVEN VALUE
+	// TRUE		CHECK TO SEE IF THE KEY EXISTS
+	// FALSE		CHECK TO SEE IF THE KEY DOESN'T EXIST
+	// OTHER		CHECK TO SEE IF THE KEY'S VALUE === GIVEN VALUE
 	////////////////////////////////////////////////////////////////////////////
 	public function has($key, $value=true) {
 		if (pudl_array($value)) {
@@ -975,8 +979,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//Split an array into chunks
-	//http://php.net/manual/en/function.array-chunk.php
+	// Split an array into chunks
+	// http://php.net/manual/en/function.array-chunk.php
 	////////////////////////////////////////////////////////////////////////////
 	public function chunk($size, $preserve_keys=false) {
 		return array_chunk($this->__array, $size, $preserve_keys);
@@ -986,8 +990,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PARTITION THE ARRAY INTO MULTIPE EQUAL SIZED CHUNKS
-	//http://php.net/manual/en/function.array-chunk.php#75022
+	// PARTITION THE ARRAY INTO MULTIPE EQUAL SIZED CHUNKS
+	// http://php.net/manual/en/function.array-chunk.php#75022
 	////////////////////////////////////////////////////////////////////////////
 	public function partition($columns) {
 		$columns = (int) $columns;
@@ -1012,7 +1016,7 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//pudlData - GET TOTAL NUMBER OF FIELDS FROM FIRST OBJECT IN LIST
+	// pudlData - GET TOTAL NUMBER OF FIELDS FROM FIRST OBJECT IN LIST
 	////////////////////////////////////////////////////////////////////////////
 	public function fields() {
 		if (empty($this->__array[0]))		return 0;
@@ -1024,8 +1028,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//pudlData - GET FIELD NAME FROM FIRST OBJECT IN LIST
-	//FORMAT MIRRORS: http://php.net/manual/en/mysqli-result.fetch-field.php
+	// pudlData - GET FIELD NAME FROM FIRST OBJECT IN LIST
+	// FORMAT MIRRORS: http://php.net/manual/en/mysqli-result.fetch-field.php
 	////////////////////////////////////////////////////////////////////////////
 	public function getField($column) {
 		$column	= (int) $column;
@@ -1060,7 +1064,7 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//pudlData - GET INFORMATION ON EVERY FIELD
+	// pudlData - GET INFORMATION ON EVERY FIELD
 	////////////////////////////////////////////////////////////////////////////
 	public function listFields() {
 		$fields	= [];
@@ -1077,7 +1081,7 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//pudlData - GET THE CURRENT ROW, THEN ADVANCE THE INTERNAL ARRAY POINTER
+	// pudlData - GET THE CURRENT ROW, THEN ADVANCE THE INTERNAL ARRAY POINTER
 	////////////////////////////////////////////////////////////////////////////
 	public function row() {
 		$row = current($this->__array);
@@ -1092,10 +1096,10 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//TRUE:		TAKE A NEW SNAPSHOT AND GET IT
-	//FALSE:	GET THE CURRENT SNAPSHOT
-	//STRING:	GET ITEM FROM CURRENT SNAPSHOT
-	//INT:		GET INDEX FROM CURRENT SNAPSHOT
+	// TRUE:		TAKE A NEW SNAPSHOT AND GET IT
+	// FALSE:	GET THE CURRENT SNAPSHOT
+	// STRING:	GET ITEM FROM CURRENT SNAPSHOT
+	// INT:		GET INDEX FROM CURRENT SNAPSHOT
 	/** @suppress PhanTypeArraySuspiciousNullable */
 	////////////////////////////////////////////////////////////////////////////
 	public function snapshot($snapshot=true) {
@@ -1120,7 +1124,7 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// GET A NEW INSTANCE OF THIS OBJECT WITH VALUES FROM THE CURRENT SNAPSHOT
+	//  GET A NEW INSTANCE OF THIS OBJECT WITH VALUES FROM THE CURRENT SNAPSHOT
 	////////////////////////////////////////////////////////////////////////////
 	protected function _snapclone($snapshot) {
 		return new static($snapshot);
@@ -1130,7 +1134,7 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//COMPARE CURRENT DATA WITH SNAPSHOT DATA, RETURNING AN ARRAY OF CHANGES
+	// COMPARE CURRENT DATA WITH SNAPSHOT DATA, RETURNING AN ARRAY OF CHANGES
 	////////////////////////////////////////////////////////////////////////////
 	public function compareData() {
 		if (empty($this->__snapshot)) return [];
@@ -1141,7 +1145,7 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//COMPARE SNAPSHOT DATA WITH CURRENT DATA, RETURNING AN ARRAY OF CHANGES
+	// COMPARE SNAPSHOT DATA WITH CURRENT DATA, RETURNING AN ARRAY OF CHANGES
 	////////////////////////////////////////////////////////////////////////////
 	public function compareSnap() {
 		if (empty($this->__snapshot)) return [];
@@ -1152,8 +1156,8 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//MAGIC METHOD - CALLED BY VAR_DUMP() WHEN DUMPING AN OBJECT
-	//http://php.net/manual/en/language.oop5.magic.php
+	// MAGIC METHOD - CALLED BY VAR_DUMP() WHEN DUMPING AN OBJECT
+	// http://php.net/manual/en/language.oop5.magic.php
 	////////////////////////////////////////////////////////////////////////////
 	public function __debugInfo() {
 		return $this->__array;
@@ -1163,7 +1167,7 @@ class	pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//PRIVATE MEMBER VARIABLES
+	// PRIVATE MEMBER VARIABLES
 	////////////////////////////////////////////////////////////////////////////
 	/** @var array */	private $__array	= [];
 	/** @var ?array */	private $__snapshot	= NULL;
