@@ -8,12 +8,20 @@
 trait pudlUnion {
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// CHECK TO SEE IF WE'RE CURRENTLY IN THE MIDDLE OF A UNION GENERATOR
+	////////////////////////////////////////////////////////////////////////////
 	public function inUnion() {
 		return is_array($this->union);
 	}
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// START THE UNION GENERATOR
+	////////////////////////////////////////////////////////////////////////////
 	public function unionStart() {
 		if ($this->inUnion()) return false;
 		$this->union = [];
@@ -22,9 +30,11 @@ trait pudlUnion {
 
 
 
-	public function unionEnd($order=false, $limit=false, $offset=false, $type='') {
-		if (!$this->inUnion()) return false;
 
+	////////////////////////////////////////////////////////////////////////////
+	// END THE UNION GENERATOR AND EXECUTE IT
+	////////////////////////////////////////////////////////////////////////////
+	public function unionEnd($order=false, $limit=false, $offset=false, $type='') {
 		$query =	$this->_union($type) .
 					$this->_order($order) .
 					$this->_limit($limit, $offset);
@@ -36,8 +46,31 @@ trait pudlUnion {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// END THE UNION "ALL" GENERATOR AND EXECUTE IT
+	////////////////////////////////////////////////////////////////////////////
+	public function unionAll($order=false, $limit=false, $offset=false) {
+		return $this->unionEnd($order, $limit, $offset, 'ALL');
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// END THE UNION "DISTINCT" GENERATOR AND EXECUTE IT
+	////////////////////////////////////////////////////////////////////////////
+	public function unionDistinct($order=false, $limit=false, $offset=false) {
+		return $this->unionEnd($order, $limit, $offset, 'DISTINCT');
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// END THE UNION "GROUP BY" GENERATOR AND EXECUTE IT
+	////////////////////////////////////////////////////////////////////////////
 	public function unionGroup($group=false, $order=false, $limit=false, $offset=false, $type='') {
-		if (!$this->inUnion()) return false;
 
 		$query =	'SELECT ' .
 					$this->_cache() .
@@ -57,14 +90,25 @@ trait pudlUnion {
 
 
 
+	////////////////////////////////////////////////////////////////////////////
+	// GENERATE THE UNION SQL QUERY
+	////////////////////////////////////////////////////////////////////////////
 	protected function _union($type='') {
 		if ($this->union === NULL) {
-			throw new pudlMethodException($this, 'Invalid call to _union()');
+			throw new pudlMethodException($this,
+				'Invalid call to ' . __METHOD__
+			);
 		}
+
 		$type = strtoupper($type);
+
 		if ($type !== 'ALL'  &&  $type !== 'DISTINCT') $type = '';
-		return '(' . implode(") UNION $type (", $this->union) . ')';
+
+		$union = ') UNION ' . (empty($type) ? '(' : ($type.' ('));
+
+		return '(' . implode($union, $this->union) . ')';
 	}
+
 
 
 
