@@ -14,6 +14,7 @@ require_once(is_owner(__DIR__.'/pudlInclude.inc.php'));
 
 
 abstract	class	pudl {
+			use		pudlCte;
 			use		pudlAuth;
 			use		pudlJson;
 			use		pudlAlias;
@@ -116,6 +117,12 @@ abstract	class	pudl {
 
 		//PERFORMANCE PROFILING DATA
 		if (!empty($this->bench)) $microtime = microtime(true);
+
+
+		//PREPEND CTE
+		if ($this->isCte()) {
+			$query = $this->_cte($query);
+		}
 
 
 		//STORE THE QUERY STRING LOCALLY
@@ -525,6 +532,7 @@ abstract	class	pudl {
 
 
 
+
 	////////////////////////////////////////////////////////////////////////////
 	// GET THE LOCAL PATH OF THE PUDL LIBRARY
 	////////////////////////////////////////////////////////////////////////////
@@ -538,32 +546,14 @@ abstract	class	pudl {
 	////////////////////////////////////////////////////////////////////////////
 	// MEMBER VARIABLES
 	////////////////////////////////////////////////////////////////////////////
-
-	/** @var bool */
-	private			$log			= false;
-
-	/** @var bool */
-	private			$bench			= false;
-
-	/** @var string|false */
-	private			$query			= false;
-
-	/** @var int */
-	private			$time			= 0;
-
-	/** @var float */
-	private			$microtime		= 0.0;
-
-	/** @var array */
-	private			$listcache		= [];
-
-	/** @var resource|object|null */
-	protected		$connection		= NULL;
-
-	/** @var array */
-	protected		$string			= [];
-
-	/** @var string */
-	public static	$version		= 'PUDL 2.9.0';
+	/** @var bool */			private			$log			= false;
+	/** @var bool */			private			$bench			= false;
+	/** @var ?string */			private			$query			= NULL;
+	/** @var int */				private			$time			= 0;
+	/** @var float */			private			$microtime		= 0.0;
+	/** @var array */			private			$listcache		= [];
+	/** @var mixed */			protected		$connection		= NULL;
+	/** @var array */			protected		$string			= [];
+	/** @var string */			public static	$version		= 'PUDL 2.9.0';
 
 }

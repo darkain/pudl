@@ -30,6 +30,7 @@ require_once(is_owner(__DIR__.'/traits/pudlCacheResult.php'));
 ////////////////////////////////////////////////////////////////////////////////
 //TRAITS
 ////////////////////////////////////////////////////////////////////////////////
+require_once(is_owner(__DIR__.'/traits/pudlCte.php'));
 require_once(is_owner(__DIR__.'/traits/pudlAuth.php'));
 require_once(is_owner(__DIR__.'/traits/pudlJson.php'));
 require_once(is_owner(__DIR__.'/traits/pudlAlias.php'));
