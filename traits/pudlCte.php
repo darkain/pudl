@@ -35,18 +35,21 @@ trait pudlCte {
 	////////////////////////////////////////////////////////////////////////////
 	// INTERNAL SQL QUERY BUILDER FOR CTE, AND RESET CTE STATE
 	////////////////////////////////////////////////////////////////////////////
-	private function _cte($query) {
-		$query	=	'WITH '
-				.	$this->_table($this->cte_alias)
-				.	' AS '
-				.	$this->cte_query
-				.	' '
-				.	$query;
+	private function _cte($query=NULL) {
+		$return		=	'WITH '
+					.	$this->_table($this->cte_alias)
+					.	' AS '
+					.	$this->cte_query
+					.	' ';
+
+		if ($query !== NULL) {
+			$return	.=	$query;
+		}
 
 		$this->cte_alias = NULL;
 		$this->cte_query = NULL;
 
-		return $query;
+		return $return;
 	}
 
 

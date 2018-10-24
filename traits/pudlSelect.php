@@ -166,7 +166,16 @@ trait pudlSelect {
 		$subquery = (isset($params['group'])  &&  isset($params['order']));
 
 
+		//	EXPLAIN
 		if (!empty($params['explain']))		$query .= 'EXPLAIN ';
+
+
+		//	CTE
+		if (!empty($params['cte'])  &&  pudl_array($params['cte'])) {
+			$this->cte_query = reset($params['cte']);
+			$this->cte_alias = key($params['cte']);
+			$query .= $this->_cte();
+		}
 
 
 		//	SELECT
