@@ -21,7 +21,7 @@ try {
 
 
 $mtime = microtime(true) - $mtime;
-$mtest = ($mtime >= 0.9)  &&  ($mtime <= 1.1);
+$mtest = ($mtime >= 0.5)  &&  ($mtime <= 2);
 
 
 pudlTest($db, $mtest);
