@@ -43,7 +43,7 @@ function pudlTest(pudl $pudl, $expected) {
 	echo "EXPECTED:\n";
 	echo (is_bool($expected) ? '[TRUE]' : $expected) . "\n\n";
 	echo "QUERY:\n";
-	echo $pudl->query() . "\n\n";
+	echo (is_bool($expected) ? '[FALSE]' : $pudl->query()) . "\n\n";
 	exit(1);
 }
 
