@@ -58,7 +58,7 @@ require_once(__DIR__.'/../null/pudlArrayResult.php');
 require_once(__DIR__.'/../null/pudlFakeResult.php');
 require_once(__DIR__.'/../pdo/pudlPdo.php');
 require_once(__DIR__.'/../pgsql/pudlPgSql.php');
-require_once(__DIR__.'/../sql/pudlOdbc.php');
+require_once(__DIR__.'/../odbc/pudlOdbc.php');
 require_once(__DIR__.'/../sql/pudlShell.php');
 require_once(__DIR__.'/../sql/pudlWeb.php');
 require_once(__DIR__.'/../sqlite/pudlSqlite.php');

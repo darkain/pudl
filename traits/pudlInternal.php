@@ -66,7 +66,7 @@ trait pudlInternal {
 
 			// ODBC_ FUNCTIONS
 			case 'ODBC':
-				return '/sql/pudlOdbc.php';
+				return '/odbc/pudlOdbc.php';
 			break;
 
 

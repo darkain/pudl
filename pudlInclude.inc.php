@@ -21,8 +21,8 @@ require_once(is_owner(__DIR__.'/clone/pudlClone.php'));
 //INTERNAL USAGE RESULT SETS
 ////////////////////////////////////////////////////////////////////////////////
 require_once(is_owner(__DIR__.'/pudlResult.php'));
-require_once(is_owner(__DIR__.'/traits/pudlStringResult.php'));
-require_once(is_owner(__DIR__.'/traits/pudlCacheResult.php'));
+require_once(is_owner(__DIR__.'/sql/pudlStringResult.php'));
+require_once(is_owner(__DIR__.'/sql/pudlCacheResult.php'));
 
 
 
