@@ -23,5 +23,6 @@ try {
 $mtime = microtime(true) - $mtime;
 $mtest = ($mtime >= 0.5)  &&  ($mtime <= 2);
 
+echo 'Timeout time: ' . $mtime . PHP_EOL;
 
 pudlTest($db, $mtest);
