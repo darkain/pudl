@@ -126,7 +126,7 @@ abstract class	pudlOrm
 			}
 		}
 
-		if (!is_numeric($id)  &&  !is_string($id)) {
+		if (!is_numeric($id)  &&  !is_string($id)  &&  !is_null($id)) {
 			throw new pudlValueException($pudl,
 				'Invalid ID for ' . __METHOD__ .
 				': ' . gettype($id) .
