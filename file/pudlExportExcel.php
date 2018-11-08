@@ -79,14 +79,25 @@ function pudlExportExcel(pudlData $result, $filename, $headers=false) {
 				$cell = chr(64 + (int)floor($key / 26)) . chr(65 + ($key % 26)) . $x;
 			}
 
+			if (is_numeric($val)) $val = (string) $val;
+
 			if ($val === NULL) {
 				//OUTPUT NOTHING
+
+			} else if (!is_string($val)) {
+				throw new pudlTypeException(
+					'Invalid data type for cell: ' . gettype($val)
+				);
+
 			} else if ($val==='0'  ||  $val==='0.0') {
 				echo '<c r="' . $cell . '"><v>' . $val . '</v></c>';
+
 			} else if (preg_match('/^[1-9][0-9]{0,12}\.?[0-9]{0,10}$/', $val)) {
 				echo '<c r="' . $cell . '"><v>' . $val . '</v></c>';
+
 			} else if (preg_match('/^[0-9]\.[0-9]{0,10}$/', $val)) {
 				echo '<c r="' . $cell . '"><v>' . $val . '</v></c>';
+
 			} else if (!empty($val)) {
 				$total++;
 				$index = array_search($val, $strings, true);
