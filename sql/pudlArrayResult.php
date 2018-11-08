@@ -43,10 +43,14 @@ class pudlArrayResult extends pudlResult {
 
 	public function listFields() {
 		if (!is_array($this->array)) return false;
-		$keys = array_keys(current($this->array));
+
+		$array	= (array) current($this->array);
+		$keys	= array_keys($array);
+
 		if (!is_array($keys)) return false;
 
 		$out = [];
+
 		foreach ($keys as $item) {
 			$out[] = (object)['name' => $item];
 		}
