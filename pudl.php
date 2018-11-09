@@ -105,8 +105,11 @@ abstract	class	pudl {
 
 
 		//SELEX
-		if (pudl_array($query)) {
-			return $this->selex($query);
+		if (pudl_array($query)  ||  func_num_args() > 1) {
+			return call_user_func_array(
+				[$this, 'selex'],
+				func_get_args()
+			);
 		}
 
 

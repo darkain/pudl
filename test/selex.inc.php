@@ -13,6 +13,66 @@ pudlTest($db, 'SELECT `one`, `two` FROM `table1` AS `t1`, `table2` AS `t2` WHERE
 
 
 $db->string();
+$db([
+	'column'	=> ['two'],
+	'table'		=> ['t2'=>'table2'],
+	'clause'	=> ['t1.key=t2.id'],
+	'order'		=> ['t2.sort'],
+], [
+	'column'	=> ['one'],
+	'table'		=> ['t1'=>'table1'],
+]);
+pudlTest($db, 'SELECT `two`, `one` FROM `table2` AS `t2`, `table1` AS `t1` WHERE (`t1`.`key`=`t2`.`id`) ORDER BY `t2`.`sort`');
+
+
+
+
+$db->string();
+$db([
+	'column'	=> 'two',
+	'table'		=> ['t2'=>'table2'],
+	'clause'	=> ['t1.key=t2.id'],
+	'order'		=> ['t2.sort'],
+], [
+	'column'	=> 'one',
+	'table'		=> ['t1'=>'table1'],
+]);
+pudlTest($db, 'SELECT `two`, `one` FROM `table2` AS `t2`, `table1` AS `t1` WHERE (`t1`.`key`=`t2`.`id`) ORDER BY `t2`.`sort`');
+
+
+
+
+$db->string();
+$db([
+	'column'	=> ['one'],
+	'table'		=> ['t2'=>'table2'],
+	'clause'	=> ['t1.key=t2.id'],
+	'order'		=> ['t2.sort'],
+], [
+	'column'	=> 'two',
+	'table'		=> ['t1'=>'table1'],
+]);
+pudlTest($db, 'SELECT `one`, `two` FROM `table2` AS `t2`, `table1` AS `t1` WHERE (`t1`.`key`=`t2`.`id`) ORDER BY `t2`.`sort`');
+
+
+
+
+$db->string();
+$db([
+	'column'	=> 'one',
+	'table'		=> ['t2'=>'table2'],
+	'clause'	=> ['t1.key=t2.id'],
+	'order'		=> ['t2.sort'],
+], [
+	'column'	=> ['two'],
+	'table'		=> ['t1'=>'table1'],
+]);
+pudlTest($db, 'SELECT `one`, `two` FROM `table2` AS `t2`, `table1` AS `t1` WHERE (`t1`.`key`=`t2`.`id`) ORDER BY `t2`.`sort`');
+
+
+
+
+$db->string();
 $db(['column' => pudl::unix_timestamp()]);
 pudlTest($db, 'SELECT UNIX_TIMESTAMP()');
 
