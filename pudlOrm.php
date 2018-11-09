@@ -449,7 +449,7 @@ abstract class	pudlOrm
 
 		$data = $this->__pudl__
 					->cache($this->_fetchCache())
-					->query(static::schema(), [
+					(static::schema(), [
 						'clause'	=> $clause,
 						'limit'		=> 1,
 					])

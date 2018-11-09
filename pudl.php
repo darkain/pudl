@@ -278,11 +278,8 @@ abstract	class	pudl {
 
 		require_once(is_owner(__DIR__ . $file));
 
-		return call_user_func(
-			['pudl'.$data['type'], 'instance'],
-			$data,
-			$autoconnect
-		);
+		$class = 'pudl'.$data['type'];
+		return new $class($data, $autoconnect);
 	}
 
 
@@ -312,10 +309,8 @@ abstract	class	pudl {
 
 
 
-	public function query($query=false) {
-		if (func_num_args() < 1) return $this->query;
-		if (!pudl_array($query)) return $this($query);
-		return call_user_func_array([$this,'selex'], func_get_args());
+	public function query() {
+		return $this->query;
 	}
 
 
