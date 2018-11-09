@@ -632,14 +632,17 @@ trait pudlQuery {
 
 		$query = '';
 
-		if ($limit === false  &&  $offset !== false)
-			$query .= ' LIMIT ' . ((1<<31)-1);
+		if ($limit === false  &&  $offset !== false) {
+			$limit = ((1<<31)-1);
+		}
 
-		else if ($limit !== false)
+		if ($limit !== false) {
 			$query .= ' LIMIT ' . ((int)$limit);
+		}
 
-		if ($offset !== false)
+		if ($offset !== false) {
 			$query .= ' OFFSET ' . ((int)$offset);
+		}
 
 		return $query;
 	}
