@@ -15,6 +15,7 @@ class pudlSqlite extends pudl {
 	public function __construct($data=[], $autoconnect=true) {
 
 		if (!pudl_array($data)) $data = [$data];
+
 		if (empty($data['database'])) {
 			$data['database'] = empty($data[0]) ? 'sqlite.db' : $data[0];
 		}
@@ -52,6 +53,7 @@ class pudlSqlite extends pudl {
 
 	////////////////////////////////////////////////////////////////////////////
 	// OPEN THE SQLITE DATABASE FILE
+	// http://php.net/manual/en/sqlite3.construct.php
 	////////////////////////////////////////////////////////////////////////////
 	public function connect() {
 		$auth = $this->auth();
@@ -85,6 +87,7 @@ class pudlSqlite extends pudl {
 
 
 		// Set a busy timeout for Sqlite to 'timeout' seconds
+		// http://php.net/manual/en/sqlite3.busytimeout.php
 		$this->connection->busyTimeout($auth['timeout'] * 1000);
 	}
 
@@ -93,6 +96,7 @@ class pudlSqlite extends pudl {
 
 	////////////////////////////////////////////////////////////////////////////
 	// DISCONNECT FROM SQLITE SERVICE (UNLOAD/RELEASE FILE HANDLE)
+	// http://php.net/manual/en/sqlite3.close.php
 	////////////////////////////////////////////////////////////////////////////
 	public function disconnect($trigger=true) {
 		parent::disconnect($trigger);
@@ -106,6 +110,7 @@ class pudlSqlite extends pudl {
 
 	////////////////////////////////////////////////////////////////////////////
 	// ESCAPE A VALUE
+	// http://php.net/manual/en/sqlite3.escapestring.php
 	////////////////////////////////////////////////////////////////////////////
 	public function escape($str) {
 		if (!$this->connection) return false;
@@ -127,6 +132,8 @@ class pudlSqlite extends pudl {
 
 	////////////////////////////////////////////////////////////////////////////
 	// PROCESS A QUERY
+	// http://php.net/manual/en/sqlite3.query.php
+	// http://php.net/manual/en/class.sqlite3result.php
 	////////////////////////////////////////////////////////////////////////////
 	protected function process($query) {
 		if (!$this->connection) return new pudlSqliteResult($this);
@@ -139,6 +146,7 @@ class pudlSqlite extends pudl {
 
 	////////////////////////////////////////////////////////////////////////////
 	// GET THE LAST AUTO INCREMENT NUMBER FROM INSERTED DATA
+	// http://php.net/manual/en/sqlite3.lastinsertrowid.php
 	////////////////////////////////////////////////////////////////////////////
 	public function insertId() {
 		if (!$this->connection) return 0;
@@ -150,6 +158,7 @@ class pudlSqlite extends pudl {
 
 	////////////////////////////////////////////////////////////////////////////
 	// GET THE NUMBER OF ROWS UPDATED BY THE LAST QUERY
+	// http://php.net/manual/en/sqlite3.changes.php
 	////////////////////////////////////////////////////////////////////////////
 	public function updated() {
 		if (!$this->connection) return 0;
@@ -161,6 +170,7 @@ class pudlSqlite extends pudl {
 
 	////////////////////////////////////////////////////////////////////////////
 	// GET THE SQLITE VERSION NUMBER
+	// http://php.net/manual/en/sqlite3.version.php
 	////////////////////////////////////////////////////////////////////////////
 	public function version() {
 		if (!$this->connection) return NULL;
@@ -173,6 +183,7 @@ class pudlSqlite extends pudl {
 
 	////////////////////////////////////////////////////////////////////////////
 	// GET THE LAST ERROR NUMBER
+	// http://php.net/manual/en/sqlite3.lasterrorcode.php
 	////////////////////////////////////////////////////////////////////////////
 	public function errno() {
 		if (!$this->connection) return 0;
@@ -184,6 +195,7 @@ class pudlSqlite extends pudl {
 
 	////////////////////////////////////////////////////////////////////////////
 	// GET THE LAST ERROR MESSAGE
+	// http://php.net/manual/en/sqlite3.lasterrormsg.php
 	////////////////////////////////////////////////////////////////////////////
 	public function error() {
 		if (!$this->connection) return '';
