@@ -56,21 +56,36 @@ class pudlSqlite extends pudl {
 	public function connect() {
 		$auth = $this->auth();
 
+
+		// Verify we have the Sqlite3 PHP extension installed
 		pudl_require_extension('sqlite3');
 
-		//Create Sqlite3 object instance
-		$this->connection = new SQLite3($auth['database']);
 
-		//Cannot connect - Error out
-		if (empty($this->connection)) {
+		// Set READ-ONLY / READ-WRITE access
+		$flags	= $auth['readonly']
+				? SQLITE3_OPEN_READONLY
+				: SQLITE3_OPEN_READWRITE;
+
+
+		// Create Sqlite3 object instance
+		try {
+			$this->connection = new SQLite3(
+				$auth['database'],
+				SQLITE3_OPEN_CREATE | $flags,
+				$auth['key']
+			);
+
+		// Convert PHP exception to PUDL exception
+		} catch (Exception $e) {
 			throw new pudlConnectionException(
 				$this,
 				'Unable to open Sqlite database file: ' . $auth['database']
 			);
 		}
 
-		//Set a busy timeout for Sqlite to 5 seconds
-		$this->connection->busyTimeout(5000);
+
+		// Set a busy timeout for Sqlite to 'timeout' seconds
+		$this->connection->busyTimeout($auth['timeout'] * 1000);
 	}
 
 

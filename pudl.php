@@ -52,8 +52,10 @@ abstract	class	pudl {
 		if (empty($data['server']))		$data['server']		= 'localhost';
 		if (empty($data['prefix']))		$data['prefix']		= [];
 		if (empty($data['persistent']))	$data['persistent']	= false;
+		if (empty($data['key']))		$data['key']		= NULL;
 		if (empty($data['salt']))		$data['salt']		= '';
 		if (empty($data['timeout']))	$data['timeout']	= 10;
+		if (empty($data['readonly']))	$data['readonly']	= false;
 
 		//SET INITIAL DATA
 		$this->microtime	= microtime(true);
