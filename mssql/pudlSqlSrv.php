@@ -87,6 +87,14 @@ class		pudlSqlSrv
 
 
 
+	public function version() {
+		if (!$this->connection) return NULL;
+		$version = sqlsrv_server_info($this->connection);
+		return $version['SQLServerVersion'];
+	}
+
+
+
 	public function errno() {
 		$errors = sqlsrv_errors(SQLSRV_ERR_ERRORS);
 		if (empty($errors)) return 0;
