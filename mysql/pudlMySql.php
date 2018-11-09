@@ -108,6 +108,13 @@ class pudlMySql extends pudlMyShared {
 
 
 
+	public function version() {
+		if (!$this->connection) return NULL;
+		return @mysql_get_server_info($this->connection);
+	}
+
+
+
 	public function errno() {
 		return @mysql_errno($this->connection);
 	}
