@@ -209,7 +209,7 @@ $db([
 	'table'		=> 'table',
 	'offset'	=> 10
 ]);
-pudlTest($db, "SELECT * FROM `table` LIMIT 18446744073709551615 OFFSET 10");
+pudlTest($db, "SELECT * FROM `table` LIMIT 2147483647 OFFSET 10");
 
 
 

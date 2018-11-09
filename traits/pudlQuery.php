@@ -633,7 +633,7 @@ trait pudlQuery {
 		$query = '';
 
 		if ($limit === false  &&  $offset !== false)
-			$query .= ' LIMIT 18446744073709551615';
+			$query .= ' LIMIT ' . ((1<<31)-1);
 
 		else if ($limit !== false)
 			$query .= ' LIMIT ' . ((int)$limit);
