@@ -447,14 +447,20 @@ abstract class	pudlOrm
 			$clause = [static::prefix.'.'.static::column => $id];
 		}
 
-		$data = $this->__pudl__
-					->cache($this->_fetchCache())
-					(static::schema(), [
-						'clause'	=> $clause,
-						'limit'		=> 1,
-					])
-					->complete();
 
+		// SET QUERY TO CACHE
+		$this->pudl()->cache($this->_fetchCache());
+
+		// EXECUTE QUERY AND RETURN THE DATA
+		$data = $this->pudl()->selex(
+			static::schema(),
+			[
+				'clause'	=> $clause,
+				'limit'		=> 1,
+			]
+		)->complete();
+
+		// STORE THE DATA
 		!empty($data)
 			? $this->govern($data[0])
 			: $this->free();
