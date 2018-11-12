@@ -71,7 +71,7 @@ pudlTest($db, "UPDATE `table` SET `column1`='value' WHERE (`id`=5)");
 
 
 //UPDATE statement - incrementing an INTEGER value
-$db->string()->update('table', ['column'=>pudlFunction::increment()], 'id=1');
+$db->string()->update('table', ['column'=>pudl::increment()], 'id=1');
 pudlTest($db, "UPDATE `table` SET `column`=`column`+1 WHERE (`id`=1)");
 
 
@@ -92,7 +92,7 @@ pudlTest($db, "UPDATE `table` SET `column`=`column`+2.3 WHERE (`id`=1)");
 
 
 //UPDATE statement - incrementing a STRING value
-$db->string()->update('table', ['column'=>pudlFunction::increment('5')], 'id=1');
+$db->string()->update('table', ['column'=>pudl::increment('5')], 'id=1');
 pudlTest($db, "UPDATE `table` SET `column`=`column`+'5' WHERE (`id`=1)");
 
 

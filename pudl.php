@@ -526,6 +526,7 @@ abstract	class	pudl {
 										? ((int) $time)
 										: strtotime($time);
 
+		// CANNOT BE SELF:: OR STATIC:: BECAUSE PHP SCOPING IS BROKEN
 		return pudlFunction::from_unixtime($time);
 	}
 

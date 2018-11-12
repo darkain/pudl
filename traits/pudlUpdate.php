@@ -104,7 +104,7 @@ trait pudlUpdate {
 
 
 
-	public function increment($table, $col, $clause, $amount=1, $limit=false, $offset=false) {
+	public function increase($table, $col, $clause, $amount=1, $limit=false, $offset=false) {
 		switch (true) {
 			case $amount === NAN:
 			case $amount === INF:

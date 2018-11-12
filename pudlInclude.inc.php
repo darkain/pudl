@@ -12,6 +12,7 @@ require_once(is_owner(__DIR__.'/pudlInterfaces.php'));
 require_once(is_owner(__DIR__.'/pudlHelpers.php'));
 require_once(is_owner(__DIR__.'/pudlOrm.php'));
 require_once(is_owner(__DIR__.'/pudlList.php'));
+require_once(is_owner(__DIR__.'/sql/pudlFunction.php'));
 require_once(is_owner(__DIR__.'/clone/pudlClone.php'));
 
 

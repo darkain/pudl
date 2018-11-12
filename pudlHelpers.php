@@ -2,53 +2,6 @@
 
 
 
-class pudlFunction implements pudlValue, pudlHelper {
-	public static function __callStatic($name, $arguments) {
-		return forward_static_call_array(['pudl', '_'.$name], $arguments);
-	}
-
-
-	/*
-	If CONVERT_TZ returns NULL, make sure the timezone table of mysql is filled
-	Note that this might need to be ran on ALL MySQL instances in a cluster!
-		install mysql-community-server-tools
-		mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root -p mysql
-	*/
-	/** @suppress PhanNonClassMethodCall */
-	public static function timestamp($time) {
-		return pudl::convert_tz(
-			static::from_unixtime(
-				is_object($time) ? $time->time() : ((int)$time)
-			),
-			new pudlGlobal('time_zone'),
-			'UTC'
-		);
-	}
-
-	public static function binary($data, $pad=0) {
-		return pudl::unhex(str_pad(bin2hex($data), $pad, '0'));
-	}
-
-	public static function increment($amount=1) {
-		return pudl::_increment($amount);
-	}
-
-
-	public function pudlValue(pudl $pudl, $quote=true) {
-		foreach ($this as $property => $value) {
-			$query	= '';
-			foreach ($value as $item) {
-				if (strlen($query)) $query .= ', ';
-				$query .= $pudl->_value($item);
-			}
-			return ltrim($property, '_') . '(' . $query . ')';
-		}
-
-		throw new pudlFunctionException($pudl, 'Invalid pudlFunction');
-	}
-}
-
-
 
 class pudlVoid implements pudlHelper {
 	public function __call($name, $arguments) {

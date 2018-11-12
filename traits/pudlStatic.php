@@ -13,8 +13,12 @@ trait pudlStatic {
 	// UNKNOWN METHODS
 	////////////////////////////////////////////////////////////////////////////
 	public function __call($name, $arguments) {
-		if ($name === 'count') {
-			return call_user_func_array([$this, 'total'], $arguments);
+		switch ($name) {
+			case 'count':
+				return call_user_func_array([$this, 'total'], $arguments);
+
+			case 'increment':
+				return call_user_func_array([$this, 'increase'], $arguments);
 		}
 
 		throw new pudlMethodException($this,
@@ -29,8 +33,13 @@ trait pudlStatic {
 	// UNKNOWN STATIC METHODS ARE CONVERTED INTO PUDLFUNCTION CALLS
 	////////////////////////////////////////////////////////////////////////////
 	public static function __callStatic($name, $arguments) {
-		if ($name === 'count') {
-			return static::_count(reset($arguments));
+		switch ($name) {
+			case 'count':
+				return static::_count(reset($arguments));
+
+			case 'increment':
+				if (empty($arguments)) $arguments = [1];
+				return static::_increment(reset($arguments));
 		}
 
 		$value	= new pudlFunction();

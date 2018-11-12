@@ -98,6 +98,7 @@ trait pudlInsert {
 	public function upsert($table, $data, $idcol=false) {
 		$update = $data;
 		if (!is_bool($idcol)) {
+			// CANNOT BE SELF:: OR STATIC:: BECAUSE PHP SCOPING IS BROKEN
 			$update[$idcol] = pudlFunction::last_insert_id(
 				static::column($idcol)
 			);
