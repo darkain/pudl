@@ -11,46 +11,6 @@ class pudlVoid implements pudlHelper {
 
 
 
-class pudlEquals implements pudlValue, pudlHelper {
-	public function __construct($value=false, $compare=false, $equals='=') {
-		$this->value	= $compare === false ? $value : $compare;
-		$this->compare	= $compare === false ? $compare : $value;
-		$this->equals	= $equals;
-
-		if (is_null($this->value)) {
-			if ($equals === '=') {
-				$this->equals = ' IS ';
-			} else if ($equals === '!=') {
-				$this->equals = ' IS NOT ';
-			}
-		}
-	}
-
-	public function __toString() { return (string) $this->value; }
-
-	public function __call($name, $arguments) {
-		$this->value	= forward_static_call_array(['pudl',$name], $arguments);
-		return $this;
-	}
-
-	public function not() {
-		$this->equals	= $this->equals === '=' ? '!=' : ' NOT' . $this->equals;
-		return $this;
-	}
-
-	public function pudlValue(pudl $pudl, $quote=true) {
-		if (pudl_array($this->value)) {
-			return '(' . $pudl->_inSet($this->value) . ')';
-		}
-		return $pudl->_value($this->value, $quote);
-	}
-
-	public	$value;
-	public	$compare;
-	public	$equals;
-}
-
-
 
 class pudlFloat extends pudlEquals {
 	public function __construct($value, $precision=10) {
