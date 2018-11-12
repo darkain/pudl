@@ -193,65 +193,6 @@ class pudlSort extends pudlEquals {
 
 
 
-class pudlRaw implements pudlValue, pudlHelper {
-	public function __construct(/* ...$values */) {
-		$this->value = func_get_args();
-	}
-
-	public function pudlValue(pudl $pudl, $quote=true) {
-		$query = '';
-		foreach ($this->value as $item) {
-			if (strlen($query)) $query .= $this->joiner;
-
-			if ($item instanceof pudlValue) {
-				$query .= $pudl->_value($item);
-			} else {
-				$query .= $item;
-			}
-		}
-		return $query;
-	}
-
-	public $value	= [];
-	public $joiner	= ',';
-}
-
-
-
-class pudlText extends pudlRaw {
-	public function pudlValue(pudl $pudl, $quote=true) {
-		$query = '';
-		foreach ($this->value as $item) {
-			if (strlen($query)) $query .= $this->joiner;
-			$query .= $pudl->_value($item);
-		}
-		return $query;
-	}
-}
-
-
-
-class pudlVariable extends pudlRaw {
-	public function __construct($name) {
-		parent::__construct('@'.$name);
-	}
-}
-
-
-
-class pudlGlobal extends pudlRaw {
-	public function __construct($name, $global=false) {
-		if (is_string($global)) {
-			parent::__construct('@@'.$global.'.'.$name);
-		} else if ($global) {
-			parent::__construct('@@GLOBAL.'.$name);
-		} else {
-			parent::__construct('@@SESSION.'.$name);
-		}
-	}
-}
-
-
 
 class pudlAnd implements pudlHelper {
 	public function __construct($clause) {

@@ -1,0 +1,98 @@
+<?php
+
+////////////////////////////////////////////////////////////////////////////////
+// ALLOW RAW UNMODIFIED SQL INTO THE QUERY GENERATOR
+////////////////////////////////////////////////////////////////////////////////
+class pudlRaw implements pudlValue, pudlHelper {
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// CONSTRUCTOR - PASS IN ANY VALUE IMAGINABLE
+	// WARNING: YES, THIS IS UNMODIFIED, UNFILTERED SQL
+	// WARNING: YES, YOU CAN BREAK EVERYTHING WITH THIS
+	// WARNING: YES, THIS CAN DO SQL INJECTION VERY EASILY
+	////////////////////////////////////////////////////////////////////////////
+	public function __construct(/* ...$values */) {
+		$this->value = func_get_args();
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// SQL QUERY GENERATOR
+	////////////////////////////////////////////////////////////////////////////
+	public function pudlValue(pudl $pudl, $quote=true) {
+		$query = '';
+		foreach ($this->value as $item) {
+			if (strlen($query)) $query .= $this->joiner;
+
+			if ($item instanceof pudlValue) {
+				$query .= $pudl->_value($item);
+			} else {
+				$query .= $item;
+			}
+		}
+		return $query;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// MEMBER VARIABLES
+	////////////////////////////////////////////////////////////////////////////
+	public $value	= [];
+	public $joiner	= ',';
+}
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// ALLOW TEXT IN A PARAMETER THAT WOULD OTHERWISE ACCEPT AN IDENTIFIER
+////////////////////////////////////////////////////////////////////////////////
+class pudlText extends pudlRaw {
+	public function pudlValue(pudl $pudl, $quote=true) {
+		$query = '';
+		foreach ($this->value as $item) {
+			if (strlen($query)) $query .= $this->joiner;
+			$query .= $pudl->_value($item);
+		}
+		return $query;
+	}
+}
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// USER DEFINED VARIABLE
+////////////////////////////////////////////////////////////////////////////////
+class pudlVariable extends pudlRaw {
+	public function __construct($name) {
+		parent::__construct('@'.$name);
+	}
+}
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// SQL SESSION AND GLOBAL VARIABLE
+////////////////////////////////////////////////////////////////////////////////
+class pudlGlobal extends pudlRaw {
+	public function __construct($name, $global=false) {
+		if (is_string($global)) {
+			parent::__construct('@@'.$global.'.'.$name);
+
+		} else if ($global) {
+			parent::__construct('@@GLOBAL.'.$name);
+
+		} else {
+			parent::__construct('@@SESSION.'.$name);
+		}
+	}
+}
