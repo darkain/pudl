@@ -6,7 +6,10 @@ require_once(is_owner(__DIR__.'/pudlMySqli.php'));
 
 
 
-class pudlGalera extends pudlMySqli {
+class		pudlGalera
+	extends	pudlMySqli {
+
+
 
 
 	////////////////////////////////////////////////////////////////////////////
@@ -107,7 +110,7 @@ class pudlGalera extends pudlMySqli {
 
 			//SET THE LOCAL STATE TO INVALID IF WE COULD NOT PULL ONE
 			if (empty($this->state['wsrep_local_state'])) {
-				$this->state['wsrep_local_state'] = 0;
+				$this->state['wsrep_local_state'] = GALERA_NONE;
 			}
 
 			//ONLY CONNECT IF NODE IS IN A 'JOINED' OR 'SYNCED' STATE
@@ -126,21 +129,30 @@ class pudlGalera extends pudlMySqli {
 
 
 		//CANNOT CONNECT - ERROR OUT
-		$error  = "<br />\n";
-		$error .= 'Unable to connect to galera cluster "';
-		$error .= implode(', ', $this->pool);
-		$error .= '" with the username: "' . $auth['username'] . "\"<br />\n";
+		$error	= 'Unable to connect to Galera cluster '
+				. '"' . implode(', ', $this->pool) . '"'
+				. ' with the username '
+				. '"' . $auth['username'] . '"';
+
 		if (!$this->connectErrno()  &&  isset($this->state['wsrep_local_state'])) {
-			if ($this->state['wsrep_local_state'] == 0) {
-				$error .= 'Invalid WSREP LOCAL STATE';
-			} else if ($this->state['wsrep_local_state'] == 1) {
-				$error .= 'This node is still joining the cluster and is currently unavailable';
-			} else if ($this->state['wsrep_local_state'] == 2) {
-				$error .= 'This node is currently acting as a donor for other nodes and is currently unavailable';
+			if ($this->state['wsrep_local_state'] == GALERA_JOINING) {
+				$error	.= "\nThis node is still joining the Galera cluster "
+						.  'and is currently unavailable';
+
+			} else if ($this->state['wsrep_local_state'] == GALERA_DESYNCED) {
+				$error	.= "\nThis node is currently acting as a donor "
+						.  'for other nodes and is currently unavailable';
+
+			} else {
+				$error	.= "\nUnknown Galera state: "
+						.  $this->state['wsrep_local_state'];
 			}
+
 		} else {
-			$error .= 'Error ' . $this->connectErrno() . ': ' . $this->connectError();
+			$error	.= "\nError " . $this->connectErrno()
+					. ': ' . $this->connectError();
 		}
+
 		throw new pudlConnectionException($this, $error);
 	}
 

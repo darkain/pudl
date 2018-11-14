@@ -6,7 +6,10 @@ require_once(is_owner(__DIR__.'/pudlPgSqlResult.php'));
 
 
 
-class pudlPgSql extends pudl {
+class		pudlPgSql
+	extends pudl {
+
+
 
 
 	////////////////////////////////////////////////////////////////////////////
@@ -21,7 +24,7 @@ class pudlPgSql extends pudl {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// REATE AN INSTANCE OF THE PUDL POSTGRESQL OBJECT
+	// REATE AN INSTANCE OF THE THIS OBJECT
 	////////////////////////////////////////////////////////////////////////////
 	public static function instance($data, $autoconnect=true) {
 		return new pudlPgSql($data, $autoconnect);
@@ -32,24 +35,46 @@ class pudlPgSql extends pudl {
 
 	////////////////////////////////////////////////////////////////////////////
 	// CREATE A CONNECTION TO THE POSTGRESQL SERVER
+	// http://php.net/manual/en/function.pg-connect.php
+	// http://php.net/manual/en/function.pg-pconnect.php
 	////////////////////////////////////////////////////////////////////////////
 	public function connect() {
 		$auth = $this->auth();
 
-		$this->connection = @pg_connect(
-			" host='"				. $auth['server']	. "'" .
-			" dbname='"				. $auth['database']	. "'" .
-			" user='"				. $auth['username']	. "'" .
-			" password='"			. $auth['password']	. "'" .
-			" connect_timeout='"	. $auth['timeout']	. "'" .
-			" options='--client_encoding=UTF8'"
-		);
+		//ATTEMPT TO CREATE A PERSISTANT CONNECTION
+		if ($auth['persistent']) {
+			$this->connection = @pg_pconnect(
+				" host='"				. $auth['server']	. "'" .
+				" dbname='"				. $auth['database']	. "'" .
+				" user='"				. $auth['username']	. "'" .
+				" password='"			. $auth['password']	. "'" .
+				" connect_timeout='"	. $auth['timeout']	. "'" .
+				" options='--client_encoding=UTF8'"
+			);
 
-		if ($this->connection === false) {
+
+		//ATTEMPT TO CREATE A NON-PERSISTANT CONNECTION
+		} else {
+			$this->connection = @pg_connect(
+				" host='"				. $auth['server']	. "'" .
+				" dbname='"				. $auth['database']	. "'" .
+				" user='"				. $auth['username']	. "'" .
+				" password='"			. $auth['password']	. "'" .
+				" connect_timeout='"	. $auth['timeout']	. "'" .
+				" options='--client_encoding=UTF8'"
+			);
+		}
+
+
+		if (empty($this->connection)) {
 			$error = error_get_last();
-			throw new pudlConnectionException(
-				$this,
-				'ERROR CONNECTING TO POSTGRESQL: ' . $error['message']
+
+			throw new pudlConnectionException($this,
+				'Unable to connect to PostgreSQL server ' .
+				'"' . $auth['server'] . '"' .
+				' with the username ' .
+				'"' . $auth['username'] . '"' .
+				"\nError: " . $error['message']
 			);
 		}
 	}
@@ -59,6 +84,7 @@ class pudlPgSql extends pudl {
 
 	////////////////////////////////////////////////////////////////////////////
 	// DISCONNECT FROM THE POSTGRESQL SERVER
+	// http://php.net/manual/en/function.pg-close.php
 	////////////////////////////////////////////////////////////////////////////
 	public function disconnect($trigger=true) {
 		parent::disconnect($trigger);
@@ -72,6 +98,7 @@ class pudlPgSql extends pudl {
 
 	////////////////////////////////////////////////////////////////////////////
 	// ESCAPE AN IDENTIFIER
+	// http://php.net/manual/en/function.pg-escape-identifier.php
 	////////////////////////////////////////////////////////////////////////////
 	public function identifier($identifier) {
 		return ($this->connection)
@@ -84,6 +111,7 @@ class pudlPgSql extends pudl {
 
 	////////////////////////////////////////////////////////////////////////////
 	// ESCAPE A VALUE
+	// http://php.net/manual/en/function.pg-escape-string.php
 	////////////////////////////////////////////////////////////////////////////
 	public function escape($value) {
 		return ($this->connection)
@@ -96,6 +124,7 @@ class pudlPgSql extends pudl {
 
 	////////////////////////////////////////////////////////////////////////////
 	// PROCESS A QUERY
+	// http://php.net/manual/en/function.pg-query.php
 	////////////////////////////////////////////////////////////////////////////
 	protected function process($query) {
 		if (!$this->connection) return new pudlPgSqlResult($this);
@@ -108,6 +137,7 @@ class pudlPgSql extends pudl {
 
 	////////////////////////////////////////////////////////////////////////////
 	// GET THE LAST AUTO INCREMENT NUMBER FROM INSERTED DATA
+	// https://www.postgresql.org/docs/8.1/functions-sequence.html
 	////////////////////////////////////////////////////////////////////////////
 	public function insertId() {
 		if (!$this->connection) return false;
@@ -123,6 +153,7 @@ class pudlPgSql extends pudl {
 
 	////////////////////////////////////////////////////////////////////////////
 	// GET THE NUMBER OF ROWS UPDATED BY THE LAST QUERY
+	// http://php.net/manual/en/function.pg-affected-rows.php
 	////////////////////////////////////////////////////////////////////////////
 	public function updated() {
 		if (!$this->connection) return 0;
@@ -134,6 +165,7 @@ class pudlPgSql extends pudl {
 
 	////////////////////////////////////////////////////////////////////////////
 	// GET THE LAST ERROR NUMBER
+	// http://php.net/manual/en/function.pg-last-error.php
 	////////////////////////////////////////////////////////////////////////////
 	public function errno() {
 		$error = $this->error();
@@ -145,6 +177,7 @@ class pudlPgSql extends pudl {
 
 	////////////////////////////////////////////////////////////////////////////
 	// GET THE LAST ERROR MESSAGE
+	// http://php.net/manual/en/function.pg-last-error.php
 	////////////////////////////////////////////////////////////////////////////
 	public function error() {
 		if (!$this->connection) return @pg_last_error();

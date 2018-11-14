@@ -7,12 +7,14 @@ require_once(is_owner(__DIR__.'/pudlMySqlResult.php'));
 
 
 
-class pudlMySql extends pudlMyShared {
+class		pudlMySql
+	extends	pudlMyShared {
+
 
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// CONSTRUCTOR
+	// CREATE AN INSTANCE OF THIS OBJECT
 	////////////////////////////////////////////////////////////////////////////
 	public static function instance($data, $autoconnect=true) {
 		return new pudlMySql($data, $autoconnect);
@@ -62,11 +64,14 @@ class pudlMySql extends pudlMyShared {
 		}
 
 		//CANNOT CONNECT - ERROR OUT
-		$error  = "<br />\n";
-		$error .= 'Unable to connect to database server "' . $auth['server'];
-		$error .= '" with the username: "' . $auth['username'];
-		$error .= "\"<br />\nError " . $this->errno() . ': ' . $this->error();
-		throw new pudlConnectionException($this, $error);
+		throw new pudlConnectionException($this,
+			'Unable to connect to MySQL server ' .
+			'"' . $auth['server'] . '"' .
+			' with the username ' .
+			'"' . $auth['username'] . '"' .
+			"\nError " . $this->errno() .
+			': ' . $this->error()
+		);
 	}
 
 
@@ -86,7 +91,7 @@ class pudlMySql extends pudlMyShared {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// ESCAPES SPECIAL CHARACTERS IN A STRING FOR USE IN AN SQL STATEMENT
+	// ESCAPES SPECIAL CHARACTERS IN A STRING FOR USE IN A SQL STATEMENT
 	// http://php.net/manual/en/function.mysql-real-escape-string.php
 	////////////////////////////////////////////////////////////////////////////
 	public function escape($value) {

@@ -6,7 +6,10 @@ require_once(is_owner(__DIR__.'/pudlSqliteResult.php'));
 
 
 
-class pudlSqlite extends pudl {
+class		pudlSqlite
+	extends	pudl {
+
+
 
 
 	////////////////////////////////////////////////////////////////////////////
@@ -42,7 +45,7 @@ class pudlSqlite extends pudl {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// CREATE AN INSTANCE OF THE PUDL SQLITE OBJECT
+	// CREATE AN INSTANCE OF THIS OBJECT
 	////////////////////////////////////////////////////////////////////////////
 	public static function instance($data=[], $autoconnect=true) {
 		return new pudlSqlite($data, $autoconnect);
@@ -79,9 +82,12 @@ class pudlSqlite extends pudl {
 
 		// Convert PHP exception to PUDL exception
 		} catch (Exception $e) {
-			throw new pudlConnectionException(
-				$this,
-				'Unable to open Sqlite database file: ' . $auth['database']
+			$error = error_get_last();
+
+			throw new pudlConnectionException($this,
+				'Unable to open to Sqlite database file ' .
+				'"' . $auth['database'] . '"' .
+				"\nError: " . $error['message']
 			);
 		}
 

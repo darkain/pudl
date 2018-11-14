@@ -11,7 +11,7 @@ try {
 	]);
 } catch (Exception $error) {
 	pudlError($error, [
-		"<br />\nUnable to connect to database server \"example.com:80\" with the username: \"\"<br />\nError 2006: MySQL server has gone away",
+		"Unable to connect to database server \"example.com:80\" with the username \"\"\nError 2006: MySQL server has gone away",
 
 		'mysqli::real_connect(): MySQL server has gone away',
 

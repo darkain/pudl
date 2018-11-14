@@ -6,8 +6,15 @@ require_once(is_owner(__DIR__.'/pudlOdbcResult.php'));
 
 
 
-class pudlOdbc extends pudl {
+class		pudlOdbc
+	extends	pudl {
 
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// DESTRUCTOR
+	////////////////////////////////////////////////////////////////////////////
 	public function __destruct() {
 		$this->disconnect();
 		parent::__destruct();
@@ -15,31 +22,64 @@ class pudlOdbc extends pudl {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// CREATE AN INSTANCE OF THIS OBJECT
+	////////////////////////////////////////////////////////////////////////////
 	public static function instance($data, $autoconnect=true) {
 		return new pudlOdbc($data, $autoconnect);
 	}
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// CONNECT TO THE ODBC SQL DATABASE
+	// http://php.net/manual/en/function.odbc-connect.php
+	// http://php.net/manual/en/function.odbc-pconnect.php
+	////////////////////////////////////////////////////////////////////////////
 	public function connect() {
 		$auth = $this->auth();
 
-		$this->connection = @odbc_connect(
-			$auth['database'],
-			$auth['username'],
-			$auth['password']
-		);
 
-		if ($this->connection === false) {
-			throw new pudlConnectionException(
-				$this,
-				'ERROR CONNECTING TO ODBC: ' . $this->errno() . ' - ' . $this->error()
+		//ATTEMPT TO CREATE A PERSISTANT CONNECTION
+		if ($auth['persistent']) {
+			$this->connection = @odbc_pconnect(
+				$auth['database'],
+				$auth['username'],
+				$auth['password']
+			);
+
+		//ATTEMPT TO CREATE A NON-PERSISTANT CONNECTION
+		} else {
+			$this->connection = @odbc_connect(
+				$auth['database'],
+				$auth['username'],
+				$auth['password']
+			);
+		}
+
+
+		//CANNOT CONNECT - ERROR OUT
+		if (empty($this->connection)) {
+			throw new pudlConnectionException($this,
+				'Unable to connect to ODBC database ' .
+				'"' . $auth['database'] . '"' .
+				' with the username ' .
+				'"' . $auth['username'] . '"' .
+				"\nError " . $this->errno() .
+				': ' . $this->error()
 			);
 		}
 	}
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// PROCESS THE SQL QUERY
+	// http://php.net/manual/en/function.odbc-exec.php
+	////////////////////////////////////////////////////////////////////////////
 	protected function process($query) {
 		if (!$this->connection) return new pudlOdbcResult($this);
 		$result = @odbc_exec($this->connection, $query);
@@ -49,6 +89,10 @@ class pudlOdbc extends pudl {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// GET THE MOST RECENT AUTO-INCREMENT ID
+	////////////////////////////////////////////////////////////////////////////
 	public function insertId() {
 		if (!$this->connection) return 0;
 		$result = @odbc_exec($this->connection, 'SELECT @@IDENTITY');
@@ -61,12 +105,21 @@ class pudlOdbc extends pudl {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// GET THE NUMBER OF ROWS AFFECTED BY THE MOST RECENT SQL QUERY
+	////////////////////////////////////////////////////////////////////////////
 	public function updated() {
 		return $this->numrows;
 	}
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// RETURNS THE ERROR CODE FOR THE MOST RECENT FUNCTION CALL
+	// http://php.net/manual/en/function.odbc-error.php
+	////////////////////////////////////////////////////////////////////////////
 	public function errno() {
 		if (!$this->connection) return (int) odbc_error();
 		return (int) odbc_error($this->connection);
@@ -74,6 +127,11 @@ class pudlOdbc extends pudl {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// RETURNS A STRING DESCRIPTION OF THE LAST ERROR
+	// http://php.net/manual/en/function.odbc-errormsg.php
+	////////////////////////////////////////////////////////////////////////////
 	public function error() {
 		if (!$this->connection) return odbc_errormsg();
 		return odbc_errormsg($this->connection);
@@ -81,5 +139,9 @@ class pudlOdbc extends pudl {
 
 
 
-	private $numrows	= 0;
+
+	////////////////////////////////////////////////////////////////////////////
+	// MEMBER VARIABLES
+	////////////////////////////////////////////////////////////////////////////
+	private $numrows = 0;
 }

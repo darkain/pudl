@@ -7,12 +7,14 @@ require_once(is_owner(__DIR__.'/pudlMySqliResult.php'));
 
 
 
-class pudlMySqli extends pudlMyShared {
+class		pudlMySqli
+	extends	pudlMyShared {
+
 
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// CREATE AN INSTANCE OF THE PUDLMYSQLI OBJECT
+	// CREATE AN INSTANCE OF THIS OBJECT
 	////////////////////////////////////////////////////////////////////////////
 	public static function instance($data, $autoconnect=true) {
 		return new pudlMySqli($data, $autoconnect);
@@ -62,11 +64,14 @@ class pudlMySqli extends pudlMyShared {
 
 
 		//CANNOT CONNECT - ERROR OUT
-		$error  = "<br />\n";
-		$error .= 'Unable to connect to database server "' . $auth['server'];
-		$error .= '" with the username: "' . $auth['username'];
-		$error .= "\"<br />\nError " . $this->connectErrno() . ': ' . $this->connectError();
-		throw new pudlConnectionException($this, $error);
+		throw new pudlConnectionException($this,
+			'Unable to connect to MySQL server ' .
+			'"' . $auth['server'] . '"' .
+			' with the username ' .
+			'"' . $auth['username'] . '"' .
+			"\nError " . $this->connectErrno() .
+			': ' . $this->connectError()
+		);
 	}
 
 

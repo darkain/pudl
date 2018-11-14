@@ -6,8 +6,15 @@ require_once(is_owner(__DIR__.'/pudlPdoResult.php'));
 
 
 
-class pudlPdo extends pudl {
+class		pudlPdo
+	extends	pudl {
 
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// CONSTRUCTOR
+	////////////////////////////////////////////////////////////////////////////
 	public function __construct($data, $autoconnect=true) {
 		if (empty($data['server'])) {
 			throw new pudlValueException(
@@ -34,6 +41,10 @@ class pudlPdo extends pudl {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// DESTRUCTOR
+	////////////////////////////////////////////////////////////////////////////
 	public function __destruct() {
 		$this->disconnect();
 		parent::__destruct();
@@ -41,12 +52,21 @@ class pudlPdo extends pudl {
 
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// CREATE AN INSTANCE OF THIS OBJECT
+	////////////////////////////////////////////////////////////////////////////
 	public static function instance($data, $autoconnect=true) {
 		return new pudlPdo($data, $autoconnect);
 	}
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// CREATE A PDO CONNECTION TO THE DATABASE SERVER
+	////////////////////////////////////////////////////////////////////////////
 	public function connect() {
 		$auth = $this->auth();
 
@@ -74,15 +94,22 @@ class pudlPdo extends pudl {
 			$this->connection->setAttribute(PDO::ATTR_TIMEOUT,		$auth['timeout']);
 
 		} catch (PDOException $e) {
-			throw new pudlConnectionException(
-				$this,
-				'Error connecting to database through PDO: ' . $e->getMessage()
+			throw new pudlConnectionException($this,
+				'Unable to connect to DDO database ' .
+				'"' . $auth['server'] . '"' .
+				' with the username ' .
+				'"' . $auth['username'] . '"' .
+				"\nError: " . $e->getMessage()
 			);
 		}
 	}
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// DISCONNECT THE PDO CONNECTION FROM THE DATABASE SERVER
+	////////////////////////////////////////////////////////////////////////////
 	public function disconnect($trigger=true) {
 		parent::disconnect($trigger);
 		$this->connection = NULL;
@@ -90,6 +117,10 @@ class pudlPdo extends pudl {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// ESCAPE AN IDENTIFIER
+	////////////////////////////////////////////////////////////////////////////
 	public function identifier($identifier) {
 		if ($this->identifier === ']') {
 			return '[' . str_replace(']', ']]', $identifier) . ']';
@@ -100,6 +131,11 @@ class pudlPdo extends pudl {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// ESCAPES SPECIAL CHARACTERS IN A STRING FOR USE IN A SQL STATEMENT
+	// http://php.net/manual/en/pdo.quote.php
+	////////////////////////////////////////////////////////////////////////////
 	public function escape($value) {
 		if (!$this->connection) return parent::escape($value);
 		return $this->connection->quote($value);
@@ -107,6 +143,11 @@ class pudlPdo extends pudl {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// PROCESS THE SQL QUERY
+	// http://php.net/manual/en/pdo.query.php
+	////////////////////////////////////////////////////////////////////////////
 	protected function process($query) {
 		if (!$this->connection) return new pudlPdoResult($this);
 		if (strtoupper(substr($query, 0, 7)) === 'SELECT ') {
@@ -120,6 +161,11 @@ class pudlPdo extends pudl {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// GET THE MOST RECENT AUTO-INCREMENT ID
+	// http://php.net/manual/en/pdo.lastinsertid.php
+	////////////////////////////////////////////////////////////////////////////
 	public function insertId() {
 		if (!$this->connection) return 0;
 		return $this->connection->lastInsertId();
@@ -127,12 +173,21 @@ class pudlPdo extends pudl {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// GET THE NUMBER OF ROWS AFFECTED BY THE MOST RECENT SQL QUERY
+	////////////////////////////////////////////////////////////////////////////
 	public function updated() {
 		return $this->updated;
 	}
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// RETURNS THE ERROR CODE FOR THE MOST RECENT FUNCTION CALL
+	// http://php.net/manual/en/pdo.errorcode.php
+	////////////////////////////////////////////////////////////////////////////
 	public function errno() {
 		if (!$this->connection) return 0;
 		$error = $this->connection->errorCode();
@@ -142,6 +197,11 @@ class pudlPdo extends pudl {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// RETURNS A STRING DESCRIPTION OF THE LAST ERROR
+	// http://php.net/manual/en/pdo.errorinfo.php
+	////////////////////////////////////////////////////////////////////////////
 	public function error() {
 		if (!$this->connection) return false;
 		$error = $this->connection->errorInfo();
@@ -153,6 +213,11 @@ class pudlPdo extends pudl {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// CHECK IF WE'RE CURRENTLY INSIDE OF A TRANSACTION
+	// http://php.net/manual/en/pdo.intransaction.php
+	////////////////////////////////////////////////////////////////////////////
 	public function inTransaction() {
 		if (!$this->connection) return false;
 		return $this->connection->inTransaction();
@@ -160,6 +225,11 @@ class pudlPdo extends pudl {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// BEGIN A NEW TRANSACTION
+	// http://php.net/manual/en/pdo.begintransaction.php
+	////////////////////////////////////////////////////////////////////////////
 	public function begin() {
 		if ($this->connection) $this->connection->beginTransaction();
 		return $this;
@@ -167,6 +237,11 @@ class pudlPdo extends pudl {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// END THE CURRENT TRANSACTION BY COMMITTING IT
+	// http://php.net/manual/en/pdo.commit.php
+	////////////////////////////////////////////////////////////////////////////
 	public function commit($sync=false) {
 		if ($this->connection) $this->connection->commit();
 		if ($sync) $this->sync();
@@ -175,6 +250,11 @@ class pudlPdo extends pudl {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// END THE CURRENT TRANSACTION BY ROLLING BACK THE CHANGES IT MADE
+	// http://php.net/manual/en/pdo.rollback.php
+	////////////////////////////////////////////////////////////////////////////
 	public function rollback() {
 		if ($this->connection) $this->connection->rollback();
 		return $this;
@@ -182,5 +262,10 @@ class pudlPdo extends pudl {
 
 
 
-	private $updated	= 0;
+
+	////////////////////////////////////////////////////////////////////////////
+	// MEMBER VARIABLES
+	////////////////////////////////////////////////////////////////////////////
+	private $updated = 0;
+
 }
