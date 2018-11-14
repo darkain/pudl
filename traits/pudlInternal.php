@@ -14,7 +14,7 @@ trait pudlInternal {
 
 			// LEGACY MYSQL_ FUNCTIONS
 			case 'MYSQL-DEPRECATED':
-				return '/mysql/pudlMySql.php';
+				return ['MySql',	'/mysql/pudlMySql.php'];
 			break;
 
 
@@ -24,26 +24,26 @@ trait pudlInternal {
 			case 'MARIA':
 			case 'MARIADB':
 			case 'PERCONA':
-				return '/mysql/pudlMySqli.php';
+				return ['MySqli',	'/mysql/pudlMySqli.php'];
 			break;
 
 
 			// MYSQLI_ FUNCTION W/ GALERA CLUSTERING SUPPORT
 			case 'GALERA':
-				return '/mysql/pudlGalera.php';
+				return ['Galera',	'/mysql/pudlGalera.php'];
 			break;
 
 
 			// PGSQL_ FUNCTIONS
 			case 'PGSQL':
 			case 'POSTGRESQL':
-				return '/pgsql/pudlPgSql.php';
+				return ['PgSql',	'/pgsql/pudlPgSql.php'];
 			break;
 
 
 			// LEGACY MSSQL_ FUNCTIONS
 			case 'MSSQL-DEPRECATED':
-				return '/mssql/pudlMsSql.php';
+				return ['MsSql',	'/mssql/pudlMsSql.php'];
 			break;
 
 
@@ -52,7 +52,7 @@ trait pudlInternal {
 			case 'SQLSRV':
 			case 'SQLSERVER':
 			case 'MICROSOFT':
-				return '/mssql/pudlSqlSrv.php';
+				return ['SqlSrv',	'/mssql/pudlSqlSrv.php'];
 			break;
 
 
@@ -60,25 +60,25 @@ trait pudlInternal {
 			case 'FILE':
 			case 'SQLITE':
 			case 'SQLITE3':
-				return '/sqlite/pudlSqlite.php';
+				return ['Sqlite',	'/sqlite/pudlSqlite.php'];
 			break;
 
 
 			// ODBC_ FUNCTIONS
 			case 'ODBC':
-				return '/odbc/pudlOdbc.php';
+				return ['Odbc',		'/odbc/pudlOdbc.php'];
 			break;
 
 
 			// PDO:: OBJECT
 			case 'PDO':
-				return '/sql/pudlPdo.php';
+				return ['Pdo',		'/sql/pudlPdo.php'];
 			break;
 
 
 			// /DEV/NULL ENGINE
 			case 'NULL':
-				return '/null/pudlNull.php';
+				return ['Null',		'/null/pudlNull.php'];
 			break;
 		}
 

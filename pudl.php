@@ -270,18 +270,18 @@ abstract	class	pudl {
 		}
 
 		// GET THE ENGINE TYPE PHP PATH/FILE
-		$file = static::_engine($data['type']);
+		$engine = static::_engine($data['type']);
 
-		if (empty($file)) {
+		if (empty($engine)) {
 			throw new pudlValueException(
 				$this,
 				'Unknown Database Server Type: ' . $data['type']
 			);
 		}
 
-		require_once(is_owner(__DIR__ . $file));
+		require_once(is_owner(__DIR__ . end($engine)));
 
-		$class = 'pudl'.$data['type'];
+		$class = 'pudl' . reset($engine);
 		return new $class($data, $autoconnect);
 	}
 
