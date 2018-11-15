@@ -1,20 +1,37 @@
 <?php
 
 
-class pudlMySqliResult extends pudlResult {
+class		pudlMySqliResult
+	extends	pudlResult {
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// CONSTRUCTOR - FORCE PARAMETER DATA TYPES
+	////////////////////////////////////////////////////////////////////////////
 	public function __construct(pudl $pudl, mysqli_result $result=NULL) {
 		parent::__construct($pudl, $result);
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// DESTRUCTOR - FREE RESOURCES
+	////////////////////////////////////////////////////////////////////////////
 	public function __destruct() {
 		parent::__destruct();
 		$this->free();
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// FREE RESOURCES ASSOCIATED WITH THIS RESULT
+	// http://php.net/manual/en/mysqli-result.free.php
+	////////////////////////////////////////////////////////////////////////////
 	public function free() {
 		$return = false;
 		if ($this->result instanceof mysqli_result) {
@@ -25,6 +42,12 @@ class pudlMySqliResult extends pudlResult {
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// GET A SINGLE CELL FROM THIS RESULT
+	// http://php.net/manual/en/mysqli-result.fetch-assoc.php
+	////////////////////////////////////////////////////////////////////////////
 	public function cell($row=0, $column=0) {
 		if (!($this->result instanceof mysqli_result)) return false;
 		$this->seek($row);
@@ -40,6 +63,13 @@ class pudlMySqliResult extends pudlResult {
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// PHP'S COUNTABLE - GET THE NUMBER OF ROWS FROM THIS RESULT
+	// http://php.net/manual/en/countable.count.php
+	// http://php.net/manual/en/mysqli-result.num-rows.php
+	////////////////////////////////////////////////////////////////////////////
 	public function count() {
 		$rows = false;
 		if ($this->result instanceof mysqli_result) {
@@ -49,6 +79,12 @@ class pudlMySqliResult extends pudlResult {
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// GET THE NUMBER OF FIELD COLUMNS IN THIS RESULT
+	// http://php.net/manual/en/mysqli-result.field-count.php
+	////////////////////////////////////////////////////////////////////////////
 	public function fields() {
 		$fields = false;
 		if ($this->result instanceof mysqli_result) {
@@ -58,6 +94,12 @@ class pudlMySqliResult extends pudlResult {
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// GET DETAILS ON A PARTICULAR FIELD COLUMN IN THIS RESULT
+	// http://php.net/manual/en/mysqli-result.fetch-field.php
+	////////////////////////////////////////////////////////////////////////////
 	public function getField($column) {
 		$field = false;
 		if ($this->result instanceof mysqli_result) {
@@ -68,6 +110,13 @@ class pudlMySqliResult extends pudlResult {
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// PHP'S SEEKABLEITERATOR - JUMP TO A ROW IN THIS RESULT
+	// http://php.net/manual/en/seekableiterator.seek.php
+	// http://php.net/manual/en/mysqli-result.data-seek.php
+	////////////////////////////////////////////////////////////////////////////
 	public function seek($row) {
 		if ($this->result instanceof mysqli_result) {
 			@$this->result->data_seek($row);
@@ -75,6 +124,12 @@ class pudlMySqliResult extends pudlResult {
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// MOVE TO THE NEXT ROW IN THIS RESULT AND RETURN THAT ROW'S DATA
+	// http://php.net/manual/en/mysqli-result.fetch-assoc.php
+	////////////////////////////////////////////////////////////////////////////
 	public function row() {
 		if (!($this->result instanceof mysqli_result)) return false;
 
@@ -113,6 +168,9 @@ class pudlMySqliResult extends pudlResult {
 
 
 
+	////////////////////////////////////////////////////////////////////////////
+	// MEMBER VARIABLES
+	////////////////////////////////////////////////////////////////////////////
 	private $first	= true;
 	private $json	= [];
 

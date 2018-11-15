@@ -16,7 +16,7 @@ class pudlNullResult extends pudlResult {
 	public function getField($column)			{ return false; }
 	public function seek($row)					{}
 	public function row()						{ return false; }
-	public function error()						{ return 0; }
-	public function errormsg()					{ return ''; }
+	public function errno()						{ return 0; }
+	public function error()						{ return ''; }
 
 }

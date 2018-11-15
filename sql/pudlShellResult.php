@@ -1,12 +1,15 @@
 <?php
 
 
-'@phan-file-suppress PhanTypeArraySuspiciousNullable';
+class		pudlShellResult
+	extends	pudlResult {
 
 
 
-class pudlShellResult extends pudlResult {
 
+	////////////////////////////////////////////////////////////////////////////
+	// CONSTRUCTOR
+	////////////////////////////////////////////////////////////////////////////
 	public function __construct(pudl $pudl, $result) {
 		parent::__construct($pudl, $result);
 
@@ -21,6 +24,11 @@ class pudlShellResult extends pudlResult {
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// DESTRUCTOR - FREE RESOURCES
+	////////////////////////////////////////////////////////////////////////////
 	public function __destruct() {
 		parent::__destruct();
 		$this->free();
@@ -28,6 +36,10 @@ class pudlShellResult extends pudlResult {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// FREE RESOURCES ASSOCIATED WITH THIS RESULT
+	////////////////////////////////////////////////////////////////////////////
 	public function free() {
 		if (!is_array($this->json)) return false;
 		$this->json = NULL;
@@ -36,6 +48,11 @@ class pudlShellResult extends pudlResult {
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// GET A SINGLE CELL FROM THIS RESULT
+	////////////////////////////////////////////////////////////////////////////
 	public function cell($row=0, $column=0) {
 		if (!is_array($this->json)) return false;
 		if (empty($this->json['data'][$row])) return false;
@@ -44,22 +61,38 @@ class pudlShellResult extends pudlResult {
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// PHP'S COUNTABLE - GET THE NUMBER OF ROWS FROM THIS RESULT
+	// http://php.net/manual/en/countable.count.php
+	////////////////////////////////////////////////////////////////////////////
 	public function count() {
-		if (!is_array($this->json)) return 0;
-		if (!isset($this->json['data'])) return 0;
-		if (!is_array($this->json['data'])) return 0;
-		return count($this->json['data']);
+		if (!is_array(	$this->json))			return 0;
+		if (!isset(		$this->json['data']))	return 0;
+		if (!is_array(	$this->json['data']))	return 0;
+		return count(	$this->json['data']);
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// GET THE NUMBER OF FIELD COLUMNS IN THIS RESULT
+	////////////////////////////////////////////////////////////////////////////
 	public function fields() {
-		if (!is_array($this->json)) return false;
-		if (!isset($this->json['header'])) return false;
-		if (!is_array($this->json['header'])) return false;
-		return count($this->json['header']);
+		if (!is_array(	$this->json))			return false;
+		if (!isset(		$this->json['header']))	return false;
+		if (!is_array(	$this->json['header']))	return false;
+		return count(	$this->json['header']);
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// GET DETAILS ON A PARTICULAR FIELD COLUMN IN THIS RESULT
+	////////////////////////////////////////////////////////////////////////////
 	public function getField($column) {
 		if (!is_array($this->json)) return false;
 		if (!isset($this->json['header'][$column])) return false;
@@ -67,12 +100,23 @@ class pudlShellResult extends pudlResult {
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// PHP'S SEEKABLEITERATOR - JUMP TO A ROW IN THIS RESULT
+	// http://php.net/manual/en/seekableiterator.seek.php
+	////////////////////////////////////////////////////////////////////////////
 	public function seek($row) {
 		if (!is_array($this->json)) return;
 		$this->row = (int) $row;
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// MOVE TO THE NEXT ROW IN THIS RESULT AND RETURN THAT ROW'S DATA
+	////////////////////////////////////////////////////////////////////////////
 	public function row($trim=true) {
 		if (!is_array($this->json)) return false;
 		if (!isset($this->json['data'][$this->row])) return false;
@@ -97,11 +141,21 @@ class pudlShellResult extends pudlResult {
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// GET THE RAW JSON DATA
+	////////////////////////////////////////////////////////////////////////////
 	public function json() {
 		return $this->json;
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// GET THE AUTO INCREMENT INSERT ID
+	////////////////////////////////////////////////////////////////////////////
 	public function insertId() {
 		if (!is_array($this->json)) return 0;
 		if (!isset($this->json['insertid'])) return 0;
@@ -109,6 +163,11 @@ class pudlShellResult extends pudlResult {
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// GET THE NUMBER OF ROWS UPDATED
+	////////////////////////////////////////////////////////////////////////////
 	public function updated() {
 		if (!is_array($this->json)) return 0;
 		if (!isset($this->json['updated'])) return 0;
@@ -116,7 +175,12 @@ class pudlShellResult extends pudlResult {
 	}
 
 
-	public function error() {
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// GET THE ERROR CODE FOR THIS RESULT
+	////////////////////////////////////////////////////////////////////////////
+	public function errno() {
 		if (isset($this->json['error'][0])) {
 			return $this->json['error'][0];
 		} else if ($this->error) {
@@ -126,7 +190,12 @@ class pudlShellResult extends pudlResult {
 	}
 
 
-	public function errormsg() {
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// GET THE ERROR MESSAGE FOR THIS RESULT
+	////////////////////////////////////////////////////////////////////////////
+	public function error() {
 		if (isset($this->json['error'][1])) {
 			return $this->json['error'][1];
 		}
@@ -134,6 +203,11 @@ class pudlShellResult extends pudlResult {
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// MEMBER VARIABLES
+	////////////////////////////////////////////////////////////////////////////
 	/** @var ?array */	private $json	= NULL;
 	/** @var int */		private $error	= 0;
 	/** @var string */	private $ermsg	= '';
@@ -141,29 +215,16 @@ class pudlShellResult extends pudlResult {
 
 
 
+
+////////////////////////////////////////////////////////////////////////////////
+// COMPATIBILITY WITH OLDER PHP VERSIONS
+////////////////////////////////////////////////////////////////////////////////
 if (!function_exists('json_last_error_msg')) {
-	/** @suppress PhanRedefineFunctionInternal */
 	function json_last_error_msg() {
-		switch (json_last_error()) {
-			case JSON_ERROR_DEPTH:
-				throw new Exception('Maximum stack depth exceeded');
-			break;
-
-			case JSON_ERROR_STATE_MISMATCH:
-				throw new Exception('Underflow or the modes mismatch');
-			break;
-
-			case JSON_ERROR_CTRL_CHAR:
-				throw new Exception('Unexpected control character found');
-			break;
-
-			case JSON_ERROR_SYNTAX:
-				throw new Exception('Syntax error, malformed JSON');
-			break;
-
-			case JSON_ERROR_UTF8:
-				throw new Exception('Malformed UTF-8 characters, possibly incorrectly encoded');
-			break;
+		global $__json_errors__;
+		$error = json_last_error();
+		if (in_array($error, $__json_errors__)) {
+			throw new Exception($__json_errors__[$error]);
 		}
 	}
 }

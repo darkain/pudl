@@ -1,7 +1,15 @@
 <?php
 
 
-class pudlSqliteResult extends pudlResult {
+class		pudlSqliteResult
+	extends	pudlResult {
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// CONSTRUCTOR
+	////////////////////////////////////////////////////////////////////////////
 	public function __construct(pudl $pudl, $result=NULL) {
 		parent::__construct($pudl, $result);
 
@@ -9,12 +17,23 @@ class pudlSqliteResult extends pudlResult {
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// DESTRUCTOR - FREE RESOURCES
+	////////////////////////////////////////////////////////////////////////////
 	public function __destruct() {
 		parent::__destruct();
 		$this->free();
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// FREE RESOURCES ASSOCIATED WITH THIS RESULT
+	// http://php.net/manual/en/sqlite3result.finalize.php
+	////////////////////////////////////////////////////////////////////////////
 	public function free() {
 		if (is_object($this->result)) {
 			$this->result->finalize();
@@ -25,6 +44,12 @@ class pudlSqliteResult extends pudlResult {
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// GET A SINGLE CELL FROM THIS RESULT
+	// http://php.net/manual/en/sqlite3result.fetcharray.php
+	////////////////////////////////////////////////////////////////////////////
 	public function cell($row=0, $column=0) {
 		if (!is_object($this->result)) return false;
 
@@ -48,20 +73,24 @@ class pudlSqliteResult extends pudlResult {
 	}
 
 
-	public function seek($row) {
-		//TODO: IMPLEMENT THIS!
-	}
 
 
+	////////////////////////////////////////////////////////////////////////////
+	// PHP'S COUNTABLE - GET THE NUMBER OF ROWS FROM THIS RESULT
+	// http://php.net/manual/en/countable.count.php
+	////////////////////////////////////////////////////////////////////////////
 	public function count() {
 		return 0;
 		//TODO: IMPLEMENT THIS (but it'll be hacky, since Sqlite doesn't support it!)
-//		$rows = false;
-//		if (is_object($this->result)) $rows = $this->result->numColumns();
-//		return ($rows !== false) ? $rows : 0;
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// GET THE NUMBER OF FIELD COLUMNS IN THIS RESULT
+	// http://php.net/manual/en/sqlite3result.numcolumns.php
+	////////////////////////////////////////////////////////////////////////////
 	public function fields() {
 		$fields = false;
 		if (is_object($this->result)) $fields = $this->result->numColumns();
@@ -69,6 +98,12 @@ class pudlSqliteResult extends pudlResult {
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// GET DETAILS ON A PARTICULAR FIELD COLUMN IN THIS RESULT
+	// http://php.net/manual/en/sqlite3result.columnname.php
+	////////////////////////////////////////////////////////////////////////////
 	public function getField($column) {
 		$field = false;
 		if (is_object($this->result)) $field = $this->result->columnName($column);
@@ -76,6 +111,23 @@ class pudlSqliteResult extends pudlResult {
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// PHP'S SEEKABLEITERATOR - JUMP TO A ROW IN THIS RESULT
+	// http://php.net/manual/en/seekableiterator.seek.php
+	////////////////////////////////////////////////////////////////////////////
+	public function seek($row) {
+		//TODO: IMPLEMENT THIS!
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// MOVE TO THE NEXT ROW IN THIS RESULT AND RETURN THAT ROW'S DATA
+	// http://php.net/manual/en/sqlite3result.fetcharray.php
+	////////////////////////////////////////////////////////////////////////////
 	public function row() {
 		if (!is_object($this->result)) return false;
 

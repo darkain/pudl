@@ -4,7 +4,10 @@
 //NOTE: THIS IS ONLY A PARTIAL IMPLEMENTATION AND WILL BE FINISHED LATER
 
 
-class pudlArrayResult extends pudlResult {
+class		pudlArrayResult
+	extends	pudlResult {
+
+
 
 
 	////////////////////////////////////////////////////////////////////////////
@@ -15,6 +18,7 @@ class pudlArrayResult extends pudlResult {
 
 		if ($array instanceof pudlObject) {
 			$array = $array->raw();
+
 		} else if (!is_array($array)) {
 			$array = (array) $array;
 		}
@@ -26,7 +30,7 @@ class pudlArrayResult extends pudlResult {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// FREE THE RESULT DATA
+	// FREE RESOURCES ASSOCIATED WITH THIS RESULT
 	////////////////////////////////////////////////////////////////////////////
 	public function free() {
 		$this->array	= false;
@@ -37,16 +41,19 @@ class pudlArrayResult extends pudlResult {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// GET A CELL BY ROW/COLUMN
+	// GET A SINGLE CELL FROM THIS RESULT
 	// TODO: CURRENTLY DOESN'T WORK
 	////////////////////////////////////////////////////////////////////////////
-	public function cell($row=0, $column=0) { return false; }
+	public function cell($row=0, $column=0) {
+		return false;
+	}
 
 
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// GET THE TOTAL NUMBER OF ROWS
+	// PHP'S COUNTABLE - GET THE NUMBER OF ROWS FROM THIS RESULT
+	// http://php.net/manual/en/countable.count.php
 	////////////////////////////////////////////////////////////////////////////
 	public function count() {
 		return is_array($this->array) ? count($this->array) : 0;
@@ -56,7 +63,7 @@ class pudlArrayResult extends pudlResult {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// GET THE TOTAL NUMBER OF FIELDS
+	// GET THE NUMBER OF FIELD COLUMNS IN THIS RESULT
 	////////////////////////////////////////////////////////////////////////////
 	public function fields() {
 		if (!is_array($this->array)) return false;
@@ -68,7 +75,7 @@ class pudlArrayResult extends pudlResult {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// LIST ALL OF THE FIELDS
+	// GET DETAILS ON ALL FIELD COLUMNS IN THIS RESULT
 	////////////////////////////////////////////////////////////////////////////
 	public function listFields() {
 		if (!is_null($this->keys)) return $this->keys;
@@ -95,7 +102,7 @@ class pudlArrayResult extends pudlResult {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// GET A LIST OF ALL THE AVAILABLE KEYS / FIELDS
+	// GET DETAILS ON A PARTICULAR FIELD COLUMN IN THIS RESULT
 	////////////////////////////////////////////////////////////////////////////
 	public function getField($column) {
 		$fields = $this->listFields();
@@ -108,7 +115,8 @@ class pudlArrayResult extends pudlResult {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// SET TO A DIFFERENT ROW
+	// PHP'S SEEKABLEITERATOR - JUMP TO A ROW IN THIS RESULT
+	// http://php.net/manual/en/seekableiterator.seek.php
 	////////////////////////////////////////////////////////////////////////////
 	public function seek($row) {
 		if (!is_array($this->array)) return;
@@ -120,7 +128,7 @@ class pudlArrayResult extends pudlResult {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// GET THE CURRENT ROW
+	// MOVE TO THE NEXT ROW IN THIS RESULT AND RETURN THAT ROW'S DATA
 	////////////////////////////////////////////////////////////////////////////
 	public function row() {
 		if (!is_array($this->array)) return false;
@@ -134,17 +142,22 @@ class pudlArrayResult extends pudlResult {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// ERROR CODE - 0 FOR NO ERROR
+	// GET THE ERROR CODE FOR THIS RESULT
 	////////////////////////////////////////////////////////////////////////////
-	public function error()		{ return 0; }
+	public function errno() {
+		return 0;
+	}
 
 
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// ERROR MESSAGE - EMPTY STRING
+	// GET THE ERROR MESSAGE FOR THIS RESULT
 	////////////////////////////////////////////////////////////////////////////
-	public function errormsg()	{ return ''; }
+	public function error() {
+		return '';
+	}
+
 
 
 
