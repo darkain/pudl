@@ -56,7 +56,7 @@ class	pudlObject
 	////////////////////////////////////////////////////////////////////////////
 	// CREATE AN INSTANCE OF THIS OBJECT
 	////////////////////////////////////////////////////////////////////////////
-	public function instance($data=NULL, $process=false) {
+	public static function _instance($data=NULL, $process=false) {
 		return new static($data, $process);
 	}
 
