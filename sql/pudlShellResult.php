@@ -217,14 +217,16 @@ class		pudlShellResult
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// COMPATIBILITY WITH OLDER PHP VERSIONS
+// COMPATIBILITY WITH OLDER PHP VERSIONS (5.4 ONLY)
 ////////////////////////////////////////////////////////////////////////////////
 if (!function_exists('json_last_error_msg')) {
 	function json_last_error_msg() {
 		global $__json_errors__;
+
 		$error = json_last_error();
-		if (in_array($error, $__json_errors__)) {
-			throw new Exception($__json_errors__[$error]);
-		}
+
+		return isset($__json_errors__[$error])
+			? $__json_errors__[$error]
+			: $__json_errors__[-1];
 	}
 }

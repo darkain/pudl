@@ -6,7 +6,15 @@ require_once(is_owner(__DIR__.'/pudlShellResult.php'));
 
 
 
-class pudlShell extends pudl {
+class		pudlShell
+	extends	pudl {
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// CONSTRUCTOR
+	////////////////////////////////////////////////////////////////////////////
 	public function __construct($data, $autoconnect=true) {
 		$this->path = empty($data['path']) ? '' : $data['path'];
 		parent::__construct($data, $autoconnect);
@@ -14,6 +22,10 @@ class pudlShell extends pudl {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// DESTRUCTOR
+	////////////////////////////////////////////////////////////////////////////
 	public function __destruct() {
 		$this->disconnect();
 		parent::__destruct();
@@ -21,60 +33,112 @@ class pudlShell extends pudl {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// CREATE AN INSTANCE OF THIS OBJECT
+	////////////////////////////////////////////////////////////////////////////
 	public static function instance($data, $autoconnect=true) {
 		return new pudlShell($data, $autoconnect);
 	}
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// VERIFY WE HAVE THE PROPER PHP EXTENSION INSTALLED
+	// NOTE: NO ACTIVE CONNECTIONS ARE MADE WITH THIS UNTIL A REQUEST IS MADE
+	////////////////////////////////////////////////////////////////////////////
+	public function connect() {
+		pudl_require_extension('json');
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// PERFORMS A QUERY ON THE DATABASE AND RETURNS A PUDLRESULT
+	// http://php.net/manual/en/function.exec.php
+	////////////////////////////////////////////////////////////////////////////
 	protected function process($query) {
 		$result = false;
-		exec('php5 ' . escapeshellarg($this->path) . ' ' . escapeshellarg($query), $result);
+
+		exec(implode(' ', [
+			'php',
+			escapeshellarg($this->path),
+			escapeshellarg($query),
+		]), $result);
+
 		return $this->_process($result[0]);
 	}
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// CREATE THE PUDLRESULT FROM JSON DATA AND RETURN IT
+	////////////////////////////////////////////////////////////////////////////
 	protected function _process($json) {
 		$item = new pudlShellResult($this, $json);
 		$this->insertId	= $item->insertId();
 		$this->updated	= $item->updated();
-		$this->errno	= $item->error();
-		$this->error	= $this->errno ? $item->errormsg() : '';
+		$this->errno	= $item->errno();
+		$this->error	= $this->errno ? $item->error() : '';
 		return $item;
 	}
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// RETURNS THE AUTO GENERATED ID USED IN THE LATEST QUERY
+	////////////////////////////////////////////////////////////////////////////
 	public function insertId() {
 		return $this->insertId;
 	}
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// GETS THE NUMBER OF AFFECTED ROWS IN A PREVIOUS MYSQL OPERATION
+	////////////////////////////////////////////////////////////////////////////
 	public function updated() {
 		return $this->updated;
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// RETURNS THE ERROR CODE FOR THE MOST RECENT FUNCTION CALL
+	////////////////////////////////////////////////////////////////////////////
 	public function errno() {
 		return $this->errno;
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// RETURNS A STRING DESCRIPTION OF THE LAST ERROR
+	////////////////////////////////////////////////////////////////////////////
 	public function error() {
+		global $__json_errors__;
+
 		if (!empty($this->error)) return $this->error;
-		switch ($this->errno()) {
-			case JSON_ERROR_NONE:			return '';
-			case JSON_ERROR_DEPTH:			return 'Maximum stack depth exceeded';
-			case JSON_ERROR_STATE_MISMATCH:	return 'Underflow or the modes mismatch';
-			case JSON_ERROR_CTRL_CHAR:		return 'Unexpected control character found';
-			case JSON_ERROR_SYNTAX:			return 'Syntax error, malformed JSON';
-			case JSON_ERROR_UTF8:			return 'Malformed UTF-8 characters';
-		}
-		return 'Unknown error';
+
+		$error = $this->errno();
+
+		return isset($__json_errors__[$error])
+			? $__json_errors__[$error]
+			: $__json_errors__[-1];
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// MEMBER VARIABLES
+	////////////////////////////////////////////////////////////////////////////
 	protected $path		= '';
 	protected $errno	= false;
 	protected $error	= false;

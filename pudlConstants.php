@@ -71,18 +71,11 @@ if (!defined('JSON_PARTIAL_OUTPUT_ON_ERROR')) {
 }
 
 $__json_errors__ = [
-	JSON_ERROR_DEPTH =>
-		'Maximum stack depth exceeded',
-
-	JSON_ERROR_STATE_MISMATCH =>
-		'Underflow or the modes mismatch',
-
-	JSON_ERROR_CTRL_CHAR =>
-		'Unexpected control character found',
-
-	JSON_ERROR_SYNTAX =>
-		'Syntax error, malformed JSON',
-
-	JSON_ERROR_UTF8 =>
-		'Malformed UTF-8 characters, possibly incorrectly encoded',
+	JSON_ERROR_NONE				=> 'No error',
+	JSON_ERROR_DEPTH			=> 'Maximum stack depth exceeded',
+	JSON_ERROR_STATE_MISMATCH	=> 'State mismatch (invalid or malformed JSON)',
+	JSON_ERROR_CTRL_CHAR		=> 'Control character error, possibly incorrectly encoded',
+	JSON_ERROR_SYNTAX			=> 'Syntax error, malformed JSON',
+	JSON_ERROR_UTF8				=> 'Malformed UTF-8 characters, possibly incorrectly encoded',
+	-1							=> 'Unknown error',
 ];

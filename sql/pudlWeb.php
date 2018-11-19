@@ -6,21 +6,46 @@ require_once(is_owner(__DIR__.'/pudlShellResult.php'));
 
 
 
-class pudlWeb extends pudlShell {
+class		pudlWeb
+	extends	pudlShell {
 
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// CREATE AN INSTANCE OF THIS OBJECT
+	////////////////////////////////////////////////////////////////////////////
 	public static function instance($data, $autoconnect=true) {
 		return new pudlWeb($data, $autoconnect);
 	}
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// VERIFY WE HAVE THE PROPER PHP EXTENSION INSTALLED
+	// NOTE: NO ACTIVE CONNECTIONS ARE MADE WITH THIS UNTIL A REQUEST IS MADE
+	////////////////////////////////////////////////////////////////////////////
+	public function connect() {
+		pudl_require_extension('curl');
+		parent::connect();
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// PERFORMS A QUERY ON THE DATABASE AND RETURNS A PUDLRESULT
+	////////////////////////////////////////////////////////////////////////////
 	protected function process($query) {
 		$ch = curl_init();
 
-		curl_setopt($ch, CURLOPT_URL, $this->path);
-		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, 'q='.rawurlencode($query));
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt_array($ch, [
+			CURLOPT_URL				=> $this->path,
+			CURLOPT_POST			=> true,
+			CURLOPT_POSTFIELDS		=> ['q' => $query],
+			CURLOPT_RETURNTRANSFER	=> true,
+		]);
 
 		$result = curl_exec($ch);
 
@@ -34,19 +59,36 @@ class pudlWeb extends pudlShell {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// RETURNS THE ERROR CODE FOR THE MOST RECENT FUNCTION CALL
+	// http://php.net/manual/en/function.curl-errno.php
+	////////////////////////////////////////////////////////////////////////////
 	public function errno() {
-		if ($this->curl_errno) return $this->curl_errno;
-		return parent::errno();
+		return	($this->curl_errno)
+				? $this->curl_errno
+				: parent::errno();
 	}
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// RETURNS A STRING DESCRIPTION OF THE LAST ERROR
+	// http://php.net/manual/en/function.curl-error.php
+	////////////////////////////////////////////////////////////////////////////
 	public function error() {
 		if ($this->curl_error) return $this->curl_error;
 		return parent::error();
 	}
 
 
-	private $curl_error = '';
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// MEMBER VARIABLES
+	////////////////////////////////////////////////////////////////////////////
 	private $curl_errno = 0;
+	private $curl_error = '';
+
 }
