@@ -87,5 +87,6 @@ require(__DIR__.'/all.php');
 
 
 echo "PHP:\t" . PHP_VERSION . "\n";
+echo "PUDL:\t" . pudl::version . "\n";
 echo "Tests:\t" . $__pudl_test_total__ . "\n";
 echo "ALL GOOD!!\n";
