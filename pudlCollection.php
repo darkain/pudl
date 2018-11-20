@@ -5,11 +5,10 @@ require_once(is_owner(__DIR__.'/pudlObject.php'));
 
 
 
-class		pudlCollection
-	extends
-			pudlObject
-	implements
-			OuterIterator {
+class			pudlCollection
+	extends		pudlObject
+	implements	OuterIterator {
+
 
 
 

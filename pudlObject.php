@@ -18,10 +18,9 @@ require_once(is_owner(__DIR__.'/pudlConstants.php'));
 
 
 
-class	pudlObject
-	implements
-		ArrayAccess,
-		pudlData {
+class			pudlObject
+	implements	ArrayAccess,
+				pudlData {
 
 
 

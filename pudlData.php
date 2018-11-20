@@ -10,8 +10,7 @@
 // http://php.net/manual/en/class.jsonserializable.php
 ////////////////////////////////////////////////////////////////////////////////
 interface	pudlData
-	extends
-			Countable,
+	extends	Countable,
 			SeekableIterator,
 			JsonSerializable {
 
