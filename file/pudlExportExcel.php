@@ -4,12 +4,17 @@
 require_once(is_owner(__DIR__.'/../pudlInterfaces.php'));
 
 
+
 function pudlExportExcel(pudlData $result, $filename, $headers=false) {
 	$zip = new ZipArchive();
 
 	@unlink($filename);
 	if ($zip->open($filename, ZipArchive::CREATE) !== true) {
-		return 'Cannot open file: ' . $filename;
+		throw new pudlFileException(
+			'Cannot create ZIP archive file "' .
+			$filename .
+			'"'
+		);
 	}
 
 
@@ -34,15 +39,15 @@ function pudlExportExcel(pudlData $result, $filename, $headers=false) {
 
 
 	ob_start();
-	$x			= 1;
+	$row		= 1;
 	$total		= 0;
 	$strings	= [];
 	$colcount	= $result->fields();
+	$fields		= $result->listFields();
+
 
 	//EXPORT HEADERS
-	$y = 0;
-	$fields = $result->listFields();
-	echo "\n\t\t".'<row r="' . $x . '" spans="1:' . $colcount . '" s="1" customFormat="1">';
+	echo "\n\t\t".'<row r="' . $row . '" spans="1:' . $colcount . '" s="1" customFormat="1">';
 	foreach ($fields as $key => $val) {
 		$name = is_object($val) ? $val->name : $val['name'];
 		if (!empty($headers[$name])) $name = $headers[$name];
@@ -53,9 +58,9 @@ function pudlExportExcel(pudlData $result, $filename, $headers=false) {
 			$index = count($strings) - 1;
 		}
 		if ($key < 26) {
-			$cell = chr(65 + $key) . $x;
+			$cell = chr(65 + $key) . $row;
 		} else {
-			$cell = chr(64 + (int)floor($key / 26)) . chr(65 + ($key % 26)) . $x;
+			$cell = chr(64 + (int)floor($key / 26)) . chr(65 + ($key % 26)) . $row;
 		}
 		echo '<c r="' . $cell . '" s="1" t="s"><v>' . $index . '</v></c>';
 	}
@@ -63,20 +68,19 @@ function pudlExportExcel(pudlData $result, $filename, $headers=false) {
 
 
 	//EXPORT CELL DATA
-	$x++;
+	$row++;
 	while ($data = $result->row()) {
 
 		$data	= ($data instanceof pudlObject)
 				? $data->values()
 				: array_values($data);
 
-		echo "\n\t\t".'<row r="' . $x . '" spans="1:' . $colcount . '">';
-		$y = 0;
+		echo "\n\t\t".'<row r="' . $row . '" spans="1:' . $colcount . '">';
 		foreach ($data as $key => $val) {
 			if ($key < 26) {
-				$cell = chr(65 + $key) . $x;
+				$cell = chr(65 + $key) . $row;
 			} else {
-				$cell = chr(64 + (int)floor($key / 26)) . chr(65 + ($key % 26)) . $x;
+				$cell = chr(64 + (int)floor($key / 26)) . chr(65 + ($key % 26)) . $row;
 			}
 
 			if (is_numeric($val)) $val = (string) $val;
@@ -110,7 +114,7 @@ function pudlExportExcel(pudlData $result, $filename, $headers=false) {
 			//ELSE OUTPUT NOTHING
 		}
 		echo '</row>';
-		$x++;
+		$row++;
 	}
 
 
@@ -157,4 +161,6 @@ function pudlExportExcel(pudlData $result, $filename, $headers=false) {
 
 	readfile($filename);
 	@unlink($filename);
+
+	return true;
 }
