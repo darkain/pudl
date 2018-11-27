@@ -139,7 +139,7 @@ trait pudlTable {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// TRUNCATE THE GIVEN TABLE
+	// TRUNCATE THE GIVEN TABLE (DELETE ALL ROWS AND RESET AUTO INCREMENT ID)
 	// https://mariadb.com/kb/en/library/truncate-table/
 	////////////////////////////////////////////////////////////////////////////
 	public function truncate($table, $wait=NULL) {
