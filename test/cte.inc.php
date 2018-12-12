@@ -16,6 +16,8 @@ pudlTest($db, 'WITH `tablex` AS (SELECT `id` FROM `table1`) SELECT * FROM `table
 
 
 
+
+$db->string();
 $db([
 	'cte'	=> ['tbx' => $db->in()->select('column', 'table')],
 	'table'	=> ['tbx', '=table2'],
