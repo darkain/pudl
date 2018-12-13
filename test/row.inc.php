@@ -11,7 +11,7 @@ pudlTest($db, 'SELECT * FROM `table` LIMIT 1');
 //SELECT statement shortcut to get a single row using a clause
 //Returns associative array instead of a pudlResult object
 $db->string()->row('table', 'column1=column2');
-pudlTest($db, 'SELECT * FROM `table` WHERE (`column1`=`column2`) LIMIT 1');
+pudlTest($db, 'SELECT * FROM `table` WHERE `column1`=`column2` LIMIT 1');
 
 
 
@@ -27,7 +27,7 @@ pudlTest($db, 'SELECT * FROM `table`');
 //SELECT statement shortcut to get multiple rows using a clause
 //Returns array of associative array instead of a pudlResult object
 $db->string()->rows('table', 'column1=column2');
-pudlTest($db, 'SELECT * FROM `table` WHERE (`column1`=`column2`)');
+pudlTest($db, 'SELECT * FROM `table` WHERE `column1`=`column2`');
 
 
 
@@ -35,7 +35,7 @@ pudlTest($db, 'SELECT * FROM `table` WHERE (`column1`=`column2`)');
 //SELECT statement shortcut to get a single row based on column STRING value
 //Returns associative array instead of a pudlResult object
 $db->string()->rowId('table', 'column', 'value');
-pudlTest($db, "SELECT * FROM `table` WHERE (`column`='value') LIMIT 1");
+pudlTest($db, "SELECT * FROM `table` WHERE `column`='value' LIMIT 1");
 
 
 
@@ -43,7 +43,7 @@ pudlTest($db, "SELECT * FROM `table` WHERE (`column`='value') LIMIT 1");
 //SELECT statement shortcut to get a single row based on column FUNCTION value
 //Returns associative array instead of a pudlResult object
 $db->string()->rowId('table', 'column', pudl::unhex('0123DEADBEEF0123'));
-pudlTest($db, "SELECT * FROM `table` WHERE (`column`=UNHEX('0123DEADBEEF0123')) LIMIT 1");
+pudlTest($db, "SELECT * FROM `table` WHERE `column`=UNHEX('0123DEADBEEF0123') LIMIT 1");
 
 
 
@@ -51,7 +51,7 @@ pudlTest($db, "SELECT * FROM `table` WHERE (`column`=UNHEX('0123DEADBEEF0123')) 
 //SELECT statement shortcut to get a single row based on LIKE comparison
 //Returns associative array instead of a pudlResult object
 $db->string()->rowId('table', 'column', pudl::like('search'));
-pudlTest($db, "SELECT * FROM `table` WHERE (`column` LIKE '%search%') LIMIT 1");
+pudlTest($db, "SELECT * FROM `table` WHERE `column` LIKE '%search%' LIMIT 1");
 
 
 
@@ -60,7 +60,7 @@ pudlTest($db, "SELECT * FROM `table` WHERE (`column` LIKE '%search%') LIMIT 1");
 //Returns associative array instead of a pudlResult object
 $array = ['column' => 5];
 $db->string()->rowId('table', 'column', $array);
-pudlTest($db, "SELECT * FROM `table` WHERE (`column`=5) LIMIT 1");
+pudlTest($db, "SELECT * FROM `table` WHERE `column`=5 LIMIT 1");
 
 
 
@@ -70,7 +70,7 @@ pudlTest($db, "SELECT * FROM `table` WHERE (`column`=5) LIMIT 1");
 $object = new stdClass;
 $object->column = 'value';
 $db->string()->rowId('table', 'column', $object);
-pudlTest($db, "SELECT * FROM `table` WHERE (`column`='value') LIMIT 1");
+pudlTest($db, "SELECT * FROM `table` WHERE `column`='value' LIMIT 1");
 
 
 
@@ -78,7 +78,7 @@ pudlTest($db, "SELECT * FROM `table` WHERE (`column`='value') LIMIT 1");
 //SELECT statement shortcut to get multiple rows based on column value
 //Returns array of associative array instead of a pudlResult object
 $db->string()->rowsId('table', 'column', 'value');
-pudlTest($db, "SELECT * FROM `table` WHERE (`column`='value')");
+pudlTest($db, "SELECT * FROM `table` WHERE `column`='value'");
 
 
 
@@ -88,4 +88,4 @@ class test_pudlId_3 implements pudlId {
 	public function pudlId() { return ['column' => 'value']; }
 }
 $db->string()->rowId('table', new test_pudlId_3);
-pudlTest($db, "SELECT * FROM `table` WHERE (`column`='value') LIMIT 1");
+pudlTest($db, "SELECT * FROM `table` WHERE `column`='value' LIMIT 1");

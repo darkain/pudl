@@ -7,7 +7,7 @@ $db([
 	'clause'	=> ['t1.key=t2.id'],
 	'order'		=> ['t2.sort'],
 ]);
-pudlTest($db, 'SELECT `one`, `two` FROM `table1` AS `t1`, `table2` AS `t2` WHERE (`t1`.`key`=`t2`.`id`) ORDER BY `t2`.`sort`');
+pudlTest($db, 'SELECT `one`, `two` FROM `table1` AS `t1`, `table2` AS `t2` WHERE `t1`.`key`=`t2`.`id` ORDER BY `t2`.`sort`');
 
 
 
@@ -22,7 +22,7 @@ $db([
 	'column'	=> ['one'],
 	'table'		=> ['t1'=>'table1'],
 ]);
-pudlTest($db, 'SELECT `two`, `one` FROM `table2` AS `t2`, `table1` AS `t1` WHERE (`t1`.`key`=`t2`.`id`) ORDER BY `t2`.`sort`');
+pudlTest($db, 'SELECT `two`, `one` FROM `table2` AS `t2`, `table1` AS `t1` WHERE `t1`.`key`=`t2`.`id` ORDER BY `t2`.`sort`');
 
 
 
@@ -37,7 +37,7 @@ $db([
 	'column'	=> 'one',
 	'table'		=> ['t1'=>'table1'],
 ]);
-pudlTest($db, 'SELECT `two`, `one` FROM `table2` AS `t2`, `table1` AS `t1` WHERE (`t1`.`key`=`t2`.`id`) ORDER BY `t2`.`sort`');
+pudlTest($db, 'SELECT `two`, `one` FROM `table2` AS `t2`, `table1` AS `t1` WHERE `t1`.`key`=`t2`.`id` ORDER BY `t2`.`sort`');
 
 
 
@@ -52,7 +52,7 @@ $db([
 	'column'	=> 'two',
 	'table'		=> ['t1'=>'table1'],
 ]);
-pudlTest($db, 'SELECT `one`, `two` FROM `table2` AS `t2`, `table1` AS `t1` WHERE (`t1`.`key`=`t2`.`id`) ORDER BY `t2`.`sort`');
+pudlTest($db, 'SELECT `one`, `two` FROM `table2` AS `t2`, `table1` AS `t1` WHERE `t1`.`key`=`t2`.`id` ORDER BY `t2`.`sort`');
 
 
 
@@ -67,7 +67,7 @@ $db([
 	'column'	=> ['two'],
 	'table'		=> ['t1'=>'table1'],
 ]);
-pudlTest($db, 'SELECT `one`, `two` FROM `table2` AS `t2`, `table1` AS `t1` WHERE (`t1`.`key`=`t2`.`id`) ORDER BY `t2`.`sort`');
+pudlTest($db, 'SELECT `one`, `two` FROM `table2` AS `t2`, `table1` AS `t1` WHERE `t1`.`key`=`t2`.`id` ORDER BY `t2`.`sort`');
 
 
 
@@ -119,7 +119,7 @@ $db([
 	'table'		=> 'table',
 	'clause'	=> 'column1=column2'
 ]);
-pudlTest($db, "SELECT * FROM `table` WHERE (`column1`=`column2`)");
+pudlTest($db, "SELECT * FROM `table` WHERE `column1`=`column2`");
 
 
 
@@ -129,7 +129,7 @@ $db([
 	'table'		=> 'table',
 	'clause'	=> ['column'=>'value']
 ]);
-pudlTest($db, "SELECT * FROM `table` WHERE (`column`='value')");
+pudlTest($db, "SELECT * FROM `table` WHERE `column`='value'");
 
 
 
@@ -139,7 +139,7 @@ $db([
 	'table'		=> 'table',
 	'group'		=> 'column'
 ]);
-pudlTest($db, "SELECT * FROM `table` GROUP BY column");
+pudlTest($db, "SELECT * FROM `table` GROUP BY `column`");
 
 
 
@@ -169,7 +169,7 @@ $db([
 	'table'		=> 'table',
 	'order'		=> 'column'
 ]);
-pudlTest($db, "SELECT * FROM `table` ORDER BY column");
+pudlTest($db, "SELECT * FROM `table` ORDER BY `column`");
 
 
 
@@ -240,7 +240,7 @@ $db([
 	'table'		=> 'table',
 	'having'	=> 'column1=column2',
 ]);
-pudlTest($db, "SELECT * FROM `table` HAVING (`column1`=`column2`)");
+pudlTest($db, "SELECT * FROM `table` HAVING `column1`=`column2`");
 
 
 
@@ -250,7 +250,7 @@ $db([
 	'table'		=> 'table',
 	'having'	=> ['column1=column2'],
 ]);
-pudlTest($db, "SELECT * FROM `table` HAVING (`column1`=`column2`)");
+pudlTest($db, "SELECT * FROM `table` HAVING `column1`=`column2`");
 
 
 
@@ -260,7 +260,7 @@ $db([
 	'table'		=> 'table',
 	'having'	=> ['column' => 'value'],
 ]);
-pudlTest($db, "SELECT * FROM `table` HAVING (`column`='value')");
+pudlTest($db, "SELECT * FROM `table` HAVING `column`='value'");
 
 
 

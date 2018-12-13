@@ -17,7 +17,7 @@ $db->on('log', function($command, $db, $result) {
 
 
 
-$logresult = 'SELECT * FROM `table` WHERE (`column`=1) LIMIT 1';
+$logresult = 'SELECT * FROM `table` WHERE `column`=1 LIMIT 1';
 $db->string()->log()->rowId('table', 'column', 1);
 
 

@@ -301,8 +301,7 @@ trait pudlQuery {
 
 
 	protected function _clause($clause, $type='') {
-		$prefix = empty($type) ? '' : (' ' . $type . ' (');
-		$suffix = empty($type) ? '' : ')';
+		$prefix = empty($type) ? '' : (' ' . $type . ' ');
 
 
 		if ($clause === false)	return '';
@@ -315,7 +314,7 @@ trait pudlQuery {
 
 
 		if ($clause instanceof pudlId) {
-			return $prefix . $this->_clauseRecurse($clause->pudlId()) . $suffix;
+			return $prefix . $this->_clauseRecurse($clause->pudlId());
 		}
 
 
@@ -324,17 +323,17 @@ trait pudlQuery {
 			$query	.= $this->_value($clause->compare);
 			$query	.= $this->_clauseEquals($clause);
 			$query	.= '(' . $this->_inSet($clause->value) . ')';
-			return	$query . $suffix;
+			return	$query;
 		}
 
 
 		if (is_array($clause)  ||  is_object($clause)) {
 			if (empty($clause))	return '';
-			return $prefix . $this->_clauseRecurse($clause) . $suffix;
+			return $prefix . $this->_clauseRecurse($clause);
 		}
 
 
-		return $prefix . $this->_compare($clause) . $suffix;
+		return $prefix . $this->_compare($clause);
 	}
 
 
@@ -344,9 +343,8 @@ trait pudlQuery {
 	// GENERATE THE 'ORDER BY' SECTION OF THE SQL QUERY
 	////////////////////////////////////////////////////////////////////////////
 	protected function _order($order, $prefix=false) {
-		//TODO: (string) should escape identifier
 		if (empty($order)) return '';
-		if (is_string($order)) return ' ORDER BY ' . $order;
+		if (is_string($order)) $order = [$order];
 
 		if (!pudl_array($order)  &&  !($order instanceof pudlHelper)) {
 			throw new pudlTypeException($this,
@@ -355,7 +353,7 @@ trait pudlQuery {
 		}
 
 		if ($order instanceof pudlStringResult) return (string) $order;
-		return ' ORDER BY ' . $this->_clauseRecurse($order, ', ', $prefix);
+		return ' ORDER BY ' . $this->_clauseRecurse($order, ', ', $prefix, false);
 	}
 
 
@@ -365,9 +363,8 @@ trait pudlQuery {
 	// GENERATE THE 'GROUP BY' SECTION OF THE SQL QUERY
 	////////////////////////////////////////////////////////////////////////////
 	protected function _group($group, $prefix=false) {
-		//TODO: (string) should escape identifier
 		if (empty($group)) return '';
-		if (is_string($group)) return ' GROUP BY ' . $group;
+		if (is_string($group)) $group = [$group];
 
 		if (!pudl_array($group)  &&  !($group instanceof pudlHelper)) {
 			throw new pudlTypeException($this,
@@ -376,7 +373,7 @@ trait pudlQuery {
 		}
 
 		if ($group instanceof pudlStringResult) return (string) $group;
-		return ' GROUP BY ' . $this->_clauseRecurse($group, ', ', $prefix);
+		return ' GROUP BY ' . $this->_clauseRecurse($group, ', ', $prefix, false);
 	}
 
 
@@ -386,7 +383,7 @@ trait pudlQuery {
 	// GENERATE A RECUSIVE CLAUSE
 	// THIS IS USED BY 'WHERE', 'ON', 'HAVING', 'GROUP BY', 'ORDER BY'
 	////////////////////////////////////////////////////////////////////////////
-	private function _clauseRecurse($clause, $joiner=' AND ', $prefix=false) {
+	private function _clauseRecurse($clause, $joiner=' AND ', $prefix=false, $encase=true) {
 		static $depth = 0;
 		$query = '';
 
@@ -427,11 +424,15 @@ trait pudlQuery {
 			return $query	.	$this->_value($clause);
 		}
 
+		if (is_object($clause)) $clause = get_object_vars($clause);
+
+		if (count($clause) > 1  &&  $encase) $query .= '(';
+
 		$depth++;
 		foreach ($clause as $key => $value) {
 			if (is_int($key)  &&  $value==='') continue;
 
-			if (strlen($query)) $query .= $joiner;
+			if (strlen($query) > 1) $query .= $joiner;
 
 			if (is_int($key)  &&  is_string($value)) {
 				$query .= $this->_compare($value);
@@ -464,7 +465,7 @@ trait pudlQuery {
 				if (pudl_array($value)) continue;
 
 			} else if ($value instanceof pudlAnd) {
-				$query .= '(' . $this->_clauseRecurse($value->clause, $value->joiner, $prefix) . ')';
+				$query .= $this->_clauseRecurse($value->clause, $value->joiner, $prefix);
 				continue;
 
 			} else if ($value instanceof pudlEquals  &&  $value->compare !== false) {
@@ -484,19 +485,21 @@ trait pudlQuery {
 				$query .= $new;
 
 			} else if ((is_array($value)  ||  is_object($value))  &&  $joiner === ' AND ') {
-				$query .= '(' . $this->_clauseRecurse($value, ' OR ', $prefix) . ')';
+				$query .= $this->_clauseRecurse($value, ' OR ', $prefix);
 
 			} else if ((is_array($value)  ||  is_object($value))  &&  $joiner === ' OR ') {
-				$query .= '(' . $this->_clauseRecurse($value, ' AND ', $prefix) . ')';
+				$query .= $this->_clauseRecurse($value, ' AND ', $prefix);
 
 			} else if ((is_array($value)  ||  is_object($value))  &&  $joiner === ', ') {
-				$query .= $this->_clauseRecurse($value, $joiner, $prefix);
+				$query .= $this->_clauseRecurse($value, ' OR ', $prefix);
 
 			} else {
 				$query = $this->_invalidType($value, 'clause');
 				break;
 			}
 		}
+
+		if (count($clause) > 1  &&  $encase) $query .= ')';
 
 		$depth--;
 		return $query;

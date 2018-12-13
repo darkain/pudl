@@ -2,42 +2,42 @@
 
 //UPDATE statement - incrementing an INTEGER value
 $db->string()->increment('table', 'item', ['column'=>'value']);
-pudlTest($db, "UPDATE `table` SET `item`=`item`+1 WHERE (`column`='value')");
+pudlTest($db, "UPDATE `table` SET `item`=`item`+1 WHERE `column`='value'");
 
 
 
 
 //UPDATE statement - incrementing an INTEGER value of 10
 $db->string()->increment('table', 'item', ['column'=>'value'], 10);
-pudlTest($db, "UPDATE `table` SET `item`=`item`+10 WHERE (`column`='value')");
+pudlTest($db, "UPDATE `table` SET `item`=`item`+10 WHERE `column`='value'");
 
 
 
 
 //UPDATE statement - incrementing an INTEGER value of negative 10
 $db->string()->increment('table', 'item', ['column'=>'value'], -10);
-pudlTest($db, "UPDATE `table` SET `item`=`item`-10 WHERE (`column`='value')");
+pudlTest($db, "UPDATE `table` SET `item`=`item`-10 WHERE `column`='value'");
 
 
 
 
 //UPDATE statement - incrementing an INTEGER value
 $db->string()->incrementId('table', 'item', 'column', 'value');
-pudlTest($db, "UPDATE `table` SET `item`=`item`+1 WHERE (`column`='value')");
+pudlTest($db, "UPDATE `table` SET `item`=`item`+1 WHERE `column`='value'");
 
 
 
 
 //UPDATE statement - incrementing an INTEGER value
 $db->string()->incrementId('table', 'item', 'column', 'value', 10);
-pudlTest($db, "UPDATE `table` SET `item`=`item`+10 WHERE (`column`='value')");
+pudlTest($db, "UPDATE `table` SET `item`=`item`+10 WHERE `column`='value'");
 
 
 
 
 //UPDATE statement - incrementing an INTEGER value
 $db->string()->incrementId('table', 'item', 'column', 'value', -10);
-pudlTest($db, "UPDATE `table` SET `item`=`item`-10 WHERE (`column`='value')");
+pudlTest($db, "UPDATE `table` SET `item`=`item`-10 WHERE `column`='value'");
 
 
 

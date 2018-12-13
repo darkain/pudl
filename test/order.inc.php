@@ -1,13 +1,13 @@
 <?php
 
 $db->string()->row('table', false, 'column');
-pudlTest($db, 'SELECT * FROM `table` ORDER BY column LIMIT 1');
+pudlTest($db, 'SELECT * FROM `table` ORDER BY `column` LIMIT 1');
 
 
 
 
-$db->string()->row('table', false, 'column DESC');
-pudlTest($db, 'SELECT * FROM `table` ORDER BY column DESC LIMIT 1');
+//$db->string()->row('table', false, 'column DESC');
+//pudlTest($db, 'SELECT * FROM `table` ORDER BY `column` DESC LIMIT 1');
 
 
 
@@ -99,8 +99,26 @@ pudlTest($db, "SELECT * FROM `table` ORDER BY `column1`, `column2` LIMIT 1");
 
 
 
-$db->string()->row('table', false, [['a'=>'column1'], ['b'=>'column2']]);
-pudlTest($db, "SELECT * FROM `table` ORDER BY `a`='column1', `b`='column2' LIMIT 1");
+$db->string()->row('table', false, [['a'=>'value1'], ['b'=>'value2']]);
+pudlTest($db, "SELECT * FROM `table` ORDER BY `a`='value1', `b`='value2' LIMIT 1");
+
+
+
+
+$db->string()->row('table', false, [['a=column1'], ['b=column2']]);
+pudlTest($db, "SELECT * FROM `table` ORDER BY `a`=`column1`, `b`=`column2` LIMIT 1");
+
+
+
+
+$db->string()->row('table', false, [['a'=>'value1', 'b'=>'value2']]);
+pudlTest($db, "SELECT * FROM `table` ORDER BY (`a`='value1' OR `b`='value2') LIMIT 1");
+
+
+
+
+$db->string()->row('table', false, [['a=column1', 'b=column2']]);
+pudlTest($db, "SELECT * FROM `table` ORDER BY (`a`=`column1` OR `b`=`column2`) LIMIT 1");
 
 
 

@@ -11,7 +11,7 @@ $db->string()->orderGroup(
 	10,				//limit
 	20				//offset
 );
-pudlTest($db, 'SELECT *, COUNT(*) FROM (SELECT `column` FROM `table` WHERE (`a`=`b`) ORDER BY sorted) `x_pudl_alias_1` GROUP BY grouped ORDER BY sorted LIMIT 10 OFFSET 20');
+pudlTest($db, 'SELECT *, COUNT(*) FROM (SELECT `column` FROM `table` WHERE `a`=`b` ORDER BY `sorted`) `x_pudl_alias_1` GROUP BY `grouped` ORDER BY `sorted` LIMIT 10 OFFSET 20');
 
 
 
@@ -26,7 +26,7 @@ $db->string()->orderGroupEx(
 	10,				//limit
 	20				//offset
 );
-pudlTest($db, 'SELECT *, COUNT(*) FROM (SELECT `column` FROM `table` WHERE (`a`=`b`) GROUP BY inside ORDER BY sorted) `x_pudl_alias_2` GROUP BY outside ORDER BY sorted LIMIT 10 OFFSET 20');
+pudlTest($db, 'SELECT *, COUNT(*) FROM (SELECT `column` FROM `table` WHERE `a`=`b` GROUP BY `inside` ORDER BY `sorted`) `x_pudl_alias_2` GROUP BY `outside` ORDER BY `sorted` LIMIT 10 OFFSET 20');
 
 
 
@@ -40,7 +40,7 @@ $db->string()->distinctGroup(
 	10,				//limit
 	20				//offset
 );
-pudlTest($db, 'SELECT DISTINCT * FROM (SELECT `column` FROM `table` WHERE (`a`=`b`) ORDER BY sorted) `x_pudl_alias_3` GROUP BY grouped ORDER BY sorted LIMIT 10 OFFSET 20');
+pudlTest($db, 'SELECT DISTINCT * FROM (SELECT `column` FROM `table` WHERE `a`=`b` ORDER BY `sorted`) `x_pudl_alias_3` GROUP BY `grouped` ORDER BY `sorted` LIMIT 10 OFFSET 20');
 
 
 

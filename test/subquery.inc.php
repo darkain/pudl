@@ -37,4 +37,4 @@ pudlTest($db, 'SELECT `column` FROM `parent` AS `t1` LEFT JOIN (SELECT `column` 
 $db->string()->select('column', 'table', [
 	'column' => $db->in()->select('column', 'table'),
 ]);
-pudlTest($db, 'SELECT `column` FROM `table` WHERE (`column` IN (SELECT `column` FROM `table`))');
+pudlTest($db, 'SELECT `column` FROM `table` WHERE `column` IN (SELECT `column` FROM `table`)');

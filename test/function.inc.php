@@ -2,7 +2,7 @@
 
 //TIMESTAMP for December 13th, 2015 @ 9:46 AM (UTC)
 $db->string()->row('table', ['column'=>pudlFunction::timestamp(1450000000)]);
-pudlTest($db, "SELECT * FROM `table` WHERE (`column`=CONVERT_TZ(FROM_UNIXTIME(1450000000), @@SESSION.time_zone, 'UTC')) LIMIT 1");
+pudlTest($db, "SELECT * FROM `table` WHERE `column`=CONVERT_TZ(FROM_UNIXTIME(1450000000), @@SESSION.time_zone, 'UTC') LIMIT 1");
 
 
 
@@ -72,49 +72,49 @@ pudlTest($db, "SELECT FROM_UNIXTIME(449020800)");
 
 //DATE RANGES
 $db->string()->select('*', 'table', ['column'=>pudl::daterange(449020800, 449040800)]);
-pudlTest($db, "SELECT * FROM `table` WHERE (`column` BETWEEN FROM_UNIXTIME(449020800) AND FROM_UNIXTIME(449040800))");
+pudlTest($db, "SELECT * FROM `table` WHERE `column` BETWEEN FROM_UNIXTIME(449020800) AND FROM_UNIXTIME(449040800)");
 
 
 
 
 $db->string()->row('table', ['column'=>pudl::column('other')]);
-pudlTest($db, "SELECT * FROM `table` WHERE (`column`=`other`) LIMIT 1");
+pudlTest($db, "SELECT * FROM `table` WHERE `column`=`other` LIMIT 1");
 
 
 
 
 $db->string()->row('table', [pudl::column('column', 'value')]);
-pudlTest($db, "SELECT * FROM `table` WHERE (`column`='value') LIMIT 1");
+pudlTest($db, "SELECT * FROM `table` WHERE `column`='value' LIMIT 1");
 
 
 
 
 $db->string()->row('table', [pudl::column('column1', pudl::column('column2'))]);
-pudlTest($db, "SELECT * FROM `table` WHERE (`column1`=`column2`) LIMIT 1");
+pudlTest($db, "SELECT * FROM `table` WHERE `column1`=`column2` LIMIT 1");
 
 
 
 
 $db->string()->row('table', [pudl::column('column1', pudl::column('column2')->not())]);
-pudlTest($db, "SELECT * FROM `table` WHERE (`column1`!=`column2`) LIMIT 1");
+pudlTest($db, "SELECT * FROM `table` WHERE `column1`!=`column2` LIMIT 1");
 
 
 
 
 $db->string()->row('table', [pudl::column('column', [1,2,3])]);
-pudlTest($db, "SELECT * FROM `table` WHERE (`column` IN (1, 2, 3)) LIMIT 1");
+pudlTest($db, "SELECT * FROM `table` WHERE `column` IN (1, 2, 3) LIMIT 1");
 
 
 
 
 $db->string()->row('table', [pudl::column('column', false)]);
-pudlTest($db, "SELECT * FROM `table` WHERE (`column`=FALSE) LIMIT 1");
+pudlTest($db, "SELECT * FROM `table` WHERE `column`=FALSE LIMIT 1");
 
 
 
 
 $db->string()->row('table', [pudl::column('column', true)]);
-pudlTest($db, "SELECT * FROM `table` WHERE (`column`=TRUE) LIMIT 1");
+pudlTest($db, "SELECT * FROM `table` WHERE `column`=TRUE LIMIT 1");
 
 
 
@@ -125,7 +125,7 @@ $db->string()->row('table', [
 		'value'
 	)
 ]);
-pudlTest($db, "SELECT * FROM `table` WHERE (REPLACE(`column`, 'old', 'new')='value') LIMIT 1");
+pudlTest($db, "SELECT * FROM `table` WHERE REPLACE(`column`, 'old', 'new')='value' LIMIT 1");
 
 
 
@@ -136,25 +136,25 @@ $db->string()->row('table', [
 		pudl::like('value')
 	)
 ]);
-pudlTest($db, "SELECT * FROM `table` WHERE (REPLACE(`column`, 'old', 'new') LIKE '%value%') LIMIT 1");
+pudlTest($db, "SELECT * FROM `table` WHERE REPLACE(`column`, 'old', 'new') LIKE '%value%' LIMIT 1");
 
 
 
 
 $db->string()->row('table', [pudl::find('column', ['a', 'b', 'c'])]);
-pudlTest($db, "SELECT * FROM `table` WHERE ((FIND_IN_SET('a', `column`) OR FIND_IN_SET('b', `column`) OR FIND_IN_SET('c', `column`))) LIMIT 1");
+pudlTest($db, "SELECT * FROM `table` WHERE (FIND_IN_SET('a', `column`) OR FIND_IN_SET('b', `column`) OR FIND_IN_SET('c', `column`)) LIMIT 1");
 
 
 
 
 $db->string()->row('table', [pudl::find('column', 'a,b,c')]);
-pudlTest($db, "SELECT * FROM `table` WHERE ((FIND_IN_SET('a', `column`) OR FIND_IN_SET('b', `column`) OR FIND_IN_SET('c', `column`))) LIMIT 1");
+pudlTest($db, "SELECT * FROM `table` WHERE (FIND_IN_SET('a', `column`) OR FIND_IN_SET('b', `column`) OR FIND_IN_SET('c', `column`)) LIMIT 1");
 
 
 
 
 $db->string()->row('table', ['column' => pudl::regexp('expression')]);
-pudlTest($db, "SELECT * FROM `table` WHERE (`column` REGEXP 'expression') LIMIT 1");
+pudlTest($db, "SELECT * FROM `table` WHERE `column` REGEXP 'expression' LIMIT 1");
 
 
 
@@ -166,7 +166,7 @@ $db->string()->row('table', [
 		'part3'
 	)
 ]);
-pudlTest($db, "SELECT * FROM `table` WHERE (`column` REGEXP 'part1part2part3') LIMIT 1");
+pudlTest($db, "SELECT * FROM `table` WHERE `column` REGEXP 'part1part2part3' LIMIT 1");
 
 
 
@@ -179,9 +179,9 @@ $db->string()->row('table', [
 	)
 ]);
 if ($db instanceof pudlMySqli  ||  $db instanceof pudlNull) {
-	pudlTest($db, "SELECT * FROM `table` WHERE (`column` REGEXP '\\\\[\\\\[\\\\:\\\\<\\\\:\\\\]\\\\]value\\\\[\\\\[\\\\:\\\\>\\\\:\\\\]\\\\]') LIMIT 1");
+	pudlTest($db, "SELECT * FROM `table` WHERE `column` REGEXP '\\\\[\\\\[\\\\:\\\\<\\\\:\\\\]\\\\]value\\\\[\\\\[\\\\:\\\\>\\\\:\\\\]\\\\]' LIMIT 1");
 } else {
-	pudlTest($db, "SELECT * FROM `table` WHERE (`column` REGEXP '\\[\\[\\:\\<\\:\\]\\]value\\[\\[\\:\\>\\:\\]\\]') LIMIT 1");
+	pudlTest($db, "SELECT * FROM `table` WHERE `column` REGEXP '\\[\\[\\:\\<\\:\\]\\]value\\[\\[\\:\\>\\:\\]\\]' LIMIT 1");
 }
 
 
@@ -194,7 +194,7 @@ $db->string()->row('table', [
 		pudl::raw('[[:>:]]')
 	)
 ]);
-pudlTest($db, "SELECT * FROM `table` WHERE (`column` REGEXP '[[:<:]]value[[:>:]]') LIMIT 1");
+pudlTest($db, "SELECT * FROM `table` WHERE `column` REGEXP '[[:<:]]value[[:>:]]' LIMIT 1");
 
 
 
@@ -206,16 +206,16 @@ $db->string()->row('table', [
 		pudl::raw('[[:>:]]')
 	])
 ]);
-pudlTest($db, "SELECT * FROM `table` WHERE (`column` REGEXP '[[:<:]]value[[:>:]]') LIMIT 1");
+pudlTest($db, "SELECT * FROM `table` WHERE `column` REGEXP '[[:<:]]value[[:>:]]' LIMIT 1");
 
 
 
 
 $db->string()->row('table', pudl::reglike('column', '12345', '\\d'));
 if ($db instanceof pudlMySqli  ||  $db instanceof pudlNull) {
-	pudlTest($db, "SELECT * FROM `table` WHERE (REGEXP_REPLACE(`column`, '\\\\d', '') LIKE '%12345%') LIMIT 1");
+	pudlTest($db, "SELECT * FROM `table` WHERE REGEXP_REPLACE(`column`, '\\\\d', '') LIKE '%12345%' LIMIT 1");
 } else {
-	pudlTest($db, "SELECT * FROM `table` WHERE (REGEXP_REPLACE(`column`, '\\d', '') LIKE '%12345%') LIMIT 1");
+	pudlTest($db, "SELECT * FROM `table` WHERE REGEXP_REPLACE(`column`, '\\d', '') LIKE '%12345%' LIMIT 1");
 }
 
 
@@ -223,9 +223,9 @@ if ($db instanceof pudlMySqli  ||  $db instanceof pudlNull) {
 
 $db->string()->row('table', [pudl::reglike('column', '12345', '\\d')]);
 if ($db instanceof pudlMySqli  ||  $db instanceof pudlNull) {
-	pudlTest($db, "SELECT * FROM `table` WHERE (REGEXP_REPLACE(`column`, '\\\\d', '') LIKE '%12345%') LIMIT 1");
+	pudlTest($db, "SELECT * FROM `table` WHERE REGEXP_REPLACE(`column`, '\\\\d', '') LIKE '%12345%' LIMIT 1");
 } else {
-	pudlTest($db, "SELECT * FROM `table` WHERE (REGEXP_REPLACE(`column`, '\\d', '') LIKE '%12345%') LIMIT 1");
+	pudlTest($db, "SELECT * FROM `table` WHERE REGEXP_REPLACE(`column`, '\\d', '') LIKE '%12345%' LIMIT 1");
 }
 
 
