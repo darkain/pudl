@@ -179,27 +179,26 @@ trait pudlQuery {
 
 			if (is_string($key)) {
 				if (is_string($value)) {
-					$query .= $this->identifiers($value);
+					$query	.= $this->identifiers($value);
 
 				} else if ($value instanceof pudlEquals  &&  $value->compare !== false) {
 					$query	.=	$this->_value($value->compare);
 					$query	.=	$this->_clauseEquals($value);
-					if (!($value instanceof pudlBetween)) $value = $value->value;
 					$query	.=	$this->_value($value);
 
 				} else {
-					$query .= $this->_value($value, true);
+					$query	.= $this->_value($value);
 				}
-				$query .= ' AS ' . $this->identifier($key);
+				$query		.= ' AS ' . $this->identifier($key);
 
 			} else if (pudl_array($value)) {
-				$query .= $this->_column($value);
+				$query		.= $this->_column($value);
 
 			} else if (is_string($value)) {
-				$query .= $this->identifiers($value);
+				$query		.= $this->identifiers($value);
 
 			} else {
-				$query .= $this->_value($value, true);
+				$query		.= $this->_value($value);
 			}
 		}
 
