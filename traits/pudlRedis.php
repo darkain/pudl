@@ -180,6 +180,9 @@ trait pudlRedis {
 
 ////////////////////////////////////////////////////////////////////////////////
 // PHP7 HACK BECAUSE EVERYTHING IS BROKEN EVERYWHERE!
+// PHP7 IS EVEN MORE BROKEN DUE TO ERRORS VS EXCEPTIONS
+// HANDLE LEGACY (ERRORS) AND MODERN (EXCEPTIONS) FROM PHP
+// IN PHP 7.2, DEBIAN IS STILL SHOWING ERRORS, FREEBSD IS SHOWING EXCEPTIONS
 ////////////////////////////////////////////////////////////////////////////////
 if (!defined('HHVM_VERSION')  &&  class_exists('Redis')) {
 	/** @suppress PhanRedefineClass */
@@ -187,7 +190,13 @@ if (!defined('HHVM_VERSION')  &&  class_exists('Redis')) {
 		public function connect($host, $port=-1, $timeout=0.0, $persistent_id='') {
 
 			$level	= error_reporting(0);
-			$return	= parent::connect($host, $port, $timeout, $persistent_id);
+
+			try {
+				$return	= parent::connect($host, $port, $timeout, $persistent_id);
+			} catch (Exception $e) {
+				$return = false;
+			}
+
 			error_reporting($level);
 			return	$return;
 		}
@@ -197,8 +206,14 @@ if (!defined('HHVM_VERSION')  &&  class_exists('Redis')) {
 									$persistent_id='', $retry_interval=0) {
 
 			$level	= error_reporting(0);
-			$return	= parent::pconnect(	$host, $port, $timeout,
-										$persistent_id, $retry_interval);
+
+			try {
+				$return	= parent::pconnect(	$host, $port, $timeout,
+											$persistent_id, $retry_interval);
+			} catch (Exception $e) {
+				$return = false;
+			}
+
 			error_reporting($level);
 			return	$return;
 		}
@@ -220,8 +235,12 @@ if (defined('HHVM_VERSION')  &&  class_exists('Redis')) {
 			$level	= error_reporting(0);
 
 			/** @suppress PhanUndeclaredStaticMethod */
-			$return	= parent::doConnect($host, $port, $timeout, $persistent_id,
-										$retry_interval, $persistent);
+			try {
+				$return	= parent::doConnect($host, $port, $timeout, $persistent_id,
+											$retry_interval, $persistent);
+			} catch (Exception $e) {
+				$return = false;
+			}
 
 			error_reporting($level);
 			return	$return;
