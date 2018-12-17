@@ -324,6 +324,24 @@ pudlTest($db, "SELECT 'value1' AS `column1`, 'value2' AS `column2`");
 
 
 
+$db->string()->select(['alias' => pudl::eq(1, 2)]);
+pudlTest($db, "SELECT 1=2 AS `alias`");
+
+
+
+
+$db->string()->select(['alias' => pudl::eq(pudl::column('col'), 2)]);
+pudlTest($db, "SELECT `col`=2 AS `alias`");
+
+
+
+
+$db->string()->select(['alias' => pudl::eq(1, pudl::column('col'))]);
+pudlTest($db, "SELECT 1=`col` AS `alias`");
+
+
+
+
 $db->string()->select(pudl::now());
 pudlTest($db, "SELECT NOW()");
 
