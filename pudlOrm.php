@@ -478,19 +478,14 @@ abstract class	pudlOrm
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// SHORTCUT FUNCTIONS FOR ERROR CHECKING
-	// THESE ARE RELATED TO ALTAFORM. IF YOU'RE NOT USING THAT LIBRARY, THESE
-	// ARE THEN WORTHLESS
+	// SHORTCUT FUNCTIONS FOR ERROR CHECKING.
+	// THIS IS RELATED TO THE ALTAFORM LIBRARY.
+	// IF YOU'RE NOT USING THAT LIBRARY, THEN THIS IS MOST LIKELY WORTHLESS.
 	////////////////////////////////////////////////////////////////////////////
-	public function assert400($text=false) { assert400((string)$this, $text); return $this; }
-	public function assert401($text=false) { assert401((string)$this, $text); return $this; }
-	public function assert402($text=false) { assert402((string)$this, $text); return $this; }
-	public function assert403($text=false) { assert403((string)$this, $text); return $this; }
-	public function assert404($text=false) { assert404((string)$this, $text); return $this; }
-	public function assert405($text=false) { assert405((string)$this, $text); return $this; }
-	public function assert422($text=false) { assert422((string)$this, $text); return $this; }
-	public function assert500($text=false) { assert500((string)$this, $text); return $this; }
-	public function assert503($text=false) { assert503((string)$this, $text); return $this; }
+	public function assertStatus($code, $text=false) {
+		assertStatus($code, (string)$this, $text);
+		return $this;
+	}
 
 
 
