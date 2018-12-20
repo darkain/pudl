@@ -67,3 +67,9 @@ $db->string()->distinct(
 	20				//offset
 );
 pudlTest($db, 'SELECT DISTINCT `column` FROM `table` WHERE `a`=`b` ORDER BY `sorted` LIMIT 10 OFFSET 20');
+
+
+
+
+$db->string()->ping();
+pudlTest($db, 'SELECT 1');

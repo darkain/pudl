@@ -8,6 +8,10 @@
 trait pudlSelect {
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// GENERAL SELECT STATEMENT, RETURNING A RESULT
+	////////////////////////////////////////////////////////////////////////////
 	public function select($column, $table=false, $clause=false, $order=false, $limit=false, $offset=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
@@ -21,6 +25,10 @@ trait pudlSelect {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// SELECT USING "HAVING"
+	////////////////////////////////////////////////////////////////////////////
 	public function having($column, $table, $clause=false, $having=false, $order=false, $limit=false, $offset=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
@@ -35,6 +43,10 @@ trait pudlSelect {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// SELECT USING "GROUP BY"
+	////////////////////////////////////////////////////////////////////////////
 	public function group($column, $table, $clause=false, $group=false, $order=false, $limit=false, $offset=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
@@ -49,6 +61,10 @@ trait pudlSelect {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// SELECT USING "GROUP BY" AND "HAVING"
+	////////////////////////////////////////////////////////////////////////////
 	public function groupHaving($column, $table, $clause=false, $group=false, $having=false, $order=false, $limit=false, $offset=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
@@ -64,6 +80,10 @@ trait pudlSelect {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// SELECT USING "ORDER BY" AND "GROUP BY"
+	////////////////////////////////////////////////////////////////////////////
 	public function orderGroup($column, $table, $clause=false, $group=false, $order=false, $limit=false, $offset=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
@@ -84,6 +104,10 @@ trait pudlSelect {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// SELECT "ORDER BY" "GROUP BY" USING DIFFERENT INNER AND OUTTER GROUPINGS
+	////////////////////////////////////////////////////////////////////////////
 	public function orderGroupEx($column, $table, $clause=false, $inner_group=false, $outer_group=false, $order=false, $limit=false, $offset=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
@@ -105,6 +129,10 @@ trait pudlSelect {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// SELECT DISTINCT QUERY
+	////////////////////////////////////////////////////////////////////////////
 	public function distinct($column, $table, $clause=false, $order=false, $limit=false, $offset=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
@@ -119,6 +147,10 @@ trait pudlSelect {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// SELECT DISTINCT QUERY USING A "GROUP BY"
+	////////////////////////////////////////////////////////////////////////////
 	public function distinctGroup($column, $table, $clause=false, $group=false, $order=false, $limit=false, $offset=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
@@ -137,6 +169,10 @@ trait pudlSelect {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// EXPLAIN A SQL QUERY
+	////////////////////////////////////////////////////////////////////////////
 	public function selectExplain($column, $table, $clause=false, $order=false, $limit=false, $offset=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_column($column);
@@ -151,7 +187,7 @@ trait pudlSelect {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// SELEX - COMPLEX SELECT STATEMENT USING ARRAY(S)
+	// SELEX - COMPLEX SQL SELECT STATEMENT GENERATOR USING ARRAY(S)
 	////////////////////////////////////////////////////////////////////////////
 	public function selex(/* ...$selex */) {
 		$query		= '';
@@ -167,7 +203,7 @@ trait pudlSelect {
 
 
 		//	EXPLAIN
-		if (!empty($params['explain']))		$query .= 'EXPLAIN ';
+		if (!empty($params['explain'])) $query .= 'EXPLAIN ';
 
 
 		//	CTE
@@ -187,7 +223,7 @@ trait pudlSelect {
 
 
 		//	DISTICT
-		if (!empty($params['distinct']))	$query .= 'DISTINCT ';
+		if (!empty($params['distinct'])) $query .= 'DISTINCT ';
 
 
 		//	(GROUP BY + ORDER BY) SUBQUERY
@@ -258,6 +294,9 @@ trait pudlSelect {
 
 
 
+	////////////////////////////////////////////////////////////////////////////
+	// PULL A SINGLE ROW MATCHING THE OPTIONAL CLAUSE AS A RESULT
+	////////////////////////////////////////////////////////////////////////////
 	public function selectRow($col, $table, $clause=false, $order=false, $limit=1, $offset=false) {
 		$result = $this->select($col, $table, $clause, $order, $limit, $offset);
 		if ($result instanceof pudlStringResult) return $result;
@@ -268,18 +307,30 @@ trait pudlSelect {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// PULL A SINGLE ROW MATCHING THE OPTIONAL CLAUSE AS ARRAY
+	////////////////////////////////////////////////////////////////////////////
 	public function row($table, $clause=false, $order=false) {
 		return $this->selectRow('*', $table, $clause, $order, 1, false);
 	}
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// PULL ALL ROWS MATCHING THE OPTIONAL CLAUSE AS A ARRAYS
+	////////////////////////////////////////////////////////////////////////////
 	public function rowEx($col, $table, $clause=false, $order=false) {
 		return $this->selectRow($col, $table, $clause, $order, 1, false);
 	}
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// PULL ALL ROWS MATCHING THE OPTIONAL CLAUSE AS A RESULT
+	////////////////////////////////////////////////////////////////////////////
 	public function selectRows($col, $table, $clause=false, $order=false, $limit=false, $offset=false) {
 		$result = $this->select($col, $table, $clause, $order, $limit, $offset);
 		if ($this->inUnion()) return true;
@@ -289,24 +340,40 @@ trait pudlSelect {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// PULL ALL ROWS MATCHING THE OPTIONAL CLAUSE AS ARRAYS
+	////////////////////////////////////////////////////////////////////////////
 	public function rows($table, $clause=false, $order=false) {
 		return $this->selectRows('*', $table, $clause, $order, false, false);
 	}
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// PULL A SINGLE ROW MATCHING THE ID
+	////////////////////////////////////////////////////////////////////////////
 	public function rowId($table, $column, $id=false) {
 		return $this->row($table, $this->_clauseId($column,$id), false);
 	}
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// PULL ALL ROWS MATCHING THE ID
+	////////////////////////////////////////////////////////////////////////////
 	public function rowsId($table, $column, $id=false) {
 		return $this->selectRows('*', $table, $this->_clauseId($column,$id), false, false, false);
 	}
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// PULL A SINGLE CELL
+	////////////////////////////////////////////////////////////////////////////
 	public function cell($table, $col, $clause=false, $order=false) {
 		$result = $this->select($col, $table, $clause, $order, 1, false);
 		if ($result instanceof pudlStringResult) return $result;
@@ -317,18 +384,30 @@ trait pudlSelect {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// PULL A SINGLE CELL BASED ON THE VALUE OF AN ID
+	////////////////////////////////////////////////////////////////////////////
 	public function cellId($table, $col, $column, $id=false, $order=false) {
 		return $this->cell($table, $col, $this->_clauseId($column,$id), $order);
 	}
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// PULL AN INTEGER ID COLUMN BASED ON THE VALUE OF ANOTHER COLUMN
+	////////////////////////////////////////////////////////////////////////////
 	public function id($table, $col, $column, $id=false, $order=false) {
 		return (int) $this->cell($table, $col, $this->_clauseId($column,$id), $order);
 	}
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// PULL A KEY/VALUE COLUMN PAIR AND COMBINE THEM INTO A SINGLE PHP ARRAY
+	////////////////////////////////////////////////////////////////////////////
 	public function collection($table, $key_column=false, $value_column=false, $clause=false, $order=false, $limit=false) {
 
 		if ($key_column === false  &&  $value_column === false) {
@@ -341,4 +420,19 @@ trait pudlSelect {
 		if ($result instanceof pudlResult) return $result->collection();
 		return $result;
 	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// PING THE DATABASE SERVER TO ENSURE CONNECTION STAYS ALIVE
+	////////////////////////////////////////////////////////////////////////////
+	public function ping() {
+		$return = $this('SELECT 1')->complete();
+		return ($return instanceof pudlStringResult)
+			? $return
+			: !empty($return);
+	}
+
+
 }
