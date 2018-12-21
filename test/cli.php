@@ -2,15 +2,16 @@
 
 //ALL WARNINGS AS EXCEPTIONS
 error_reporting(E_ALL);
-function exception_error_handler($errno, $errstr, $errfile, $errline ) {
+set_error_handler(function ($errno, $errstr, $errfile, $errline ) {
 	throw new ErrorException($errstr, $errno, 0, $errfile, $errline);
-}
-set_error_handler("exception_error_handler");
+});
+
 
 
 
 //PHP REQUIRES DEFAULT TIMEZONE TO BE SET NOW
 date_default_timezone_set('UTC');
+
 
 
 
@@ -20,8 +21,10 @@ ini_set('serialize_precision', 14);
 
 
 
+
 //CHANGE TO THIS DIRECTORY FOR CONSISTENCY
 chdir(__DIR__);
+
 
 
 
@@ -38,6 +41,8 @@ foreach (['PDO', 'mysql', 'mysqli', 'sqlite3', 'pgsql', 'mssql', 'odbc'] as $ite
 	}
 }
 if (!$found) throw new Exception('No supported database PHP extensions found');
+
+
 
 
 //REQUIRE ALL VERSIONS EVEN THOUGH WE ONLY USE "NULL"
@@ -63,6 +68,8 @@ require_once(__DIR__.'/../sql/pudlShell.php');
 require_once(__DIR__.'/../sql/pudlWeb.php');
 require_once(__DIR__.'/../sqlite/pudlSqlite.php');
 require_once(__DIR__.'/../pudlSession.php');
+
+
 
 
 //TEST TO ENSURE EACH CLASS CAN INSTANTIATE PROPERLY
