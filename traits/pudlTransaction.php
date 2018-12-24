@@ -12,8 +12,9 @@ trait pudlTransaction {
 
 	public function begin() {
 		if ($this->inTransaction()) return $this;
-		$this->transaction = [];
-		$this->_inserted = 0;
+		$this->transaction	= [];
+		$this->_inserted	= 0;
+		$this->_transtime	= time();
 		$this('START TRANSACTION');
 		return $this;
 	}
@@ -30,11 +31,19 @@ trait pudlTransaction {
 
 
 
-	public function chunk($size=1000, $sync=false) {
+	public function chunk($size=1000, $sync=false, $time=0) {
 		if (!$this->inTransaction()) return $this;
-		return (++$this->_inserted % $size === 0)
-			 ? $this->commit($sync)->begin()
-			 : $this;
+
+		$time = (int) $time;
+
+		switch (true) {
+			case (++$this->_inserted % $size === 0):
+			case ($time  &&  (time() - $this->_transtime > $time)):
+				$this->commit($sync)->begin();
+			break;
+		}
+
+		return $this;
 	}
 
 
@@ -118,6 +127,7 @@ trait pudlTransaction {
 
 	/** @var array|false */		protected		$transaction	= false;
 	/** @var bool */			private			$locked			= false;
+	/** @var int */				private			$_transtime		= 0;
 	/** @var int */				private			$_inserted		= 0;
 
 }
