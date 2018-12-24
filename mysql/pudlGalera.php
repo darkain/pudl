@@ -163,6 +163,8 @@ class		pudlGalera
 	// RECONNECT TO THE GALERA CLUSTER SERVER POOL
 	////////////////////////////////////////////////////////////////////////////
 	public function reconnect() {
+		$this->disconnect(false);
+
 		if (empty($this->pool)) return false;
 
 		array_shift($this->pool);

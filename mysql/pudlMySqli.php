@@ -78,6 +78,17 @@ class		pudlMySqli
 
 
 	////////////////////////////////////////////////////////////////////////////
+	// RECONNECT TO THE DATABASE SERVER
+	////////////////////////////////////////////////////////////////////////////
+	public function reconnect() {
+		$this->disconnect(false);
+		return $this->connect();
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
 	// CLOSES THE DATABASE CONNECTION
 	// http://php.net/manual/en/mysqli.close.php
 	////////////////////////////////////////////////////////////////////////////
@@ -108,9 +119,34 @@ class		pudlMySqli
 	// http://php.net/manual/en/mysqli.query.php
 	////////////////////////////////////////////////////////////////////////////
 	protected function process($query) {
+		static $depth = 0;
+
+		if ($depth > PUDL_RECURSION) {
+			throw new pudlRecursionException($this,
+				'Recursion limit reached in ' . __METHOD__
+			);
+		}
+
 		if (!$this->connection) return new pudlMySqliResult($this);
 
 		$result = @$this->connection->query($query);
+
+		switch ($this->errno()) {
+			case 2006: // "MYSQL SERVER HAS GONE AWAY"
+			case 2013: // "LOST CONNECTION TO MYSQL SERVER DURING QUERY"
+			case 2062: // "READ TIMEOUT IS REACHED"
+				if (!$this->reconnect()) return new pudlMySqliResult($this);
+
+				$depth++;
+				if ($this->inTransaction()) {
+					$result = $this->retryTransaction();
+				} else {
+					$result = $this->process($query);
+				}
+				$depth--;
+			break;
+		}
+
 
 		return new pudlMySqliResult($this,
 			$result instanceof mysqli_result ?
