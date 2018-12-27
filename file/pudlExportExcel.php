@@ -10,7 +10,7 @@ function pudlExportExcel(pudlData $result, $filename, $headers=false) {
 
 	@unlink($filename);
 	if ($zip->open($filename, ZipArchive::CREATE) !== true) {
-		throw new pudlFileException(
+		throw new pudlFileException($result->pudl(),
 			'Cannot create ZIP archive file "' .
 			$filename .
 			'"'
@@ -89,7 +89,7 @@ function pudlExportExcel(pudlData $result, $filename, $headers=false) {
 				//OUTPUT NOTHING
 
 			} else if (!is_string($val)) {
-				throw new pudlTypeException(
+				throw new pudlTypeException($result->pudl(),
 					'Invalid data type for cell: ' . gettype($val)
 				);
 

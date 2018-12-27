@@ -10,6 +10,8 @@ class pudlException extends Exception {
 		$this->pudl = $pudl;
 
 		if ($pudl instanceof pudl) {
+			//TODO: RESET TRANSACTION STATE
+			//TODO: RESET RECURSION DEPTH STATE
 			$pudl->decache()->destring();
 		}
 	}
