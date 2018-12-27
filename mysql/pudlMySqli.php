@@ -81,8 +81,32 @@ class		pudlMySqli
 	// RECONNECT TO THE DATABASE SERVER
 	////////////////////////////////////////////////////////////////////////////
 	public function reconnect() {
+		static $depth = 0;
+
+		if (++$depth > PUDL_RECURSION) {
+			$depth = 0;
+			throw new pudlRecursionException($this,
+				'Recursion limit reached in ' . __METHOD__
+			);
+		}
+
 		$this->disconnect(false);
-		return $this->connect();
+		$connect = $this->connect();
+
+		$this->trigger('reconnect', $connect, $depth);
+
+		//TODO: move this to a reconnect callback method
+		if ($connect) {
+			if ($this->inTransaction()) {
+				$result = $this->retryTransaction();
+			} else {
+				$result = $this->process($query);
+			}
+		}
+
+		$depth--;
+
+		return $connect;
 	}
 
 
@@ -119,38 +143,21 @@ class		pudlMySqli
 	// http://php.net/manual/en/mysqli.query.php
 	////////////////////////////////////////////////////////////////////////////
 	protected function process($query) {
-		static $depth = 0;
-
-		if ($depth > PUDL_RECURSION) {
-			throw new pudlRecursionException($this,
-				'Recursion limit reached in ' . __METHOD__
-			);
-		}
-
-		if (!$this->connection) return new pudlMySqliResult($this);
-
-		$result = @$this->connection->query($query);
+		$result = $this->_query($query);
 
 		switch ($this->errno()) {
 			case 2006: // "MYSQL SERVER HAS GONE AWAY"
 			case 2013: // "LOST CONNECTION TO MYSQL SERVER DURING QUERY"
 			case 2062: // "READ TIMEOUT IS REACHED"
-				if (!$this->reconnect()) return new pudlMySqliResult($this);
-
-				$depth++;
-				if ($this->inTransaction()) {
-					$result = $this->retryTransaction();
-				} else {
-					$result = $this->process($query);
-				}
-				$depth--;
+				if ($result) $result->free();
+				$result = $this->reconnect();
 			break;
 		}
 
-
 		return new pudlMySqliResult($this,
-			$result instanceof mysqli_result ?
-			$result : NULL
+			$result instanceof mysqli_result
+				? $result
+				: NULL
 		);
 	}
 
@@ -163,7 +170,7 @@ class		pudlMySqli
 	////////////////////////////////////////////////////////////////////////////
 	protected function _query($query) {
 		if (!$this->connection) return false;
-		return $this->connection->query($query);
+		return @$this->connection->query($query);
 	}
 
 

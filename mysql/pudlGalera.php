@@ -170,13 +170,12 @@ class		pudlGalera
 		array_shift($this->pool);
 
 		if (empty($this->pool)) {
-			throw new pudlConnectionException(
-				$this,
+			throw new pudlConnectionException($this,
 				'No more servers available in server pool'
 			);
 		}
 
-		return $this->connect();
+		return parent::reconnect();
 	}
 
 
@@ -194,19 +193,19 @@ class		pudlGalera
 		$this->wait = false;
 
 		if ($wait) {
-			@$this->connection->query(
+			$this->_query(
 				'SET @wsrep_sync_wait_orig = @@wsrep_sync_wait'
 			);
 			if ($this->errno()) return new pudlMySqliResult($this);
 
-			@$this->connection->query(
+			$this->_query(
 				'SET SESSION wsrep_sync_wait = @wsrep_sync_wait_orig | ' . ((int)$wait)
 			);
 			if ($this->errno()) return new pudlMySqliResult($this);
 		}
 
 
-		$result = @$this->connection->query($query);
+		$result = $this->_query($query);
 
 		switch ($this->errno()) {
 			case 0: break; //NO ERRORS!
@@ -218,12 +217,8 @@ class		pudlGalera
 			case 2006: // "MYSQL SERVER HAS GONE AWAY"
 			case 2013: // "LOST CONNECTION TO MYSQL SERVER DURING QUERY"
 			case 2062: // "READ TIMEOUT IS REACHED"
-				if (!$this->reconnect()) return new pudlMySqliResult($this);
-				if ($this->inTransaction()) {
-					$result = $this->retryTransaction();
-				} else {
-					$result = $this->process($query);
-				}
+				if ($result) $result->free();
+				$result = $this->reconnect();
 			break;
 
 			//A DEADLOCKING CONDITION OCCURRED, SIMPLE, LET'S RETRY!
@@ -231,32 +226,36 @@ class		pudlGalera
 			case 1213: // "DEADLOCK FOUND WHEN TRYING TO GET LOCK; TRY RESTARTING TRANSACTION"
 				if ($this->inTransaction()) {
 					usleep(mt_rand(30000,50000));
+					if ($result) $result->free();
 					$result = $this->retryTransaction();
 
 				//IT IS POSSIBLE TO DEADLOCK WITH A SINGLE QUERY
 				//THIS CONDITION IS SIMPLE: JUST RETRY THE QUERY!
 				} else {
 					usleep(mt_rand(15000,25000));
-					$result = @$this->connection->query($query);
+					if ($result) $result->free();
+					$result = $this->_query($query);
 
 					//IF WE DEADLOCK AGAIN, TRY ONCE MORE BUT WAIT LONGER
 					if ($this->errno() == 1205  ||  $this->errno() == 1213) {
 						usleep(mt_rand(30000,50000));
-						$result = @$this->connection->query($query);
+						if ($result) $result->free();
+						$result = $this->_query($query);
 					}
 				}
 			break;
 		}
 
-		if ($wait  &&  !$this->errno()) {
-			@$this->connection->query(
+		if ($result  &&  $wait  &&  !$this->errno()) {
+			$this->_query(
 				'SET SESSION wsrep_sync_wait = @wsrep_sync_wait_orig'
 			);
 		}
 
 		return new pudlMySqliResult($this,
-			$result instanceof mysqli_result ?
-			$result : NULL
+			$result instanceof mysqli_result
+				? $result
+				: NULL
 		);
 	}
 
