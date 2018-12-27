@@ -100,7 +100,7 @@ class		pudlMySqli
 			if ($this->inTransaction()) {
 				$result = $this->retryTransaction();
 			} else {
-				$result = $this->process($query);
+				$result = $this->process($this->query());
 			}
 		}
 
