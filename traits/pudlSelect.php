@@ -333,7 +333,7 @@ trait pudlSelect {
 	////////////////////////////////////////////////////////////////////////////
 	public function selectRows($col, $table, $clause=false, $order=false, $limit=false, $offset=false) {
 		$result = $this->select($col, $table, $clause, $order, $limit, $offset);
-		if ($this->inUnion()) return true;
+		if ($this->inUnion()) return [];
 		if ($result instanceof pudlStringResult) return $result;
 		return $result->complete();
 	}
