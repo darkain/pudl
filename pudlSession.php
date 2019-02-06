@@ -46,8 +46,8 @@ class			pudlSession
 
 		// DIFFERENT SESSION NAME FOR HTTPS CONNECTIONS
 		session_name(
-			(empty($this->name) ? 'PUDLSESSID' : $this->name) .
-			($secure ? '-SECURE' : '')
+			($secure ? '__Secure-' : '') .
+			(empty($this->name) ? 'PUDLSESSID' : $this->name)
 		);
 
 
