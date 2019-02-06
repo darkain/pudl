@@ -32,6 +32,9 @@ class			pudlSession
 		$this->name		= $name;
 		$this->domain	= $domain;
 
+		// FORCE BOOLEAN
+		$secure = !!$secure;
+
 		// VERIFY THAT SESSION SUPPORT IS AVAILABLE
 		pudl_require_extension('session');
 
@@ -47,14 +50,28 @@ class			pudlSession
 			($secure ? '-SECURE' : '')
 		);
 
+
 		// SET PARAMETERS FOR BROWSER SESSION COOKIE
-		session_set_cookie_params(
-			60*60*24*30,		// SAVE SESSION FOR ONE MONTH
-			'/',				// SESSION IS FOR ENTIRE DOMAIN
-			empty($this->domain) ? '' : $this->domain,
-			$secure,			// HTTPS ONLY
-			true				// HTTP(S) ONLY - BLOCK JAVASCRIPT ACCESS
-		);
+		if (version_compare(PHP_VERSION, '7.3.0', '>=')) {
+			session_set_cookie_params([
+				'lifetime'	=> 60*60*24*30,		// SAVE SESSION FOR ONE MONTH
+				'path'		=> '/',				// SESSION IS FOR ENTIRE DOMAIN
+				'domain'	=> empty($this->domain) ? '' : $this->domain,
+				'secure'	=> $secure,			// HTTPS ONLY
+				'httponly'	=> true,			// HTTP(S) ONLY - BLOCK JAVASCRIPT ACCESS
+				'samesite'	=> 'Strict',		// ONLY ALLOW COOKIE FROM SAME SITE
+			]);
+
+		} else {
+			session_set_cookie_params(
+				60*60*24*30,					// SAVE SESSION FOR ONE MONTH
+				'/',							// SESSION IS FOR ENTIRE DOMAIN
+				empty($this->domain) ? '' : $this->domain,
+				$secure,						// HTTPS ONLY
+				true							// HTTP(S) ONLY - BLOCK JAVASCRIPT ACCESS
+			);
+		}
+
 
 		// START THE SESSION
 		if (!headers_sent()) {
