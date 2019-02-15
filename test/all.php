@@ -25,7 +25,14 @@
 \*****************************************************************************/
 
 
+
+// COUNTER FOR TOTAL NUMBER OF UNIT TESTS COMPLETED
 $__pudl_test_total__ = 0;
+
+
+// RESET PREFIX INFORMATION IN CASE WE'RE CALLING THIS FROM ALTAFORM
+$db->updateAuth(['prefix'=>[]]);
+
 
 
 function pudlTest(pudl $pudl, $expected) {
@@ -94,7 +101,7 @@ function pudlUnit($result, $expected=true) {
 }
 
 
-//PHP 5.x COMPATIBILITY
+// PHP 5.x COMPATIBILITY
 if (!defined('PHP_INT_MIN'))		define('PHP_INT_MIN',		~PHP_INT_MAX);
 if (!defined('PHP_FLOAT_MIN'))		define('PHP_FLOAT_MIN',		2.2250738585072E-308);
 if (!defined('PHP_FLOAT_MAX'))		define('PHP_FLOAT_MAX',		1.7976931348623E+308);
@@ -102,12 +109,12 @@ if (!defined('PHP_FLOAT_EPSILON'))	define('PHP_FLOAT_EPSILON',	2.2204460492503E-
 
 
 
-//ENSURE WE HAVE PUDL NULL, SINCE SOME TESTS USE THIS INSTEAD OF DEFAULT $DB OBJECT
+// ENSURE WE HAVE PUDL NULL, SINCE SOME TESTS USE THIS INSTEAD OF DEFAULT $DB OBJECT
 require_once(__DIR__.'/../null/pudlNull.php');
 
 
 
-//PREP THE DIRECTORY
+// PREP THE DIRECTORY
 $parent	= dirname(dirname(__DIR__));
 $dir	= substr(__DIR__, strlen($parent)-strlen(__DIR__)+1);
 $list	= scandir(__DIR__);
@@ -115,7 +122,7 @@ shuffle($list);
 
 
 
-//RUN ALL UNIT TESTS
+// RUN ALL UNIT TESTS
 foreach ($list as $item) {
 	if (strtolower(substr($item, -8)) !== '.inc.php') continue;
 	echo "\033[97m" . "Testing:\t";
@@ -126,7 +133,7 @@ foreach ($list as $item) {
 
 
 
-//OPTIONAL UNIT TESTS ONLY FOR TRAVIS CI
+// OPTIONAL UNIT TESTS ONLY FOR TRAVIS CI
 if (!empty($found)) {
 	require_once(__DIR__ . '/timeout.php');
 }
