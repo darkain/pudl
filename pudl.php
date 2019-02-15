@@ -66,14 +66,9 @@ abstract	class	pudl {
 		//SET INITIAL DATA
 		$this->microtime	= microtime(true);
 		$this->time			= (int) $this->microtime;
-		$this->prefix		= $data['prefix'];
-
-		if (is_string($this->prefix)) {
-			$this->prefix = ['pudl_' => $this->prefix];
-		}
 
 		//STORE CREDENTIALS IN SECURED AREA HIDDEN FROM VAR_DUMP/VAR_EXPORT
-		$this->_auth($data);
+		$this->updateAuth($data);
 
 		//INITIALIZE REDIS CONNECTION
 		if (!empty($data['redis'])) {
