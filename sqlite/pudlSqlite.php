@@ -223,4 +223,19 @@ class		pudlSqlite
 				$this->_update($data);
 	}
 
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// GET THE LIST OF AVAILABLE TABLES
+	////////////////////////////////////////////////////////////////////////////
+	public function tables($clause=NULL) {
+		$output	= [];
+		$rows	= $this->rows('sqlite_master', $clause);
+		foreach ($rows as $row) {
+			if ($row['type'] !== 'table') continue;
+			$output[$row['tbl_name']] = $row;
+		}
+		return $output;
+	}
 }
