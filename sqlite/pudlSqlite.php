@@ -15,19 +15,23 @@ class		pudlSqlite
 	////////////////////////////////////////////////////////////////////////////
 	// CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
-	public function __construct($data=[]) {
+	public function __construct($options=[]) {
 
-		if (!pudl_array($data)) $data = [$data];
-
-		if (empty($data['database'])) {
-			$data['database'] = empty($data[0]) ? 'sqlite.db' : $data[0];
+		if (!pudl_array($options)) {
+			$options = [$options];
 		}
 
-		if (!empty($data['identifier'])) {
-			$this->identifier = $data['identifier'];
+		if (empty($options['database'])) {
+			$options['database']	= empty($options[0])
+									? 'sqlite.db'
+									: $options[0];
 		}
 
-		parent::__construct($data);
+		if (!empty($options['identifier'])) {
+			$this->identifier = $options['identifier'];
+		}
+
+		parent::__construct($options);
 	}
 
 

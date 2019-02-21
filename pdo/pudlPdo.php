@@ -15,8 +15,8 @@ class		pudlPdo
 	////////////////////////////////////////////////////////////////////////////
 	// CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
-	public function __construct($data) {
-		if (empty($data['server'])) {
+	public function __construct($options) {
+		if (empty($options['server'])) {
 			throw new pudlValueException(
 				$this,
 				'No DSN provided for PDO'
@@ -25,18 +25,18 @@ class		pudlPdo
 
 
 		//DEFAULT OPTIONS
-		if (empty($data['options'])  ||  !pudl_array($data['options'])) {
-			$data['options'] = [];
+		if (empty($options['options'])  ||  !pudl_array($options['options'])) {
+			$options['options'] = [];
 		}
 
 
 		//DEFAULT TO ANSI STYLE IDENTIFIERS, BUT CAN BE OVERWRITTEN
-		$this->identifier	= !empty($data['identifier'])
-							? $data['identifier']
+		$this->identifier	= !empty($options['identifier'])
+							? $options['identifier']
 							: '"';
 
 
-		parent::__construct($data);
+		parent::__construct($options);
 	}
 
 

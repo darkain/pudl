@@ -16,12 +16,12 @@ class pudlNull extends pudl {
 	////////////////////////////////////////////////////////////////////////////
 	// CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
-	public function __construct($data=[]) {
-		if (!empty($data['identifier'])) {
-			$this->identifier = $data['identifier'];
+	public function __construct($options=[]) {
+		if (!empty($options['identifier'])) {
+			$this->identifier = $options['identifier'];
 		}
 
-		parent::__construct($data);
+		parent::__construct($options);
 	}
 
 

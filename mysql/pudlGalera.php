@@ -15,24 +15,24 @@ class		pudlGalera
 	////////////////////////////////////////////////////////////////////////////
 	// CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
-	public function __construct($data) {
+	public function __construct($options) {
 		// TEMPORARILY SET US AS OFFLINE
-		$offline = !empty($data['offline']);
-		$data['offline'] = true;
+		$offline = !empty($options['offline']);
+		$options['offline'] = true;
 
 		// CONNECT TO THE SERVER CLUSTER
-		parent::__construct($data);
+		parent::__construct($options);
 
 		// LOAD CLEANED DATA AND RESET OFFLINE STATUS
-		$data = $this->auth();
-		$data['offline'] = $offline;
+		$options = $this->auth();
+		$options['offline'] = $offline;
 
 
 		// VALIDATE SERVER LIST IS ARRAY
-		if (!pudl_array($data['server'])) {
+		if (!pudl_array($options['server'])) {
 			throw new pudlValueException(
 				$this,
-				'Not a valid server pool, $data[server] must be ARRAY data type'
+				'Not a valid server pool, $options[server] must be ARRAY data type'
 			);
 		}
 
@@ -42,7 +42,7 @@ class		pudlGalera
 
 
 		// SET INITIAL VALUES
-		$this->pool = $this->onlineServers($data['server']);
+		$this->pool = $this->onlineServers($options['server']);
 
 
 		// RANDOMIZE SERVER POOL ORDER
@@ -56,12 +56,12 @@ class		pudlGalera
 		}
 
 		// SET BACKUP SERVERS
-		if (!empty($data['backup'])  &&  pudl_array($data['backup'])) {
-			$this->pool = array_merge($this->pool, $data['backup']);
+		if (!empty($options['backup'])  &&  pudl_array($options['backup'])) {
+			$this->pool = array_merge($this->pool, $options['backup']);
 		}
 
 		// CONNECT TO CLUSTER
-		if (!$data['offline']) $this->connect();
+		if (!$options['offline']) $this->connect();
 	}
 
 

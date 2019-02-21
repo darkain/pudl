@@ -41,44 +41,43 @@ abstract	class	pudl {
 	// CONSTRUCTOR
 	// $DATA IS A KEY/VALUE PAIR LIST WITH CONFIGURATION DETAILS
 	////////////////////////////////////////////////////////////////////////////
-	public function __construct($data) {
-		if (!empty($data[0])  &&  $data[0] instanceof pudl) {
-			$pudl = $data[0];
-			unset($data[0]);
-			$data += $pudl->auth();
+	public function __construct($options) {
+		if (!empty($options[0])  &&  $options[0] instanceof pudl) {
+			$pudl = $options[0];
+			unset($options[0]);
+			$options += $pudl->auth();
 		}
 
 		//SANITIZE DATA
-		//TODO:	create a method to parse and validate every possible $data item
-		//TODO: rename $data to $parameters or $options or $connection or $settings
-		if (empty($data['username']))	$data['username']	= '';
-		if (empty($data['password']))	$data['password']	= '';
-		if (empty($data['database']))	$data['database']	= '';
-		if (empty($data['server']))		$data['server']		= 'localhost';
-		if (empty($data['prefix']))		$data['prefix']		= [];
-		if (empty($data['persistent']))	$data['persistent']	= false;
-		if (empty($data['key']))		$data['key']		= NULL;
-		if (empty($data['salt']))		$data['salt']		= '';
-		if (empty($data['timeout']))	$data['timeout']	= 10;
-		if (empty($data['readonly']))	$data['readonly']	= false;
-		if (empty($data['offline']))	$data['offline']	= false;
+		//TODO:	create a method to parse and validate every possible $options item
+		if (empty($options['username']))	$options['username']	= '';
+		if (empty($options['password']))	$options['password']	= '';
+		if (empty($options['database']))	$options['database']	= '';
+		if (empty($options['server']))		$options['server']		= 'localhost';
+		if (empty($options['prefix']))		$options['prefix']		= [];
+		if (empty($options['persistent']))	$options['persistent']	= false;
+		if (empty($options['key']))			$options['key']			= NULL;
+		if (empty($options['salt']))		$options['salt']		= '';
+		if (empty($options['timeout']))		$options['timeout']		= 10;
+		if (empty($options['readonly']))	$options['readonly']	= false;
+		if (empty($options['offline']))		$options['offline']		= false;
 
 		//SET INITIAL DATA
 		$this->microtime	= microtime(true);
 		$this->time			= (int) $this->microtime;
 
 		//STORE CREDENTIALS IN SECURED AREA HIDDEN FROM VAR_DUMP/VAR_EXPORT
-		$this->updateAuth($data);
+		$this->updateAuth($options);
 
 		//INITIALIZE REDIS CONNECTION
-		if (!empty($data['redis'])) {
-			$this->redis($data['redis']);
+		if (!empty($options['redis'])) {
+			$this->redis($options['redis']);
 		} else {
 			$this->redis	= new pudlVoid;
 		}
 
 		//CONNECT TO SERVER
-		if (!$data['offline']) $this->connect();
+		if (!$options['offline']) $this->connect();
 	}
 
 
