@@ -15,10 +15,20 @@ class		pudlGalera
 	////////////////////////////////////////////////////////////////////////////
 	// CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
-	public function __construct($data, $autoconnect=true) {
-		//CONNECT TO THE SERVER CLUSTER
-		parent::__construct($data, false);
+	public function __construct($data) {
+		// TEMPORARILY SET US AS OFFLINE
+		$offline = !empty($data['offline']);
+		$data['offline'] = true;
 
+		// CONNECT TO THE SERVER CLUSTER
+		parent::__construct($data);
+
+		// LOAD CLEANED DATA AND RESET OFFLINE STATUS
+		$data = $this->auth();
+		$data['offline'] = $offline;
+
+
+		// VALIDATE SERVER LIST IS ARRAY
 		if (!pudl_array($data['server'])) {
 			throw new pudlValueException(
 				$this,
@@ -27,16 +37,16 @@ class		pudlGalera
 		}
 
 
-		//ONLY SET SHMKEY IF EXTENSION EXISTS
+		// ONLY SET SHMKEY IF EXTENSION EXISTS
 		$this->shmkey = extension_loaded('sysvshm') ? 1 : false;
 
 
-		//SET INITIAL VALUES
+		// SET INITIAL VALUES
 		$this->pool = $this->onlineServers($data['server']);
 
 
-		//RANDOMIZE SERVER POOL ORDER
-		//IF REMOTE_ADDR AVAILABLE, USE IT TO HASH ROUTE TO SAME NODE EACH TIME
+		// RANDOMIZE SERVER POOL ORDER
+		// IF REMOTE_ADDR AVAILABLE, USE IT TO HASH ROUTE TO SAME NODE EACH TIME
 		if (!empty($_SERVER['REMOTE_ADDR'])) {
 			srand( crc32($_SERVER['REMOTE_ADDR']) );
 			shuffle($this->pool);
@@ -45,23 +55,13 @@ class		pudlGalera
 			shuffle($this->pool);
 		}
 
-		//SET BACKUP SERVERS
+		// SET BACKUP SERVERS
 		if (!empty($data['backup'])  &&  pudl_array($data['backup'])) {
 			$this->pool = array_merge($this->pool, $data['backup']);
 		}
 
-		//CONNECT TO CLUSTER
-		if ($autoconnect) $this->connect();
-	}
-
-
-
-
-	////////////////////////////////////////////////////////////////////////////
-	// CREATE AN INSTANCE OF THIS OBJECT
-	////////////////////////////////////////////////////////////////////////////
-	public static function instance($data, $autoconnect=true) {
-		return new pudlGalera($data, $autoconnect);
+		// CONNECT TO CLUSTER
+		if (!$data['offline']) $this->connect();
 	}
 
 

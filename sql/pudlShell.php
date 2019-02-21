@@ -15,9 +15,9 @@ class		pudlShell
 	////////////////////////////////////////////////////////////////////////////
 	// CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
-	public function __construct($data, $autoconnect=true) {
+	public function __construct($data) {
 		$this->path = empty($data['path']) ? '' : $data['path'];
-		parent::__construct($data, $autoconnect);
+		parent::__construct($data);
 	}
 
 
@@ -29,16 +29,6 @@ class		pudlShell
 	public function __destruct() {
 		$this->disconnect();
 		parent::__destruct();
-	}
-
-
-
-
-	////////////////////////////////////////////////////////////////////////////
-	// CREATE AN INSTANCE OF THIS OBJECT
-	////////////////////////////////////////////////////////////////////////////
-	public static function instance($data, $autoconnect=true) {
-		return new pudlShell($data, $autoconnect);
 	}
 
 

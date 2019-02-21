@@ -15,7 +15,7 @@ class		pudlPdo
 	////////////////////////////////////////////////////////////////////////////
 	// CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
-	public function __construct($data, $autoconnect=true) {
+	public function __construct($data) {
 		if (empty($data['server'])) {
 			throw new pudlValueException(
 				$this,
@@ -36,7 +36,7 @@ class		pudlPdo
 							: '"';
 
 
-		parent::__construct($data, $autoconnect);
+		parent::__construct($data);
 	}
 
 
@@ -48,17 +48,6 @@ class		pudlPdo
 	public function __destruct() {
 		$this->disconnect();
 		parent::__destruct();
-	}
-
-
-
-
-
-	////////////////////////////////////////////////////////////////////////////
-	// CREATE AN INSTANCE OF THIS OBJECT
-	////////////////////////////////////////////////////////////////////////////
-	public static function instance($data, $autoconnect=true) {
-		return new pudlPdo($data, $autoconnect);
 	}
 
 

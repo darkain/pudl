@@ -39,10 +39,9 @@ abstract	class	pudl {
 
 	////////////////////////////////////////////////////////////////////////////
 	// CONSTRUCTOR
-	// $DATA IS ARRAY WITH CONFIGURATION DETAILS
-	// $AUTOCONNECT = TRUE: AUTOMATICALLY CONNECT TO THE DATA SOURCE
+	// $DATA IS A KEY/VALUE PAIR LIST WITH CONFIGURATION DETAILS
 	////////////////////////////////////////////////////////////////////////////
-	public function __construct($data, $autoconnect=true) {
+	public function __construct($data) {
 		if (!empty($data[0])  &&  $data[0] instanceof pudl) {
 			$pudl = $data[0];
 			unset($data[0]);
@@ -62,6 +61,7 @@ abstract	class	pudl {
 		if (empty($data['salt']))		$data['salt']		= '';
 		if (empty($data['timeout']))	$data['timeout']	= 10;
 		if (empty($data['readonly']))	$data['readonly']	= false;
+		if (empty($data['offline']))	$data['offline']	= false;
 
 		//SET INITIAL DATA
 		$this->microtime	= microtime(true);
@@ -78,7 +78,7 @@ abstract	class	pudl {
 		}
 
 		//CONNECT TO SERVER
-		if ($autoconnect) $this->connect();
+		if (!$data['offline']) $this->connect();
 	}
 
 
@@ -265,19 +265,23 @@ abstract	class	pudl {
 	////////////////////////////////////////////////////////////////////////////
 	// CREATE AN INSTANCE OF THIS OBJECT
 	////////////////////////////////////////////////////////////////////////////
-	public static function instance($data, $autoconnect=true) {
+	public static function instance($data) {
 		if (!empty($data[0])  &&  $data[0] instanceof pudl) {
 			$pudl = $data[0];
 			unset($data[0]);
 			$data += $pudl->auth();
 		}
 
+		if (get_called_class() !== __CLASS__) {
+			$type = str_ireplace(__CLASS__, '', get_called_class());
+			if (!empty($type)) $data['type'] = $type;
+		}
+
 		if (empty($data['type'])) {
 			if (!empty($data['server'])) {
 				$data['type'] = pudl_array($data['server']) ? 'Galera' : 'MySqli';
 			} else {
-				throw new pudlValueException(
-					$this,
+				throw new pudlValueException(NULL,
 					'No database type or server specified'
 				);
 			}
@@ -287,8 +291,7 @@ abstract	class	pudl {
 		$engine = static::_engine($data['type']);
 
 		if (empty($engine)) {
-			throw new pudlValueException(
-				$this,
+			throw new pudlValueException(NULL,
 				'Unknown Database Server Type: ' . $data['type']
 			);
 		}
@@ -296,7 +299,7 @@ abstract	class	pudl {
 		require_once(is_owner(__DIR__ . end($engine)));
 
 		$class = 'pudl' . reset($engine);
-		return new $class($data, $autoconnect);
+		return new $class($data);
 	}
 
 

@@ -16,22 +16,12 @@ class pudlNull extends pudl {
 	////////////////////////////////////////////////////////////////////////////
 	// CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
-	public function __construct($data=[], $autoconnect=true) {
+	public function __construct($data=[]) {
 		if (!empty($data['identifier'])) {
 			$this->identifier = $data['identifier'];
 		}
 
-		parent::__construct($data, $autoconnect);
-	}
-
-
-
-
-	////////////////////////////////////////////////////////////////////////////
-	// CREATE INSTANCE OF THIS OBJECT
-	////////////////////////////////////////////////////////////////////////////
-	public static function instance($data, $autoconnect=true) {
-		return new pudlNull($data, $autoconnect);
+		parent::__construct($data);
 	}
 
 

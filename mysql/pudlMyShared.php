@@ -13,11 +13,11 @@ abstract class	pudlMyShared
 	////////////////////////////////////////////////////////////////////////////
 	// CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
-	public function __construct($data, $autoconnect=true) {
+	public function __construct($data) {
 		//SET INITIAL VALUES
 		$this->identifier = '`';
 
-		parent::__construct($data, $autoconnect);
+		parent::__construct($data);
 	}
 
 

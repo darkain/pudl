@@ -15,7 +15,7 @@ class		pudlSqlite
 	////////////////////////////////////////////////////////////////////////////
 	// CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
-	public function __construct($data=[], $autoconnect=true) {
+	public function __construct($data=[]) {
 
 		if (!pudl_array($data)) $data = [$data];
 
@@ -27,7 +27,7 @@ class		pudlSqlite
 			$this->identifier = $data['identifier'];
 		}
 
-		parent::__construct($data, $autoconnect);
+		parent::__construct($data);
 	}
 
 
@@ -39,16 +39,6 @@ class		pudlSqlite
 	public function __destruct() {
 		$this->disconnect();
 		parent::__destruct();
-	}
-
-
-
-
-	////////////////////////////////////////////////////////////////////////////
-	// CREATE AN INSTANCE OF THIS OBJECT
-	////////////////////////////////////////////////////////////////////////////
-	public static function instance($data=[], $autoconnect=true) {
-		return new pudlSqlite($data, $autoconnect);
 	}
 
 
