@@ -73,16 +73,16 @@ require_once(__DIR__.'/../pudlSession.php');
 
 
 //TEST TO ENSURE EACH CLASS CAN INSTANTIATE PROPERLY
-new pudlMsSql(	[], false);
-new pudlGalera(	['server'=>['localhost']], false);
-new pudlMySql(	[], false);
-new pudlMySqli(	[], false);
-new pudlSqlite(	[], false);
-new pudlNull(	[], false);
-new pudlPdo(	['server'=>'localhost'], false);
-new pudlOdbc(	[], false);
-new pudlShell(	[], false);
-new pudlWeb(	[], false);
+new pudlMsSql(	['offline'=>true]);
+new pudlGalera(	['offline'=>true, 'server'=>['localhost']]);
+new pudlMySql(	['offline'=>true]);
+new pudlMySqli(	['offline'=>true]);
+new pudlSqlite(	['offline'=>true]);
+new pudlNull(	['offline'=>true]);
+new pudlPdo(	['offline'=>true, 'server'=>'localhost']);
+new pudlOdbc(	['offline'=>true]);
+new pudlShell(	['offline'=>true]);
+new pudlWeb(	['offline'=>true]);
 
 
 $db = new pudlNull(['identifier' => '`']);
