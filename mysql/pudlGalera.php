@@ -26,6 +26,7 @@ class		pudlGalera
 		// LOAD CLEANED DATA AND RESET OFFLINE STATUS
 		$options = $this->auth();
 		$options['offline'] = $offline;
+		$this->updateAuth($options);
 
 
 		// VALIDATE SERVER LIST IS ARRAY
