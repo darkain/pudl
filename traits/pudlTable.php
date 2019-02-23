@@ -67,6 +67,27 @@ trait pudlTable {
 
 
 	////////////////////////////////////////////////////////////////////////////
+	// GET STATISTICS ABOUT THE GIVEN TABLES
+	////////////////////////////////////////////////////////////////////////////
+	public function tableStatus($tables) {
+		if (!pudl_array($tables)) {
+			$tables = [$tables];
+		}
+
+		foreach ($tables as &$table) {
+			$table = $this->_prefix($table);
+		}
+
+		return $this(
+			'SHOW TABLE STATUS' .
+			$this->_where(['name' => $tables])
+		)->complete();
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
 	// RENAME A TABLE IN THE DATABASE
 	// https://mariadb.com/kb/en/library/rename-table/
 	////////////////////////////////////////////////////////////////////////////
