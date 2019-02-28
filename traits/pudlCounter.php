@@ -9,7 +9,31 @@ trait pudlCounter {
 	// $pudl->count('table') is a virtual alias of $pudl->total('table')
 	////////////////////////////////////////////////////////////////////////////
 	public function total($table, $clause=NULL) {
-		$return = $this->cell($table, new pudlCount(), $clause);
+		$return	= $this->cell($table, new pudlCount(), $clause);
+		if ($return instanceof pudlStringResult) return $return;
+		return $return === false ? $return : (int) $return;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// ESTIMATE THE NUMBER OF ROWS IN A TABLE
+	// SIGNIFICANTLY FASTER THAN COUNT(*) ON LARGER TABLES (1 MILLION+ ROWS)
+	// BUT NOT 100% ACCURATE
+	////////////////////////////////////////////////////////////////////////////
+	public function estimate($table) {
+		$auth	= $this->auth();
+
+		$return	= $this->cell(
+			pudl::raw('INFORMATION_SCHEMA.TABLES'),
+			'TABLE_ROWS',
+			[
+				'TABLE_SCHEMA'	=> $auth['database'],
+				'TABLE_NAME'	=> $this->_prefix($table),
+			]
+		);
+
 		if ($return instanceof pudlStringResult) return $return;
 		return $return === false ? $return : (int) $return;
 	}

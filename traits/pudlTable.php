@@ -284,10 +284,11 @@ trait pudlTable {
 	// PROCESS A LIST OF TABLES
 	////////////////////////////////////////////////////////////////////////////
 	protected function _tables($table) {
-		if ($table === false)		return;
-		if ($table === NULL)		return;
-		if (is_string($table))		return ' FROM ' . $this->_table($table);
-		if (!pudl_array($table))	return $this->_invalidType($table, 'table');
+		if ($table === false)			return;
+		if ($table === NULL)			return;
+		if ($table instanceof pudlRaw)	return ' FROM ' . $table->pudlValue($this);
+		if (is_string($table))			return ' FROM ' . $this->_table($table);
+		if (!pudl_array($table))		return $this->_invalidType($table, 'table');
 
 		$query = '';
 		foreach ($table as $key => $value) {
