@@ -244,8 +244,8 @@ class		pudlPdo
 	// END THE CURRENT TRANSACTION BY ROLLING BACK THE CHANGES IT MADE
 	// http://php.net/manual/en/pdo.rollback.php
 	////////////////////////////////////////////////////////////////////////////
-	public function rollback() {
-		if ($this->connection) $this->connection->rollback();
+	public function rollback($savepoint=NULL) {
+		if ($this->connection) $this->connection->rollBack();
 		return $this;
 	}
 
