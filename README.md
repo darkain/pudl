@@ -73,11 +73,11 @@ First, create an instance of PUDL for your specific database type
 require_once('pudl/pudl.php');
 
 $db = pudl::instance([
-	'type'     => 'MySqli',
-	'server'   => 'localhost',
-	'database' => 'DatabaseName',
-	'username' => 'AwesomeGuy9001',
-	'password' => 'SuperDuperSecretSauce',
+	'type'		=> 'mariadb',
+	'server'	=> 'localhost',
+	'database'	=> 'DatabaseName',
+	'username'	=> 'AwesomeGuy9001',
+	'password'	=> 'SuperDuperSecretSauce',
 ]);
 ```
 
