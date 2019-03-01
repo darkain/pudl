@@ -85,12 +85,45 @@ trait pudlTransaction {
 
 
 	////////////////////////////////////////////////////////////////////////////
+	// CREATE A SAVE POINT OR CHECK POINT FOR CURRENT TRANSACTION
+	////////////////////////////////////////////////////////////////////////////
+	public function savepoint($savepoint) {
+		if ($this->inTransaction()) {
+			$this('SAVEPOINT ' . $this->identifier($savepoint));
+		}
+
+		return $this;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// RELEASE A SAVE POINT OR CHECK POINT FOR CURRENT TRANSACTION
+	////////////////////////////////////////////////////////////////////////////
+	public function release($savepoint) {
+		if ($this->inTransaction()) {
+			$this('RELEASE SAVEPOINT ' . $this->identifier($savepoint));
+		}
+
+		return $this;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
 	// ROLLBACK THE CURRENT TRANSACTION
 	////////////////////////////////////////////////////////////////////////////
-	public function rollback() {
+	public function rollback($savepoint=NULL) {
 		if (!$this->inTransaction()) return $this;
-		$this->transaction = false;
-		$this->_rollback();
+
+		if (is_null($savepoint)) {
+			$this->transaction = false;
+		}
+
+		$this->_rollback($savepoint);
+
 		return $this;
 	}
 
@@ -100,8 +133,10 @@ trait pudlTransaction {
 	////////////////////////////////////////////////////////////////////////////
 	// INTERNAL METHOD FOR ROLLING BACK THE CURRENT TRANSACTION
 	////////////////////////////////////////////////////////////////////////////
-	protected function _rollback() {
-		return $this('ROLLBACK');
+	protected function _rollback($savepoint=NULL) {
+		return !is_null($savepoint)
+			? ($this('ROLLBACK TO SAVEPOINT ' . $this->identifier($savepoint)))
+			: ($this('ROLLBACK'));
 	}
 
 
