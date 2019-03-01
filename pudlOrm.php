@@ -121,6 +121,10 @@ abstract class	pudlOrm
 		if (is_object($id)) {
 			if (method_exists($id, 'id')) {
 				$id = $id->id();
+
+			} else if (property_exists($id, 'id')) {
+				$id = $id->id;
+
 			} else if (method_exists($id, '__toString')) {
 				$id = (string) $id;
 			}
