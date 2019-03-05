@@ -61,7 +61,7 @@ trait pudlCounter {
 					$this->_cache() .
 					'COUNT(*) FROM (' .
 					'SELECT ' .
-					$this->_column($col) .
+					$this->_columns($col) .
 					$this->_tables($table) .
 					$this->_where($clause) .
 					$this->_group($group) .

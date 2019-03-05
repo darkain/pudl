@@ -15,7 +15,7 @@ trait pudlSelect {
 	public function select($column, $table=false, $clause=false, $order=false, $limit=false, $offset=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
-		$query .= $this->_column($column);
+		$query .= $this->_columns($column);
 		$query .= $this->_tables($table);
 		$query .= $this->_where($clause);
 		$query .= $this->_order($order);
@@ -32,7 +32,7 @@ trait pudlSelect {
 	public function having($column, $table, $clause=false, $having=false, $order=false, $limit=false, $offset=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
-		$query .= $this->_column($column);
+		$query .= $this->_columns($column);
 		$query .= $this->_tables($table);
 		$query .= $this->_where($clause);
 		$query .= $this->_having($having);
@@ -50,7 +50,7 @@ trait pudlSelect {
 	public function group($column, $table, $clause=false, $group=false, $order=false, $limit=false, $offset=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
-		$query .= $this->_column($column);
+		$query .= $this->_columns($column);
 		$query .= $this->_tables($table);
 		$query .= $this->_where($clause);
 		$query .= $this->_group($group);
@@ -68,7 +68,7 @@ trait pudlSelect {
 	public function groupHaving($column, $table, $clause=false, $group=false, $having=false, $order=false, $limit=false, $offset=false) {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
-		$query .= $this->_column($column);
+		$query .= $this->_columns($column);
 		$query .= $this->_tables($table);
 		$query .= $this->_where($clause);
 		$query .= $this->_group($group);
@@ -88,7 +88,7 @@ trait pudlSelect {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
 		$query .= '*, COUNT(*) FROM (SELECT ';
-		$query .= $this->_column($column);
+		$query .= $this->_columns($column);
 		$query .= $this->_tables($table);
 		$query .= $this->_where($clause);
 		$query .= $this->_order($order);
@@ -112,7 +112,7 @@ trait pudlSelect {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
 		$query .= '*, COUNT(*) FROM (SELECT ';
-		$query .= $this->_column($column);
+		$query .= $this->_columns($column);
 		$query .= $this->_tables($table);
 		$query .= $this->_where($clause);
 		$query .= $this->_group($inner_group);
@@ -137,7 +137,7 @@ trait pudlSelect {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
 		$query .= 'DISTINCT ';
-		$query .= $this->_column($column);
+		$query .= $this->_columns($column);
 		$query .= $this->_tables($table);
 		$query .= $this->_where($clause);
 		$query .= $this->_order($order);
@@ -155,7 +155,7 @@ trait pudlSelect {
 		$query  = 'SELECT ';
 		$query .= $this->_cache();
 		$query .= 'DISTINCT * FROM (SELECT ';
-		$query .= $this->_column($column);
+		$query .= $this->_columns($column);
 		$query .= $this->_tables($table);
 		$query .= $this->_where($clause);
 		$query .= $this->_order($order);
@@ -175,7 +175,7 @@ trait pudlSelect {
 	////////////////////////////////////////////////////////////////////////////
 	public function selectExplain($column, $table, $clause=false, $order=false, $limit=false, $offset=false) {
 		$query  = 'SELECT ';
-		$query .= $this->_column($column);
+		$query .= $this->_columns($column);
 		$query .= $this->_tables($table);
 		$query .= $this->_where($clause);
 		$query .= $this->_order($order);
@@ -234,7 +234,7 @@ trait pudlSelect {
 
 		//	COLUMNS
 		if (!empty($params['column'])) {
-			$query .= $this->_column($params['column']);
+			$query .= $this->_columns($params['column']);
 		} else {
 			$query .= '*';
 		}

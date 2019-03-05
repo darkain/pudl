@@ -142,7 +142,7 @@ trait pudlQuery {
 
 
 
-	protected function _column($column) {
+	protected function _columns($column) {
 		if ($column instanceof pudlId) {
 			$column = key( $column->pudlId() );
 		}
@@ -192,7 +192,7 @@ trait pudlQuery {
 				$query		.= ' AS ' . $this->identifier($key);
 
 			} else if (pudl_array($value)) {
-				$query		.= $this->_column($value);
+				$query		.= $this->_columns($value);
 
 			} else if (is_string($value)) {
 				$query		.= $this->identifiers($value);
