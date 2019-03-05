@@ -559,10 +559,11 @@ abstract	class	pudl {
 	////////////////////////////////////////////////////////////////////////////
 	// GET THE APPLICATION SYNCED TIME
 	////////////////////////////////////////////////////////////////////////////
-	public function time($source=false) {
-		if ($source === false) {
-			if (is_object($this->time)) return $this->time->time();
-			return $this->time;
+	public function time($source=NULL) {
+		if (empty($source)) {
+			return is_object($this->time)
+				? $this->time->time()
+				: $this->time;
 		}
 
 		$this->time = $source;
@@ -574,10 +575,11 @@ abstract	class	pudl {
 	////////////////////////////////////////////////////////////////////////////
 	// GET THE APPLICATION SYNCED MICRO-TIME
 	////////////////////////////////////////////////////////////////////////////
-	public function microtime($source=false) {
-		if ($source === false) {
-			if (is_object($this->microtime)) return $this->microtime->microtime();
-			return $this->microtime;
+	public function microtime($source=NULL) {
+		if (empty($source)) {
+			return is_object($this->microtime)
+				? $this->microtime->microtime()
+				: $this->microtime;
 		}
 
 		$this->microtime = $source;
