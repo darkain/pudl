@@ -54,13 +54,16 @@ class		pudlMySqli
 
 
 		//CANNOT CONNECT - ERROR OUT
-		throw new pudlConnectionException($this,
-			'Unable to connect to MySQL server ' .
-			'"' . $auth['server'] . '"' .
-			' with the username ' .
-			'"' . $auth['username'] . '"' .
-			"\nError " . $this->connectErrno() .
-			': ' . $this->connectError()
+		throw new pudlConnectionException(
+			$this,
+			pudl::jsonEncode([
+				'message'	=> 'Database connection error',
+				'code'		=> $this->connectErrno(),
+				'error'		=> $this->connectError(),
+				'server'	=> $auth['server'],
+				'user'		=> $auth['username'],
+			],
+			$this->connectErrno())
 		);
 	}
 
