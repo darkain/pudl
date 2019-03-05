@@ -539,20 +539,19 @@ trait pudlQuery {
 
 
 
-	protected function _clauseId($column, $id=false) {
-		if ($id === false) {
+	protected function _clauseId($column, $id=NULL) {
+		if ($id === false  ||  $id === NULL) {
 			if ($column instanceof pudlId) {
 				$value	= $column->pudlId();
 				$this->_requireTrue($value, 'Object retuned invalid value from pudlId');
 				return $value;
 			}
-			throw new pudlTypeException(
-				$this,
+			throw new pudlTypeException($this,
 				is_object($column)
 					? 'Undefined method: ' . get_class($column) . '::pudlId'
 					: 'Invalid data type for object: ' . gettype($column)
 			);
-			return false;
+			return NULL;
 		}
 
 		if ($id instanceof pudlId) {
@@ -637,23 +636,26 @@ trait pudlQuery {
 
 
 
-	protected function _limit($limit, $offset=false) {
+	protected function _limit($limit, $offset=NULL) {
 		if (pudl_array($limit)) {
-			$offset	= count($limit) > 1 ? end($limit) : false;
+			$offset	= count($limit) > 1 ? end($limit) : NULL;
 			$limit	= reset($limit);
 		}
 
+		if ($limit  === false) $limit  = NULL;
+		if ($offset === false) $offset = NULL;
+
 		$query = '';
 
-		if ($limit === false  &&  $offset !== false) {
+		if ($limit === NULL  &&  $offset !== NULL) {
 			$limit = ((1<<31)-1);
 		}
 
-		if ($limit !== false) {
+		if ($limit !== NULL) {
 			$query .= ' LIMIT ' . ((int)$limit);
 		}
 
-		if ($offset !== false) {
+		if ($offset !== NULL) {
 			$query .= ' OFFSET ' . ((int)$offset);
 		}
 

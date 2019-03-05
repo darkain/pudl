@@ -78,19 +78,19 @@ abstract class	pudlMsShared
 	////////////////////////////////////////////////////////////////////////////
 	// LIMIT AND OFFSET
 	////////////////////////////////////////////////////////////////////////////
-	protected function _limit($limit, $offset=false) {
+	protected function _limit($limit, $offset=NULL) {
 		if (pudl_array($limit)) {
-			$offset	= count($limit) > 1 ? end($limit) : false;
+			$offset	= count($limit) > 1 ? end($limit) : NULL;
 			$limit	= reset($limit);
 		}
 
 		$query = '';
 
-		if ($offset !== false) {
+		if ($offset !== false  &&  $offset !== NULL) {
 			$query .= ' OFFSET ' . ((int)$offset) . ' ROWS';
 		}
 
-		if ($limit !== false) {
+		if ($limit !== false  &&  $limit !== NULL) {
 			$query .= ' FETCH NEXT ' . ((int)$limit) . ' ROWS ONLY';
 		}
 
