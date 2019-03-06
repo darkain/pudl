@@ -539,8 +539,8 @@ trait pudlQuery {
 
 
 
-	protected function _clauseId($column, $id=NULL) {
-		if ($id === false  ||  $id === NULL) {
+	protected function _clauseId($column, $id=false) {
+		if ($id === false) {
 			if ($column instanceof pudlId) {
 				$value	= $column->pudlId();
 				$this->_requireTrue($value, 'Object retuned invalid value from pudlId');
@@ -549,7 +549,7 @@ trait pudlQuery {
 			throw new pudlTypeException($this,
 				is_object($column)
 					? 'Undefined method: ' . get_class($column) . '::pudlId'
-					: 'Invalid data type for object: ' . gettype($column)
+					: 'Invalid data type for $column: ' . gettype($column) . ' - $id: ' . gettype($id)
 			);
 			return NULL;
 		}

@@ -371,7 +371,7 @@ trait pudlSelect {
 	////////////////////////////////////////////////////////////////////////////
 	// PULL A SINGLE ROW MATCHING THE ID
 	////////////////////////////////////////////////////////////////////////////
-	public function rowId($tables, $search=NULL, $id=NULL) {
+	public function rowId($tables, $search=NULL, $id=false) {
 		return $this->row($tables, $this->_clauseId($search, $id));
 	}
 
@@ -381,7 +381,7 @@ trait pudlSelect {
 	////////////////////////////////////////////////////////////////////////////
 	// PULL ALL ROWS MATCHING THE ID
 	////////////////////////////////////////////////////////////////////////////
-	public function rowsId($tables, $search, $id=NULL) {
+	public function rowsId($tables, $search, $id=false) {
 		return $this->rows($tables, $this->_clauseId($search, $id));
 	}
 
@@ -405,7 +405,7 @@ trait pudlSelect {
 	////////////////////////////////////////////////////////////////////////////
 	// PULL A SINGLE CELL BASED ON THE VALUE OF AN ID
 	////////////////////////////////////////////////////////////////////////////
-	public function cellId($tables, $column, $search, $id=NULL, $order=NULL) {
+	public function cellId($tables, $column, $search, $id=false, $order=NULL) {
 		return $this->cell($tables, $column, $this->_clauseId($search, $id), $order);
 	}
 
@@ -415,7 +415,7 @@ trait pudlSelect {
 	////////////////////////////////////////////////////////////////////////////
 	// PULL AN INTEGER ID COLUMN BASED ON THE VALUE OF ANOTHER COLUMN
 	////////////////////////////////////////////////////////////////////////////
-	public function id($tables, $column, $search, $id=NULL, $order=NULL) {
+	public function id($tables, $column, $search, $id=false, $order=NULL) {
 		return (int) $this->cell($tables, $column, $this->_clauseId($search, $id), $order);
 	}
 
