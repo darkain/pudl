@@ -549,7 +549,7 @@ trait pudlQuery {
 			throw new pudlTypeException($this,
 				is_object($column)
 					? 'Undefined method: ' . get_class($column) . '::pudlId'
-					: 'Invalid data type for $column: ' . gettype($column) . ' - $id: ' . gettype($id)
+					: 'Invalid data type for $column: ' . gettype($column)
 			);
 			return NULL;
 		}

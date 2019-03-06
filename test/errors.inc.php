@@ -4,7 +4,7 @@ try {
 	$db->string()->rowId('table', 'error');
 	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
-	pudlError($error, 'Invalid data type for object: string');
+	pudlError($error, 'Invalid data type for $column: string');
 }
 
 
@@ -14,7 +14,7 @@ try {
 	$db->string()->rowId('table', false);
 	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
-	pudlError($error, 'Invalid data type for object: boolean');
+	pudlError($error, 'Invalid data type for $column: boolean');
 }
 
 
@@ -24,7 +24,7 @@ try {
 	$db->string()->rowId('table', 3);
 	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
-	pudlError($error, 'Invalid data type for object: integer');
+	pudlError($error, 'Invalid data type for $column: integer');
 }
 
 
@@ -34,7 +34,7 @@ try {
 	$db->string()->rowId('table', true);
 	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
-	pudlError($error, 'Invalid data type for object: boolean');
+	pudlError($error, 'Invalid data type for $column: boolean');
 }
 
 
@@ -44,7 +44,7 @@ try {
 	$db->string()->rowId('table', 5.5);
 	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
-	pudlError($error, 'Invalid data type for object: double');
+	pudlError($error, 'Invalid data type for $column: double');
 }
 
 
@@ -54,7 +54,7 @@ try {
 	$db->string()->rowId('table', INF);
 	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
-	pudlError($error, 'Invalid data type for object: double');
+	pudlError($error, 'Invalid data type for $column: double');
 }
 
 
@@ -64,7 +64,7 @@ try {
 	$db->string()->rowId('table', -INF);
 	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
-	pudlError($error, 'Invalid data type for object: double');
+	pudlError($error, 'Invalid data type for $column: double');
 }
 
 
@@ -74,7 +74,7 @@ try {
 	$db->string()->rowId('table', NAN);
 	pudlTest($db, 'pudlException');
 } catch (pudlException $error) {
-	pudlError($error, 'Invalid data type for object: double');
+	pudlError($error, 'Invalid data type for $column: double');
 }
 
 
