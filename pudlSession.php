@@ -24,16 +24,23 @@ class			pudlSession
 	////////////////////////////////////////////////////////////////////////////
 	// CONSTRUCTOR, PASS IN SOME PUDL AND SESSION CONFIGURATIONS
 	////////////////////////////////////////////////////////////////////////////
-	public function __construct(pudl $pudl, $table, $name=false,
-								$domain=false, $secure=false) {
+	public function __construct(pudl $pudl, $table, $options=[]) {
 
-		$this->pudl		= $pudl;
-		$this->table	= $table;
-		$this->name		= $name;
-		$this->domain	= $domain;
+		// ENSURE VALUES ARE SET
+		if (!isset($options['domain']))		$options['domain']		= '';
+		if (!isset($options['path']))		$options['path']		= '/';
+		if (!isset($options['name']))		$options['name']		= 'PUDLSESSID';
+		if (!isset($options['samesite']))	$options['samesite']	= 'Strict';
+		if (!isset($options['lifetime']))	$options['lifetime']	= 60*60*24*30;
 
 		// FORCE BOOLEAN
-		$secure = !!$secure;
+		$options['secure']		= !empty($options['secure']);
+		$options['httponly']	= !empty($options['httponly']);
+
+		// BASIC INFORMATION
+		$this->pudl				= $pudl;
+		$this->table			= $table;
+		$this->options			= $options;
 
 		// VERIFY THAT SESSION SUPPORT IS AVAILABLE
 		pudl_require_extension('session');
@@ -45,30 +52,21 @@ class			pudlSession
 		session_set_save_handler($this, true);
 
 		// DIFFERENT SESSION NAME FOR HTTPS CONNECTIONS
-		session_name(
-			($secure ? '__Secure-' : '') .
-			(empty($this->name) ? 'PUDLSESSID' : $this->name)
-		);
+		session_name(($options['secure'] ? '__Secure-' : '') . $options['name']);
 
 
 		// SET PARAMETERS FOR BROWSER SESSION COOKIE
 		if (version_compare(PHP_VERSION, '7.3.0', '>=')) {
-			session_set_cookie_params([
-				'lifetime'	=> 60*60*24*30,		// SAVE SESSION FOR ONE MONTH
-				'path'		=> '/',				// SESSION IS FOR ENTIRE DOMAIN
-				'domain'	=> empty($this->domain) ? '' : $this->domain,
-				'secure'	=> $secure,			// HTTPS ONLY
-				'httponly'	=> true,			// HTTP(S) ONLY - BLOCK JAVASCRIPT ACCESS
-				'samesite'	=> 'Strict',		// ONLY ALLOW COOKIE FROM SAME SITE
-			]);
+			unset($options['name']);
+			session_set_cookie_params($options);
 
 		} else {
 			session_set_cookie_params(
-				60*60*24*30,					// SAVE SESSION FOR ONE MONTH
-				'/',							// SESSION IS FOR ENTIRE DOMAIN
-				empty($this->domain) ? '' : $this->domain,
-				$secure,						// HTTPS ONLY
-				true							// HTTP(S) ONLY - BLOCK JAVASCRIPT ACCESS
+				$options['lifetime'],			// SAVE SESSION FOR LENGTH OF TIME
+				$options['path'],				// LIMIT TO A SPECIFIC PATH WITHIN DOMAIN
+				$options['domain'],				// DOMAIN THIS SESSION IS TIED TO
+				$options['secure'],				// HTTPS ONLY - BLOCK HTTP ACCESS
+				$options['httponly']			// HTTP(S) ONLY - BLOCK JAVASCRIPT ACCESS
 			);
 		}
 
@@ -88,7 +86,12 @@ class			pudlSession
 	// GET THE REDIS CACHE ID FOR THIS SESSION ID
 	////////////////////////////////////////////////////////////////////////////
 	private function cache($id) {
-		return 'session-' . $this->name . '-' . $this->domain . '-' . $id;
+		return implode('-', [
+			'session',
+			$this->options['name'],
+			$this->options['domain'],
+			$id,
+		]);
 	}
 
 
@@ -275,10 +278,9 @@ class			pudlSession
 	////////////////////////////////////////////////////////////////////////////
 	// PRIVATE LOCAL VARIABLES
 	////////////////////////////////////////////////////////////////////////////
-	private $pudl;
-	private $table;
-	private $name;
-	private $domain;
+	private $pudl		= NULL;
+	private $table		= '';
+	private $options	= [];
 	private $user		= 0;
 	private $hash		= false;
 	private $secure		= false;
