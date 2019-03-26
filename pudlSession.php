@@ -34,8 +34,8 @@ class			pudlSession
 		if (!isset($options['lifetime']))	$options['lifetime']	= 60*60*24*30;
 
 		// FORCE BOOLEAN
-		$options['secure']		= !empty($options['secure']);
-		$options['httponly']	= !empty($options['httponly']);
+		$options['secure']		= !isset($options['secure'])    ||  !empty($options['secure']);
+		$options['httponly']	= !isset($options['httponly'])  ||  !empty($options['httponly']);
 
 		// BASIC INFORMATION
 		$this->pudl				= $pudl;
