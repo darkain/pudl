@@ -371,3 +371,10 @@ $db->string()->select('*', 'table', [
 	'column' => 'value',
 ]);
 pudlTest($db, "SELECT * FROM `table` WHERE (123 IN (`column7`, `column8`) AND `column`='value')");
+
+
+
+
+//LONGEST DEPTH BEFORE RECUSION EXCEPTION
+$db->string()->row('table', [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['a']]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]);
+pudlTest($db, 'SELECT * FROM `table` WHERE `a` LIMIT 1');

@@ -9,11 +9,14 @@ class pudlException extends Exception {
 		parent::__construct($message, $code, $previous);
 		$this->pudl = $pudl;
 
-		if ($pudl instanceof pudl) {
-			//TODO: RESET TRANSACTION STATE
-			//TODO: RESET RECURSION DEPTH STATE
-			$pudl->decache()->destring();
-		}
+		if (!($pudl instanceof pudl)) return;
+
+		try {
+			$pudl->decache();
+			$pudl->destring();
+			$pudl->decursion();
+			$pudl->rollback();
+		} catch (pudlException $e) {}
 	}
 
 	public $pudl;

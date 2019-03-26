@@ -633,7 +633,18 @@ abstract	class	pudl {
 	// DISABLE STRING-GENERATOR MODE
 	////////////////////////////////////////////////////////////////////////////
 	public function destring() {
-		array_pop($this->string);
+		$this->string = [];
+		return $this;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// DISABLE STRING-GENERATOR MODE
+	////////////////////////////////////////////////////////////////////////////
+	public function decursion() {
+		$this->_depth = 0;
 		return $this;
 	}
 
@@ -715,6 +726,7 @@ abstract	class	pudl {
 	/** @var array */			private			$listcache		= [];
 	/** @var mixed */			protected		$connection		= NULL;
 	/** @var array */			protected		$string			= [];
+	/** @var int */				protected		$_depth			= 0;
 
 
 

@@ -205,3 +205,14 @@ try {
 } catch (pudlException $error) {
 	pudlError($error, 'Invalid clause: x><1');
 }
+
+
+
+
+
+try {
+	$db->string()->row('table', [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['a']]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]);
+	pudlTest($db, 'pudlException');
+} catch (pudlException $error) {
+	pudlError($error, 'Recursion limit reached for value expression');
+}

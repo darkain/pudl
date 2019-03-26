@@ -54,12 +54,9 @@ trait pudlQuery {
 
 
 	public function _value($value, $quote=true, $isnull=false) {
-		static $depth = 0;
 		$query = false;
 
-		if ($depth++ > PUDL_RECURSION) {
-			//TODO:	reset query depth upon ANY pudlException
-			//		this means it'll have to no longer be a local scope static variable
+		if ($this->_depth++ > PUDL_RECURSION) {
 			throw new pudlRecursionException($this,
 				'Recursion limit reached for value expression'
 			);
@@ -123,7 +120,7 @@ trait pudlQuery {
 		}
 
 
-		$depth--;
+		$this->_depth--;
 		return $query;
 	}
 
@@ -394,10 +391,9 @@ trait pudlQuery {
 	// THIS IS USED BY 'WHERE', 'ON', 'HAVING', 'GROUP BY', 'ORDER BY'
 	////////////////////////////////////////////////////////////////////////////
 	private function _clauseRecurse($clause, $joiner=' AND ', $prefix=false, $encase=true) {
-		static $depth = 0;
 		$query = '';
 
-		if ($depth > PUDL_RECURSION) {
+		if ($this->_depth > PUDL_RECURSION) {
 			throw new pudlRecursionException($this,
 				'Recursion limit reached in recursive clause'
 			);
@@ -438,7 +434,7 @@ trait pudlQuery {
 
 		if (count($clause) > 1  &&  $encase) $query .= '(';
 
-		$depth++;
+		$this->_depth++;
 		foreach ($clause as $key => $value) {
 			if (is_int($key)  &&  $value==='') continue;
 
@@ -511,7 +507,7 @@ trait pudlQuery {
 
 		if (count($clause) > 1  &&  $encase) $query .= ')';
 
-		$depth--;
+		$this->_depth--;
 		return $query;
 	}
 
