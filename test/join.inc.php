@@ -209,3 +209,112 @@ pudlTest($db, 'SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (`col1`>`col2
 
 $db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(col1<>col2)']);
 pudlTest($db, 'SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (`col1`<>`col2`)');
+
+
+
+$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(col1=5)']);
+pudlTest($db, 'SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (`col1`=5)');
+
+
+
+$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(col1=5.5)']);
+pudlTest($db, 'SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (`col1`=5.5)');
+
+
+
+$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(col1=-5.5)']);
+pudlTest($db, 'SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (`col1`=-5.5)');
+
+
+
+$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(col1=null)']);
+pudlTest($db, 'SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (`col1` IS NULL)');
+
+
+
+$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(col1=NULL)']);
+pudlTest($db, 'SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (`col1` IS NULL)');
+
+
+
+$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(col1!=null)']);
+pudlTest($db, 'SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (`col1` IS NOT NULL)');
+
+
+
+$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(col1!=NULL)']);
+pudlTest($db, 'SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (`col1` IS NOT NULL)');
+
+
+
+$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(col1<>null)']);
+pudlTest($db, 'SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (`col1` IS NOT NULL)');
+
+
+
+$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(col1<>NULL)']);
+pudlTest($db, 'SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (`col1` IS NOT NULL)');
+
+
+
+$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(col1=inf)']);
+pudlTest($db, 'SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (`col1`=`inf`)');
+
+
+
+$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(col1=-inf)']);
+pudlTest($db, 'SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (`col1`=`-inf`)');
+
+
+
+$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(col1=nan)']);
+pudlTest($db, 'SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (`col1`=`nan`)');
+
+
+
+$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(5=col1)']);
+pudlTest($db, 'SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (5=`col1`)');
+
+
+
+$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(5.5=col1)']);
+pudlTest($db, 'SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (5.5=`col1`)');
+
+
+
+$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(-5.5=col1)']);
+pudlTest($db, 'SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (-5.5=`col1`)');
+
+
+
+$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(null=col1)']);
+pudlTest($db, 'SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (`null`=`col1`)');
+
+
+
+$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(NULL=col1)']);
+pudlTest($db, 'SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (`NULL`=`col1`)');
+
+
+
+$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(inf=col1)']);
+pudlTest($db, 'SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (`inf`=`col1`)');
+
+
+
+$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(-inf=col1)']);
+pudlTest($db, 'SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (`-inf`=`col1`)');
+
+
+
+$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(nan=col1)']);
+pudlTest($db, 'SELECT * FROM `tbl1` AS `t1` JOIN `tbl2` AS `t2` ON (`nan`=`col1`)');
+
+
+
+try {
+	$db->string()->select('*', ['t1'=>'tbl1', 't2'=>'~tbl2(test<null)']);
+	pudlTest($db, 'pudlException');
+} catch (pudlException $error) {
+	pudlError($error, 'Invalid NULL comparison: test<null');
+}

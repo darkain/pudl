@@ -593,11 +593,27 @@ trait pudlQuery {
 
 		if (empty($equals[0])) return $query;
 
-		$query .= $equals[0];
+		switch (true) {
+			case ctype_digit($parts[1]):
+				return $query . $equals[0] . ((int) $parts[1]);
 
-		return $query	. (is_numeric($parts[1])
-						? (float) $parts[1]
-						: $this->identifiers($parts[1]));
+			case is_numeric($parts[1]):
+				return $query . $equals[0] . ((float) $parts[1]);
+
+			case $parts[1] === 'NULL':
+			case $parts[1] === 'null':
+				if ($equals[0] === '=') {
+					return $query . ' IS NULL';
+
+				} else if ($equals[0] === '!='  ||  $equals[0] === '<>') {
+					return $query . ' IS NOT NULL';
+
+				} else {
+					throw new pudlValueException($this, 'Invalid NULL comparison: ' . $clause);
+				}
+		}
+
+		return $query . $equals[0] . $this->identifiers($parts[1]);
 	}
 
 
