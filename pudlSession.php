@@ -30,7 +30,7 @@ class			pudlSession
 		if (!isset($options['domain']))		$options['domain']		= '';
 		if (!isset($options['path']))		$options['path']		= '/';
 		if (!isset($options['name']))		$options['name']		= 'PUDLSESSID';
-		if (!isset($options['samesite']))	$options['samesite']	= 'Strict';
+		if (!isset($options['samesite']))	$options['samesite']	= 'Lax';
 		if (!isset($options['lifetime']))	$options['lifetime']	= 60*60*24*30;
 
 		// FORCE BOOLEAN
