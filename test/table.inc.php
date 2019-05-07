@@ -175,3 +175,25 @@ pudlTest($db, 'CREATE TABLE IF NOT EXISTS `table` (`column` int) ENGINE=InnoDB C
 //CREATE TABLE
 $db->string()->create('table', ['column'=>'int'], false, ['ENGINE'=>'InnoDB', 'CHARSET'=>'ascii']);
 pudlTest($db, 'CREATE TABLE IF NOT EXISTS `table` (`column` int) ENGINE=InnoDB CHARSET=ascii');
+
+
+
+
+//CREATE TABLE
+$db->string()->create('table', [
+	'column1'		=> [
+		'type'		=> 'int',
+		'collate'	=> 'utf8mb4_unicode_ci',
+		'null'		=> false,
+		'comment'	=> 'test column',
+	],
+	'column2'		=> [
+		'type'		=> 'char(256)',
+		'null'		=> true,
+		'comment'	=> 'another column',
+	],
+	'column3'		=> [
+		'type'		=> 'varchar(256)',
+	],
+]);
+pudlTest($db, "CREATE TABLE IF NOT EXISTS `table` (`column1` int COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'test column', `column2` char(256) NULL COMMENT 'another column', `column3` varchar(256))");

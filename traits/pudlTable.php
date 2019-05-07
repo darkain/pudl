@@ -179,7 +179,31 @@ trait pudlTable {
 	// THIS IS OVERWRITTEN IN SOME PUDL DATABASE DRIVERS
 	////////////////////////////////////////////////////////////////////////////
 	protected function datatype($type) {
-		return rtrim($type, " \t\n\r\0\x0B,");
+		if (!pudl_array($type)) {
+			return preg_replace("/[^A-Za-z0-9_(), ']/", '', $type);
+		}
+
+		$query = '';
+
+		if (!empty($type['type'])) {
+			$query .= preg_replace("/[^A-Za-z0-9_(), ']/", '', $type['type']);
+		}
+
+		if (!empty($type['collate'])) {
+			$query .= ' COLLATE ' . $type['collate'];
+		}
+
+		if (!empty($type['null'])) {
+			$query .= ' NULL';
+		} else if (isset($type['null'])) {
+			$query .= ' NOT NULL';
+		}
+
+		if (!empty($type['comment'])) {
+			$query .= ' COMMENT ' . $this->_value($type['comment']);
+		}
+
+		return $query;
 	}
 
 
@@ -200,9 +224,11 @@ trait pudlTable {
 			$first = true;
 			foreach ($columns as $key => $item) {
 				if ($first) $first = false; else $query .= ', ';
+
 				if (is_string($key)) {
 					$query .= $this->identifier($key) . ' ';
 				}
+
 				$query .= $this->datatype($item);
 			}
 
