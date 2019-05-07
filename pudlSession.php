@@ -28,10 +28,10 @@ class			pudlSession
 
 		// ENSURE VALUES ARE SET
 		if (!isset($options['domain']))		$options['domain']		= '';
-		if (!isset($options['path']))		$options['path']		= '/';
-		if (!isset($options['name']))		$options['name']		= 'PUDLSESSID';
-		if (!isset($options['samesite']))	$options['samesite']	= 'Lax';
-		if (!isset($options['lifetime']))	$options['lifetime']	= 60*60*24*30;
+		if ( empty($options['path']))		$options['path']		= '/';
+		if ( empty($options['name']))		$options['name']		= 'PUDLSESSID';
+		if ( empty($options['samesite']))	$options['samesite']	= 'Lax';
+		if ( empty($options['lifetime']))	$options['lifetime']	= 60*60*24*30;
 
 		// FORCE BOOLEAN
 		$options['secure']		= !isset($options['secure'])    ||  !empty($options['secure']);
