@@ -197,3 +197,39 @@ $db->string()->create('table', [
 	],
 ]);
 pudlTest($db, "CREATE TABLE IF NOT EXISTS `table` (`column1` int COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'test column', `column2` char(256) NULL COMMENT 'another column', `column3` varchar(256))");
+
+
+
+
+//CREATE TABLE
+$db->string()->create('table', [
+	'column'		=> [
+		'type'		=> 'int',
+		'key'		=> 'auto',
+	],
+]);
+pudlTest($db, "CREATE TABLE IF NOT EXISTS `table` (`column` int PRIMARY KEY AUTOINCREMENT)");
+
+
+
+
+//CREATE TABLE
+$db->string()->create('table', [
+	'column'		=> [
+		'type'		=> 'int',
+		'key'		=> 'primary',
+	],
+]);
+pudlTest($db, "CREATE TABLE IF NOT EXISTS `table` (`column` int PRIMARY KEY)");
+
+
+
+
+//CREATE TABLE
+$db->string()->create('table', [
+	'column'		=> [
+		'type'		=> 'int',
+		'key'		=> 'unique',
+	],
+]);
+pudlTest($db, "CREATE TABLE IF NOT EXISTS `table` (`column` int UNIQUE)");

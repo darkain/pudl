@@ -189,6 +189,22 @@ trait pudlTable {
 			$query .= preg_replace("/[^A-Za-z0-9_(), ']/", '', $type['type']);
 		}
 
+		if (!empty($type['key'])) {
+			switch (strtolower($type['key'])) {
+				case 'auto':
+					$query .= ' PRIMARY KEY AUTOINCREMENT';
+				break;
+
+				case 'primary':
+					$query .= ' PRIMARY KEY';
+				break;
+
+				case 'unique':
+					$query .= ' UNIQUE';
+				break;
+			}
+		}
+
 		if (!empty($type['collate'])) {
 			$query .= ' COLLATE ' . $type['collate'];
 		}
