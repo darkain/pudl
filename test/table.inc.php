@@ -233,3 +233,54 @@ $db->string()->create('table', [
 	],
 ]);
 pudlTest($db, "CREATE TABLE IF NOT EXISTS `table` (`column` int UNIQUE)");
+
+
+
+
+//CREATE TABLE
+$db->string()->create('table', [
+	'column'		=> [
+		'type'		=> 'char(16)',
+		'charset'	=> 'ascii',
+		'default'	=> 'test',
+	],
+]);
+pudlTest($db, "CREATE TABLE IF NOT EXISTS `table` (`column` char(16) CHARACTER SET ascii DEFAULT 'test')");
+
+
+
+
+//CREATE TABLE
+$db->string()->create('table', [
+	'column'		=> [
+		'type'		=> 'int',
+		'default'	=> 2,
+	],
+]);
+pudlTest($db, "CREATE TABLE IF NOT EXISTS `table` (`column` int DEFAULT 2)");
+
+
+
+
+//CREATE TABLE
+$db->string()->create('table', [
+	'column'		=> [
+		'type'		=> 'int',
+		'default'	=> NULL,
+	],
+]);
+pudlTest($db, "CREATE TABLE IF NOT EXISTS `table` (`column` int DEFAULT NULL)");
+
+
+
+/*
+//CREATE TABLE
+//THIS IS BROKEN
+$db->string()->create('table', [
+	'column'		=> [
+		'type'		=> 'int',
+		'comment'	=> " 'string' ",
+	],
+]);
+pudlTest($db, "CREATE TABLE IF NOT EXISTS `table` (`column` int COMMENT ' ''string'' ')");
+*/

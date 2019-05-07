@@ -186,7 +186,9 @@ trait pudlTable {
 		$query = '';
 
 		if (!empty($type['type'])) {
-			$query .= preg_replace("/[^A-Za-z0-9_(), ']/", '', $type['type']);
+			$query .= strtolower(
+				preg_replace("/[^A-Za-z0-9_(), ']/", '', $type['type'])
+			);
 		}
 
 		if (!empty($type['key'])) {
@@ -205,14 +207,24 @@ trait pudlTable {
 			}
 		}
 
+		if (!empty($type['charset'])) {
+			$query	.= ' CHARACTER SET '
+					.  strtolower($this->_value($type['charset'], false));
+		}
+
 		if (!empty($type['collate'])) {
-			$query .= ' COLLATE ' . $type['collate'];
+			$query	.= ' COLLATE '
+					.  strtolower($this->_value($type['collate'], false));
 		}
 
 		if (!empty($type['null'])) {
 			$query .= ' NULL';
 		} else if (isset($type['null'])) {
 			$query .= ' NOT NULL';
+		}
+
+		if (array_key_exists('default', $type)) {
+			$query .= ' DEFAULT ' . $this->_value($type['default']);
 		}
 
 		if (!empty($type['comment'])) {
