@@ -74,6 +74,10 @@ class		pudlSqlite
 				$auth['key']
 			);
 
+			// Enable exceptions instead of errors/warnings
+			// https://www.php.net/manual/en/sqlite3.enableexceptions.php
+			$this->connection->enableExceptions(true);
+
 		// Convert PHP exception to PUDL exception
 		} catch (Exception $e) {
 			$error = error_get_last();
@@ -137,7 +141,12 @@ class		pudlSqlite
 	////////////////////////////////////////////////////////////////////////////
 	protected function process($query) {
 		if (!$this->connection) return new pudlSqliteResult($this);
-		$result = $this->connection->query($query);
+
+		try {
+			$this->connection->enableExceptions(true);
+			$result = $this->connection->query($query);
+		} catch (Exception $e) {}
+
 		return new pudlSqliteResult($this, $result);
 	}
 
