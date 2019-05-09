@@ -145,7 +145,9 @@ class		pudlSqlite
 		try {
 			$this->connection->enableExceptions(true);
 			$result = $this->connection->query($query);
-		} catch (Exception $e) {}
+		} catch (Exception $e) {
+			$result = NULL;
+		}
 
 		return new pudlSqliteResult($this, $result);
 	}
