@@ -145,11 +145,15 @@ class			pudlSession
 	// http://php.net/manual/en/sessionhandlerinterface.read.php
 	////////////////////////////////////////////////////////////////////////////
 	public function read($id) {
-		$data = $this->pudl->cache(60*60, $this->cache($id))->selectRow(
-			['user', 'data'],
-			$this->table,
-			['id' => $id]
-		);
+		try {
+			$data = $this->pudl->cache(60*60, $this->cache($id))->selectRow(
+				['user', 'data'],
+				$this->table,
+				['id' => $id]
+			);
+		} catch (pudlException $e) {
+			$data = [];
+		}
 
 		if (empty($data)  ||  !isset($data['data'])  ||  !isset($data['user'])) {
 			$data = ['data'=>'', 'user'=>0];
