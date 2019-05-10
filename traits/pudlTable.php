@@ -12,9 +12,9 @@ trait pudlTable {
 	// GET A LIST OF TABLES FROM THE DATABASE
 	// https://mariadb.com/kb/en/library/show-tables/
 	////////////////////////////////////////////////////////////////////////////
-	public function tables($clause=NULL) {
+	public function tables($where=NULL) {
 		$tables				= [];
-		$query				= 'SHOW TABLES' . $this->_where($clause);
+		$query				= 'SHOW TABLES' . $this->_where($where);
 		$list				= $this($query)->complete();
 
 		if (is_string($list)  ||  $list instanceof pudlStringResult) {
