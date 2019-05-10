@@ -239,7 +239,7 @@ class		pudlSqlite
 		$rows	= $this->rows('sqlite_master', $where);
 		foreach ($rows as $row) {
 			if ($row['type'] !== 'table') continue;
-			$output[$row['tbl_name']] = $row;
+			$output[] = $row['tbl_name'];
 		}
 		return $output;
 	}
