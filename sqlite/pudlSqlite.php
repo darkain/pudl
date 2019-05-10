@@ -234,9 +234,9 @@ class		pudlSqlite
 	////////////////////////////////////////////////////////////////////////////
 	// GET THE LIST OF AVAILABLE TABLES
 	////////////////////////////////////////////////////////////////////////////
-	public function tables($clause=NULL) {
+	public function tables($where=NULL) {
 		$output	= [];
-		$rows	= $this->rows('sqlite_master', $clause);
+		$rows	= $this->rows('sqlite_master', $where);
 		foreach ($rows as $row) {
 			if ($row['type'] !== 'table') continue;
 			$output[$row['tbl_name']] = $row;
