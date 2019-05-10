@@ -60,7 +60,7 @@ trait pudlTable {
 	////////////////////////////////////////////////////////////////////////////
 	public function tableExists($table) {
 		$tables = $this->tables();
-		return in_array($this->_prefixTable($table), $tables);
+		return in_array($this->_prefix($table), $tables);
 	}
 
 
