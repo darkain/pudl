@@ -201,6 +201,19 @@ trait pudlTable {
 
 
 	////////////////////////////////////////////////////////////////////////////
+	// HANDLE TECH COLLATIONS
+	// THIS IS OVERWRITTEN IN SOME PUDL DATABASE DRIVERS
+	////////////////////////////////////////////////////////////////////////////
+	protected function collate($collate) {
+		return preg_replace("/[^a-z0-9_']/", '',
+			strtolower($collate)
+		);
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
 	// CONVERT COLUMN DEFINITION FROM PUDL STANDARD TO DATABASE SPECIFIC
 	// THIS IS OVERWRITTEN IN SOME PUDL DATABASE DRIVERS
 	////////////////////////////////////////////////////////////////////////////
@@ -241,8 +254,10 @@ trait pudlTable {
 		}
 
 		if (!empty($type['collate'])) {
-			$query	.= ' COLLATE '
-					.  strtolower($this->_value($type['collate'], false));
+			$collate = $this->collate($type['collate']);
+			if (!empty($collate)) {
+				$query .= ' COLLATE ' . $collate;
+			}
 		}
 
 		if (!empty($type['null'])) {

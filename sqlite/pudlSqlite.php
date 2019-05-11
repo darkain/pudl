@@ -262,4 +262,18 @@ class		pudlSqlite
 		return parent::dataType($type);
 	}
 
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// HANDLE TECH COLLATIONS
+	// THIS IS OVERWRITTEN IN SOME PUDL DATABASE DRIVERS
+	////////////////////////////////////////////////////////////////////////////
+	protected function collate($collate) {
+		$collate = parent::collate($collate);
+		return (substr($collate, -3) === '_ci')
+			? 'NOCASE'
+			: 'BINARY';
+	}
+
 }
