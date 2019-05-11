@@ -254,6 +254,9 @@ class		pudlSqlite
 	protected function dataType($type) {
 		if ($type instanceof pudlType) {
 			$type = 'text';
+
+		} else {
+			$type = str_replace('UNSIGNED', '', strtoupper($type));
 		}
 
 		return parent::dataType($type);
