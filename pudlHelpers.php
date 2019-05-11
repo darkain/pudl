@@ -288,3 +288,19 @@ class pudlString {
 
 	public $value;
 }
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// COMPLEX DATA TYPES FOR CREATE TABLE SYNTAX GENERATOR
+////////////////////////////////////////////////////////////////////////////////
+class pudlType {
+	public function __construct($type, $value) {
+		$this->type		= $type;
+		$this->value	= $value;
+	}
+
+	public $type;
+	public $value;
+}

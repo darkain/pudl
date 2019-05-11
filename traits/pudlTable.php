@@ -175,20 +175,48 @@ trait pudlTable {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// CONVERT DATA TYPE FROM STANDARD TO DATABASE SPECIFIC
+	// CONVERT COLUMN DEFINITION FROM PUDL STANDARD TO DATABASE SPECIFIC
 	// THIS IS OVERWRITTEN IN SOME PUDL DATABASE DRIVERS
 	////////////////////////////////////////////////////////////////////////////
-	protected function datatype($type) {
+	protected function dataType($type) {
+		if (!($type instanceof pudlType)) {
+			return strtoupper(
+				preg_replace("/[^A-Za-z0-9_(), ']/", '', $type)
+			);
+
+		}
+
+		$query = $type->type . '(';
+		$first = true;
+
+		foreach ($type->value as $item) {
+			if ($first) $first = false; else $query .= ',';
+			$query .= "'" . str_replace(["'", '\\'], ["''", '\\\\'], $item) . "'";
+		}
+
+		return $query . ')';
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// CONVERT COLUMN DEFINITION FROM PUDL STANDARD TO DATABASE SPECIFIC
+	// THIS IS OVERWRITTEN IN SOME PUDL DATABASE DRIVERS
+	////////////////////////////////////////////////////////////////////////////
+	protected function columnType($type) {
 		if (!pudl_array($type)) {
-			return preg_replace("/[^A-Za-z0-9_(), ']/", '', $type);
+			return strtoupper(
+				preg_replace("/[^A-Za-z0-9_(), ']/", '', $type)
+			);
 		}
 
 		$query = '';
 
 		if (!empty($type['type'])) {
-			$query .= strtolower(
-				preg_replace("/[^A-Za-z0-9_(), ']/", '', $type['type'])
-			);
+			$query .= $this->dataType($type['type']);
+		} else if (!empty($type[0])) {
+			$query .= $this->dataType($type[0]);
 		}
 
 		if (!empty($type['key'])) {
@@ -255,9 +283,10 @@ trait pudlTable {
 
 				if (is_string($key)) {
 					$query .= $this->identifier($key) . ' ';
+					$query .= $this->columnType($item);
+				} else {
+					$query .= $item;
 				}
-
-				$query .= $this->datatype($item);
 			}
 
 		} else {

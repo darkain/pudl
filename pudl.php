@@ -676,7 +676,7 @@ abstract	class	pudl {
 	////////////////////////////////////////////////////////////////////////////
 	// SET A VARIABLE ON THE DATABASE SERVER
 	////////////////////////////////////////////////////////////////////////////
-	public function set($variable, $value, $global=false) {
+	public function variable($variable, $value, $global=false) {
 		$query  = 'SET ';
 		$query .= $this->_value(new pudlGlobal($variable, $global));
 		$query .= '=';

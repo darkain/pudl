@@ -243,4 +243,20 @@ class		pudlSqlite
 		}
 		return $output;
 	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// CONVERT COLUMN DEFINITION FROM PUDL STANDARD TO DATABASE SPECIFIC
+	// THIS IS OVERWRITTEN IN SOME PUDL DATABASE DRIVERS
+	////////////////////////////////////////////////////////////////////////////
+	protected function dataType($type) {
+		if ($type instanceof pudlType) {
+			$type = 'text';
+		}
+
+		return parent::dataType($type);
+	}
+
 }

@@ -19,6 +19,9 @@ trait pudlStatic {
 
 			case 'increment':
 				return call_user_func_array([$this, 'increase'], $arguments);
+
+			case 'set':
+				return call_user_func_array([$this, 'variable'], $arguments);
 		}
 
 		throw new pudlMethodException($this,
@@ -40,6 +43,9 @@ trait pudlStatic {
 			case 'increment':
 				if (empty($arguments)) $arguments = [1];
 				return static::_increment(reset($arguments));
+
+			case 'set':
+				return forward_static_call_array('static::_set', $arguments);
 		}
 
 		$value	= new pudlFunction();
@@ -180,6 +186,28 @@ trait pudlStatic {
 		}
 
 		return $return;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// TABLE COLUMN SET DATA TYPE
+	////////////////////////////////////////////////////////////////////////////
+	public static function _set($values) {
+		if (!pudl_array($values)) $values = func_get_args();
+		return new pudlType('SET', $values);
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// TABLE COLUMN ENUM DATA TYPE
+	////////////////////////////////////////////////////////////////////////////
+	public static function enum($values) {
+		if (!pudl_array($values)) $values = func_get_args();
+		return new pudlType('ENUM', $values);
 	}
 
 
