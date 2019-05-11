@@ -191,7 +191,7 @@ trait pudlTable {
 
 		foreach ($type->value as $item) {
 			if ($first) $first = false; else $query .= ',';
-			$query .= "'" . str_replace(["'", '\\'], ["''", '\\\\'], $item) . "'";
+			$query .= $this->_value((string)$item);
 		}
 
 		return $query . ')';
