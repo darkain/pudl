@@ -14,10 +14,14 @@ class pudlException extends Exception {
 		if (self::$recurse) return;
 		self::$recurse = true;
 
+		// RESET INTERNAL PUDL STATE
 		try { $pudl->decache();		} catch (pudlException $e) {}
 		try { $pudl->destring();	} catch (pudlException $e) {}
 		try { $pudl->decursion();	} catch (pudlException $e) {}
 		try { $pudl->rollback();	} catch (pudlException $e) {}
+
+		// RUN A GENERIC QUERY TO RESET EXTERNAL ERROR CODES
+		try { $pudl('SELECT 1');	} catch (pudlException $e) {}
 
 		self::$recurse = false;
 	}
