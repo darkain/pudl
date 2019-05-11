@@ -159,7 +159,7 @@ pudlTest($db, "CREATE TABLE IF NOT EXISTS `table` (`column` INT PRIMARY KEY AUTO
 $db->string()->create('table', [
 	'column'		=> ['bigint(10)', 'key' => 'auto'],
 ]);
-pudlTest($db, "CREATE TABLE IF NOT EXISTS `table` (`column` BIGINT(10) PRIMARY KEY AUTOINCREMENT))");
+pudlTest($db, "CREATE TABLE IF NOT EXISTS `table` (`column` BIGINT(10) PRIMARY KEY AUTOINCREMENT)");
 
 
 
