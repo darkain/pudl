@@ -84,3 +84,21 @@ if (!function_exists('array_diff_assoc_recursive')) {
 		return $difference;
 	}
 }
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// FIX FOR PHP NOT HAVING A STR_PUTCSV
+// SOURCE: https://www.php.net/manual/en/function.fputcsv.php
+////////////////////////////////////////////////////////////////////////////////
+if (!function_exists('str_putcsv')) {
+	function str_putcsv($fields, $delimiter=',', $enclosure='"', $escape='\\') {
+		$fp = fopen('php://temp', 'w');
+		fputcsv($fp, $fields, $delimiter, $enclosure, $escape);
+		fseek($fp, 0, SEEK_SET);
+		$csv = stream_get_contents($fp);
+		fclose($fp);
+		return $csv;
+	}
+}
