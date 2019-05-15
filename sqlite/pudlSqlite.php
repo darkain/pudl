@@ -259,6 +259,10 @@ class		pudlSqlite
 			$type = str_replace('UNSIGNED', '', strtoupper($type));
 		}
 
+		// CHANGE "INT" TO "INTEGER"
+		// FIXES: "AUTOINCREMENT is only allowed on an INTEGER PRIMARY KEY"
+		$type = preg_replace('/\bINT\b/i', 'INTEGER', $type);
+
 		return parent::dataType($type);
 	}
 
