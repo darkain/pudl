@@ -12,7 +12,7 @@ class pudlException extends Exception {
 		if (!($pudl instanceof pudl)) return;
 
 		// STORE THE LAST QUERY BEFORE WE EXECUTE A NEW ONE
-		$this->query = $pudl->query();
+		$query = $pudl->query();
 
 		// PREVENT INFINITE RECURSIONS
 		if (self::$recurse) return;
@@ -27,11 +27,15 @@ class pudlException extends Exception {
 		// RUN A GENERIC QUERY TO RESET EXTERNAL ERROR CODES
 		try { $pudl('SELECT 1');	} catch (pudlException $e) {}
 
+		// RESET THE INTERNAL QUERY STRING FOR DEBUGGING
+		try { $pudl->string();		} catch (pudlException $e) {}
+		try { $pudl($query);		} catch (pudlException $e) {}
+		try { $pudl->destring();	} catch (pudlException $e) {}
+
 		self::$recurse = false;
 	}
 
 	public			$pudl		= NULL;
-	public			$query		= NULL;
 	private	static	$recurse	= false;
 }
 
