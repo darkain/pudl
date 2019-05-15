@@ -11,6 +11,10 @@ class pudlException extends Exception {
 
 		if (!($pudl instanceof pudl)) return;
 
+		// STORE THE LAST QUERY BEFORE WE EXECUTE A NEW ONE
+		$this->query = $pudl->query();
+
+		// PREVENT INFINITE RECURSIONS
 		if (self::$recurse) return;
 		self::$recurse = true;
 
@@ -27,6 +31,7 @@ class pudlException extends Exception {
 	}
 
 	public			$pudl		= NULL;
+	public			$query		= NULL;
 	private	static	$recurse	= false;
 }
 
