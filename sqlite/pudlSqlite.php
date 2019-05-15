@@ -276,4 +276,14 @@ class		pudlSqlite
 			: 'BINARY';
 	}
 
+
+
+/*
+// GET THE "CREATE TABLE" TEXT FOR TABLE session
+.schema session
+
+// GET DETAILED INFORMATION OF EACH COLUMN IN session
+pragma table_info(session);
+*/
+
 }

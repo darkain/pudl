@@ -371,7 +371,7 @@ trait pudlTable {
 	////////////////////////////////////////////////////////////////////////////
 	// GET A SQL ESCAPED TABLE NAME
 	////////////////////////////////////////////////////////////////////////////
-	protected function _table($table) {
+	public function _table($table) {
 		return $this->identifiers($table, true);
 	}
 
@@ -381,7 +381,7 @@ trait pudlTable {
 	////////////////////////////////////////////////////////////////////////////
 	// PROCESS A LIST OF TABLES
 	////////////////////////////////////////////////////////////////////////////
-	protected function _tables($table) {
+	public function _tables($table) {
 		if ($table === false)			return;
 		if ($table === NULL)			return;
 		if ($table instanceof pudlRaw)	return ' FROM ' . $table->pudlValue($this);
