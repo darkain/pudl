@@ -232,6 +232,35 @@ class		pudlSqlite
 
 
 	////////////////////////////////////////////////////////////////////////////
+	// GET A LIST OF FIELDS FOR THE GIVEN $TABLE
+	////////////////////////////////////////////////////////////////////////////
+	protected function _fields($table) {
+		$list = $this(
+			'pragma table_info(' . $this->_table($table) . ')'
+		)->complete();
+
+		$columns = [];
+
+		foreach ($list as $item) {
+			$columns[] = [
+				'field'		=> $item['name'],
+				'type'		=> $item['type'],
+				'null'		=> empty($item['notnull']) ? 'YES' : 'NO',
+				'key'		=> empty($item['pk']) ? '' : 'PRI',
+				'default'	=> $item['dflt_value'],
+				'extra'		=> '',
+				'table'		=> $table,
+				'prefix'	=> '',
+			];
+		}
+
+		return $columns;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
 	// GET THE LIST OF AVAILABLE TABLES
 	////////////////////////////////////////////////////////////////////////////
 	public function tables($where=NULL) {

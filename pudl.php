@@ -406,34 +406,34 @@ abstract	class	pudl {
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// GET A LIST OF FIELDS FOR THE GIVEN $TABLE
+	// GET A LIST OF FIELDS FOR THE GIVEN $TABLES
 	////////////////////////////////////////////////////////////////////////////
-	public function listFields($table, $prefix='') {
-		if (!pudl_array($table)) $table = [$table];
+	public function listFields($tables, $prefix='') {
+		if (!pudl_array($tables)) $tables = [$tables];
 
 		$return = [];
 
-		foreach ($table as $key => $value) {
+		foreach ($tables as $key => $table) {
 			if (in_array($key, ['on', 'clause', 'using'], true)) continue;
 
-			if (pudl_array($value)) {
+			if (pudl_array($table)) {
 				if (is_int($key)) $key = '';
-				$return		+= $this->listFields($value, $key);
+				$return		+= $this->listFields($table, $key);
 
 			} else {
-				$value		= $this->_table($value);
+				$table = (string) $table;
 
-				if (isset($this->listcache[$value])) {
-					$list	= $this->listcache[$value];
+				if (isset($this->listcache[$table])) {
+					$list	= $this->listcache[$table];
 
 				} else {
-					$list	= $this('SHOW COLUMNS FROM ' . $value)->complete();
+					$list	= $this_fields($table);
 					array_change_key_case($list);
-					$this->listcache[$value] = $list;
+					$this->listcache[$table] = $list;
 				}
 
 				foreach ($list as $item) {
-					$item['table']	= $value;
+					$item['table']	= $table;
 					$item['prefix']	= is_int($key) ? $prefix : $key;
 					$return[$item['field']] = $item;
 				}
@@ -442,6 +442,18 @@ abstract	class	pudl {
 
 		return $return;
 	}
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// GET A LIST OF FIELDS FOR THE GIVEN $TABLE
+	////////////////////////////////////////////////////////////////////////////
+	protected function _fields($table) {
+		return $this(
+			'SHOW COLUMNS FROM ' . $this->_table($table)
+		)->complete();
+	}
+
 
 
 
