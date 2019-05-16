@@ -427,7 +427,7 @@ abstract	class	pudl {
 					$list	= $this->listcache[$table];
 
 				} else {
-					$list	= $this_fields($table);
+					$list	= $this->_fields($table);
 					array_change_key_case($list);
 					$this->listcache[$table] = $list;
 				}
