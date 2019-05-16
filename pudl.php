@@ -428,13 +428,14 @@ abstract	class	pudl {
 
 				} else {
 					$list	= $this('SHOW COLUMNS FROM ' . $value)->complete();
+					array_change_key_case($list);
 					$this->listcache[$value] = $list;
 				}
 
 				foreach ($list as $item) {
-					$item['Table']	= $value;
-					$item['Prefix']	= is_int($key) ? $prefix : $key;
-					$return[$item['Field']] = $item;
+					$item['table']	= $value;
+					$item['prefix']	= is_int($key) ? $prefix : $key;
+					$return[$item['field']] = $item;
 				}
 			}
 		}

@@ -792,8 +792,8 @@ trait pudlQuery {
 		$return	= [];
 
 		foreach ($columns as $val) {
-			if (!empty($list[$val]['Prefix'])) {
-				$return[] = $list[$val]['Prefix'] . '.' . $val;
+			if (!empty($list[$val]['prefix'])) {
+				$return[] = $list[$val]['prefix'] . '.' . $val;
 
 			} else if ($unprefixed) {
 				$return[] = $val;
