@@ -428,11 +428,11 @@ abstract	class	pudl {
 
 				} else {
 					$list	= $this->_fields($table);
-					array_change_key_case($list);
 					$this->listcache[$table] = $list;
 				}
 
 				foreach ($list as $item) {
+					array_change_key_case($item);
 					$item['table']	= $table;
 					$item['prefix']	= is_int($key) ? $prefix : $key;
 					$return[$item['field']] = $item;
