@@ -432,7 +432,7 @@ abstract	class	pudl {
 				}
 
 				foreach ($list as $item) {
-					array_change_key_case($item);
+					$item = array_change_key_case($item);
 					$item['table']	= $table;
 					$item['prefix']	= is_int($key) ? $prefix : $key;
 					$return[$item['field']] = $item;
