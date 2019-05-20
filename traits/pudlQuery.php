@@ -813,13 +813,13 @@ trait pudlQuery {
 		$fields = $this->listFields($table);
 
 		foreach ($fields as $key => $field) {
-			if (!$options['primary']  &&  !empty($field['Key'])) {
-				if (stripos($field['Key'], 'PRI') !== false) {
+			if (!$options['primary']  &&  !empty($field['key'])) {
+				if (stripos($field['key'], 'PRI') !== false) {
 					unset($fields[$key]);
 				}
 			}
-			if (!$options['generated']  &&  !empty($field['Extra'])) {
-				if (stripos($field['Extra'], 'GENERATED') !== false) {
+			if (!$options['generated']  &&  !empty($field['extra'])) {
+				if (stripos($field['extra'], 'GENERATED') !== false) {
 					unset($fields[$key]);
 				}
 			}
