@@ -16,11 +16,15 @@ class		pudlGalera
 	// CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
 	public function __construct($options) {
+
+		// PRE-PROCESS OPTIONS
+		$options = self::_options($options);
+
 		// TEMPORARILY SET US AS OFFLINE
 		$offline = !empty($options['offline']);
 		$options['offline'] = true;
 
-		// CONNECT TO THE SERVER CLUSTER
+		// INITIALIZE PUDL
 		parent::__construct($options);
 
 		// LOAD CLEANED DATA AND RESET OFFLINE STATUS
@@ -61,7 +65,7 @@ class		pudlGalera
 			$this->pool = array_merge($this->pool, $options['backup']);
 		}
 
-		// CONNECT TO CLUSTER
+		// CONNECT TO THE SERVER CLUSTER
 		if (!$options['offline']) $this->connect();
 	}
 

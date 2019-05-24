@@ -16,6 +16,12 @@ class		pudlPdo
 	// CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
 	public function __construct($options) {
+
+		// PRE-PROCESS OPTIONS
+		$options = self::_options($options);
+
+
+		// VALIDATE SERVER OPTION
 		if (empty($options['server'])) {
 			throw new pudlValueException(
 				$this,
@@ -24,13 +30,13 @@ class		pudlPdo
 		}
 
 
-		//DEFAULT OPTIONS
+		// DEFAULT OPTIONS
 		if (empty($options['options'])  ||  !pudl_array($options['options'])) {
 			$options['options'] = [];
 		}
 
 
-		//DEFAULT TO ANSI STYLE IDENTIFIERS, BUT CAN BE OVERWRITTEN
+		// DEFAULT TO ANSI STYLE IDENTIFIERS, BUT CAN BE OVERWRITTEN
 		$this->identifier	= !empty($options['identifier'])
 							? $options['identifier']
 							: '"';

@@ -16,8 +16,8 @@ class		pudlShell
 	// CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
 	public function __construct($options) {
-		$this->path = empty($options['path']) ? '' : $options['path'];
 		parent::__construct($options);
+		$this->path = empty($options['path']) ? '' : $options['path'];
 	}
 
 

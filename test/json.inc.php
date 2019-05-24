@@ -1,5 +1,9 @@
 <?php
 
+$testdb = new pudlNull('{"identifier":"~"}');
+$testdb->string()->select('table');
+pudlTest($testdb, "SELECT ~table~");
+
 
 
 $db->string()->select('column', 'table', 'json$param');

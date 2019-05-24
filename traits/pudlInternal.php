@@ -8,6 +8,33 @@
 trait pudlInternal {
 
 
+	////////////////////////////////////////////////////////////////////////////
+	// PRE-PROCESS CONFIGURATION OPTIONS
+	////////////////////////////////////////////////////////////////////////////
+	protected static function _options($options) {
+
+		// TREAT OPTIONS STRINGS AS JSON, AND DECODE IT INTO AN ARRAY
+		if (is_string($options)) {
+			$options = self::jsonDecode($options);
+			var_dump($options);
+		}
+
+		// IF OPTIONS[0] IS ANOTHER PUDL INSTANCE, INHERIT THAT CONFIG FIRST
+		if (!empty($options[0])  &&  $options[0] instanceof pudl) {
+			$pudl = $options[0];
+			unset($options[0]);
+			$options += $pudl->auth();
+		}
+
+		return $options;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// CONVERT AN ENGINE TYPE FROM EXTERNAL STRING TO INTERNAL CLASS NAME
+	////////////////////////////////////////////////////////////////////////////
 	protected static function _engine($type) {
 
 		switch (strtoupper($type)) {

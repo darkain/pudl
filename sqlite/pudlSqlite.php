@@ -17,20 +17,27 @@ class		pudlSqlite
 	////////////////////////////////////////////////////////////////////////////
 	public function __construct($options=[]) {
 
-		if (!pudl_array($options)) {
+		// PRE-PROCESS OPTIONS
+		$tmp = self::_options($options);
+
+		// IF JSON FAILED, STRING IS A FILE NAME
+		if (!pudl_array($tmp)) {
 			$options = [$options];
 		}
 
+		// IF DATABASE NOT SPECIFIED, AUTO DETECT IT ANOTHER WAY
 		if (empty($options['database'])) {
-			$options['database']	= empty($options[0])
+			$options['database']	= (empty($options[0])
 									? 'sqlite.db'
 									: $options[0];
 		}
 
+		// ALLOW CUSTOM IDENTIFIER
 		if (!empty($options['identifier'])) {
 			$this->identifier = $options['identifier'];
 		}
 
+		// INITIALIZE PUDL OBJECT
 		parent::__construct($options);
 	}
 

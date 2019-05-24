@@ -42,18 +42,9 @@ abstract	class	pudl {
 	// $DATA IS A KEY/VALUE PAIR LIST WITH CONFIGURATION DETAILS
 	////////////////////////////////////////////////////////////////////////////
 	public function __construct($options) {
-		
-		// TREAT OPTIONS STRINGS AS JSON, AND DECODE IT INTO AN ARRAY
-		if (is_string($options)) {
-			$options = self::jsonDecode($options);
-		}
-		
-		// IF OPTIONS[0] IS ANOTHER PUDL INSTANCE, INHERIT THAT CONFIG FIRST
-		if (!empty($options[0])  &&  $options[0] instanceof pudl) {
-			$pudl = $options[0];
-			unset($options[0]);
-			$options += $pudl->auth();
-		}
+
+		// PRE-PROCESS OPTIONS
+		$options = self::_options($options);
 
 		//SANITIZE DATA
 		//TODO:	create a method to parse and validate every possible $options item
@@ -271,28 +262,21 @@ abstract	class	pudl {
 	////////////////////////////////////////////////////////////////////////////
 	// CREATE AN INSTANCE OF THIS OBJECT
 	////////////////////////////////////////////////////////////////////////////
-	public static function instance($data) {
-		
-		// TREAT OPTIONS STRINGS AS JSON, AND DECODE IT INTO AN ARRAY
-		if (is_string($data)) {
-			$data = self::jsonDecode($data);
-		}
+	public static function instance($options) {
 
-		// IF OPTIONS[0] IS ANOTHER PUDL INSTANCE, INHERIT THAT CONFIG FIRST
-		if (!empty($data[0])  &&  $data[0] instanceof pudl) {
-			$pudl = $data[0];
-			unset($data[0]);
-			$data += $pudl->auth();
-		}
+		// PRE-PROCESS OPTIONS
+		$options = self::_options($options);
 
+		// DETERMINE DATABASE TYPE BASED ON CALLED CLASS
 		if (get_called_class() !== __CLASS__) {
 			$type = str_ireplace(__CLASS__, '', get_called_class());
-			if (!empty($type)) $data['type'] = $type;
+			if (!empty($type)) $options['type'] = $type;
 		}
 
-		if (empty($data['type'])) {
-			if (!empty($data['server'])) {
-				$data['type'] = pudl_array($data['server']) ? 'Galera' : 'MySqli';
+		// USER DEFAULT DATABASE TYPE MYSQL OR GALERA IF POSSIBLE
+		if (empty($options['type'])) {
+			if (!empty($options['server'])) {
+				$options['type'] = pudl_array($options['server']) ? 'Galera' : 'MySql';
 			} else {
 				throw new pudlValueException(NULL,
 					'No database type or server specified'
@@ -301,18 +285,18 @@ abstract	class	pudl {
 		}
 
 		// GET THE ENGINE TYPE PHP PATH/FILE
-		$engine = static::_engine($data['type']);
+		$engine = static::_engine($options['type']);
 
 		if (empty($engine)) {
 			throw new pudlValueException(NULL,
-				'Unknown Database Server Type: ' . $data['type']
+				'Unknown Database Server Type: ' . $options['type']
 			);
 		}
 
 		require_once(is_owner(__DIR__ . end($engine)));
 
 		$class = 'pudl' . reset($engine);
-		return new $class($data);
+		return new $class($options);
 	}
 
 

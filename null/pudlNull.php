@@ -17,6 +17,11 @@ class pudlNull extends pudl {
 	// CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
 	public function __construct($options=[]) {
+
+		// PRE-PROCESS OPTIONS
+		$options = self::_options($options);
+
+		// ALLOW CUSTOM IDENTIFIER
 		if (!empty($options['identifier'])) {
 			$this->identifier = $options['identifier'];
 		}
