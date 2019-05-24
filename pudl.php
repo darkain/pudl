@@ -42,6 +42,13 @@ abstract	class	pudl {
 	// $DATA IS A KEY/VALUE PAIR LIST WITH CONFIGURATION DETAILS
 	////////////////////////////////////////////////////////////////////////////
 	public function __construct($options) {
+		
+		// TREAT OPTIONS STRINGS AS JSON, AND DECODE IT INTO AN ARRAY
+		if (is_string($options)) {
+			$options = self::jsonDecode($options);
+		}
+		
+		// IF OPTIONS[0] IS ANOTHER PUDL INSTANCE, INHERIT THAT CONFIG FIRST
 		if (!empty($options[0])  &&  $options[0] instanceof pudl) {
 			$pudl = $options[0];
 			unset($options[0]);
