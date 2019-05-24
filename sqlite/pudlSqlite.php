@@ -27,7 +27,7 @@ class		pudlSqlite
 
 		// IF DATABASE NOT SPECIFIED, AUTO DETECT IT ANOTHER WAY
 		if (empty($options['database'])) {
-			$options['database']	= (empty($options[0])
+			$options['database']	= empty($options[0])
 									? 'sqlite.db'
 									: $options[0];
 		}
