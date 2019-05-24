@@ -272,6 +272,13 @@ abstract	class	pudl {
 	// CREATE AN INSTANCE OF THIS OBJECT
 	////////////////////////////////////////////////////////////////////////////
 	public static function instance($data) {
+		
+		// TREAT OPTIONS STRINGS AS JSON, AND DECODE IT INTO AN ARRAY
+		if (is_string($data)) {
+			$data = self::jsonDecode($data);
+		}
+
+		// IF OPTIONS[0] IS ANOTHER PUDL INSTANCE, INHERIT THAT CONFIG FIRST
 		if (!empty($data[0])  &&  $data[0] instanceof pudl) {
 			$pudl = $data[0];
 			unset($data[0]);
