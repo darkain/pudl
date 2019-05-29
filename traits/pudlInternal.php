@@ -16,7 +16,6 @@ trait pudlInternal {
 		// TREAT OPTIONS STRINGS AS JSON, AND DECODE IT INTO AN ARRAY
 		if (is_string($options)) {
 			$options = self::jsonDecode($options);
-			var_dump($options);
 		}
 
 		// IF OPTIONS[0] IS ANOTHER PUDL INSTANCE, INHERIT THAT CONFIG FIRST
