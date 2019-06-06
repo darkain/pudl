@@ -486,8 +486,8 @@ abstract class	pudlOrm
 	// THIS IS RELATED TO THE ALTAFORM LIBRARY.
 	// IF YOU'RE NOT USING THAT LIBRARY, THEN THIS IS MOST LIKELY WORTHLESS.
 	////////////////////////////////////////////////////////////////////////////
-	public function assertStatus($code, $text=false) {
-		assertStatus($code, (string)$this, $text);
+	public function assert($code, $text=false) {
+		\af\assert($code, (string)$this, $text);
 		return $this;
 	}
 
