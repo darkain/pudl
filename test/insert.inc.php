@@ -446,4 +446,8 @@ pudlTest($db, 'REPLACE INTO `table1` (SELECT * FROM `table2` LIMIT 1)');
 
 
 $db->string()->exsert('table', ['a'=>1, 'b'=>2]);
-pudlTest($db, 'INSERT INTO `table` (`a`, `b`) VALUES (1, 2) ON DUPLICATE KEY UPDATE `a`=`a`');
+if ($db instanceof pudlMyShared) {
+	pudlTest($db, 'INSERT INTO `table` (`a`, `b`) VALUES (1, 2) ON DUPLICATE KEY UPDATE `a`=`a`');
+} else {
+	pudlTest($db, 'INSERT INTO `table` (`a`, `b`) VALUES (1, 2) UPDATE `a`=`a`');
+}
