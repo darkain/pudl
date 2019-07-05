@@ -175,6 +175,29 @@ trait pudlTable {
 
 
 	////////////////////////////////////////////////////////////////////////////
+	// CHECK TABLE(S) FOR CONSISTENCY ERRORS
+	// https://dev.mysql.com/doc/refman/8.0/en/check-table.html
+	////////////////////////////////////////////////////////////////////////////
+	public function check($tables, $modifiers=[]) {
+		$query  = 'CHECK TABLE ';
+		$query .= $this->_tables($tables, NULL);
+
+		$query .= $this->_modifiers($modifiers, [
+			'upgrade'		=> 'FOR UPGRADE',
+			'quick'			=> 'QUICK',
+			'fast'			=> 'FAST',
+			'medium'		=> 'MEDIUM',
+			'extended'		=> 'EXTENDED',
+			'changed'		=> 'CHANGED',
+		]);
+
+		return $this($query);
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
 	// CONVERT COLUMN DEFINITION FROM PUDL STANDARD TO DATABASE SPECIFIC
 	// THIS IS OVERWRITTEN IN SOME PUDL DATABASE DRIVERS
 	////////////////////////////////////////////////////////////////////////////
@@ -381,11 +404,16 @@ trait pudlTable {
 	////////////////////////////////////////////////////////////////////////////
 	// PROCESS A LIST OF TABLES
 	////////////////////////////////////////////////////////////////////////////
-	public function _tables($table) {
+	public function _tables($table, $prefix='FROM') {
 		if ($table === false)			return;
 		if ($table === NULL)			return;
-		if ($table instanceof pudlRaw)	return ' FROM ' . $table->pudlValue($this);
-		if (is_string($table))			return ' FROM ' . $this->_table($table);
+
+		if (!empty($prefix)) {
+			$prefix = ' ' . trim($prefix) . ' ';
+		}
+
+		if ($table instanceof pudlRaw)	return $prefix . $table->pudlValue($this);
+		if (is_string($table))			return $prefix . $this->_table($table);
 		if (!pudl_array($table))		return $this->_invalidType($table, 'table');
 
 		$query = '';
@@ -446,7 +474,7 @@ trait pudlTable {
 			}
 		}
 
-		return ' FROM ' . $query;
+		return $prefix . $query;
 	}
 
 

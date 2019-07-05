@@ -785,6 +785,29 @@ trait pudlQuery {
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////
+	// PROCESS A LIST OF QUERY MODIFIERS
+	////////////////////////////////////////////////////////////////////////////
+	protected function _modifiers($modifiers, $list) {
+		if (!pudl_array($modifiers)) {
+			$modifiers = [$modifiers];
+		}
+
+		$query = '';
+
+		foreach ($list as $key => $value) {
+			if (in_array($key, $modifiers)) {
+				$query .= ' ' . $value;
+			}
+		}
+
+		return $query;
+	}
+
+
+
+
 	public function prefixColumns($tables, $columns=false, $unprefixed=true) {
 		if ($columns === false) return [];
 
