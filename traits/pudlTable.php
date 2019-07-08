@@ -198,6 +198,26 @@ trait pudlTable {
 
 
 	////////////////////////////////////////////////////////////////////////////
+	// OPTIMIZE TABLE(S) ON DISK
+	// https://dev.mysql.com/doc/refman/8.0/en/optimize-table.html
+	////////////////////////////////////////////////////////////////////////////
+	public function optimize($tables, $local=false) {
+		$query  = 'OPTIMIZE ';
+
+		if ($local) {
+			$query .= 'NO_WRITE_TO_BINLOG ';
+		}
+
+		$query .= 'TABLE ';
+		$query .= $this->_tables($tables, NULL);
+
+		return $this($query);
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
 	// CONVERT COLUMN DEFINITION FROM PUDL STANDARD TO DATABASE SPECIFIC
 	// THIS IS OVERWRITTEN IN SOME PUDL DATABASE DRIVERS
 	////////////////////////////////////////////////////////////////////////////

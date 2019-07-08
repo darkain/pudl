@@ -9,6 +9,12 @@ pudlTest($db, 'CHECK TABLE `table`');
 
 
 //CREATE TABLE
+$db->string()->check(['table']);
+pudlTest($db, 'CHECK TABLE `table`');
+
+
+
+//CREATE TABLE
 $db->string()->check(['table1', 'table2']);
 pudlTest($db, 'CHECK TABLE `table1`, `table2`');
 
