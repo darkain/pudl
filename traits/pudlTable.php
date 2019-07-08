@@ -218,6 +218,26 @@ trait pudlTable {
 
 
 	////////////////////////////////////////////////////////////////////////////
+	// ANALYZE TABLE(S) ON DISK
+	// https://dev.mysql.com/doc/refman/8.0/en/analyze-table.html
+	////////////////////////////////////////////////////////////////////////////
+	public function analyze($tables, $local=false) {
+		$query  = 'ANALYZE ';
+
+		if ($local) {
+			$query .= 'NO_WRITE_TO_BINLOG ';
+		}
+
+		$query .= 'TABLE ';
+		$query .= $this->_tables($tables, NULL);
+
+		return $this($query);
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
 	// CONVERT COLUMN DEFINITION FROM PUDL STANDARD TO DATABASE SPECIFIC
 	// THIS IS OVERWRITTEN IN SOME PUDL DATABASE DRIVERS
 	////////////////////////////////////////////////////////////////////////////
