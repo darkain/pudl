@@ -238,6 +238,58 @@ trait pudlTable {
 
 
 	////////////////////////////////////////////////////////////////////////////
+	// UPDATE HISTOGRAM FOR COLUMN(S) IN A GIVEN TABLE
+	// https://dev.mysql.com/doc/refman/8.0/en/analyze-table.html
+	////////////////////////////////////////////////////////////////////////////
+	public function histogramUpdate($table, $columns, $buckets=false, $local=false) {
+		$query  = 'ANALYZE ';
+
+		if ($local) {
+			$query .= 'NO_WRITE_TO_BINLOG ';
+		}
+
+		$query .= 'TABLE ';
+		$query .= $this->_table($table);
+
+		$query .= ' UPDATE HISTOGRAM ON ';
+		$query .= $this->_columns($columns);
+
+		if ($buckets) {
+			$query .= ' WITH ';
+			$query .= (int) $buckets;
+			$query .= ' BUCKETS';
+		}
+
+		return $this($query);
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// DROP HISTOGRAM FOR COLUMN(S) IN A GIVEN TABLE
+	// https://dev.mysql.com/doc/refman/8.0/en/analyze-table.html
+	////////////////////////////////////////////////////////////////////////////
+	public function histogramDrop($table, $columns, $local=false) {
+		$query  = 'ANALYZE ';
+
+		if ($local) {
+			$query .= 'NO_WRITE_TO_BINLOG ';
+		}
+
+		$query .= 'TABLE ';
+		$query .= $this->_table($table);
+
+		$query .= ' DROP HISTOGRAM ON ';
+		$query .= $this->_columns($columns);
+
+		return $this($query);
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
 	// CONVERT COLUMN DEFINITION FROM PUDL STANDARD TO DATABASE SPECIFIC
 	// THIS IS OVERWRITTEN IN SOME PUDL DATABASE DRIVERS
 	////////////////////////////////////////////////////////////////////////////
