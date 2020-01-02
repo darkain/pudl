@@ -82,7 +82,7 @@ trait pudlTransaction {
 		$time = (int) $time;
 
 		switch (true) {
-			case (++$this->_inserted % $size === 0):
+			case ($this->_inserted++ % $size === 0):
 			case ($time  &&  (time() - $this->_transtime > $time)):
 				$this->commit($sync)->begin();
 			break;
