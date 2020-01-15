@@ -135,4 +135,15 @@ abstract class	pudlMyShared
 		return $this;
 	}
 
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// GET THE HOSTNAME AS REPORTED BY THE DATABASE SERVER
+	// https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_hostname
+	////////////////////////////////////////////////////////////////////////////
+	public function hostname() {
+		if (!$this->connection) return NULL;
+		return $this('SELECT @@hostname')->cell();
+	}
 }
