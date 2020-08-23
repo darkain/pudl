@@ -15,7 +15,9 @@ try {
 
 		'mysqli::real_connect(): MySQL server has gone away',
 
-		"mysql_connect(): Lost connection to MySQL server at 'waiting for initial communication packet', system error: 110"
+		"mysql_connect(): Lost connection to MySQL server at 'waiting for initial communication packet', system error: 110",
+
+		'mysqli::real_connect(): Error while reading greeting packet. PID='.getmypid(),
 	]);
 }
 
