@@ -736,6 +736,7 @@ abstract	class	pudl {
 	/** @var float */			private			$microtime		= 0.0;
 	/** @var array */			private			$listcache		= [];
 	/** @var mixed */			protected		$connection		= NULL;
+	/** @var bool */			protected		$connected		= false;
 	/** @var array */			protected		$string			= [];
 	/** @var int */				protected		$_depth			= 0;
 

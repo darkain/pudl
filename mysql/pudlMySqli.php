@@ -42,6 +42,8 @@ class		pudlMySqli
 
 		//CONNECTION IS GOOD!
 		if (!empty($ok)) {
+			$this->connected = true;
+
 			$this->connection->options(
 				MYSQLI_OPT_READ_TIMEOUT,
 				ini_get('mysqlnd.net_read_timeout')
@@ -110,7 +112,8 @@ class		pudlMySqli
 		parent::disconnect($trigger);
 		if (!$this->connection) return;
 		@$this->connection->close();
-		$this->connection = NULL;
+		$this->connection	= NULL;
+		$this->connected	= false;
 	}
 
 
@@ -121,7 +124,7 @@ class		pudlMySqli
 	// http://php.net/manual/en/mysqli.real-escape-string.php
 	////////////////////////////////////////////////////////////////////////////
 	public function escape($value) {
-		if (!$this->connection) return false;
+		if (!$this->connected) return false;
 		return @$this->connection->real_escape_string($value);
 	}
 
@@ -159,7 +162,7 @@ class		pudlMySqli
 	// http://php.net/manual/en/mysqli.query.php
 	////////////////////////////////////////////////////////////////////////////
 	protected function _query($query) {
-		if (!$this->connection) return false;
+		if (!$this->connected) return false;
 		return @$this->connection->query($query);
 	}
 
@@ -171,7 +174,7 @@ class		pudlMySqli
 	// http://php.net/manual/en/mysqli.insert-id.php
 	////////////////////////////////////////////////////////////////////////////
 	public function insertId() {
-		if (!$this->connection) return 0;
+		if (!$this->connected) return 0;
 		return $this->connection->insert_id;
 	}
 
@@ -183,7 +186,7 @@ class		pudlMySqli
 	// http://php.net/manual/en/mysqli.affected-rows.php
 	////////////////////////////////////////////////////////////////////////////
 	public function updated() {
-		if (!$this->connection) return 0;
+		if (!$this->connected) return 0;
 		return $this->connection->affected_rows;
 	}
 
@@ -195,7 +198,7 @@ class		pudlMySqli
 	// http://php.net/manual/en/mysqli.info.php
 	////////////////////////////////////////////////////////////////////////////
 	public function info() {
-		if (!$this->connection) return [];
+		if (!$this->connected) return [];
 
 		$info	= explode('  ', $this->connection->info);
 		$array	= [];
@@ -218,7 +221,7 @@ class		pudlMySqli
 	// http://php.net/manual/en/mysqli.get-server-info.php
 	////////////////////////////////////////////////////////////////////////////
 	public function version() {
-		if (!$this->connection) return NULL;
+		if (!$this->connected) return NULL;
 		return $this->connection->server_info;
 	}
 
@@ -230,7 +233,7 @@ class		pudlMySqli
 	// http://php.net/manual/en/mysqli.errno.php
 	////////////////////////////////////////////////////////////////////////////
 	public function errno() {
-		if (!$this->connection) return @mysqli_connect_errno();
+		if (!$this->connected) return @mysqli_connect_errno();
 		return $this->connection->errno;
 	}
 
@@ -242,7 +245,7 @@ class		pudlMySqli
 	// http://php.net/manual/en/mysqli.error.php
 	////////////////////////////////////////////////////////////////////////////
 	public function error() {
-		if (!$this->connection) return @mysqli_connect_error();
+		if (!$this->connected) return @mysqli_connect_error();
 		return $this->connection->error;
 	}
 
@@ -254,7 +257,7 @@ class		pudlMySqli
 	// http://php.net/manual/en/mysqli.connect-errno.php
 	////////////////////////////////////////////////////////////////////////////
 	public function connectErrno() {
-		if (!$this->connection) return @mysqli_connect_errno();
+		if (!$this->connected) return @mysqli_connect_errno();
 		return $this->connection->connect_errno;
 	}
 
@@ -266,7 +269,7 @@ class		pudlMySqli
 	// http://php.net/manual/en/mysqli.connect-error.php
 	////////////////////////////////////////////////////////////////////////////
 	public function connectError() {
-		if (!$this->connection) return @mysqli_connect_error();
+		if (!$this->connected) return @mysqli_connect_error();
 		return $this->connection->connect_error;
 	}
 
