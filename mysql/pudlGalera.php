@@ -114,6 +114,7 @@ class		pudlGalera
 			$this->state = $ok ? $this->globals('wsrep_local_state') : [];
 
 			//SET THE LOCAL STATE TO INVALID IF WE COULD NOT PULL ONE
+			//SEE ../pudlConstants.php FOR MORE DETAILS
 			if (empty($this->state['wsrep_local_state'])) {
 				$this->state['wsrep_local_state'] = GALERA_NONE;
 			}
@@ -269,7 +270,7 @@ class		pudlGalera
 
 	////////////////////////////////////////////////////////////////////////////
 	// SET THE wsrep_sync_wait VARIABLE FOR THE NEXT STATEMENT
-	// SEE pudlConstants.php FOR LIST OF VALUES
+	// SEE ../pudlConstants.php FOR MORE DETAILS
 	////////////////////////////////////////////////////////////////////////////
 	public function wait($wait=true) {
 		$this->wait = ($wait === true) ? GALERA_ALL : (int)$wait;
@@ -413,17 +414,8 @@ class		pudlGalera
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// GET THE ADDRESS WHICH GALERA NODE WE'RE CONNECTED TO
-	////////////////////////////////////////////////////////////////////////////
-	public function server() {
-		return $this->connected;
-	}
-
-
-
-
-	////////////////////////////////////////////////////////////////////////////
 	// GET THIS CONNECTED GALERA NODE'S GALERA CLUSTER STATE
+	// SEE ../pudlConstants.php FOR MORE DETAILS
 	////////////////////////////////////////////////////////////////////////////
 	public function state() {
 		return $this->state;
@@ -447,7 +439,6 @@ class		pudlGalera
 	////////////////////////////////////////////////////////////////////////////
 	/** @var string[] */		private $pool		= [];
 	/** @var int|false */		private $wait		= false;
-	/** @var string|false */	private $connected	= false;
 	/** @var array */			private $state		= [];
 	/** @var int|false */		private $shmkey		= false;
 }

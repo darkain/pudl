@@ -42,7 +42,7 @@ class		pudlMySqli
 
 		//CONNECTION IS GOOD!
 		if (!empty($ok)) {
-			$this->connected = true;
+			$this->connected = $auth['server'];
 
 			$this->connection->options(
 				MYSQLI_OPT_READ_TIMEOUT,
@@ -113,7 +113,7 @@ class		pudlMySqli
 		if (!$this->connection) return;
 		@$this->connection->close();
 		$this->connection	= NULL;
-		$this->connected	= false;
+		$this->connected	= NULL;
 	}
 
 
