@@ -23,9 +23,8 @@ php:
 
 matrix:
   allow_failures:
-    - php:
-        - nightly
-        - 8.0
+    - php: nightly
+    - php: 8.0
 
 before_script:
   - phpenv config-rm xdebug.ini || true
