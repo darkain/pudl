@@ -25,6 +25,11 @@ matrix:
   allow_failures:
     - php: nightly
     - php: 8.0
+  include:
+    - php: 8.0
+      dist: focal
+    - php: nightly
+      dist: focal
 
 before_script:
   - phpenv config-rm xdebug.ini || true
