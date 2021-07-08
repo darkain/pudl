@@ -128,9 +128,11 @@ abstract class	pudlMyShared
 	// SET STRICT SQL COMPATIBILITY MODE
 	////////////////////////////////////////////////////////////////////////////
 	public function strict() {
-		$this->_query(
-			"SET @@SQL_MODE = CONCAT(@@SQL_MODE, ',TRADITIONAL')"
-		);
+		if ($this->sql_mode === TRUE) {
+			$this->_query("SET @@SQL_MODE = CONCAT(@@SQL_MODE, ',TRADITIONAL')");
+		} else if (is_string($this->sql_mode)) {
+			$this->_query("SET @@SQL_MODE = " . $this->_value($this->sql_mode));
+		}
 
 		return $this;
 	}
@@ -146,4 +148,12 @@ abstract class	pudlMyShared
 		if (!$this->connection) return NULL;
 		return $this('SELECT @@hostname')->cell();
 	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// MEMBER VARIABLES
+	////////////////////////////////////////////////////////////////////////////
+	public $sql_mode = TRUE;
 }
