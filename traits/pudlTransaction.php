@@ -17,12 +17,12 @@ trait pudlTransaction {
 	////////////////////////////////////////////////////////////////////////////
 	// START A NEW TRANSACTION
 	////////////////////////////////////////////////////////////////////////////
-	public function begin() {
+	public function begin($snapshot=false) {
 		if ($this->inTransaction()) return $this;
 		$this->transaction	= [];
 		$this->_inserted	= 0;
 		$this->_transtime	= time();
-		$this->_begin();
+		$this->_begin($snapshot);
 		return $this;
 	}
 
@@ -32,8 +32,10 @@ trait pudlTransaction {
 	////////////////////////////////////////////////////////////////////////////
 	// INTERNAL METHOD FOR STARTING THE TRANSACTION
 	////////////////////////////////////////////////////////////////////////////
-	protected function _begin() {
-		return $this('BEGIN');
+	protected function _begin($snapshot=false) {
+		return $snapshot
+			? $this('START TRANSACTION WITH CONSISTENT SNAPSHOT')
+			: $this('START TRANSACTION');
 	}
 
 

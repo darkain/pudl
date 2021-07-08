@@ -225,7 +225,7 @@ class		pudlPdo
 	// BEGIN A NEW TRANSACTION
 	// http://php.net/manual/en/pdo.begintransaction.php
 	////////////////////////////////////////////////////////////////////////////
-	public function begin() {
+	public function begin($snapshot=false) {
 		if ($this->connection) $this->connection->beginTransaction();
 		return $this;
 	}
