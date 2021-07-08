@@ -85,6 +85,10 @@ new pudlShell(	['offline'=>true]);
 new pudlWeb(	['offline'=>true]);
 
 
+if (!empty($argv[1])) {
+	new pudlMySqli(['server'=>$argv[1]]);
+}
+
 $db = new pudlNull(['identifier' => '`']);
 
 
