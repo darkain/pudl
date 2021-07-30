@@ -115,6 +115,11 @@ trait pudlQuery {
 			break;
 
 
+			case is_callable($value):
+				$query = $this->_value($value(), $quote, $isnull);
+			break;
+
+
 			default:
 				$query = $this->_invalidType($value);
 		}
@@ -427,6 +432,10 @@ trait pudlQuery {
 		}
 
 		if ($clause instanceof pudlHelper) {
+			return $query	.	$this->_value($clause);
+		}
+
+		if (is_callable($clause)) {
 			return $query	.	$this->_value($clause);
 		}
 
