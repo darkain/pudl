@@ -69,6 +69,7 @@ trait pudlInternal {
 
 			// LEGACY MSSQL_ FUNCTIONS
 			case 'MSSQL-DEPRECATED':
+			case 'MICROSOFT-DEPRECATED':
 				return ['MsSql',	'/mssql/pudlMsSql.php'];
 			break;
 

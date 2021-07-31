@@ -75,11 +75,16 @@ class		pudlSqlite
 
 		// Create Sqlite3 object instance
 		try {
-			$this->connection = new SQLite3(
-				$auth['database'],
-				SQLITE3_OPEN_CREATE | $flags,
-				$auth['key']
-			);
+			if ($auth['server'] instanceof SQLite3) {
+				$this->connection = $auth['server'];
+
+			} else {
+				$this->connection = new SQLite3(
+					$auth['database'],
+					SQLITE3_OPEN_CREATE | $flags,
+					$auth['key']
+				);
+			}
 
 			// Enable exceptions instead of errors/warnings
 			// https://www.php.net/manual/en/sqlite3.enableexceptions.php

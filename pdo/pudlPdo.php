@@ -75,13 +75,20 @@ class		pudlPdo
 
 
 		try {
-			//ATTEMPT TO CONNECT
-			$this->connection = new PDO(
-				$auth['server'],
-				$auth['username'],
-				$auth['password'],
-				$auth['options']
-			);
+
+			//USE EXISTING CONNECTION IF AVAILABLE
+			if ($auth['server'] instanceof PDO) {
+				$this->connection = $auth['server'];
+
+			//ATTEMPT A NEW CONNECTION OTHERWISE
+			} else {
+				$this->connection = new PDO(
+					$auth['server'],
+					$auth['username'],
+					$auth['password'],
+					$auth['options']
+				);
+			}
 
 			$this->connection->setAttribute(PDO::ATTR_ERRMODE,		PDO::ERRMODE_SILENT);
 			$this->connection->setAttribute(PDO::ATTR_CASE,			PDO::CASE_NATURAL);

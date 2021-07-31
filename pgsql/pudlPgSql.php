@@ -31,8 +31,14 @@ class		pudlPgSql
 	public function connect() {
 		$auth = $this->auth();
 
+
+		//USE EXISTING CONNECTION IF AVAILABLE
+		if (is_resource($auth['server'])) {
+			$this->connection = $auth['server'];
+
+
 		//ATTEMPT TO CREATE A PERSISTANT CONNECTION
-		if ($auth['persistent']) {
+		} else if ($auth['persistent']) {
 			$this->connection = @pg_pconnect(
 				" host='"				. $auth['server']	. "'" .
 				" dbname='"				. $auth['database']	. "'" .

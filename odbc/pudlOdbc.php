@@ -32,8 +32,13 @@ class		pudlOdbc
 		$auth = $this->auth();
 
 
+		//USE EXISTING CONNECTION IF AVAILABLE
+		if (is_resource($auth['server'])) {
+			$this->connection = $auth['server'];
+
+
 		//ATTEMPT TO CREATE A PERSISTANT CONNECTION
-		if ($auth['persistent']) {
+		} else if ($auth['persistent']) {
 			$this->connection = @odbc_pconnect(
 				$auth['database'],
 				$auth['username'],

@@ -267,22 +267,81 @@ abstract	class	pudl {
 		// PRE-PROCESS OPTIONS
 		$options = self::_options($options);
 
+
 		// DETERMINE DATABASE TYPE BASED ON CALLED CLASS
 		if (get_called_class() !== __CLASS__) {
 			$type = str_ireplace(__CLASS__, '', get_called_class());
 			if (!empty($type)) $options['type'] = $type;
 		}
 
-		// USER DEFAULT DATABASE TYPE MYSQL OR GALERA IF POSSIBLE
-		if (empty($options['type'])) {
-			if (!empty($options['server'])) {
-				$options['type'] = pudl_array($options['server']) ? 'Galera' : 'MySql';
-			} else {
-				throw new pudlValueException(NULL,
-					'No database type or server specified'
-				);
+
+		// ATTEMPT TO DETERMINE DATABASE TYPE FROM PROVIDED SERVER INFO
+		if (empty($options['type'])  &&  !empty($options['server'])) {
+			switch (true) {
+				case pudl_array($options['server']):
+					$options['type']		= 'Galera';
+				break;
+
+				case $options['server'] instanceof mysqli:
+					$options['type']		= 'MySQL';
+				break;
+
+				case $options['server'] instanceof SQLite3:
+					$options['type']		= 'Sqlite';
+				break;
+
+				case $options['server'] instanceof PDO:
+					$options['type']		= 'PDO';
+				break;
+			}
+
+
+			if (is_resource($options['server'])) switch (ture) {
+				case get_resource_type($options['server']) === 'mysql link':
+					$options['type']		= 'MySQL-deprecated';
+				break;
+
+				case get_resource_type($options['server']) === 'mysql link persistent':
+					$options['type']		= 'MySQL-deprecated';
+					$options['persistent']	= true;
+				break;
+
+				case get_resource_type($options['server']) === 'pgsql link':
+					$options['type']		= 'PostgreSQL';
+				break;
+
+				case get_resource_type($options['server']) === 'pgsql link persistent':
+					$options['type']		= 'PostgreSQL';
+					$options['persistent']	= true;
+				break;
+
+				case get_resource_type($options['server']) === 'odbc link':
+					$options['type']		= 'ODBC';
+				break;
+
+				case get_resource_type($options['server']) === 'odbc link persistent':
+					$options['type']		= 'ODBC';
+					$options['persistent']	= true;
+				break;
+
+				case get_resource_type($options['server']) === 'mssql link':
+					$options['type']		= 'Microsoft-deprecated';
+				break;
+
+				case get_resource_type($options['server']) === 'SQL Server Connection':
+					$options['type']		= 'Microsoft';
+				break;
 			}
 		}
+
+
+		// NO DATABASE TYPE SPECIFIED
+		if (empty($options['type'])) {
+			throw new pudlValueException(NULL,
+				'No database type or server specified'
+			);
+		}
+
 
 		// GET THE ENGINE TYPE PHP PATH/FILE
 		$engine = static::_engine($options['type']);

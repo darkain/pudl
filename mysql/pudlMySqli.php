@@ -22,17 +22,25 @@ class		pudlMySqli
 
 		pudl_require_extension('mysqli');
 
-		$this->connection = mysqli_init();
-		$this->connection->options(MYSQLI_OPT_CONNECT_TIMEOUT,	$auth['timeout']);
-		$this->connection->options(MYSQLI_OPT_READ_TIMEOUT,		$auth['timeout']);
+		//USE EXISTING CONNECTION IF AVAILABLE
+		if ($auth['server'] instanceof mysqli){
+			$this->connection = $auth['server'];
+			$ok = true;
 
-		//ATTEMPT TO CREATE A CONNECTION
-		$ok = @$this->connection->real_connect(
-			(empty($auth['persistent']) ? '' : 'p:') . $auth['server'],
-			$auth['username'],
-			$auth['password'],
-			$auth['database']
-		);
+		//CREATE A NEW CONNECTION OTHERWISE
+		} else {
+			$this->connection = mysqli_init();
+			$this->connection->options(MYSQLI_OPT_CONNECT_TIMEOUT,	$auth['timeout']);
+			$this->connection->options(MYSQLI_OPT_READ_TIMEOUT,		$auth['timeout']);
+
+			//ATTEMPT TO CREATE A CONNECTION
+			$ok = @$this->connection->real_connect(
+				(empty($auth['persistent']) ? '' : 'p:') . $auth['server'],
+				$auth['username'],
+				$auth['password'],
+				$auth['database']
+			);
+		}
 
 		//VERIFY WE CONNECTED OKAY!
 		if ($ok) $ok = ($this->connectErrno() === 0);

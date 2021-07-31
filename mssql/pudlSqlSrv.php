@@ -22,18 +22,27 @@ class		pudlSqlSrv
 
 		pudl_require_extension('sqlsrv');
 
-		$this->connection = @sqlsrv_connect(
-			$auth['server'],
-			[
-				'Database'			=> $auth['database'],
-				'UID'				=> $auth['username'],
-				'PWD'				=> $auth['password'],
-				'ConnectionPooling'	=> $auth['persistent'],
-				'LoginTimeout'		=> $auth['timeout'],
-				'APP'				=> $this->version,
-				'CharacterSet'		=> 'UTF-8',
-			]
-		);
+
+		//USE EXISTING CONNECTION IF AVAILABLE
+		if (is_resource($auth['server'])) {
+			$this->connection = $auth['server'];
+
+		//ATTEMPT TO CREATE A NEW CONNECTION OTHERWISE
+		} else {
+			$this->connection = @sqlsrv_connect(
+				$auth['server'],
+				[
+					'Database'			=> $auth['database'],
+					'UID'				=> $auth['username'],
+					'PWD'				=> $auth['password'],
+					'ConnectionPooling'	=> $auth['persistent'],
+					'LoginTimeout'		=> $auth['timeout'],
+					'APP'				=> $this->version,
+					'CharacterSet'		=> 'UTF-8',
+				]
+			);
+		}
+
 
 		if (!$this->connection) {
 			throw new pudlConnectionException($this,

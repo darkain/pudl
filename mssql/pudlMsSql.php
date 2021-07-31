@@ -24,8 +24,12 @@ class		pudlMsSql
 
 		pudl_require_extension('mssql');
 
+		//USE EXISTING CONNECTION IF AVAILABLE
+		if (is_resource($auth['server'])) {
+			$this->connection = $auth['server'];
+
 		//ATTEMPT TO CREATE A PERSISTANT CONNECTION
-		if ($auth['persistent']) {
+		} else if ($auth['persistent']) {
 			$this->connection = @mssql_pconnect(
 				$auth['server'],
 				$auth['username'],

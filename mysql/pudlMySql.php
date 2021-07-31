@@ -24,8 +24,13 @@ class		pudlMySql
 
 		ini_set('mysql.connect_timeout', $auth['timeout']);
 
+
+		//USE EXISTING CONNECTION IF AVAILABLE
+		if (is_resource($auth['server'])) {
+			$this->connection = $auth['server'];
+
 		//ATTEMPT TO CREATE A PERSISTANT CONNECTION
-		if ($auth['persistent']) {
+		} else if ($auth['persistent']) {
 			$this->connection = @mysql_pconnect(
 				$auth['server'],
 				$auth['username'],
