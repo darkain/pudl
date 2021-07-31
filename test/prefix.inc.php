@@ -217,3 +217,65 @@ pudlTest($prefix4, "SELECT * FROM `default_table` ORDER BY `column`");
 
 $prefix4->string()->rows('table', false, ['table.column']);
 pudlTest($prefix4, "SELECT * FROM `default_table` ORDER BY `table`.`column`");
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+$prefix5 = new pudlNull([
+	'identifier'	=> '`',
+	'prefix'		=> function($table) {
+		return '(((' . $table . ')))';
+	},
+]);
+
+
+
+
+$prefix5->string()->rows('table', false);
+pudlTest($prefix5, "SELECT * FROM `(((table)))`");
+
+
+
+
+$prefix5->string()->rows('pudl_table');
+pudlTest($prefix5, "SELECT * FROM `(((pudl_table)))`");
+
+
+
+
+$prefix5->string()->rows('replace_table');
+pudlTest($prefix5, "SELECT * FROM `(((replace_table)))`");
+
+
+
+
+$prefix5->string()->rows('test_table');
+pudlTest($prefix5, "SELECT * FROM `(((test_table)))`");
+
+
+
+
+$prefix5->string()->rows('search_table');
+pudlTest($prefix5, "SELECT * FROM `(((search_table)))`");
+
+
+
+
+$prefix5->string()->rows('table', false, ['column']);
+pudlTest($prefix5, "SELECT * FROM `(((table)))` ORDER BY `column`");
+
+
+
+
+$prefix5->string()->rows('table', false, ['table.column']);
+pudlTest($prefix5, "SELECT * FROM `(((table)))` ORDER BY `table`.`column`");
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////

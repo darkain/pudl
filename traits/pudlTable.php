@@ -35,6 +35,15 @@ trait pudlTable {
 	// USED TO TRANSLATE TABLE NAME PREFIXES
 	////////////////////////////////////////////////////////////////////////////
 	protected function _prefix($table) {
+
+		// USE CUSTOM CALLBACK PROCESSOR
+		$prefix = $this->prefix;
+		if (is_callable($prefix)) {
+			return $prefix($table);
+		}
+
+
+		// SEARCH FOR MATCHING PREFIX TO REPLACE
 		foreach ($this->prefix as $key => $prefix) {
 			if (is_int($key)) continue;
 
@@ -43,12 +52,18 @@ trait pudlTable {
 			}
 		}
 
+
+		// NO DEFAULT, RETURN TABLE NAME AS IS
 		if (!isset($this->prefix[0])) return $table;
 
+
+		// TABLE NAME IS ALREADY PREFIXED, DONT DOUBLE-PREFIX
 		if (substr($table, 0, strlen($this->prefix[0])) === $this->prefix[0]) {
 			return $table;
 		}
 
+
+		// ADD DEFAULT PREFIX
 		return $this->prefix[0] . $table;
 	}
 
