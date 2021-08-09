@@ -277,60 +277,56 @@ abstract	class	pudl {
 
 		// ATTEMPT TO DETERMINE DATABASE TYPE FROM PROVIDED SERVER INFO
 		if (empty($options['type'])  &&  !empty($options['server'])) {
-			switch (true) {
-				case pudl_array($options['server']):
-					$options['type']		= 'Galera';
-				break;
+			if (is_resource($options['server'])) {
+				switch (strtolower(get_resource_type($options['server']))) {
+					case 'mysql link persistent':
+						$options['persistent']	= true;		// FALL THROUGH CASE
+					case 'mysql link':
+						$options['type']		= 'MySQL-deprecated';
+					break;
 
-				case $options['server'] instanceof mysqli:
-					$options['type']		= 'MySQL';
-				break;
+					case 'pgsql link persistent':
+						$options['persistent']	= true;		// FALL THROUGH CASE
+					case 'pgsql link':
+						$options['type']		= 'PostgreSQL';
+					break;
 
-				case $options['server'] instanceof SQLite3:
-					$options['type']		= 'Sqlite';
-				break;
+					case 'odbc link persistent':
+						$options['persistent']	= true;		// FALL THROUGH CASE
+					case 'odbc link':
+						$options['type']		= 'ODBC';
+					break;
 
-				case $options['server'] instanceof PDO:
-					$options['type']		= 'PDO';
-				break;
-			}
+					case 'mssql link persistent':
+						$options['persistent']	= true;		// FALL THROUGH CASE
+					case 'mssql link':
+						$options['type']		= 'Microsoft-deprecated';
+					break;
 
+					case 'sql server connection persistent':
+						$options['persistent']	= true;		// FALL THROUGH CASE
+					case 'sql server connection':
+						$options['type']		= 'Microsoft';
+					break;
+				}
+			} else {
+				switch (true) {
+					case pudl_array($options['server']):
+						$options['type']		= 'Galera';
+					break;
 
-			if (is_resource($options['server'])) switch (ture) {
-				case get_resource_type($options['server']) === 'mysql link':
-					$options['type']		= 'MySQL-deprecated';
-				break;
+					case $options['server'] instanceof mysqli:
+						$options['type']		= 'MySQL';
+					break;
 
-				case get_resource_type($options['server']) === 'mysql link persistent':
-					$options['type']		= 'MySQL-deprecated';
-					$options['persistent']	= true;
-				break;
+					case $options['server'] instanceof SQLite3:
+						$options['type']		= 'Sqlite';
+					break;
 
-				case get_resource_type($options['server']) === 'pgsql link':
-					$options['type']		= 'PostgreSQL';
-				break;
-
-				case get_resource_type($options['server']) === 'pgsql link persistent':
-					$options['type']		= 'PostgreSQL';
-					$options['persistent']	= true;
-				break;
-
-				case get_resource_type($options['server']) === 'odbc link':
-					$options['type']		= 'ODBC';
-				break;
-
-				case get_resource_type($options['server']) === 'odbc link persistent':
-					$options['type']		= 'ODBC';
-					$options['persistent']	= true;
-				break;
-
-				case get_resource_type($options['server']) === 'mssql link':
-					$options['type']		= 'Microsoft-deprecated';
-				break;
-
-				case get_resource_type($options['server']) === 'SQL Server Connection':
-					$options['type']		= 'Microsoft';
-				break;
+					case $options['server'] instanceof PDO:
+						$options['type']		= 'PDO';
+					break;
+				}
 			}
 		}
 
