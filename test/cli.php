@@ -29,6 +29,7 @@ chdir(__DIR__);
 
 
 //TEST FOR PHP EXTENSIONS
+if (!extension_loaded('ctype'))		throw new Exception('Missing "ctype" PHP extension');
 if (!extension_loaded('date'))		throw new Exception('Missing "date" PHP extension');
 if (!extension_loaded('json'))		throw new Exception('Missing "json" PHP extension');
 if (!extension_loaded('session'))	throw new Exception('Missing "session" PHP extension');
