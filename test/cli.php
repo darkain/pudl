@@ -29,9 +29,9 @@ chdir(__DIR__);
 
 
 //TEST FOR PHP EXTENSIONS
-if (!extension_loaded('date')) throw new Exception('Missing "date" PHP extension');
-if (!extension_loaded('json')) throw new Exception('Missing "json" PHP extension');
-if (!extension_loaded('session'))	echo "Missing optional \"session\" PHP extension\n";
+if (!extension_loaded('date'))		throw new Exception('Missing "date" PHP extension');
+if (!extension_loaded('json'))		throw new Exception('Missing "json" PHP extension');
+if (!extension_loaded('session'))	throw new Exception('Missing "session" PHP extension');
 if (!extension_loaded('redis'))		echo "Missing optional \"redis\" PHP extension\n";
 
 $found = false;
