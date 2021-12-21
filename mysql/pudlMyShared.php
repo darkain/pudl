@@ -153,6 +153,34 @@ abstract class	pudlMyShared
 
 
 	////////////////////////////////////////////////////////////////////////////
+	// GET WARNINGS FROM LAST QUERY
+	// https://mariadb.com/kb/en/show-warnings/
+	////////////////////////////////////////////////////////////////////////////
+	public function warnings($limit=NULL, $offset=NULL) {
+		if (!$this->connection) return NULL;
+		$result = $this('SHOW WARNINGS' . $this->_limit($limit, $offset));
+		if ($result instanceof pudlStringResult) return $result;
+		return $result->complete();
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// GET WARNINGS FROM LAST QUERY
+	// https://mariadb.com/kb/en/show-warnings/
+	////////////////////////////////////////////////////////////////////////////
+	public function errors($limit=NULL, $offset=NULL) {
+		if (!$this->connection) return NULL;
+		$result = $this('SHOW ERRORS' . $this->_limit($limit, $offset));
+		if ($result instanceof pudlStringResult) return $result;
+		return $result->complete();
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
 	// MEMBER VARIABLES
 	////////////////////////////////////////////////////////////////////////////
 	public $sql_mode = TRUE;
