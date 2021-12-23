@@ -56,10 +56,10 @@ abstract	class	pudl {
 		if (empty($options['persistent']))	$options['persistent']	= false;
 		if (empty($options['key']))			$options['key']			= NULL;
 		if (empty($options['salt']))		$options['salt']		= '';
-		if (empty($options['timeout']))		$options['timeout']		= 10;
 		if (empty($options['readonly']))	$options['readonly']	= false;
 		if (empty($options['offline']))		$options['offline']		= false;
-
+		if (!isset($options['timeout']))	$options['timeout']		= 10;
+		
 		//SET INITIAL DATA
 		$this->microtime	= microtime(true);
 		$this->time			= (int) $this->microtime;
