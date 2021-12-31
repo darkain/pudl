@@ -26,6 +26,8 @@ try {
 		"mysql_connect(): Lost connection to MySQL server at 'waiting for initial communication packet', system error: 110",
 
 		'mysqli::real_connect(): Error while reading greeting packet. PID='.getmypid(),
+
+		'MySQL server has gone away',
 	]);
 }
 
