@@ -122,6 +122,7 @@ class			pudlSession
 	// INITIALIZE SESSION
 	// http://php.net/manual/en/sessionhandlerinterface.open.php
 	////////////////////////////////////////////////////////////////////////////
+	#[\ReturnTypeWillChange]
 	public function open($path, $name) {
 		return true;
 	}
@@ -133,6 +134,7 @@ class			pudlSession
 	// CLOSE THE SESSION
 	// http://php.net/manual/en/sessionhandlerinterface.close.php
 	////////////////////////////////////////////////////////////////////////////
+	#[\ReturnTypeWillChange]
 	public function close() {
 		return true;
 	}
@@ -144,6 +146,7 @@ class			pudlSession
 	// READ SESSION DATA
 	// http://php.net/manual/en/sessionhandlerinterface.read.php
 	////////////////////////////////////////////////////////////////////////////
+	#[\ReturnTypeWillChange]
 	public function read($id) {
 		try {
 			$data = $this->pudl->cache(60*60, $this->cache($id))->selectRow(
@@ -172,6 +175,7 @@ class			pudlSession
 	// WRITE SESSION DATA
 	// http://php.net/manual/en/sessionhandlerinterface.write.php
 	////////////////////////////////////////////////////////////////////////////
+	#[\ReturnTypeWillChange]
 	public function write($id, $data) {
 
 		// IF CONTENT UNCHANGED, NOP
@@ -217,6 +221,7 @@ class			pudlSession
 	// DESTROY A SESSION
 	// http://php.net/manual/en/sessionhandlerinterface.destroy.php
 	////////////////////////////////////////////////////////////////////////////
+	#[\ReturnTypeWillChange]
 	public function destroy($id) {
 		// DELETE THE OBJECT
 		if ($this->hash !== false) {
@@ -234,6 +239,7 @@ class			pudlSession
 	// CLEANUP OLD SESSIONS
 	// http://php.net/manual/en/sessionhandlerinterface.gc.php
 	////////////////////////////////////////////////////////////////////////////
+	#[\ReturnTypeWillChange]
 	public function gc($max) {
 		$expire = $this->pudl->time() - (int) $max;
 		$this->pudl->delete($this->table, ['access'=>pudl::lt($expire)]);

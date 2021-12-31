@@ -753,6 +753,7 @@ class			pudlObject
 	// ARRAY ACCESS - ASSIGN A VALUE TO THE SPECIFIED OFFSET
 	// http://php.net/manual/en/arrayaccess.offsetset.php
 	////////////////////////////////////////////////////////////////////////////
+	#[\ReturnTypeWillChange]
 	public function offsetSet($key, $value) {
 		if (is_null($key)) {
 			$this->__array[]		= $value;
@@ -779,6 +780,7 @@ class			pudlObject
 	// ARRAY ACCESS - OFFSET TO RETRIEVE
 	// http://php.net/manual/en/arrayaccess.offsetget.php
 	////////////////////////////////////////////////////////////////////////////
+	#[\ReturnTypeWillChange]
 	public function &offsetGet($key) {
 		return $this->__array[$key];
 	}
@@ -801,6 +803,7 @@ class			pudlObject
 	// ARRAY ACCESS - WHETHER AN OFFSET EXISTS
 	// http://php.net/manual/en/arrayaccess.offsetexists.php
 	////////////////////////////////////////////////////////////////////////////
+	#[\ReturnTypeWillChange]
 	public function offsetExists($key, $isset=true) {
 		return $isset
 			? isset($this->__array[$key])
@@ -825,6 +828,7 @@ class			pudlObject
 	// ARRAY ACCESS - UNSET AN OFFSET
 	// http://php.net/manual/en/arrayaccess.offsetunset.php
 	////////////////////////////////////////////////////////////////////////////
+	#[\ReturnTypeWillChange]
 	public function offsetUnset($key) {
 		unset($this->__array[$key]);
 	}
@@ -836,6 +840,7 @@ class			pudlObject
 	// SEEKABLE ITERATOR - MOVE THE ARRAY POINTER TO THE GIVEN ROW NUMBER
 	// http://php.net/manual/en/seekableiterator.seek.php
 	////////////////////////////////////////////////////////////////////////////
+	#[\ReturnTypeWillChange]
 	public function seek($row) {
 		$row = (int) $row;
 		reset($this->__array);
@@ -849,6 +854,7 @@ class			pudlObject
 	// ITERATOR - REWIND THE ITERATOR TO THE FIRST ELEMENT
 	// http://php.net/manual/en/iterator.rewind.php
 	////////////////////////////////////////////////////////////////////////////
+	#[\ReturnTypeWillChange]
 	public function rewind() {
 		reset($this->__array);
 	}
@@ -860,6 +866,7 @@ class			pudlObject
 	// ITERATOR - RETURN THE CURRENT ELEMENT
 	// http://php.net/manual/en/iterator.current.php
 	////////////////////////////////////////////////////////////////////////////
+	#[\ReturnTypeWillChange]
 	public function current() {
 		return current($this->__array);
 	}
@@ -871,6 +878,7 @@ class			pudlObject
 	// ITERATOR - RETURN THE KEY OF THE CURRENT ELEMENT
 	// http://php.net/manual/en/iterator.key.php
 	////////////////////////////////////////////////////////////////////////////
+	#[\ReturnTypeWillChange]
 	public function key() {
 		return key($this->__array);
 	}
@@ -916,6 +924,7 @@ class			pudlObject
 	// ITERATOR - MOVE FORWARD TO NEXT ELEMENT
 	// http://php.net/manual/en/iterator.next.php
 	////////////////////////////////////////////////////////////////////////////
+	#[\ReturnTypeWillChange]
 	public function next() {
 		return next($this->__array);
 	}
@@ -927,6 +936,7 @@ class			pudlObject
 	// ITERATOR - CHECKS IF CURRENT POSITION IS VALID
 	// http://php.net/manual/en/iterator.valid.php
 	////////////////////////////////////////////////////////////////////////////
+	#[\ReturnTypeWillChange]
 	public function valid() {
 		$key = key($this->__array);
 		return ($key !== NULL && $key !== FALSE);
@@ -939,6 +949,7 @@ class			pudlObject
 	// RETURNS JSON SERIALIZABLE DATA
 	// http://php.net/manual/en/jsonserializable.jsonserialize.php
 	////////////////////////////////////////////////////////////////////////////
+	#[\ReturnTypeWillChange]
 	public function jsonSerialize() {
 		return $this->__array;
 	}
@@ -950,6 +961,7 @@ class			pudlObject
 	// RETURNS THE JSON REPRESENTATION OF THIS OBJECT
 	// http://php.net/manual/en/function.json-encode.php
 	////////////////////////////////////////////////////////////////////////////
+	#[\ReturnTypeWillChange]
 	public function json() {
 		return pudl::jsonEncode($this);
 	}

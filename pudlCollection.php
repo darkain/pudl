@@ -58,6 +58,7 @@ class			pudlCollection
 	////////////////////////////////////////////////////////////////////////////
 	// RESET INTERNAL POINTER TO FIRST OBJECT IN COLLECTION
 	////////////////////////////////////////////////////////////////////////////
+	#[\ReturnTypeWillChange]
 	public function rewind() {
 		$this->first = true;
 		return pudlObject::rewind();
@@ -69,6 +70,7 @@ class			pudlCollection
 	////////////////////////////////////////////////////////////////////////////
 	// MOVE INTERNAL POINTER TO SPECIFIC ITEM WITHIN COLLECTION
 	////////////////////////////////////////////////////////////////////////////
+	#[\ReturnTypeWillChange]
 	public function seek($row) {
 		if (!$row) $this->first = true;
 		pudlObject::seek($row);
@@ -178,6 +180,7 @@ class			pudlCollection
 	// RETURNS THE INNER ITERATOR FOR THE CURRENT ENTRY.
 	// http://php.net/manual/en/outeriterator.getinneriterator.php
 	////////////////////////////////////////////////////////////////////////////
+	#[\ReturnTypeWillChange]
 	public function getInnerIterator() {
 		return $this->current();
 	}
