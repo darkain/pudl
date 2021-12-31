@@ -1,5 +1,13 @@
 <?php
 
+
+// ONLY DO THE TIMEOUT TEST IF WE HAVE MYSQLI DRIVER INSTALLER
+if (!extension_loaded('mysqli')) {
+	return;
+}
+
+
+
 $mtime = microtime(true);
 
 
