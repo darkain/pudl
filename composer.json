@@ -1,17 +1,17 @@
 {
 	"name":			"darkain/pudl",
 	"description":	"SQL query generator with support for MySQL, MariaDB, SQLite, PostgreSQL, MS-SQL, and more",
-	"version":		"2.9.0",
-	"time":			"2018-09-19",
+	"version":		"3.0.0",
+	"time":			"2021-12-31",
 	"keywords":		["sql", "query", "query generator", "query builder", "mariadb", "mysql", "mssql", "postgresql"],
 	"license":		"BSD-2-Clause",
 	"readme":		"README.md",
-	"homepage":		"https://github.com/darkain/pudl",
+	"homepage":		"https://pudl.dev/",
 	"require":		{"php":">=5.4"},
 	"authors":		[{
 		"name":		"Vincent Milum Jr",
 		"email":	"composer@darkain.com",
-		"homepage":	"https://darkain.com",
+		"homepage":	"https://darkain.com/",
 		"role":		"Developer"
 	}]
 }
