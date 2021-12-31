@@ -96,13 +96,20 @@ abstract class	pudlMyShared
 	// SET THE QUERY TIMEOUT VALUE - HELPS PREVENT DDOS ATTACKS
 	////////////////////////////////////////////////////////////////////////////
 	public function timeout($timeout) {
+		$version = $this->version();
+		if ($version === NULL) return $this;
+
 		if (pudl_array($timeout)) {
 			if (empty($timeout['timeout'])) return $this;
 			$timeout = $timeout['timeout'];
 		}
 
 		if (!empty($timeout)) {
-			$this->set('max_statement_time', (int)$timeout);
+			if (stripos($version, 'MariaDB') !== false) {
+				$this->set('max_statement_time', (int)$timeout);
+			} else { // MySQL
+				$this->set('max_execution_time', (int)$timeout);
+			}
 		}
 
 		return $this;
