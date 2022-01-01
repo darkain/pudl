@@ -23,7 +23,6 @@ matrix:
   allow_failures:
     - php: nightly
     - php: master
-    - php: 8.1.0
   include:
     - php: 8.0
       dist: focal
