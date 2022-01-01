@@ -56,30 +56,6 @@ trait pudlCompare {
 
 
 
-	public static function inSet($value) {
-		if (pudl_array($value)  &&  func_num_args() === 1)
-			return new pudlSet($value);
-
-		if ($value instanceof pudlResult)
-			return new pudlSet($value->rows());
-
-		return new pudlSet(func_get_args());
-	}
-
-
-
-	public static function notInSet($value) {
-		if (pudl_array($value)  &&  func_num_args() === 1)
-			return (new pudlSet($value))->not();
-
-		if ($value instanceof pudlResult)
-			return (new pudlSet($value->rows()))->not();
-
-		return (new pudlSet(func_get_args()))->not();
-	}
-
-
-
 	public static function _and($clause) {
 		return new pudlAnd($clause);
 	}

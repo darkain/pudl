@@ -462,6 +462,8 @@ trait pudlQuery {
 				$query			.= $this->identifiers($key, $prefix);
 				$query			.= $this->_clauseEquals($value);
 				if (pudl_array($value)) continue;
+				if ($value instanceof pudlResult && !$value instanceof pudlValue) continue;
+				if ($value instanceof pudlEquals  &&  $value->value instanceof pudlResult) continue;
 
 			} else if ($value instanceof pudlSort  &&  is_int($key)) {
 				$query			.= $this->identifiers($value->column);
@@ -528,12 +530,18 @@ trait pudlQuery {
 				if ($value->equals == '=')	return ' IN ';
 				if ($value->equals == '!=')	return ' NOT IN ';
 			}
+			if ($value->value instanceof pudlResult) {
+				if ($value->equals == '=')	return ' IN (' . $this->_inSet($value->value) . ')';
+				if ($value->equals == '!=')	return ' NOT IN (' . $this->_inSet($value->value) . ')';
+			}
 			return $value->equals;
 		}
 
 		if ($value instanceof pudlStringResult) return $value->type;
 
-		if (pudl_array($value)) return ' IN (' . $this->_inSet($value) . ')';
+		if (pudl_array($value)  ||  $value instanceof pudlResult) {
+			return ' IN (' . $this->_inSet($value) . ')';
+		}
 
 		if (is_float($value)  &&  (is_nan($value)  ||  is_infinite($value))) return '';
 

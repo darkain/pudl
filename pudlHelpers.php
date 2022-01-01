@@ -194,23 +194,6 @@ class pudlRegexp extends pudlEquals {
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// CHECK IF ONE VALUE IS INSIDE OF ANOTHER SET OF VALUES
-////////////////////////////////////////////////////////////////////////////////
-class pudlSet extends pudlEquals {
-	public function __construct($value) {
-		if (empty($value)) $value = [''];
-		parent::__construct($value, false, ' IN ');
-	}
-
-	public function pudlValue(pudl $pudl, $quote=true) {
-		return '(' . $pudl->_inSet($this->value) . ')';
-	}
-}
-
-
-
-
-////////////////////////////////////////////////////////////////////////////////
 // ADD AN ITEM TO A SET VALUE
 ////////////////////////////////////////////////////////////////////////////////
 class pudlAppendSet extends pudlEquals {}

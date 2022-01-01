@@ -15,6 +15,7 @@ class		pudlShellResult
 
 		$this->row			= 0;
 		$this->json			= $pudl->jsonDecode($result);
+		$this->query		= '';
 
 		if (!is_array($this->json)) {
 			$this->result	= false;
@@ -115,12 +116,37 @@ class		pudlShellResult
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// MOVE TO THE NEXT ROW IN THIS RESULT AND RETURN THAT ROW'S DATA
+	// PHP'S ITERATOR - TRUE IF THE CURRENT ROW IN THIS RESULT IS VALID
+	// http://php.net/manual/en/iterator.valid.php
 	////////////////////////////////////////////////////////////////////////////
-	public function row($trim=true) {
+	public function valid() {
+		if (!is_array($this->json)) return false;
+		if ($this->row === false) return false;
+		return $this->row < $this->count();
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// PHP'S ITERATOR - GET THE CURRENT ROW IN THIS RESULT
+	// http://php.net/manual/en/iterator.current.php
+	////////////////////////////////////////////////////////////////////////////
+	public function current() {
+		if (!is_array($this->json)) return;
+		$this->parse();
+		return $this->data;
+	}
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// PARSE THE CURRENT ROW'S DATA
+	////////////////////////////////////////////////////////////////////////////
+	function parse($trim=true) {
 		if (!is_array($this->json)) return false;
 		if (!isset($this->json['data'][$this->row])) return false;
-
 		$data = $this->json['data'][$this->row];
 
 		$this->data = [];
@@ -129,13 +155,21 @@ class		pudlShellResult
 			$this->data[$this->json['header'][$key]] = $val;
 		} unset($val);
 
-
 		if ($trim) {
 			foreach ($this->data as $key => &$val) {
 				$val = trim($val);
 			} unset($val);
 		}
+	}
 
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// MOVE TO THE NEXT ROW IN THIS RESULT AND RETURN THAT ROW'S DATA
+	////////////////////////////////////////////////////////////////////////////
+	public function row($trim=true) {
+		if ($this->parse($trim) === false) return false;
 		$this->row++;
 		return $this->data;
 	}
