@@ -67,6 +67,10 @@ class		pudlMySql
 			"\nError " . $this->errno() .
 			': ' . $this->error()
 		);
+
+
+		// STORE WHICH SERVER WE'RE CONNECTED TO
+		$this->connected = $auth['server'];
 	}
 
 

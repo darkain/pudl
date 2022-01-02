@@ -105,8 +105,13 @@ class		pudlSqlite
 		// Set a busy timeout for Sqlite to 'timeout' seconds
 		// http://php.net/manual/en/sqlite3.busytimeout.php
 		$this->connection->busyTimeout($auth['timeout'] * 1000);
-	}
 
+
+		// STORE WHICH SERVER WE'RE CONNECTED TO
+		if (!empty($auth['server'])) {
+			$this->connected = $auth['server'];
+		}
+	}
 
 
 

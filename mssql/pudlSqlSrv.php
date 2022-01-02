@@ -54,6 +54,11 @@ class		pudlSqlSrv
 				': ' . $this->error()
 			);
 		}
+
+		// STORE WHICH SERVER WE'RE CONNECTED TO
+		if (!empty($auth['server'])) {
+			$this->connected = $auth['server'];
+		}
 	}
 
 

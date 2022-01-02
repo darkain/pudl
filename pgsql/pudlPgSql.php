@@ -73,6 +73,12 @@ class		pudlPgSql
 				"\nError: " . $error['message']
 			);
 		}
+
+
+		// STORE WHICH SERVER WE'RE CONNECTED TO
+		if (!empty($auth['server'])) {
+			$this->connected = $auth['server'];
+		}
 	}
 
 
