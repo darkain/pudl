@@ -59,7 +59,7 @@ abstract	class	pudl {
 		if (empty($options['readonly']))	$options['readonly']	= false;
 		if (empty($options['offline']))		$options['offline']		= false;
 		if (!isset($options['timeout']))	$options['timeout']		= 10;
-		
+
 		//SET INITIAL DATA
 		$this->microtime	= microtime(true);
 		$this->time			= (int) $this->microtime;
@@ -805,10 +805,10 @@ abstract	class	pudl {
 	////////////////////////////////////////////////////////////////////////////
 	// PUDL VERSION INFORMATION
 	////////////////////////////////////////////////////////////////////////////
-	const version			= '2.9.1';
-	const version_id		= 20901;
-	const version_major		= 2;
-	const version_minor		= 9;
-	const version_release	= 1;
+	const version			= '3.0.0';
+	const version_id		= 30000;
+	const version_major		= 3;
+	const version_minor		= 0;
+	const version_release	= 0;
 
 }
