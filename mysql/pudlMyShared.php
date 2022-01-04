@@ -106,9 +106,11 @@ abstract class	pudlMyShared
 
 		if (!empty($timeout)) {
 			if (stripos($version, 'MariaDB') !== false) {
-				$this->set('max_statement_time', (int)$timeout);
-			} else { // MySQL
-				$this->set('max_execution_time', (int)$timeout);
+				// MariaDB uses sections with milliseconds in floating point
+				$this->set('max_statement_time', (float)$timeout);
+			} else { 
+				// MySQL uses milliseconds as an integer value
+				$this->set('max_execution_time', (int)($timeout*1000));
 			}
 		}
 
