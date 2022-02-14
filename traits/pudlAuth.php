@@ -61,8 +61,8 @@ trait pudlAuth {
 							: $auth['prefix'];
 		}
 
-		// STORE AUTH DATA
-		return $this->_auth($auth);
+		// STORE AUTH DATA (BUT DONT RETURN ANYTHING, INTENTIONALLY)
+		$this->_auth($auth);
 	}
 
 
