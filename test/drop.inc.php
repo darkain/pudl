@@ -2,6 +2,16 @@
 
 
 
+$db->string()->drop('my_tbl');
+pudlTest($db, "DROP TEMPORARY TABLE IF EXISTS `my_tbl`");
+
+
+
+$db->string()->drop('my_db.my_tbl');
+pudlTest($db, "DROP TEMPORARY TABLE IF EXISTS `my_db`.`my_tbl`");
+
+
+
 $db->string()->drop('table', false);
 pudlTest($db, "DROP TABLE IF EXISTS `table`");
 
