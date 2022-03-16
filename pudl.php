@@ -234,8 +234,7 @@ abstract	class	pudl {
 		//PERFORMANCE PROFILING DATA
 		if (!empty($this->bench)) {
 			$bench = $this->bench;
-			$diff = round(microtime(true)-$microtime, 6);
-			$bench($query, $diff, $this);
+			$bench($query, $microtime, microtime(true), $this);
 		}
 
 
