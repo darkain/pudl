@@ -512,12 +512,23 @@ abstract	class	pudl {
 
 	////////////////////////////////////////////////////////////////////////////
 	// RUN "EXPLAIN" ON THE GIVEN SQL QUERY STRING
+	// TODO: add support for "EXPLAIN ANALYZE" after $db->analize is removed
 	////////////////////////////////////////////////////////////////////////////
-	public function explain($query) {
-		$return = '';
-		$result = $this('EXPLAIN ' . $query);
+	public function explain($query, $format=NULL) {
+		$explain	= 'EXPLAIN';
+
+		if (!empty($format)) {
+			$explain .= ' FORMAT=' . strtoupper($this->_value($format));
+		}
+
+		$result		= $this($explain . ' (' . $query . ')');
+
 		if ($result instanceof pudlStringResult) return $result;
-		while ($data = $result()) $return .= print_r($data, true);
+
+		$return = '';
+		while ($data = $result()) {
+			$return .= print_r($data, true);
+		}
 		$result->free();
 		return $return;
 	}
