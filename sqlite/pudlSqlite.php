@@ -197,13 +197,13 @@ class		pudlSqlite
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// GET THE SQLITE VERSION NUMBER
+	// GET THE SQLITE VERSION INFORMATION NUMBER
 	// http://php.net/manual/en/sqlite3.version.php
 	////////////////////////////////////////////////////////////////////////////
-	public function version() {
+	public function info() {
 		if (!$this->connection) return NULL;
-		$version = $this->connection->version();
-		return $version['versionString'];
+		$info = $this->connection->version();
+		return $info['versionString'];
 	}
 
 

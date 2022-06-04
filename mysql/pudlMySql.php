@@ -151,10 +151,10 @@ class		pudlMySql
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// GET THE VERSION NUMBER OF THE CONNECTED MYSQL/MARIADB SERVER
+	// GET THE VERSION NUMBER INFO OF THE CONNECTED MYSQL/MARIADB SERVER
 	// http://php.net/manual/en/function.mysql-get-server-info.php
 	////////////////////////////////////////////////////////////////////////////
-	public function version() {
+	public function info() {
 		if (!$this->connection) return NULL;
 		return @mysql_get_server_info($this->connection);
 	}

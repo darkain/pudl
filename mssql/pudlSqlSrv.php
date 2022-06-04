@@ -130,13 +130,13 @@ class		pudlSqlSrv
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// GET THE VERSION STRING FOR THE MICROSOFT SQL SERVER
+	// GET THE VERSION INFO STRING FOR THE MICROSOFT SQL SERVER
 	// http://php.net/manual/en/function.sqlsrv-server-info.php
 	////////////////////////////////////////////////////////////////////////////
-	public function version() {
+	public function info() {
 		if (!$this->connection) return NULL;
-		$version = sqlsrv_server_info($this->connection);
-		return $version['SQLServerVersion'];
+		$info = sqlsrv_server_info($this->connection);
+		return $info['SQLServerVersion'];
 	}
 
 
