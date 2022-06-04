@@ -205,7 +205,7 @@ class		pudlMySqli
 	// RETRIEVES INFORMATION ABOUT THE MOST RECENTLY EXECUTED QUERY
 	// http://php.net/manual/en/mysqli.info.php
 	////////////////////////////////////////////////////////////////////////////
-	public function info() {
+	public function queryinfo() {
 		if (!$this->connection) return [];
 
 		$info	= explode('  ', $this->connection->info);
