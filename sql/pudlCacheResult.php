@@ -65,7 +65,7 @@ class		pudlCacheResult
 	// PHP'S COUNTABLE - GET THE NUMBER OF ROWS FROM THIS RESULT
 	// http://php.net/manual/en/countable.count.php
 	////////////////////////////////////////////////////////////////////////////
-	public function count() {
+	public function _count() {
 		return count($this->rows);
 	}
 
@@ -99,7 +99,7 @@ class		pudlCacheResult
 	// PHP'S SEEKABLEITERATOR - JUMP TO A ROW IN THIS RESULT
 	// http://php.net/manual/en/seekableiterator.seek.php
 	////////////////////////////////////////////////////////////////////////////
-	public function seek($row) {
+	public function _seek($row) {
 		$this->row = (int) $row;
 	}
 

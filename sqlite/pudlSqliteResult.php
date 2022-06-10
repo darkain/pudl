@@ -79,7 +79,7 @@ class		pudlSqliteResult
 	// PHP'S COUNTABLE - GET THE NUMBER OF ROWS FROM THIS RESULT
 	// http://php.net/manual/en/countable.count.php
 	////////////////////////////////////////////////////////////////////////////
-	public function count() {
+	public function _count() {
 		return 0;
 		//TODO: IMPLEMENT THIS (but it'll be hacky, since Sqlite doesn't support it!)
 	}
@@ -117,7 +117,7 @@ class		pudlSqliteResult
 	// PHP'S SEEKABLEITERATOR - JUMP TO A ROW IN THIS RESULT
 	// http://php.net/manual/en/seekableiterator.seek.php
 	////////////////////////////////////////////////////////////////////////////
-	public function seek($row) {
+	public function _seek($row) {
 		//TODO: IMPLEMENT THIS!
 	}
 

@@ -50,7 +50,7 @@ class		pudlMsSqlResult
 	// http://php.net/manual/en/countable.count.php
 	// http://php.net/manual/en/function.mssql-num-rows.php
 	////////////////////////////////////////////////////////////////////////////
-	public function count() {
+	public function _count() {
 		$rows = false;
 		if ($this->result) $rows = @mssql_num_rows($this->result);
 		return ($rows !== false) ? $rows : 0;
@@ -90,7 +90,7 @@ class		pudlMsSqlResult
 	// http://php.net/manual/en/seekableiterator.seek.php
 	// http://php.net/manual/en/function.mssql-data-seek.php
 	////////////////////////////////////////////////////////////////////////////
-	public function seek($row) {
+	public function _seek($row) {
 		if ($this->result) @mssql_data_seek($this->result, $row);
 	}
 

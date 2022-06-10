@@ -50,7 +50,7 @@ class		pudlSqlSrvResult
 	// http://php.net/manual/en/countable.count.php
 	// http://php.net/manual/en/function.sqlsrv-num-rows.php
 	////////////////////////////////////////////////////////////////////////////
-	public function count() {
+	public function _count() {
 		if (!$this->result) return 0;
 		$rows = @sqlsrv_num_rows($this->result);
 		return (!empty($rows)) ? $rows : 0;
@@ -90,7 +90,7 @@ class		pudlSqlSrvResult
 	// http://php.net/manual/en/seekableiterator.seek.php
 	// http://php.net/manual/en/function.sqlsrv-fetch.php
 	////////////////////////////////////////////////////////////////////////////
-	public function seek($row) {
+	public function _seek($row) {
 		if (!$this->result) return;
 		@sqlsrv_fetch($this->result, SQLSRV_SCROLL_ABSOLUTE, $row);
 	}

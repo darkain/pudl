@@ -68,7 +68,7 @@ class		pudlShellResult
 	// PHP'S COUNTABLE - GET THE NUMBER OF ROWS FROM THIS RESULT
 	// http://php.net/manual/en/countable.count.php
 	////////////////////////////////////////////////////////////////////////////
-	public function count() {
+	public function _count() {
 		if (!is_array(	$this->json))			return 0;
 		if (!isset(		$this->json['data']))	return 0;
 		if (!is_array(	$this->json['data']))	return 0;
@@ -107,7 +107,7 @@ class		pudlShellResult
 	// PHP'S SEEKABLEITERATOR - JUMP TO A ROW IN THIS RESULT
 	// http://php.net/manual/en/seekableiterator.seek.php
 	////////////////////////////////////////////////////////////////////////////
-	public function seek($row) {
+	public function _seek($row) {
 		if (!is_array($this->json)) return;
 		$this->row = (int) $row;
 	}
@@ -119,7 +119,7 @@ class		pudlShellResult
 	// PHP'S ITERATOR - TRUE IF THE CURRENT ROW IN THIS RESULT IS VALID
 	// http://php.net/manual/en/iterator.valid.php
 	////////////////////////////////////////////////////////////////////////////
-	public function valid() {
+	public function _valid() {
 		if (!is_array($this->json)) return false;
 		if ($this->row === false) return false;
 		return $this->row < $this->count();
@@ -132,7 +132,7 @@ class		pudlShellResult
 	// PHP'S ITERATOR - GET THE CURRENT ROW IN THIS RESULT
 	// http://php.net/manual/en/iterator.current.php
 	////////////////////////////////////////////////////////////////////////////
-	public function current() {
+	public function _current() {
 		if (!is_array($this->json)) return;
 		$this->parse();
 		return $this->data;

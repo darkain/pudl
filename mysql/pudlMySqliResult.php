@@ -70,7 +70,7 @@ class		pudlMySqliResult
 	// http://php.net/manual/en/countable.count.php
 	// http://php.net/manual/en/mysqli-result.num-rows.php
 	////////////////////////////////////////////////////////////////////////////
-	public function count() {
+	public function _count() {
 		$rows = false;
 		if ($this->result instanceof mysqli_result) {
 			$rows = $this->result->num_rows;
@@ -117,7 +117,7 @@ class		pudlMySqliResult
 	// http://php.net/manual/en/seekableiterator.seek.php
 	// http://php.net/manual/en/mysqli-result.data-seek.php
 	////////////////////////////////////////////////////////////////////////////
-	public function seek($row) {
+	public function _seek($row) {
 		if ($this->result instanceof mysqli_result) {
 			@$this->result->data_seek($row);
 		}

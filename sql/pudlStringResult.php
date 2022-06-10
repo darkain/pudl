@@ -45,7 +45,7 @@ class			pudlStringResult
 	// RETURN DEFAULT VALUES
 	////////////////////////////////////////////////////////////////////////////
 	public function free()		{ return false; }
-	public function count()		{ return 1; }
+	public function _count()	{ return 1; }
 	public function fields()	{ return ['QUERY']; }
 	public function errno()		{ return 0; }
 	public function error()		{ return false; }
@@ -68,7 +68,7 @@ class			pudlStringResult
 	// PHP'S SEEKABLEITERATOR - JUMP TO A ROW IN THIS RESULT
 	// http://php.net/manual/en/seekableiterator.seek.php
 	////////////////////////////////////////////////////////////////////////////
-	public function seek($row) {
+	public function _seek($row) {
 		$this->returned = !!$row;
 	}
 

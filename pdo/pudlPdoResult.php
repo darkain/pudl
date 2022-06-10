@@ -56,7 +56,7 @@ class		pudlPdoResult
 	// http://php.net/manual/en/countable.count.php
 	// http://php.net/manual/en/pdostatement.rowcount.php
 	////////////////////////////////////////////////////////////////////////////
-	public function count() {
+	public function _count() {
 		if (!is_object($this->result)) return 0;
 		return $this->result->rowCount();
 	}
@@ -96,7 +96,7 @@ class		pudlPdoResult
 	// http://php.net/manual/en/seekableiterator.seek.php
 	// http://php.net/manual/en/pdostatement.fetch.php
 	////////////////////////////////////////////////////////////////////////////
-	public function seek($row) {
+	public function _seek($row) {
 		if (!is_object($this->result)) return;
 		$this->result->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_ABS, $row);
 		if (!$row) $this->seekzero = true;

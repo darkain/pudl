@@ -51,7 +51,7 @@ class		pudlOdbcResult
 	// http://php.net/manual/en/countable.count.php
 	// http://php.net/manual/en/function.odbc-num-rows.php
 	////////////////////////////////////////////////////////////////////////////
-	public function count() {
+	public function _count() {
 		$rows = false;
 		if ($this->result) $rows = @odbc_num_rows($this->result);
 		return ($rows !== false  &&  $rows > 0) ? $rows : 0;
@@ -91,7 +91,7 @@ class		pudlOdbcResult
 	// PHP'S SEEKABLEITERATOR - JUMP TO A ROW IN THIS RESULT
 	// http://php.net/manual/en/seekableiterator.seek.php
 	////////////////////////////////////////////////////////////////////////////
-	public function seek($row) {
+	public function _seek($row) {
 		if ($this->result) $this->row = (int) $row;
 	}
 

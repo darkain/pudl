@@ -55,7 +55,7 @@ class		pudlArrayResult
 	// PHP'S COUNTABLE - GET THE NUMBER OF ROWS FROM THIS RESULT
 	// http://php.net/manual/en/countable.count.php
 	////////////////////////////////////////////////////////////////////////////
-	public function count() {
+	public function _count() {
 		return is_array($this->array) ? count($this->array) : 0;
 	}
 
@@ -118,7 +118,7 @@ class		pudlArrayResult
 	// PHP'S SEEKABLEITERATOR - JUMP TO A ROW IN THIS RESULT
 	// http://php.net/manual/en/seekableiterator.seek.php
 	////////////////////////////////////////////////////////////////////////////
-	public function seek($row) {
+	public function _seek($row) {
 		if (!is_array($this->array)) return;
 		if ($row < 0  ||  $row >= count($this->array)) return;
 		$this->pos = $row;

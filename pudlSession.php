@@ -13,10 +13,23 @@ if (!headers_sent()) {
 
 
 ////////////////////////////////////////////////////////////////////////////////
+// HANDLE PHP VERSION SPECIFIC IMPLEMENTATIONS
+////////////////////////////////////////////////////////////////////////////////
+if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
+	require_once(is_owner(__DIR__.'/pudlSession.modern.php'));
+} else {
+	require_once(is_owner(__DIR__.'/pudlSession.legacy.php'));
+}
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////
 // PUDL CUSTOM SESSION HANDLER
 ////////////////////////////////////////////////////////////////////////////////
 class			pudlSession
 	implements	SessionHandlerInterface {
+	use			pudlSession_trait;
 
 
 
@@ -122,8 +135,7 @@ class			pudlSession
 	// INITIALIZE SESSION
 	// http://php.net/manual/en/sessionhandlerinterface.open.php
 	////////////////////////////////////////////////////////////////////////////
-	#[\ReturnTypeWillChange]
-	public function open($path, $name) {
+	public function _open($path, $name) {
 		return true;
 	}
 
@@ -134,8 +146,7 @@ class			pudlSession
 	// CLOSE THE SESSION
 	// http://php.net/manual/en/sessionhandlerinterface.close.php
 	////////////////////////////////////////////////////////////////////////////
-	#[\ReturnTypeWillChange]
-	public function close() {
+	public function _close() {
 		return true;
 	}
 
@@ -146,8 +157,7 @@ class			pudlSession
 	// READ SESSION DATA
 	// http://php.net/manual/en/sessionhandlerinterface.read.php
 	////////////////////////////////////////////////////////////////////////////
-	#[\ReturnTypeWillChange]
-	public function read($id) {
+	public function _read($id) {
 		try {
 			$data = $this->pudl->cache(60*60, $this->cache($id))->selectRow(
 				['user', 'data'],
@@ -175,8 +185,7 @@ class			pudlSession
 	// WRITE SESSION DATA
 	// http://php.net/manual/en/sessionhandlerinterface.write.php
 	////////////////////////////////////////////////////////////////////////////
-	#[\ReturnTypeWillChange]
-	public function write($id, $data) {
+	public function _write($id, $data) {
 
 		// IF CONTENT UNCHANGED, NOP
 		if (is_string($data)) {
@@ -221,8 +230,7 @@ class			pudlSession
 	// DESTROY A SESSION
 	// http://php.net/manual/en/sessionhandlerinterface.destroy.php
 	////////////////////////////////////////////////////////////////////////////
-	#[\ReturnTypeWillChange]
-	public function destroy($id) {
+	public function _destroy($id) {
 		// DELETE THE OBJECT
 		if ($this->hash !== false) {
 			$this->pudl->deleteId($this->table, 'id', $id);
@@ -239,8 +247,7 @@ class			pudlSession
 	// CLEANUP OLD SESSIONS
 	// http://php.net/manual/en/sessionhandlerinterface.gc.php
 	////////////////////////////////////////////////////////////////////////////
-	#[\ReturnTypeWillChange]
-	public function gc($max) {
+	public function _gc($max) {
 		$expire = $this->pudl->time() - (int) $max;
 		$this->pudl->delete($this->table, ['access'=>pudl::lt($expire)]);
 		return true;

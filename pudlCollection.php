@@ -5,10 +5,23 @@ require_once(is_owner(__DIR__.'/pudlObject.php'));
 
 
 
+
+////////////////////////////////////////////////////////////////////////////////
+// HANDLE PHP VERSION SPECIFIC IMPLEMENTATIONS
+////////////////////////////////////////////////////////////////////////////////
+if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
+	require_once(is_owner(__DIR__.'/pudlCollection.modern.php'));
+} else {
+	require_once(is_owner(__DIR__.'/pudlCollection.legacy.php'));
+}
+
+
+
+
 class			pudlCollection
 	extends		pudlObject
 	implements	OuterIterator {
-
+	use			pudlCollection_trait;
 
 
 
@@ -57,11 +70,11 @@ class			pudlCollection
 
 	////////////////////////////////////////////////////////////////////////////
 	// RESET INTERNAL POINTER TO FIRST OBJECT IN COLLECTION
+	// https://www.php.net/manual/en/iterator.rewind.php
 	////////////////////////////////////////////////////////////////////////////
-	#[\ReturnTypeWillChange]
-	public function rewind() {
+	public function _rewind() {
 		$this->first = true;
-		return pudlObject::rewind();
+		return pudlObject::_rewind();
 	}
 
 
@@ -70,10 +83,9 @@ class			pudlCollection
 	////////////////////////////////////////////////////////////////////////////
 	// MOVE INTERNAL POINTER TO SPECIFIC ITEM WITHIN COLLECTION
 	////////////////////////////////////////////////////////////////////////////
-	#[\ReturnTypeWillChange]
-	public function seek($row) {
+	public function _seek($row) {
 		if (!$row) $this->first = true;
-		pudlObject::seek($row);
+		pudlObject::_seek($row);
 	}
 
 
@@ -180,8 +192,7 @@ class			pudlCollection
 	// RETURNS THE INNER ITERATOR FOR THE CURRENT ENTRY.
 	// http://php.net/manual/en/outeriterator.getinneriterator.php
 	////////////////////////////////////////////////////////////////////////////
-	#[\ReturnTypeWillChange]
-	public function getInnerIterator() {
+	public function _getInnerIterator() {
 		return $this->current();
 	}
 

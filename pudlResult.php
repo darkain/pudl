@@ -10,6 +10,7 @@ require_once(is_owner(__DIR__.'/pudlData.php'));
 
 abstract class	pudlResult
 	implements	pudlData {
+	use			pudlData_shim;
 
 
 
@@ -50,7 +51,7 @@ abstract class	pudlResult
 	// PHP'S COUNTABLE - GET THE NUMBER OF ROWS FROM THIS RESULT
 	// http://php.net/manual/en/countable.count.php
 	////////////////////////////////////////////////////////////////////////////
-	abstract public function count();
+	abstract public function _count();
 
 
 
@@ -59,7 +60,7 @@ abstract class	pudlResult
 	// PHP'S SEEKABLEITERATOR - JUMP TO A ROW IN THIS RESULT
 	// http://php.net/manual/en/seekableiterator.seek.php
 	////////////////////////////////////////////////////////////////////////////
-	abstract public function seek($row);
+	abstract public function _seek($row);
 
 
 
@@ -68,7 +69,7 @@ abstract class	pudlResult
 	// PHP'S ITERATOR - GET THE CURRENT ROW IN THIS RESULT
 	// http://php.net/manual/en/iterator.current.php
 	////////////////////////////////////////////////////////////////////////////
-	public function current() {
+	public function _current() {
 		if ($this->row === false) $this->row();
 		return $this->data;
 	}
@@ -80,7 +81,7 @@ abstract class	pudlResult
 	// PHP'S ITERATOR - GET THE KEY FOR THE CURRENT ROW IN THIS RESULT
 	// http://php.net/manual/en/iterator.key.php
 	////////////////////////////////////////////////////////////////////////////
-	public function key() {
+	public function _key() {
 		return ($this->row === false) ? 0 : $this->row;
 	}
 
@@ -91,8 +92,8 @@ abstract class	pudlResult
 	// PHP'S ITERATOR - MOVE TO THE NEXT ROW IN THIS RESULT AND RETURN THAT ROW
 	// http://php.net/manual/en/iterator.next.php
 	////////////////////////////////////////////////////////////////////////////
-	public function next() {
-		return $this->row();
+	public function _next() {
+		$this->row();
 	}
 
 
@@ -102,7 +103,7 @@ abstract class	pudlResult
 	// PHP'S ITERATOR - MOVE TO THE FIRST ROW IN THIS RESULT
 	// http://php.net/manual/en/iterator.rewind.php
 	////////////////////////////////////////////////////////////////////////////
-	public function rewind() {
+	public function _rewind() {
 		$this->seek(0);
 	}
 
@@ -113,7 +114,7 @@ abstract class	pudlResult
 	// PHP'S ITERATOR - TRUE IF THE CURRENT ROW IN THIS RESULT IS VALID
 	// http://php.net/manual/en/iterator.valid.php
 	////////////////////////////////////////////////////////////////////////////
-	public function valid() {
+	public function _valid() {
 		if ($this->row === false) $this->row();
 		return pudl_array($this->data);
 	}
@@ -290,7 +291,7 @@ abstract class	pudlResult
 	// RETURNS JSON SERIALIZABLE DATA
 	// http://php.net/manual/en/jsonserializable.jsonserialize.php
 	////////////////////////////////////////////////////////////////////////////
-	public function jsonSerialize() {
+	public function _jsonSerialize() {
 		return $this->rows();
 	}
 

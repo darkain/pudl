@@ -2,6 +2,17 @@
 
 
 
+////////////////////////////////////////////////////////////////////////////////
+// HANDLE PHP VERSION SPECIFIC IMPLEMENTATIONS
+////////////////////////////////////////////////////////////////////////////////
+if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
+	require_once(is_owner(__DIR__.'/pudlData.modern.php'));
+} else {
+	require_once(is_owner(__DIR__.'/pudlData.legacy.php'));
+}
+
+
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Used by both pudlResult and pudlObject
@@ -10,66 +21,64 @@
 // http://php.net/manual/en/class.jsonserializable.php
 ////////////////////////////////////////////////////////////////////////////////
 interface	pudlData
-	extends	Countable,
+extends		Countable,
 			SeekableIterator,
 			JsonSerializable {
 
 
 
-	//Pulled from PHPs built in Countable interface
-	#[\ReturnTypeWillChange]
-	public function count();
+	////////////////////////////////////////////////////////////////////////////
+	// PULLED FROM PHPS BUILT IN COUNTABLE INTERFACE
+	////////////////////////////////////////////////////////////////////////////
+	public function _count();
 
 
 
-	//Pulled from PHPs built in SeekableIterator interface
-	#[\ReturnTypeWillChange]
-	public function seek($position);
+
+	////////////////////////////////////////////////////////////////////////////
+	// PULLED FROM PHPS BUILT IN SEEKABLEITERATOR INTERFACE
+	////////////////////////////////////////////////////////////////////////////
+	public function _seek($position);
 
 
 
-	//Pulled from PHPs built in Iterator interface
-	#[\ReturnTypeWillChange]
-	public function current();
 
-	#[\ReturnTypeWillChange]
-	public function key();
-
-	#[\ReturnTypeWillChange]
-	public function next();
-
-	#[\ReturnTypeWillChange]
-	public function rewind();
-
-	#[\ReturnTypeWillChange]
-	public function valid();
+	////////////////////////////////////////////////////////////////////////////
+	// PULLED FROM PHPS BUILT IN ITERATOR INTERFACE
+	////////////////////////////////////////////////////////////////////////////
+	public function _current();
+	public function _key();
+	public function _next();
+	public function _rewind();
+	public function _valid();
 
 
 
-	//Methods added for pudlData
-	#[\ReturnTypeWillChange]
+
+	////////////////////////////////////////////////////////////////////////////
+	// PULLED FROM PHP'S BUILT IN JSONSERIALIZABLE INTERFACE
+	////////////////////////////////////////////////////////////////////////////
+	public function _jsonSerialize();
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////
+	// METHODS ADDED FOR PUDLDATA
+	////////////////////////////////////////////////////////////////////////////
 	public function fields();
-
-	#[\ReturnTypeWillChange]
 	public function getField($column);
-
-	#[\ReturnTypeWillChange]
 	public function listFields();
-
-	#[\ReturnTypeWillChange]
 	public function row();
-
-	#[\ReturnTypeWillChange]
 	public function free();
 
 
-	//Pulled from PHP's built in JsonSerializable interface
-	#[\ReturnTypeWillChange]
-	public function jsonSerialize();
 
 
-
-	//Method to get JSON text string from this object
-	#[\ReturnTypeWillChange]
+	////////////////////////////////////////////////////////////////////////////
+	// METHOD TO GET JSON TEXT STRING FROM THIS OBJECT
+	////////////////////////////////////////////////////////////////////////////
 	public function json();
+
+
 }
