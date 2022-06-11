@@ -65,7 +65,7 @@ trait pudlSession_trait {
 	// http://php.net/manual/en/sessionhandlerinterface.gc.php
 	////////////////////////////////////////////////////////////////////////////
 	public function gc($max) {
-		return $this-_gc($max);
+		return $this->_gc($max);
 	}
 
 
