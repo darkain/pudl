@@ -339,6 +339,27 @@ pudlTest($db, "SELECT * FROM `table` WHERE `column` IS NOT NULL");
 
 
 
+//SELECT statement where column isnt equal to NULL
+$db->string()->select('*', 'table', ['column'=>pudl::neq([NULL])]);
+pudlTest($db, "SELECT * FROM `table` WHERE `column` NOT IN (NULL)");
+
+
+
+
+//SELECT statement where column isnt equal to NULL
+$db->string()->select('*', 'table', ['column'=>pudl::neq([])]);
+pudlTest($db, "SELECT * FROM `table` WHERE `column` NOT IN (NULL)");
+
+
+
+
+//SELECT statement where column isnt equal to NULL
+$db->string()->select('*', 'table', ['column'=>pudl::eq([])]);
+pudlTest($db, "SELECT * FROM `table` WHERE `column` IN (NULL)");
+
+
+
+
 //SELECT statement where column isnt equal to integer
 $db->string()->select('*', 'table', ['column'=>pudl::neq(5)]);
 pudlTest($db, "SELECT * FROM `table` WHERE `column`!=5");

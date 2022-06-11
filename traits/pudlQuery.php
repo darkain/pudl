@@ -465,6 +465,10 @@ trait pudlQuery {
 				if ($value instanceof pudlResult && !$value instanceof pudlValue) continue;
 				if ($value instanceof pudlEquals  &&  $value->value instanceof pudlResult) continue;
 
+				if ($value instanceof pudlEquals  &&  $value->value === []) {
+					$value->value = [NULL];
+				}
+
 			} else if ($value instanceof pudlSort  &&  is_int($key)) {
 				$query			.= $this->identifiers($value->column);
 				$query			.= ' ' . $value->value;
