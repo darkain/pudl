@@ -37,7 +37,7 @@ class		pudlSqlSrv
 					'PWD'				=> $auth['password'],
 					'ConnectionPooling'	=> $auth['persistent'],
 					'LoginTimeout'		=> $auth['timeout'],
-					'APP'				=> $this->version,
+					'APP'				=> 'PHP/PUDL',
 					'CharacterSet'		=> 'UTF-8',
 				]
 			);
