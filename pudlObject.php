@@ -1231,7 +1231,7 @@ class			pudlObject
 
 
 	////////////////////////////////////////////////////////////////////////////
-	//  GET A NEW INSTANCE OF THIS OBJECT WITH VALUES FROM THE CURRENT SNAPSHOT
+	// GET A NEW INSTANCE OF THIS OBJECT WITH VALUES FROM THE CURRENT SNAPSHOT
 	////////////////////////////////////////////////////////////////////////////
 	protected function _snapclone($snapshot) {
 		return new static($snapshot);

@@ -59,9 +59,12 @@ class			pudlCollection
 	// INVOKE, ALIAS FOR NEXT ITEM IN COLLECTION. EASY WAY TO WALK THE LIST
 	////////////////////////////////////////////////////////////////////////////
 	public function __invoke() {
-		if (!$this->first) return $this->next();
+		if (!$this->first) {
+			$this->next();
+		} else {
+			$this->first = false;
+		}
 
-		$this->first = false;
 		return $this->current();
 	}
 
