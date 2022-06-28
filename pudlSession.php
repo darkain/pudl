@@ -52,7 +52,7 @@ class			pudlSession
 
 		// BASIC INFORMATION
 		$this->pudl				= $pudl;
-		$this->table			= $table;
+		$this->table			= (is_string($table)) ? $table : 'session';
 		$this->options			= $options;
 
 		// VERIFY THAT SESSION SUPPORT IS AVAILABLE
