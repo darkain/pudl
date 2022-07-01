@@ -48,7 +48,7 @@ if (version_compare(PHP_VERSION, '7.2', '>=')) {
 
 } else {
 	//TIMEOUT IS BROKEN ON PHP 7.1 AND LOWER
-	$mtest = ($mtime >= 58.0)  &&  ($mtime <= 62.0);
+	$mtest = ($mtime >= 55.0)  &&  ($mtime <= 65.0);
 }
 
 
