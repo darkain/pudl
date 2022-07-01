@@ -34,12 +34,16 @@ class		pudlMySqli
 			$this->connection->options(MYSQLI_OPT_READ_TIMEOUT,		$auth['timeout']);
 
 			//ATTEMPT TO CREATE A CONNECTION
-			$ok = @$this->connection->real_connect(
-				(empty($auth['persistent']) ? '' : 'p:') . $auth['server'],
-				$auth['username'],
-				$auth['password'],
-				$auth['database']
-			);
+			try {
+				$ok = @$this->connection->real_connect(
+					(empty($auth['persistent']) ? '' : 'p:') . $auth['server'],
+					$auth['username'],
+					$auth['password'],
+					$auth['database']
+				);
+			} catch (Exception $e) {
+				$ok = false;
+			}				
 		}
 
 		//VERIFY WE CONNECTED OKAY!
