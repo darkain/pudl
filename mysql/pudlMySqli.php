@@ -43,7 +43,7 @@ class		pudlMySqli
 				);
 			} catch (Exception $e) {
 				$ok = false;
-			}				
+			}
 		}
 
 		//VERIFY WE CONNECTED OKAY!
@@ -175,6 +175,7 @@ class		pudlMySqli
 	////////////////////////////////////////////////////////////////////////////
 	protected function _query($query) {
 		if (!$this->connection) return false;
+		if ($this->connection->connect_errno) return false;
 		return @$this->connection->query($query);
 	}
 

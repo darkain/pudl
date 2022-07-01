@@ -28,6 +28,8 @@ try {
 		'mysqli::real_connect(): Error while reading greeting packet. PID='.getmypid(),
 
 		'MySQL server has gone away',
+
+		'{"message":"Database connection error","code":2006,"error":"MySQL server has gone away","server":"example.com:80","user":""}',
 	]);
 }
 
@@ -38,11 +40,11 @@ $mtime = microtime(true) - $mtime;
 
 if (version_compare(PHP_VERSION, '7.2', '>=')) {
 	//TIMEOUT WORKS IN PHP 7.2 AND HIGHER
-	$mtest = ($mtime >= 0.5)  &&  ($mtime <= 1.5);
+	$mtest = ($mtime >= 0.5)  &&  ($mtime <= 2.5);
 
 } else if (defined('HHVM_VERSION')) {
 	//TIMEOUT WORKS IN ALL HHVM VERSIONS
-	$mtest = ($mtime >= 0.5)  &&  ($mtime <= 1.5);
+	$mtest = ($mtime >= 0.5)  &&  ($mtime <= 2.5);
 
 } else {
 	//TIMEOUT IS BROKEN ON PHP 7.1 AND LOWER

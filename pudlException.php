@@ -19,18 +19,18 @@ class pudlException extends Exception {
 		self::$recurse = true;
 
 		// RESET INTERNAL PUDL STATE
-		try { $pudl->decache();		} catch (pudlException $e) {}
-		try { $pudl->destring();	} catch (pudlException $e) {}
-		try { $pudl->decursion();	} catch (pudlException $e) {}
-		try { $pudl->rollback();	} catch (pudlException $e) {}
+		try { $pudl->decache();		} catch (Exception $e) {}
+		try { $pudl->destring();	} catch (Exception $e) {}
+		try { $pudl->decursion();	} catch (Exception $e) {}
+		try { $pudl->rollback();	} catch (Exception $e) {}
 
 		// RUN A GENERIC QUERY TO RESET EXTERNAL ERROR CODES
-		try { $pudl('SELECT 1');	} catch (pudlException $e) {}
+		try { $pudl('SELECT 1');	} catch (Exception $e) {}
 
 		// RESET THE INTERNAL QUERY STRING FOR DEBUGGING
-		try { $pudl->string();		} catch (pudlException $e) {}
-		try { $pudl($query);		} catch (pudlException $e) {}
-		try { $pudl->destring();	} catch (pudlException $e) {}
+		try { $pudl->string();		} catch (Exception $e) {}
+		try { $pudl($query);		} catch (Exception $e) {}
+		try { $pudl->destring();	} catch (Exception $e) {}
 
 		self::$recurse = false;
 	}
