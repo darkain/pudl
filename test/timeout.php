@@ -30,6 +30,8 @@ try {
 		'MySQL server has gone away',
 
 		'{"message":"Database connection error","code":2006,"error":"MySQL server has gone away","server":"example.com:80","user":""}',
+
+		'{"message":"Database connection error","code":0,"error":null,"server":"example.com:80","user":""}',
 	]);
 }
 
