@@ -40,15 +40,15 @@ $mtime = microtime(true) - $mtime;
 
 if (version_compare(PHP_VERSION, '7.2', '>=')) {
 	//TIMEOUT WORKS IN PHP 7.2 AND HIGHER
-	$mtest = ($mtime >= 0.5)  &&  ($mtime <= 2.5);
+	$mtest = ($mtime >= 0.5)  &&  ($mtime <= 1.5);
 
 } else if (defined('HHVM_VERSION')) {
 	//TIMEOUT WORKS IN ALL HHVM VERSIONS
-	$mtest = ($mtime >= 0.5)  &&  ($mtime <= 2.5);
+	$mtest = ($mtime >= 0.5)  &&  ($mtime <= 1.5);
 
 } else {
 	//TIMEOUT IS BROKEN ON PHP 7.1 AND LOWER
-	$mtest = ($mtime >= 55.0)  &&  ($mtime <= 65.0);
+	$mtest = ($mtime >= 58.0)  &&  ($mtime <= 62.0);
 }
 
 

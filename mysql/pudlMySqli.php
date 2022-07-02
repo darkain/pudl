@@ -88,6 +88,8 @@ class		pudlMySqli
 	// RECONNECT TO THE DATABASE SERVER
 	////////////////////////////////////////////////////////////////////////////
 	public function reconnect() {
+		if (empty($this->connected)) return false;
+
 		if (++$this->_depth > PUDL_RECURSION) {
 			throw new pudlRecursionException($this,
 				'Recursion limit reached in ' . __METHOD__
