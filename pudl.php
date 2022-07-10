@@ -815,10 +815,10 @@ abstract	class	pudl {
 	////////////////////////////////////////////////////////////////////////////
 	// PUDL VERSION INFORMATION
 	////////////////////////////////////////////////////////////////////////////
-	const version			= '3.1.0';
-	const version_id		= 30100;
+	const version			= '3.1.1';
+	const version_id		= 30101;
 	const version_major		= 3;
 	const version_minor		= 1;
-	const version_release	= 0;
+	const version_release	= 1;
 
 }
