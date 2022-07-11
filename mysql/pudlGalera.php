@@ -296,6 +296,7 @@ class		pudlGalera
 					$this,
 					'server'	=> [$server],
 					'timeout'	=> 1,
+					'prefix'	=> NULL,
 				]);
 
 				if ($sync->server() === false) continue;
