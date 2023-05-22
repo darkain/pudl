@@ -78,11 +78,17 @@ class		pudlSqlite
 			if ($auth['server'] instanceof SQLite3) {
 				$this->connection = $auth['server'];
 
-			} else {
+			} else if (!empty($auth['key'])) {
 				$this->connection = new SQLite3(
 					$auth['database'],
 					SQLITE3_OPEN_CREATE | $flags,
 					$auth['key']
+				);
+
+			} else {
+				$this->connection = new SQLite3(
+					$auth['database'],
+					SQLITE3_OPEN_CREATE | $flags
 				);
 			}
 
