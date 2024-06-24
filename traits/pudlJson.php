@@ -33,7 +33,7 @@ trait pudlJson {
 		return static::column(
 			$column,
 			forward_static_call_array(
-				['static', '_json_set'],
+				[self::class, '_json_set'],
 				static::_json_params($column, func_get_args())
 			)
 		);
@@ -49,7 +49,7 @@ trait pudlJson {
 		return static::column(
 			$column,
 			forward_static_call_array(
-				['static', '_json_insert'],
+				[self::class, '_json_insert'],
 				static::_json_params($column, func_get_args())
 			)
 		);
@@ -65,7 +65,7 @@ trait pudlJson {
 		return static::column(
 			$column,
 			forward_static_call_array(
-				['static', '_json_replace'],
+				[self::class, '_json_replace'],
 				static::_json_params($column, func_get_args())
 			)
 		);

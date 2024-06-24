@@ -186,7 +186,7 @@ trait pudlRedis {
 ////////////////////////////////////////////////////////////////////////////////
 if (!defined('HHVM_VERSION')  &&  class_exists('Redis')) {
 	/** @suppress PhanRedefineClass */
-	class pudlRedisHack extends Redis {
+	class pudlRedisHack_base extends Redis {
 		public function connect($host, $port=-1, $timeout=0.0, $persistent_id='') {
 
 			$level	= error_reporting(0);
@@ -202,20 +202,60 @@ if (!defined('HHVM_VERSION')  &&  class_exists('Redis')) {
 		}
 
 
-		public function pconnect(	$host, $port=-1, $timeout=0.0,
-									$persistent_id='', $retry_interval=0) {
+		public function pconnect_hack(
+				$host, $port=-1, $timeout=0.0,
+				$persistent_id='', $retry_interval=0,
+				$read_timeout=0) {
 
 			$level	= error_reporting(0);
 
 			try {
-				$return	= parent::pconnect(	$host, $port, $timeout,
-											$persistent_id, $retry_interval);
+				if ($read_timeout !== 0) {
+					$return	= parent::pconnect(
+						$host, $port, $timeout, $persistent_id,
+						$retry_interval, $read_timeout
+					);
+				} else {
+					$return	= parent::pconnect(
+						$host, $port, $timeout, $persistent_id,
+						$retry_interval, $read_timeout
+					);
+				}
 			} catch (Exception $e) {
 				$return = false;
 			}
 
 			error_reporting($level);
 			return	$return;
+		}
+	}
+
+
+	if (version_compare(PHP_VERSION, '8.1.0') >= 0) {
+		class pudlRedisHack extends pudlRedisHack_base {
+			public function pconnect_hack(
+					$host, $port=-1, $timeout=0.0,
+					$persistent_id='', $retry_interval=0,
+					$read_timeout=0) {
+
+				return parent::pconnect(
+					$host, $port, $timeout, $persistent_id,
+					$retry_interval, $read_timeout
+				);
+			}
+		}
+
+	} else {
+		class pudlRedisHack extends pudlRedisHack_base {
+			public function pconnect_hack(
+					$host, $port=-1, $timeout=0.0,
+					$persistent_id='', $retry_interval=0) {
+
+				return parent::pconnect(
+					$host, $port, $timeout, $persistent_id,
+					$retry_interval
+				);
+			}
 		}
 	}
 }
