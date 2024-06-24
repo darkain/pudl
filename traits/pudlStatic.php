@@ -45,7 +45,10 @@ trait pudlStatic {
 				return static::_increment(reset($arguments));
 
 			case 'set':
-				return forward_static_call_array('static::_set', $arguments);
+				return forward_static_call_array(
+					[self::class, '_set'],
+					$arguments
+				);
 		}
 
 		$value	= new pudlFunction();
