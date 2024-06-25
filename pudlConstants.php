@@ -15,6 +15,12 @@ define('PUDL_CSV',			0x10);
 
 
 
+// QUICK DETECTION OF MAJOR PHP VERSIONS
+define('PUDL_PHP_5',		version_compare(PHP_VERSION, '7.0.0') <  0);
+define('PUDL_PHP_7',		version_compare(PHP_VERSION, '7.0.0') >= 0);
+define('PUDL_PHP_8',		version_compare(PHP_VERSION, '8.0.0') >= 0);
+
+
 
 ////////////////////////////////////////////////////////////////////////////////
 /* NOTE: HERE ARE THE NUMERICAL STATE VALUES FOR A GALERA CLUSTER LOCAL STATE
