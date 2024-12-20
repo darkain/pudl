@@ -45,6 +45,13 @@ matrix:
           packages:
             - libonig5
 
+    - php: 8.4
+      dist: jammy
+      addons:
+        apt:
+          packages:
+            - libonig5
+
     - php: master
       dist: jammy
       addons:
