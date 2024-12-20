@@ -2,11 +2,13 @@
 
 // SET THE NUMBER OF BITS PER CHARACTER TO MAX
 if (!headers_sent()) {
-	ini_set('session.sid_length',				64);
-	ini_set('session.sid_bits_per_character',	6);
-	ini_set('session.hash_bits_per_character',	6);
-	ini_set('session.gc_maxlifetime',			60*60*24*30);
-	ini_set('session.hash_function',			1);
+	if (version_compare(PHP_VERSION, '8.4.0') < 0) {
+		ini_set('session.sid_length',				64);
+		ini_set('session.sid_bits_per_character',	6);
+		ini_set('session.hash_bits_per_character',	6);
+	}
+	ini_set('session.gc_maxlifetime',				60*60*24*30);
+	ini_set('session.hash_function',				1);
 }
 
 

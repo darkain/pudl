@@ -15,7 +15,7 @@ abstract class	pudlOrm
 	////////////////////////////////////////////////////////////////////////////
 	// CONSTRUCTOR
 	////////////////////////////////////////////////////////////////////////////
-	public function __construct(pudl $pudl=NULL, $item=false, $fetch=false) {
+	public function __construct($pudl=NULL, $item=false, $fetch=false) {
 
 		// SET THE LOCAL INSTANCE OF DATABASE OBJECT
 		$this->__pudl__ = $pudl;

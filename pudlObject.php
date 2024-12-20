@@ -53,7 +53,7 @@ class			pudlObject
 			break;
 
 			case $process === PUDL_CSV:
-				$x = @str_getcsv($data);
+				$x = @str_getcsv($data, ',', '"', '\\');
 				$x === [NULL] ? $this->free() : $this->govern($x);
 			break;
 
