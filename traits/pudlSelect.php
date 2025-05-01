@@ -417,7 +417,7 @@ trait pudlSelect {
 	////////////////////////////////////////////////////////////////////////////
 	public function jsonId($tables, $column, $search, $id=false, $order=NULL) {
 		return pudl::jsonDecode(
-			$this->cellId($tables, $column, $search, $id=false, $order=NULL)
+			$this->cellId($tables, $column, $search, $id, $order)
 		);
 	}
 
