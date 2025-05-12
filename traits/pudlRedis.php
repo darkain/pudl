@@ -82,7 +82,7 @@ trait pudlRedis {
 			try {
 				$this->redis = new pudlRedisHack;
 
-				if ($this->redis->connect($server, -1, 0.25)) {
+				if ($this->redis->connect_hack($server, -1, 0.25)) {
 					$this->redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
 				} else {
 					$this->redis = NULL;
@@ -187,7 +187,7 @@ trait pudlRedis {
 if (!defined('HHVM_VERSION')  &&  class_exists('Redis')) {
 	/** @suppress PhanRedefineClass */
 	class pudlRedisHack_base extends Redis {
-		public function connect($host, $port=-1, $timeout=0.0, $persistent_id='') {
+		public function connect_hack($host, $port=-1, $timeout=0.0, $persistent_id='') {
 
 			$level	= error_reporting(0);
 
@@ -205,20 +205,20 @@ if (!defined('HHVM_VERSION')  &&  class_exists('Redis')) {
 		public function pconnect_hack(
 				$host, $port=-1, $timeout=0.0,
 				$persistent_id='', $retry_interval=0,
-				$read_timeout=0) {
+				$read_timeout=0, $context=NULL) {
 
 			$level	= error_reporting(0);
 
 			try {
-				if ($read_timeout !== 0) {
+				if ($read_timeout !== 0  ||  !is_null($context)) {
 					$return	= parent::pconnect(
 						$host, $port, $timeout, $persistent_id,
-						$retry_interval, $read_timeout
+						$retry_interval, $read_timeout, $context
 					);
 				} else {
 					$return	= parent::pconnect(
 						$host, $port, $timeout, $persistent_id,
-						$retry_interval, $read_timeout
+						$retry_interval
 					);
 				}
 			} catch (Exception $e) {
@@ -233,20 +233,41 @@ if (!defined('HHVM_VERSION')  &&  class_exists('Redis')) {
 
 	if (version_compare(PHP_VERSION, '8.1.0') >= 0) {
 		class pudlRedisHack extends pudlRedisHack_base {
+			public function connect_hack(
+					$host, $port=-1, $timeout=0.0,
+					$persistent_id='', $retry_interval=0,
+					$read_timeout=0, $context=NULL) {
+
+				return parent::connect(
+					$host, $port, $timeout, $persistent_id,
+					$retry_interval, $read_timeout, $context
+				);
+			}
+
 			public function pconnect_hack(
 					$host, $port=-1, $timeout=0.0,
 					$persistent_id='', $retry_interval=0,
-					$read_timeout=0) {
+					$read_timeout=0, $context=NULL) {
 
 				return parent::pconnect(
 					$host, $port, $timeout, $persistent_id,
-					$retry_interval, $read_timeout
+					$retry_interval, $read_timeout, $context
 				);
 			}
 		}
 
 	} else {
 		class pudlRedisHack extends pudlRedisHack_base {
+			public function connect_hack(
+					$host, $port=-1, $timeout=0.0,
+					$persistent_id='', $retry_interval=0) {
+
+				return parent::connect(
+					$host, $port, $timeout, $persistent_id,
+					$retry_interval
+				);
+			}
+
 			public function pconnect_hack(
 					$host, $port=-1, $timeout=0.0,
 					$persistent_id='', $retry_interval=0) {
