@@ -457,8 +457,11 @@ trait pudlSelect {
 	////////////////////////////////////////////////////////////////////////////
 	// PING THE DATABASE SERVER TO ENSURE CONNECTION STAYS ALIVE
 	////////////////////////////////////////////////////////////////////////////
-	public function ping() {
-		$return = $this('SELECT 1')->complete();
+	public function ping($legacy_oracle=false) {
+		$return = $legacy_oracle
+			? $this('SELECT 1 FROM DUAL')->complete()
+			: $this('SELECT 1')->complete();
+		
 		return ($return instanceof pudlStringResult)
 			? $return
 			: !empty($return);
@@ -466,3 +469,4 @@ trait pudlSelect {
 
 
 }
+
